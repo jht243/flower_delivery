@@ -458,8 +458,8 @@ type SessionRecord = {
 
 const sessions = new Map<string, SessionRecord>();
 
-const ssePath = "/mcp/v2";
-const postPath = "/mcp/v2/messages";
+const ssePath = "/mcp";
+const postPath = "/mcp/messages";
 const subscribePath = "/api/subscribe";
 const analyticsPath = "/analytics";
 const trackEventPath = "/api/track";
