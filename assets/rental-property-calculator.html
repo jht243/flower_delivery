@@ -66,6 +66,15 @@
         margin-bottom: 14px;
       }
 
+      .section-block,
+      .section-summary,
+      .section-block > .collapsible-content,
+      .section-block .grid {
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
       .section-summary {
         font-size: 11px;
         font-weight: 500;
@@ -82,54 +91,51 @@
 
       /* Purchase header toggles aligned to the right of the title (single horizontal line) */
       details[data-openai-component="purchase-details"] > summary.section-summary {
-        position: relative;
-        padding-right: 420px; /* reserve space for two inline toggles */
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
       }
       .purchase-header-toggles {
-        position: absolute;
-        right: 18px;
-        top: 50%;
-        transform: translateY(-50%);
-        display: flex;
-        flex-direction: row; /* inline, side-by-side */
+        display: inline-flex;
         align-items: center;
         gap: 16px;
         white-space: nowrap;
       }
-      .purchase-header-toggles .row { display: inline-flex; align-items: center; gap: 8px; }
+      .purchase-header-toggles .row { display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end; }
       .purchase-header-toggles .label { margin: 0; font-size: 10px; white-space: nowrap; color: rgba(148,163,184,0.8); }
       .purchase-header-toggles .yesno-toggle { transform: scale(0.9); transform-origin: right center; }
-      @media (max-width: 900px) {
-        details[data-openai-component="purchase-details"] > summary.section-summary { padding-right: 320px; }
-        .purchase-header-toggles { gap: 12px; }
-      }
-      @media (max-width: 620px) {
-        details[data-openai-component="purchase-details"] > summary.section-summary { padding-right: 18px; }
-        .purchase-header-toggles { display: none; }
+      @media (max-width: 680px) {
+        details[data-openai-component="purchase-details"] > summary.section-summary {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+        .purchase-header-toggles { width: 100%; justify-content: flex-start; flex-wrap: wrap; row-gap: 6px; }
+        .purchase-header-toggles .row { justify-content: flex-start; }
       }
 
       /* Sell/Exit header toggle aligned to the right of the title (single line) */
       details[data-openai-component="sell-exit-assumptions"] > summary.section-summary {
-        position: relative;
-        padding-right: 240px; /* space for toggle */
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
       }
       .sell-header-toggle {
-        position: absolute;
-        right: 18px;
-        top: 50%;
-        transform: translateY(-50%);
         display: inline-flex;
         align-items: center;
         gap: 10px;
         white-space: nowrap;
       }
       .sell-header-toggle .yesno-toggle { transform: scale(0.9); transform-origin: right center; }
-      @media (max-width: 820px) {
-        details[data-openai-component="sell-exit-assumptions"] > summary.section-summary { padding-right: 200px; }
-      }
-      @media (max-width: 620px) {
-        details[data-openai-component="sell-exit-assumptions"] > summary.section-summary { padding-right: 18px; }
-        .sell-header-toggle { display: none; }
+      @media (max-width: 680px) {
+        details[data-openai-component="sell-exit-assumptions"] > summary.section-summary {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+        .sell-header-toggle { width: 100%; justify-content: flex-start; flex-wrap: wrap; row-gap: 6px; }
       }
 
       .section-summary::after {
