@@ -1028,7 +1028,6 @@ function createMortgageCalculatorServer(): Server {
         } catch {}
 
         return {
-          content: [],
           structuredContent: structured,
           _meta: metaForReturn,
         };
