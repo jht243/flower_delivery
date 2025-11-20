@@ -3846,8 +3846,17 @@ if (outputs.term_hint) outputs.term_hint.textContent = `Original term ${normaliz
         const hydrateInputsFromState = () => {
           const state = loadUserInputsState();
           if (!state) return false;
+
+          const entries = Object.entries(state.inputs || {});
+          const hasMeaningfulInput = entries.some(([, val]) => {
+            const s = String(val ?? '').trim();
+            return s !== '';
+          });
+          // If everything saved was blank, treat as no prior state so defaults can apply
+          if (!hasMeaningfulInput) return false;
+
           // Fill inputs
-          Object.entries(state.inputs || {}).forEach(([id, val]) => {
+          entries.forEach(([id, val]) => {
             const el = document.getElementById(id);
             if (!el) return;
             el.value = String(val);
