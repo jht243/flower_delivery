@@ -40,7 +40,19 @@ type MortgageWidget = {
 };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT_DIR = process.env.ASSETS_ROOT || path.resolve(__dirname, "..");
+
+function findProjectRoot(startDir: string): string {
+  let currentDir = startDir;
+  while (currentDir !== path.parse(currentDir).root) {
+    if (fs.existsSync(path.join(currentDir, 'package.json'))) {
+      return currentDir;
+    }
+    currentDir = path.dirname(currentDir);
+  }
+  return startDir; // Fallback
+}
+
+const ROOT_DIR = process.env.ASSETS_ROOT || findProjectRoot(__dirname);
 const ASSETS_DIR = path.resolve(ROOT_DIR, "assets");
 const LOGS_DIR = path.resolve(__dirname, "..", "logs");
 
