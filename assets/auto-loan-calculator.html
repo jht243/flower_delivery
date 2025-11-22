@@ -101,7 +101,7 @@
         align-items: center;
         gap: 16px;
       }
-      .purchase-header-toggles .row { display: inline-flex; align-items: center; gap: 8px; }
+      .purchase-header-toggles .row { display: flex; align-items: center; gap: 16px; }
       .purchase-header-toggles .label { margin: 0; font-size: 10px; white-space: nowrap; color: rgba(148,163,184,0.8); }
       .purchase-header-toggles .yesno-toggle, .sell-header-toggle .yesno-toggle {
         transform: scale(0.9);
@@ -1508,17 +1508,35 @@
               <span>Lease</span>
             </label>
           </div>
+          <div class="yesno-toggle" role="group" aria-label="Calculate By">
+            <label class="yesno-option">
+              <input type="radio" id="calculate_by_price" name="calculate_by" value="price" checked />
+              <span>Purchase Price</span>
+            </label>
+            <label class="yesno-option">
+              <input type="radio" id="calculate_by_payment" name="calculate_by" value="payment" />
+              <span>Monthly Payment</span>
+            </label>
+          </div>
         </div>
       </div>
     </summary>
     <div class="collapsible-content">
       <div class="grid duo-columns" id="purchase_inputs_row">
-        <label>
+        <label id="auto_price_label">
           Auto Price ($)
           <input type="number" id="auto_price" min="0" step="100" />
           <div class="slider-row">
             <input type="range" id="auto_price_slider" min="0" max="150000" step="100" aria-label="Auto price" />
             <span class="slider-value" id="auto_price_slider_display">$0</span>
+          </div>
+        </label>
+        <label id="monthly_payment_label" class="is-hidden">
+          Monthly Payment ($)
+          <input type="number" id="monthly_payment" min="0" step="10" />
+          <div class="slider-row">
+            <input type="range" id="monthly_payment_slider" min="0" max="2000" step="10" aria-label="Monthly payment" />
+            <span class="slider-value" id="monthly_payment_slider_display">$0</span>
           </div>
         </label>
         <label class="loan-field">
@@ -4262,9 +4280,15 @@
           const show = !!(loan && loan.checked);
           // Hide/show individual loan fields
           qsa('.loan-field').forEach((el) => el.classList.toggle('is-hidden', !show));
-          // Collapse/expand the entire group to remove extra whitespace
-          const group = document.getElementById('loan_field_group');
+          // Hide/show the entire loan details group
+          const group = document.getElementById('loan_details_group');
           if (group) group.classList.toggle('is-hidden', !show);
+        };
+
+        const toggleCalculationMode = () => {
+          const byPrice = document.getElementById('calculate_by_price').checked;
+          document.getElementById('auto_price_label').classList.toggle('is-hidden', !byPrice);
+          document.getElementById('monthly_payment_label').classList.toggle('is-hidden', byPrice);
         };
 
         ['purchase_type_loan','purchase_type_lease']
@@ -4275,6 +4299,18 @@
               toggleLoanFields();
               adjustPurchaseDetailsSpacing();
               calculateAndRender();
+              saveUserInputsState();
+            });
+          });
+
+        ['calculate_by_price', 'calculate_by_payment']
+          .forEach((id) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('change', () => {
+              toggleCalculationMode();
+              calculateAndRender();
+              saveUserInputsState();
             });
           });
 
