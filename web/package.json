@@ -1,11 +1,12 @@
 {
-  "name": "auto-loan-calculator-web",
+  "name": "bmi-health-calculator-web",
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "build": "esbuild src/main.tsx --bundle --format=esm --outfile=../assets/auto-loan-calculator.js"
+    "build": "esbuild src/main.tsx --bundle --format=esm --outfile=../assets/bmi-health-calculator.js"
   },
   "dependencies": {
+    "lucide-react": "^0.554.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
