@@ -250,6 +250,9 @@ export default function Calculator({ initialData }: { initialData?: any }) {
            ...current.values,
            heightCm: initialData.height_cm ? String(initialData.height_cm) : current.values.heightCm,
            weightKg: initialData.weight_kg ? String(initialData.weight_kg) : current.values.weightKg,
+           heightFt: initialData.height_cm ? String(Math.floor((Number(initialData.height_cm) / 2.54) / 12)) : current.values.heightFt,
+           heightIn: initialData.height_cm ? String(Math.round((Number(initialData.height_cm) / 2.54) % 12)) : current.values.heightIn,
+           weightLbs: initialData.weight_kg ? String(Math.round(Number(initialData.weight_kg) * 2.20462)) : current.values.weightLbs,
            age: initialData.age_years ? String(initialData.age_years) : current.values.age,
            gender: initialData.gender === "female" ? "female" : "male",
            activityLevel: initialData.activity_level || "moderate"

@@ -24814,6 +24814,9 @@ function Calculator({ initialData: initialData2 }) {
           ...current.values,
           heightCm: initialData2.height_cm ? String(initialData2.height_cm) : current.values.heightCm,
           weightKg: initialData2.weight_kg ? String(initialData2.weight_kg) : current.values.weightKg,
+          heightFt: initialData2.height_cm ? String(Math.floor(Number(initialData2.height_cm) / 2.54 / 12)) : current.values.heightFt,
+          heightIn: initialData2.height_cm ? String(Math.round(Number(initialData2.height_cm) / 2.54 % 12)) : current.values.heightIn,
+          weightLbs: initialData2.weight_kg ? String(Math.round(Number(initialData2.weight_kg) * 2.20462)) : current.values.weightLbs,
           age: initialData2.age_years ? String(initialData2.age_years) : current.values.age,
           gender: initialData2.gender === "female" ? "female" : "male",
           activityLevel: initialData2.activity_level || "moderate"
@@ -25453,7 +25456,6 @@ function Calculator({ initialData: initialData2 }) {
       maxWidth: "600px",
       margin: "0 auto",
       backgroundColor: COLORS.bg,
-      minHeight: "100vh",
       fontFamily: "'Inter', sans-serif",
       padding: "20px",
       boxSizing: "border-box"
