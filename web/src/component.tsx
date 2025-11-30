@@ -420,15 +420,15 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
     // Annual shortfall at retirement (inflated)
     const annualShortfallAtRetire = annualShortfallToday * Math.pow(1 + infl, yearsPre);
     
-    // Need: Balance that can sustain inflated withdrawals until death
+    // Need: Present value of all retirement expenses (lump sum at retirement that can fund expenses)
+    // Use a fixed 4% safe withdrawal rate assumption - independent of investment strategy choice
+    const safeWithdrawalRate = 0.04;
     let neededAtRetirement = 0;
-    // Backwards simulation for NEED
-    let balance = 0;
     for (let i = 0; i < yearsPost; i++) {
-        const payout = annualShortfallAtRetire * Math.pow(1 + infl, yearsPost - 1 - i);
-        balance = (balance + payout) / (1 + postRate);
+        // Each year's expense discounted back to retirement age using fixed rate
+        const yearlyExpense = annualShortfallAtRetire * Math.pow(1 + infl, i);
+        neededAtRetirement += yearlyExpense / Math.pow(1 + safeWithdrawalRate, i + 1);
     }
-    neededAtRetirement = balance;
 
     // 2. Required Contribution Calculation
     const fvSavings = savingsNum * Math.pow(1 + preRate, yearsPre);
@@ -443,17 +443,42 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
         initialAnnualContribNeeded = gap / accumFactor;
     }
     
-    // 3. Generate Graph Data
+    // 3. Calculate "What you'll have" using proper FV formula
+    let annualContrib = parseFloat(contributions);
+    if (contributionMode === "%") {
+        annualContrib = incomeNum * (parseFloat(contributions) / 100);
+    } else {
+        annualContrib = annualContrib * 12; // Convert monthly to annual
+    }
+    
+    // Future value of initial savings
+    const fvInitial = savingsNum * Math.pow(1 + preRate, yearsPre);
+    
+    // Future value of contributions
+    let fvContributions = 0;
+    if (contributionMode === "$") {
+        // Fixed contributions: standard annuity formula
+        // FV = PMT * [((1+r)^n - 1) / r]
+        fvContributions = annualContrib * (Math.pow(1 + preRate, yearsPre) - 1) / preRate;
+    } else {
+        // % of income: contributions grow with income (growing annuity)
+        if (Math.abs(preRate - incIncrease) < 0.0001) {
+            fvContributions = annualContrib * yearsPre * Math.pow(1 + preRate, yearsPre - 1);
+        } else {
+            fvContributions = annualContrib * (Math.pow(1 + preRate, yearsPre) - Math.pow(1 + incIncrease, yearsPre)) / (preRate - incIncrease);
+        }
+    }
+    
+    const whatYouHave = Math.round(fvInitial + fvContributions);
+    
+    // 4. Generate Graph Data for visualization
     const graphData = [];
     
     let simCurrent = savingsNum;
     let simIdeal = savingsNum;
     
     let simSalary = incomeNum;
-    let simCurrentContrib = parseFloat(contributions);
-    if (contributionMode === "%") simCurrentContrib = (simSalary / 12) * (simCurrentContrib / 100);
-    simCurrentContrib *= 12; // Annual
-    
+    let simCurrentContrib = annualContrib;
     let simIdealContrib = Math.max(0, initialAnnualContribNeeded);
     
     let runOutAgeCurrent = null;
@@ -463,7 +488,7 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
     
     for (let yr = 0; yr <= totalYears; yr++) {
         const age = currentAgeNum + yr;
-        const isRetired = age >= retirementAgeNum;
+        const isRetired = age > retirementAgeNum; // Changed: retire AFTER this age
         
         graphData.push({
             age,
@@ -473,14 +498,15 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
         
         if (isRetired) {
             // Drawdown phase
-            const payout = annualShortfallAtRetire * Math.pow(1 + infl, age - retirementAgeNum);
+            const yearsIntoRetirement = age - retirementAgeNum;
+            const payout = annualShortfallAtRetire * Math.pow(1 + infl, yearsIntoRetirement - 1);
             
             // Current Path
             if (simCurrent > 0) {
                 simCurrent = simCurrent * (1 + postRate) - payout;
                 if (simCurrent < 0) {
                     simCurrent = 0;
-                    runOutAgeCurrent = age;
+                    if (!runOutAgeCurrent) runOutAgeCurrent = age;
                 }
             }
             
@@ -489,25 +515,23 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
                 simIdeal = simIdeal * (1 + postRate) - payout;
                 if (simIdeal < 0) {
                     simIdeal = 0;
-                    runOutAgeIdeal = age;
+                    if (!runOutAgeIdeal) runOutAgeIdeal = age;
                 }
             }
             
         } else {
-            // Accumulation phase
+            // Accumulation phase (including retirement year)
             simCurrent = simCurrent * (1 + preRate) + simCurrentContrib;
             simIdeal = simIdeal * (1 + preRate) + simIdealContrib;
             
             simSalary *= (1 + incIncrease);
             
             if (contributionMode === "%") {
-                simCurrentContrib = (simSalary) * (parseFloat(contributions) / 100);
+                simCurrentContrib = simSalary * (parseFloat(contributions) / 100);
             }
             simIdealContrib *= (1 + incIncrease);
         }
     }
-
-    const whatYouHave = graphData.find(d => d.age === retirementAgeNum)?.current || 0;
     const whatYouNeed = neededAtRetirement;
 
     updateResult({
@@ -595,48 +619,95 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
       });
   };
 
-  const [showQuiz, setShowQuiz] = useState(false);
-  const [quizStep, setQuizStep] = useState(0);
-  const [quizAnswers, setQuizAnswers] = useState({
-    kids: 0,
-    college: "no", // no, partial, full
-    travel: "moderate", // low, moderate, high
-  });
+  const resetToDefaults = () => {
+    setCalculators(prev => {
+      const next = { ...prev };
+      next[calculatorType] = {
+        values: { 
+          ...DEFAULT_VALUES,
+          preRetireRate: "7",  // Moderate investment strategy
+          postRetireRate: "5"
+        },
+        touched: {},
+        result: null
+      };
+      return next;
+    });
+    setTravelPlan("moderate");
+    setFamilyPlan("none");
+    setHelpWithCollege(false);
+    setSavingsDetails({ savings: "", checking: "", crypto: "", retirement: "", stockPortfolio: "" });
+    setIncomeDetails({ socialSecurity: "", realEstate: "", trust: "", investments: "", other: "" });
+  };
 
-  const handleQuizComplete = () => {
-    // 1. Adjust Monthly Contributions based on College
-    // Assumption: College costs reduce ability to save for retirement now (if kids are young) 
-    // or are a large expense. Let's assume it reduces monthly contributions availability.
-    let currentContrib = parseFloat(contributions);
-    if (quizAnswers.college === "full") {
-        // Reduce savings by $500 per kid
-        currentContrib = Math.max(0, currentContrib - (quizAnswers.kids * 500));
-    } else if (quizAnswers.college === "partial") {
-        // Reduce savings by $200 per kid
-        currentContrib = Math.max(0, currentContrib - (quizAnswers.kids * 200));
+  const [travelPlan, setTravelPlan] = useState<"low" | "moderate" | "high">("moderate");
+  const [familyPlan, setFamilyPlan] = useState<"none" | "small" | "large">("none");
+  const [helpWithCollege, setHelpWithCollege] = useState(false);
+
+  const getTravelCost = (plan: "low" | "moderate" | "high") => {
+    if (plan === "low") return 200;
+    if (plan === "moderate") return 800;
+    return 2500; // high
+  };
+
+  const handleTravelPlanChange = (newPlan: "low" | "moderate" | "high") => {
+    const oldCost = getTravelCost(travelPlan);
+    const newCost = getTravelCost(newPlan);
+    const diff = newCost - oldCost;
+    
+    const currentBudget = parseFloat(budget) || 0;
+    const newBudget = Math.max(0, currentBudget + diff);
+    
+    setTravelPlan(newPlan);
+    updateVal("budget", String(Math.round(newBudget)));
+  };
+
+  const getFamilyCost = (plan: "none" | "small" | "large") => {
+    if (plan === "none") return 0;
+    if (plan === "small") return 300; // 1-2 kids: visits, gifts in retirement
+    return 600; // large family: 3+ kids
+  };
+
+  const getCollegeContribReduction = (plan: "none" | "small" | "large") => {
+    if (plan === "none") return 0;
+    if (plan === "small") return 400; // reduce monthly contributions by $400
+    return 800; // large family: reduce by $800
+  };
+
+  const handleFamilyPlanChange = (newPlan: "none" | "small" | "large") => {
+    const oldCost = getFamilyCost(familyPlan);
+    const newCost = getFamilyCost(newPlan);
+    const budgetDiff = newCost - oldCost;
+    
+    const currentBudget = parseFloat(budget) || 0;
+    const newBudget = Math.max(0, currentBudget + budgetDiff);
+    
+    // If college help was checked, also adjust contributions
+    if (helpWithCollege) {
+      const oldReduction = getCollegeContribReduction(familyPlan);
+      const newReduction = getCollegeContribReduction(newPlan);
+      const contribDiff = newReduction - oldReduction;
+      const currentContrib = parseFloat(contributions) || 0;
+      updateVal("contributions", String(Math.max(0, Math.round(currentContrib - contribDiff))));
     }
-    updateVal("contributions", String(currentContrib));
-
-    // 2. Adjust Retirement Budget based on Travel
-    let baseBudget = parseFloat(budget);
-    // Reset base if we want to purely calculate from scratch, but let's just adjust current
-    // If user hasn't touched budget, it might be the auto-calculated one.
     
-    let travelCost = 0;
-    if (quizAnswers.travel === "low") travelCost = 200;
-    else if (quizAnswers.travel === "moderate") travelCost = 800;
-    else if (quizAnswers.travel === "high") travelCost = 2500;
+    setFamilyPlan(newPlan);
+    updateVal("budget", String(Math.round(newBudget)));
+  };
+
+  const handleCollegeToggle = (checked: boolean) => {
+    const reduction = getCollegeContribReduction(familyPlan);
+    const currentContrib = parseFloat(contributions) || 0;
     
-    // If they have kids, maybe they visit them? +$200/mo
-    if (quizAnswers.kids > 0) travelCost += 200;
-
-    // We add this to the "Smart Estimate" baseline if budget wasn't manually set, 
-    // OR we just add it to the current value. Let's add to current for simplicity.
-    const newBudget = Math.round(baseBudget + travelCost);
-    updateVal("budget", String(newBudget));
-
-    setShowQuiz(false);
-    setQuizStep(0);
+    if (checked) {
+      // Start helping with college: reduce contributions
+      updateVal("contributions", String(Math.max(0, Math.round(currentContrib - reduction))));
+    } else {
+      // Stop helping: restore contributions
+      updateVal("contributions", String(Math.round(currentContrib + reduction)));
+    }
+    
+    setHelpWithCollege(checked);
   };
 
   // "Smart Estimate" for budget
@@ -647,6 +718,67 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
           const suggested = Math.round((incomeNum * 0.75) / 12);
           updateVal("budget", String(suggested));
       }
+  };
+
+  const [savingsDetails, setSavingsDetails] = useState({
+    savings: "",
+    checking: "",
+    crypto: "",
+    retirement: "",
+    stockPortfolio: ""
+  });
+  const [showSavingsModal, setShowSavingsModal] = useState(false);
+
+  const [incomeDetails, setIncomeDetails] = useState({
+    socialSecurity: "",
+    realEstate: "",
+    trust: "",
+    investments: "",
+    other: ""
+  });
+  const [showIncomeModal, setShowIncomeModal] = useState(false);
+
+  const updateSavingsTotal = (details: typeof savingsDetails) => {
+    const total = [
+      details.savings, 
+      details.checking, 
+      details.crypto, 
+      details.retirement,
+      details.stockPortfolio
+    ].reduce((acc, val) => acc + (parseFloat(val) || 0), 0);
+    updateVal("savings", String(total));
+  };
+
+  const handleSavingsDetailChange = (field: keyof typeof savingsDetails, value: string) => {
+    const newDetails = { ...savingsDetails, [field]: value };
+    setSavingsDetails(newDetails);
+    updateSavingsTotal(newDetails);
+  };
+
+  
+  const updateIncomeTotal = (details: typeof incomeDetails) => {
+    const total = [
+      details.socialSecurity,
+      details.realEstate,
+      details.trust,
+      details.investments,
+      details.other
+    ].reduce((acc, val) => acc + (parseFloat(val) || 0), 0);
+    updateVal("otherIncome", String(total));
+  };
+
+  const handleIncomeDetailChange = (field: keyof typeof incomeDetails, value: string) => {
+    const newDetails = { ...incomeDetails, [field]: value };
+    setIncomeDetails(newDetails);
+    updateIncomeTotal(newDetails);
+  };
+
+  const handleEstimateSocialSecurity = () => {
+    const annualIncome = parseFloat(income) || 0;
+    const estimated = Math.min(Math.round((annualIncome * 0.4) / 12), 3800);
+    const newDetails = { ...incomeDetails, socialSecurity: String(estimated) };
+    setIncomeDetails(newDetails);
+    updateIncomeTotal(newDetails);
   };
 
   const styles = {
@@ -688,13 +820,22 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
     column: {
       flex: 1,
       display: "flex",
-      flexDirection: "column" as const,
-      gap: "8px"
+      flexDirection: "column" as const
     },
     label: {
       fontWeight: 600,
       color: COLORS.textMain,
-      fontSize: "15px"
+      fontSize: "15px",
+      marginBottom: "0px"
+    },
+    subheaderLabel: {
+        fontSize: "12px",
+        color: COLORS.textSecondary,
+        fontWeight: 400,
+        marginTop: "0px",
+        marginBottom: "8px",
+        lineHeight: "1.3",
+        maxWidth: "90%"
     },
     toggleContainer: {
       display: "flex",
@@ -848,23 +989,6 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
       alignItems: "center",
       marginBottom: "10px"
     },
-    quizButton: {
-        width: "100%",
-        backgroundColor: COLORS.accentLight,
-        color: COLORS.primaryDark,
-        border: `1px solid ${COLORS.primary}`,
-        padding: "12px",
-        borderRadius: "12px",
-        fontSize: "14px",
-        fontWeight: 700,
-        cursor: "pointer",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "8px",
-        marginBottom: "24px",
-        transition: "all 0.2s"
-    },
     strategyBtn: (active: boolean) => ({
         flex: 1,
         padding: "8px",
@@ -907,17 +1031,13 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
         Plan your financial future.
       </div>
 
-      <button style={styles.quizButton} onClick={() => setShowQuiz(true)}>
-        <MessageSquare size={18} />
-        Get More Accurate Results
-      </button>
-
       <div style={styles.card}>
         <div style={styles.sectionTitle}>Retirement details</div>
         
         <div style={styles.row}>
             <div style={styles.column}>
                 <div style={styles.label}>Current age</div>
+                <div style={styles.subheaderLabel}>Age you are now</div>
                 <NumberControl 
                     value={currentAge}
                     onChange={(v) => updateVal("currentAge", v)}
@@ -927,6 +1047,7 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
 
             <div style={styles.column}>
                 <div style={styles.label}>Annual pre-tax income</div>
+                <div style={styles.subheaderLabel}>Your yearly earnings before tax</div>
                 <NumberControl 
                     value={income}
                     onChange={(v) => updateVal("income", v)}
@@ -939,22 +1060,36 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
         <div style={styles.row}>
             <div style={styles.column}>
                 <div style={styles.label}>Current retirement savings</div>
+                <div style={styles.subheaderLabel}>Total amount saved for retirement</div>
                 <NumberControl 
                     value={savings}
                     onChange={(v) => updateVal("savings", v)}
                     min={0} max={10000000} step={1000}
                     prefix="$"
                 />
+                <div 
+                    style={{fontSize: 12, color: COLORS.primary, fontWeight: 700, cursor: 'pointer', display: 'flex', justifyContent: 'flex-end', marginTop: 4}}
+                    onClick={() => setShowSavingsModal(true)}
+                >
+                    <span>+ Add Details</span>
+                </div>
             </div>
 
             <div style={styles.column}>
-                <div style={styles.label}>Other retirement income</div>
+                <div style={styles.label}>Other Monthly Retirement Income</div>
+                <div style={styles.subheaderLabel}>Monthly income from other sources</div>
                 <NumberControl 
                     value={otherIncome}
                     onChange={(v) => updateVal("otherIncome", v)}
                     min={0} max={100000} step={100}
                     prefix="$"
                 />
+                <div 
+                    style={{fontSize: 12, color: COLORS.primary, fontWeight: 700, cursor: 'pointer', display: 'flex', justifyContent: 'flex-end', marginTop: 4}}
+                    onClick={() => setShowIncomeModal(true)}
+                >
+                    <span>+ Add Details</span>
+                </div>
             </div>
         </div>
 
@@ -973,6 +1108,7 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
                         >%</div>
                     </div>
                 </div>
+                <div style={styles.subheaderLabel}>Amount you save each month</div>
                 <NumberControl 
                     value={contributions}
                     onChange={(v) => updateVal("contributions", v)}
@@ -996,6 +1132,7 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
                         >%</div>
                     </div>
                 </div>
+                <div style={styles.subheaderLabel}>Estimated monthly spending</div>
                 <NumberControl 
                     value={budget}
                     onChange={(v) => updateVal("budget", v)}
@@ -1022,7 +1159,29 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
 
         {showAdvanced && (
             <>
-                <div style={{marginBottom: 16}}>
+                <div style={styles.row}>
+                    <div style={styles.column}>
+                        <div style={styles.label}>Retirement age</div>
+                        <div style={styles.subheaderLabel}>Age you plan to retire</div>
+                        <NumberControl 
+                            value={retirementAge}
+                            onChange={(v) => updateVal("retirementAge", v)}
+                            min={parseInt(currentAge) + 1} max={100} 
+                        />
+                    </div>
+
+                    <div style={styles.column}>
+                        <div style={styles.label}>Life expectancy</div>
+                        <div style={styles.subheaderLabel}>Estimated age of lifespan</div>
+                        <NumberControl 
+                            value={lifeExpectancy}
+                            onChange={(v) => updateVal("lifeExpectancy", v)}
+                            min={parseInt(retirementAge) + 1} max={120} 
+                        />
+                    </div>
+                </div>
+
+                <div style={{marginBottom: 16, marginTop: 16}}>
                     <div style={{fontSize: 14, fontWeight: 600, color: COLORS.textMain, marginBottom: 8}}>Investment Strategy</div>
                     <div style={{display: "flex", gap: 8}}>
                         <div style={styles.strategyBtn(preRetireRate === "4" && postRetireRate === "3")} onClick={() => handleInvestmentStrategy("conservative")}>
@@ -1040,64 +1199,51 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
                     </div>
                 </div>
 
-                <div style={styles.row}>
-                    <div style={styles.column}>
-                        <div style={styles.label}>Retirement age</div>
-                        <NumberControl 
-                            value={retirementAge}
-                            onChange={(v) => updateVal("retirementAge", v)}
-                            min={parseInt(currentAge) + 1} max={100} 
-                        />
-                    </div>
-
-                    <div style={styles.column}>
-                        <div style={styles.label}>Life expectancy</div>
-                        <NumberControl 
-                            value={lifeExpectancy}
-                            onChange={(v) => updateVal("lifeExpectancy", v)}
-                            min={parseInt(retirementAge) + 1} max={120} 
-                        />
+                <div style={{marginBottom: 16}}>
+                    <div style={{fontSize: 14, fontWeight: 600, color: COLORS.textMain, marginBottom: 8}}>Post-Retirement Travel Plans</div>
+                    <div style={{display: "flex", gap: 8}}>
+                        <div style={styles.strategyBtn(travelPlan === "low")} onClick={() => handleTravelPlanChange("low")}>
+                            <div>Conservative</div>
+                            <div style={{fontSize: 10, fontWeight: 400, marginTop: 2}}>Local trips</div>
+                        </div>
+                        <div style={styles.strategyBtn(travelPlan === "moderate")} onClick={() => handleTravelPlanChange("moderate")}>
+                            <div>Moderate</div>
+                            <div style={{fontSize: 10, fontWeight: 400, marginTop: 2}}>1-2 trips/year</div>
+                        </div>
+                        <div style={styles.strategyBtn(travelPlan === "high")} onClick={() => handleTravelPlanChange("high")}>
+                            <div>Aggressive</div>
+                            <div style={{fontSize: 10, fontWeight: 400, marginTop: 2}}>Frequent travel</div>
+                        </div>
                     </div>
                 </div>
 
-                <div style={styles.row}>
-                    <div style={styles.column}>
-                        <div style={styles.label}>Pre-retirement rate of return</div>
-                        <NumberControl 
-                            value={preRetireRate}
-                            onChange={(v) => updateVal("preRetireRate", v)}
-                            min={0} max={15} suffix="%"
-                        />
+                <div style={{marginBottom: 16}}>
+                    <div style={{fontSize: 14, fontWeight: 600, color: COLORS.textMain, marginBottom: 8}}>Family Plans</div>
+                    <div style={{display: "flex", gap: 8, marginBottom: 12}}>
+                        <div style={styles.strategyBtn(familyPlan === "none")} onClick={() => handleFamilyPlanChange("none")}>
+                            <div>No Family</div>
+                            <div style={{fontSize: 10, fontWeight: 400, marginTop: 2}}>No children</div>
+                        </div>
+                        <div style={styles.strategyBtn(familyPlan === "small")} onClick={() => handleFamilyPlanChange("small")}>
+                            <div>Small Family</div>
+                            <div style={{fontSize: 10, fontWeight: 400, marginTop: 2}}>1-2 children</div>
+                        </div>
+                        <div style={styles.strategyBtn(familyPlan === "large")} onClick={() => handleFamilyPlanChange("large")}>
+                            <div>Large Family</div>
+                            <div style={{fontSize: 10, fontWeight: 400, marginTop: 2}}>3+ children</div>
+                        </div>
                     </div>
-
-                    <div style={styles.column}>
-                        <div style={styles.label}>Post-retirement rate of return</div>
-                        <NumberControl 
-                            value={postRetireRate}
-                            onChange={(v) => updateVal("postRetireRate", v)}
-                            min={0} max={15} suffix="%"
-                        />
-                    </div>
-                </div>
-
-                <div style={styles.row}>
-                    <div style={styles.column}>
-                        <div style={styles.label}>Inflation rate</div>
-                        <NumberControl 
-                            value={inflation}
-                            onChange={(v) => updateVal("inflation", v)}
-                            min={0} max={10} suffix="%"
-                        />
-                    </div>
-
-                    <div style={styles.column}>
-                        <div style={styles.label}>Annual income increase</div>
-                        <NumberControl 
-                            value={incomeIncrease}
-                            onChange={(v) => updateVal("incomeIncrease", v)}
-                            min={0} max={10} suffix="%"
-                        />
-                    </div>
+                    {familyPlan !== "none" && (
+                        <label style={{display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 13, color: COLORS.textSecondary}}>
+                            <input 
+                                type="checkbox" 
+                                checked={helpWithCollege}
+                                onChange={(e) => handleCollegeToggle(e.target.checked)}
+                                style={{width: 16, height: 16, accentColor: COLORS.primary}}
+                            />
+                            Check here if you plan to help with college tuition
+                        </label>
+                    )}
                 </div>
             </>
         )}
@@ -1248,8 +1394,11 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
             )}
         </div>
       )}
-      
+
       <div style={styles.footer} className="no-print">
+        <button style={styles.footerBtn} onClick={resetToDefaults} className="btn-press">
+          <RotateCcw size={16} /> Reset
+        </button>
         <button style={styles.footerBtn} className="btn-press">
           <Heart size={16} /> Donate
         </button>
@@ -1306,102 +1455,119 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
         </div>
       )}
 
-      {/* Quiz Modal */}
-      {showQuiz && (
+      {/* Savings Details Modal */}
+      {showSavingsModal && (
         <div style={styles.modalOverlay}>
             <div style={styles.modalContent}>
-                <button style={styles.modalClose} onClick={() => setShowQuiz(false)}>✕</button>
-                
+                <button style={styles.modalClose} onClick={() => setShowSavingsModal(false)}>✕</button>
                 <div style={{marginBottom: 24, textAlign: "center"}}>
-                    <div style={{fontSize: 20, fontWeight: 800, color: COLORS.textMain, marginBottom: 8}}>Personalize Your Plan</div>
-                    <div style={{fontSize: 14, color: COLORS.textSecondary}}>Answer a few questions to refine your retirement inputs.</div>
+                    <div style={{fontSize: 20, fontWeight: 800, color: COLORS.textMain, marginBottom: 8}}>Retirement Savings Breakdown</div>
                 </div>
-
-                {quizStep === 0 && (
+                
+                <div style={{display: "flex", flexDirection: "column", gap: 16}}>
                     <div>
-                        <div style={{fontSize: 16, fontWeight: 600, color: COLORS.textMain, marginBottom: 16}}>1. Do you plan to have a family?</div>
-                        <div style={{marginBottom: 16}}>
-                            <div style={styles.label}>How many children?</div>
-                            <NumberControl 
-                                value={String(quizAnswers.kids)}
-                                onChange={(v) => setQuizAnswers({...quizAnswers, kids: parseInt(v)})}
-                                min={0} max={10}
-                            />
-                        </div>
-                        <div style={{marginTop: 24, display: "flex", justifyContent: "flex-end"}}>
-                            <button style={styles.subscribeBtn} onClick={() => setQuizStep(1)}>Next →</button>
+                        <div style={styles.label}>Savings Account</div>
+                        <NumberControl 
+                            value={savingsDetails.savings}
+                            onChange={(v) => handleSavingsDetailChange("savings", v)}
+                            prefix="$"
+                        />
+                    </div>
+                    <div>
+                        <div style={styles.label}>Checking Account</div>
+                        <NumberControl 
+                            value={savingsDetails.checking}
+                            onChange={(v) => handleSavingsDetailChange("checking", v)}
+                            prefix="$"
+                        />
+                    </div>
+                    <div>
+                        <div style={styles.label}>Stock Portfolio</div>
+                        <NumberControl 
+                            value={savingsDetails.stockPortfolio}
+                            onChange={(v) => handleSavingsDetailChange("stockPortfolio", v)}
+                            prefix="$"
+                        />
+                    </div>
+                    <div>
+                        <div style={styles.label}>Crypto Accounts</div>
+                        <NumberControl 
+                            value={savingsDetails.crypto}
+                            onChange={(v) => handleSavingsDetailChange("crypto", v)}
+                            prefix="$"
+                        />
+                    </div>
+                    <div>
+                        <div style={styles.label}>401k / Retirement Accounts</div>
+                        <NumberControl 
+                            value={savingsDetails.retirement}
+                            onChange={(v) => handleSavingsDetailChange("retirement", v)}
+                            prefix="$"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+      )}
+
+      {/* Income Details Modal */}
+      {showIncomeModal && (
+        <div style={styles.modalOverlay}>
+            <div style={styles.modalContent}>
+                <button style={styles.modalClose} onClick={() => setShowIncomeModal(false)}>✕</button>
+                <div style={{marginBottom: 24, textAlign: "center"}}>
+                    <div style={{fontSize: 20, fontWeight: 800, color: COLORS.textMain, marginBottom: 8}}>Other Monthly Retirement Income</div>
+                    <div style={{fontSize: 14, color: COLORS.textSecondary}}>Enter monthly income amounts</div>
+                </div>
+                
+                <div style={{display: "flex", flexDirection: "column", gap: 16}}>
+                    <div>
+                        <div style={styles.label}>Social Security Payment</div>
+                        <NumberControl 
+                            value={incomeDetails.socialSecurity}
+                            onChange={(v) => handleIncomeDetailChange("socialSecurity", v)}
+                            prefix="$"
+                        />
+                        <div 
+                            style={{fontSize: 12, color: COLORS.primary, fontWeight: 700, cursor: 'pointer', display: 'flex', justifyContent: 'flex-end', marginTop: 4}}
+                            onClick={handleEstimateSocialSecurity}
+                        >
+                            <span>🪄 Estimate</span>
                         </div>
                     </div>
-                )}
-
-                {quizStep === 1 && (
                     <div>
-                        <div style={{fontSize: 16, fontWeight: 600, color: COLORS.textMain, marginBottom: 16}}>2. College Plans</div>
-                        <div style={{fontSize: 14, color: COLORS.textSecondary, marginBottom: 16}}>
-                            Do you plan to pay for your children's college education?
-                        </div>
-                        <div style={{display: "flex", flexDirection: "column", gap: 12}}>
-                            <button 
-                                style={styles.strategyBtn(quizAnswers.college === "no")} 
-                                onClick={() => setQuizAnswers({...quizAnswers, college: "no"})}
-                            >
-                                No / They will take loans
-                            </button>
-                            <button 
-                                style={styles.strategyBtn(quizAnswers.college === "partial")} 
-                                onClick={() => setQuizAnswers({...quizAnswers, college: "partial"})}
-                            >
-                                Partial Support
-                            </button>
-                            <button 
-                                style={styles.strategyBtn(quizAnswers.college === "full")} 
-                                onClick={() => setQuizAnswers({...quizAnswers, college: "full"})}
-                            >
-                                Full Support
-                            </button>
-                        </div>
-                        <div style={{marginTop: 24, display: "flex", justifyContent: "space-between"}}>
-                            <button style={{...styles.subscribeBtn, background: 'transparent', color: COLORS.textSecondary}} onClick={() => setQuizStep(0)}>← Back</button>
-                            <button style={styles.subscribeBtn} onClick={() => setQuizStep(2)}>Next →</button>
-                        </div>
+                        <div style={styles.label}>Real Estate</div>
+                        <NumberControl 
+                            value={incomeDetails.realEstate}
+                            onChange={(v) => handleIncomeDetailChange("realEstate", v)}
+                            prefix="$"
+                        />
                     </div>
-                )}
-
-                {quizStep === 2 && (
                     <div>
-                        <div style={{fontSize: 16, fontWeight: 600, color: COLORS.textMain, marginBottom: 16}}>3. Retirement Lifestyle</div>
-                        <div style={{fontSize: 14, color: COLORS.textSecondary, marginBottom: 16}}>
-                            How do you envision your travel plans?
-                        </div>
-                        <div style={{display: "flex", flexDirection: "column", gap: 12}}>
-                            <button 
-                                style={styles.strategyBtn(quizAnswers.travel === "low")} 
-                                onClick={() => setQuizAnswers({...quizAnswers, travel: "low"})}
-                            >
-                                <div>Start Local</div>
-                                <div style={{fontSize: 12, fontWeight: 400, opacity: 0.8}}>Low cost, mostly local trips</div>
-                            </button>
-                            <button 
-                                style={styles.strategyBtn(quizAnswers.travel === "moderate")} 
-                                onClick={() => setQuizAnswers({...quizAnswers, travel: "moderate"})}
-                            >
-                                <div>Explorer</div>
-                                <div style={{fontSize: 12, fontWeight: 400, opacity: 0.8}}>1-2 major trips per year</div>
-                            </button>
-                            <button 
-                                style={styles.strategyBtn(quizAnswers.travel === "high")} 
-                                onClick={() => setQuizAnswers({...quizAnswers, travel: "high"})}
-                            >
-                                <div>Globetrotter</div>
-                                <div style={{fontSize: 12, fontWeight: 400, opacity: 0.8}}>Frequent international travel</div>
-                            </button>
-                        </div>
-                        <div style={{marginTop: 24, display: "flex", justifyContent: "space-between"}}>
-                            <button style={{...styles.subscribeBtn, background: 'transparent', color: COLORS.textSecondary}} onClick={() => setQuizStep(1)}>← Back</button>
-                            <button style={styles.subscribeBtn} onClick={handleQuizComplete}>Apply to Calculator</button>
-                        </div>
+                        <div style={styles.label}>Trust Fund</div>
+                        <NumberControl 
+                            value={incomeDetails.trust}
+                            onChange={(v) => handleIncomeDetailChange("trust", v)}
+                            prefix="$"
+                        />
                     </div>
-                )}
+                    <div>
+                        <div style={styles.label}>Investment Funds</div>
+                        <NumberControl 
+                            value={incomeDetails.investments}
+                            onChange={(v) => handleIncomeDetailChange("investments", v)}
+                            prefix="$"
+                        />
+                    </div>
+                    <div>
+                        <div style={styles.label}>Other</div>
+                        <NumberControl 
+                            value={incomeDetails.other}
+                            onChange={(v) => handleIncomeDetailChange("other", v)}
+                            prefix="$"
+                        />
+                    </div>
+                </div>
             </div>
         </div>
       )}
