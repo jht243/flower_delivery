@@ -1709,6 +1709,7 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
               {/* First row - 2 buttons */}
               <div style={{ display: "flex", gap: "8px" }}>
                   <button 
+                    className="btn-press"
                     style={{
                         flex: 1,
                         padding: "12px 10px",
@@ -1719,7 +1720,6 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
                         fontWeight: 600,
                         fontSize: "14px",
                         cursor: "pointer",
-                        transition: "all 0.2s",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -1738,6 +1738,7 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
                       Retirement Calculator
                   </button>
                   <button 
+                    className="btn-press"
                     style={{
                         flex: 1,
                         padding: "12px 10px",
@@ -1748,7 +1749,6 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
                         fontWeight: 600,
                         fontSize: "14px",
                         cursor: "pointer",
-                        transition: "all 0.2s",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -1770,6 +1770,7 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
               {/* Second row - 1 button centered */}
               <div style={{ display: "flex", justifyContent: "center" }}>
                   <button 
+                    className="btn-press"
                     style={{
                         flex: "0 1 50%",
                         padding: "12px 10px",
@@ -1780,7 +1781,6 @@ export default function RetirementCalculatorHelloWorld({ initialData }: { initia
                         fontWeight: 600,
                         fontSize: "14px",
                         cursor: "pointer",
-                        transition: "all 0.2s",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
