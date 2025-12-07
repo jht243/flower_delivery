@@ -61,7 +61,6 @@ const ROOT_DIR = (() => {
 
 const ASSETS_DIR = path.resolve(ROOT_DIR, "assets");
 const LOGS_DIR = path.resolve(__dirname, "..", "logs");
-const TURNSTILE_SITE_KEY = process.env.TURNSTILE_SITE_KEY || "";
 
 if (!fs.existsSync(LOGS_DIR)) {
   fs.mkdirSync(LOGS_DIR, { recursive: true });
@@ -256,12 +255,10 @@ function widgetMeta(widget: PortfolioOptimizerWidget, bustCache: boolean = false
       connect_domains: [
         "https://api.stlouisfed.org",
         "https://portfolio-optimizer-svpa.onrender.com",
-        "http://localhost:8010",
-        "https://challenges.cloudflare.com"
+        "http://localhost:8010"
       ],
       script_src_domains: [
-        "https://portfolio-optimizer-svpa.onrender.com",
-        "https://challenges.cloudflare.com"
+        "https://portfolio-optimizer-svpa.onrender.com"
       ],
       resource_domains: [],
     },
@@ -429,13 +426,7 @@ function createPortfolioOptimizerServer(): Server {
 
       // Inject current FRED rate into HTML before sending to ChatGPT
       // (Logic removed for portfolio optimizer)
-      let htmlToSend = widget.html;
-      
-      if (TURNSTILE_SITE_KEY) {
-        htmlToSend = htmlToSend.replace(/__TURNSTILE_SITE_KEY__/g, TURNSTILE_SITE_KEY);
-      } else {
-        console.warn("[Turnstile] TURNSTILE_SITE_KEY missing; captcha will not render");
-      }
+      const htmlToSend = widget.html;
 
       return {
         contents: [
@@ -1310,40 +1301,6 @@ async function handleTrackEvent(req: IncomingMessage, res: ServerResponse) {
   }
 }
 
-// Turnstile verification
-async function verifyTurnstile(token: string): Promise<boolean> {
-  const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY;
-  
-  if (!TURNSTILE_SECRET_KEY) {
-    console.error("TURNSTILE_SECRET_KEY not set in environment variables");
-    return false;
-  }
-
-  if (!token) {
-    console.error("Turnstile token missing");
-    return false;
-  }
-
-  try {
-    const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        secret: TURNSTILE_SECRET_KEY,
-        response: token,
-      }),
-    });
-
-    const data = await response.json();
-    return data.success === true;
-  } catch (error) {
-    console.error('Turnstile verification error:', error);
-    return false;
-  }
-}
-
 // Buttondown API integration
 async function subscribeToButtondown(email: string, topicId: string, topicName: string) {
   const BUTTONDOWN_API_KEY = process.env.BUTTONDOWN_API_KEY;
@@ -1504,22 +1461,8 @@ async function handleSubscribe(req: IncomingMessage, res: ServerResponse) {
     const email = parsed.email;
     const topicId = parsed.topicId || parsed.settlementId || "portfolio-news";
     const topicName = parsed.topicName || parsed.settlementName || "Portfolio Optimizer Updates";
-    const turnstileToken = parsed.turnstileToken;
-
     if (!email || !email.includes("@")) {
       res.writeHead(400).end(JSON.stringify({ error: "Invalid email address" }));
-      return;
-    }
-
-    // Verify Turnstile token
-    if (!turnstileToken) {
-      res.writeHead(400).end(JSON.stringify({ error: "Security verification required" }));
-      return;
-    }
-
-    const isValidToken = await verifyTurnstile(turnstileToken);
-    if (!isValidToken) {
-      res.writeHead(400).end(JSON.stringify({ error: "Security verification failed. Please try again." }));
       return;
     }
 
@@ -1739,24 +1682,6 @@ const httpServer = createServer(
           "Access-Control-Allow-Origin": "*",
           "Cache-Control": "no-cache"
         });
-
-        // If serving the main widget HTML, inject the current rate into the badge
-        if (ext === ".html" && path.basename(assetPath) === "portfolio-optimizer.html") {
-          try {
-            let html = fs.readFileSync(assetPath, "utf8");
-            
-            if (TURNSTILE_SITE_KEY) {
-              html = html.replace(/__TURNSTILE_SITE_KEY__/g, TURNSTILE_SITE_KEY);
-            } else {
-              console.warn("[Turnstile] TURNSTILE_SITE_KEY missing; captcha will not render");
-            }
-
-            res.end(html);
-            return;
-          } catch (e) {
-            // Fallback to streaming the file unchanged if anything goes wrong
-          }
-        }
 
         fs.createReadStream(assetPath).pipe(res);
         return;

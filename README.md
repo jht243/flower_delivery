@@ -65,8 +65,6 @@ Copy `.env.example` to `.env` and configure:
 
 ```bash
 BUTTONDOWN_API_KEY=your_api_key
-TURNSTILE_SITE_KEY=your_public_turnstile_site_key
-TURNSTILE_SECRET_KEY=your_secret_key
 FRED_API_KEY=optional_fred_api_key
 FRED_SERIES_ID=MORTGAGE30US
 ANALYTICS_PASSWORD=your_password

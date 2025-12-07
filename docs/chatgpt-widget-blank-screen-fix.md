@@ -66,12 +66,10 @@ Ensure your MCP server's CSP includes:
 ```typescript
 "openai/widgetCSP": {
   connect_domains: [
-    "https://portfolio-optimizer-svpa.onrender.com",
-    "https://challenges.cloudflare.com" // if using Turnstile
+    "https://portfolio-optimizer-svpa.onrender.com"
   ],
   script_src_domains: [
-    "https://portfolio-optimizer-svpa.onrender.com",
-    "https://challenges.cloudflare.com" // if using Turnstile
+    "https://portfolio-optimizer-svpa.onrender.com"
   ],
   resource_domains: [],
 }
