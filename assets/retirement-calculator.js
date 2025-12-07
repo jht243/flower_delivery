@@ -513,7 +513,7 @@ var require_react_development = __commonJS({
           }
           return element;
         };
-        function createElement46(type, config, children) {
+        function createElement45(type, config, children) {
           var propName;
           var props = {};
           var key = null;
@@ -581,7 +581,7 @@ var require_react_development = __commonJS({
           var newElement = ReactElement(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
           return newElement;
         }
-        function cloneElement11(element, config, children) {
+        function cloneElement10(element, config, children) {
           if (element === null || element === void 0) {
             throw new Error("React.cloneElement(...): The argument must be a React element, but you passed " + element + ".");
           }
@@ -629,7 +629,7 @@ var require_react_development = __commonJS({
           }
           return ReactElement(element.type, key, ref, self2, source, owner, props);
         }
-        function isValidElement18(object) {
+        function isValidElement17(object) {
           return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
         }
         var SEPARATOR = ".";
@@ -694,7 +694,7 @@ var require_react_development = __commonJS({
                 return c2;
               });
             } else if (mappedChild != null) {
-              if (isValidElement18(mappedChild)) {
+              if (isValidElement17(mappedChild)) {
                 {
                   if (mappedChild.key && (!_child || _child.key !== mappedChild.key)) {
                     checkKeyStringCoercion(mappedChild.key);
@@ -782,7 +782,7 @@ var require_react_development = __commonJS({
           }) || [];
         }
         function onlyChild(children) {
-          if (!isValidElement18(children)) {
+          if (!isValidElement17(children)) {
             throw new Error("React.Children.only expected to receive a single React element child.");
           }
           return children;
@@ -1087,7 +1087,7 @@ var require_react_development = __commonJS({
           }
           return dispatcher.useContext(Context);
         }
-        function useState16(initialState13) {
+        function useState15(initialState13) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useState(initialState13);
         }
@@ -1099,7 +1099,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useRef(initialValue);
         }
-        function useEffect18(create, deps) {
+        function useEffect16(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useEffect(create, deps);
         }
@@ -1513,11 +1513,11 @@ var require_react_development = __commonJS({
           if (isArray2(node)) {
             for (var i = 0; i < node.length; i++) {
               var child = node[i];
-              if (isValidElement18(child)) {
+              if (isValidElement17(child)) {
                 validateExplicitKey(child, parentType);
               }
             }
-          } else if (isValidElement18(node)) {
+          } else if (isValidElement17(node)) {
             if (node._store) {
               node._store.validated = true;
             }
@@ -1528,7 +1528,7 @@ var require_react_development = __commonJS({
                 var iterator = iteratorFn.call(node);
                 var step;
                 while (!(step = iterator.next()).done) {
-                  if (isValidElement18(step.value)) {
+                  if (isValidElement17(step.value)) {
                     validateExplicitKey(step.value, parentType);
                   }
                 }
@@ -1612,7 +1612,7 @@ var require_react_development = __commonJS({
               error("React.createElement: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s", typeString, info);
             }
           }
-          var element = createElement46.apply(this, arguments);
+          var element = createElement45.apply(this, arguments);
           if (element == null) {
             return element;
           }
@@ -1651,7 +1651,7 @@ var require_react_development = __commonJS({
           return validatedFactory;
         }
         function cloneElementWithValidation(element, props, children) {
-          var newElement = cloneElement11.apply(this, arguments);
+          var newElement = cloneElement10.apply(this, arguments);
           for (var i = 2; i < arguments.length; i++) {
             validateChildKeys(arguments[i], newElement.type);
           }
@@ -1873,7 +1873,7 @@ var require_react_development = __commonJS({
         exports.createFactory = createFactory;
         exports.createRef = createRef;
         exports.forwardRef = forwardRef17;
-        exports.isValidElement = isValidElement18;
+        exports.isValidElement = isValidElement17;
         exports.lazy = lazy;
         exports.memo = memo8;
         exports.startTransition = startTransition;
@@ -1882,7 +1882,7 @@ var require_react_development = __commonJS({
         exports.useContext = useContext12;
         exports.useDebugValue = useDebugValue2;
         exports.useDeferredValue = useDeferredValue;
-        exports.useEffect = useEffect18;
+        exports.useEffect = useEffect16;
         exports.useId = useId2;
         exports.useImperativeHandle = useImperativeHandle3;
         exports.useInsertionEffect = useInsertionEffect;
@@ -1890,7 +1890,7 @@ var require_react_development = __commonJS({
         exports.useMemo = useMemo10;
         exports.useReducer = useReducer;
         exports.useRef = useRef17;
-        exports.useState = useState16;
+        exports.useState = useState15;
         exports.useSyncExternalStore = useSyncExternalStore2;
         exports.useTransition = useTransition;
         exports.version = ReactVersion;
@@ -2386,9 +2386,9 @@ var require_react_dom_development = __commonJS({
         if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
           __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
         }
-        var React46 = require_react();
+        var React44 = require_react();
         var Scheduler = require_scheduler();
-        var ReactSharedInternals = React46.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React44.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         var suppressWarning = false;
         function setSuppressWarning(newSuppressWarning) {
           {
@@ -2437,7 +2437,7 @@ var require_react_dom_development = __commonJS({
         var HostPortal = 4;
         var HostComponent = 5;
         var HostText = 6;
-        var Fragment12 = 7;
+        var Fragment10 = 7;
         var Mode = 8;
         var ContextConsumer = 9;
         var ContextProvider = 10;
@@ -3593,7 +3593,7 @@ var require_react_dom_development = __commonJS({
               return "DehydratedFragment";
             case ForwardRef2:
               return getWrappedName$1(type, type.render, "ForwardRef");
-            case Fragment12:
+            case Fragment10:
               return "Fragment";
             case HostComponent:
               return type;
@@ -3993,7 +3993,7 @@ var require_react_dom_development = __commonJS({
           {
             if (props.value == null) {
               if (typeof props.children === "object" && props.children !== null) {
-                React46.Children.forEach(props.children, function(child) {
+                React44.Children.forEach(props.children, function(child) {
                   if (child == null) {
                     return;
                   }
@@ -9387,7 +9387,7 @@ var require_react_dom_development = __commonJS({
             }
           }
         }
-        function createElement46(type, props, rootContainerElement, parentNamespace) {
+        function createElement45(type, props, rootContainerElement, parentNamespace) {
           var isCustomComponentTag;
           var ownerDocument = getOwnerDocumentFromRootContainer(rootContainerElement);
           var domElement;
@@ -10242,7 +10242,7 @@ var require_react_dom_development = __commonJS({
             }
             parentNamespace = hostContextDev.namespace;
           }
-          var domElement = createElement46(type, props, rootContainerInstance, parentNamespace);
+          var domElement = createElement45(type, props, rootContainerInstance, parentNamespace);
           precacheFiberNode(internalInstanceHandle, domElement);
           updateFiberProps(domElement, props);
           return domElement;
@@ -11976,7 +11976,7 @@ var require_react_dom_development = __commonJS({
             }
           }
           function updateFragment2(returnFiber, current4, fragment, lanes, key) {
-            if (current4 === null || current4.tag !== Fragment12) {
+            if (current4 === null || current4.tag !== Fragment10) {
               var created = createFiberFromFragment(fragment, returnFiber.mode, lanes, key);
               created.return = returnFiber;
               return created;
@@ -12379,7 +12379,7 @@ var require_react_dom_development = __commonJS({
               if (child.key === key) {
                 var elementType = element.type;
                 if (elementType === REACT_FRAGMENT_TYPE) {
-                  if (child.tag === Fragment12) {
+                  if (child.tag === Fragment10) {
                     deleteRemainingChildren(returnFiber, child.sibling);
                     var existing = useFiber(child, element.props.children);
                     existing.return = returnFiber;
@@ -17854,7 +17854,7 @@ var require_react_dom_development = __commonJS({
               var _resolvedProps2 = workInProgress2.elementType === type ? _unresolvedProps2 : resolveDefaultProps2(type, _unresolvedProps2);
               return updateForwardRef(current4, workInProgress2, type, _resolvedProps2, renderLanes2);
             }
-            case Fragment12:
+            case Fragment10:
               return updateFragment(current4, workInProgress2, renderLanes2);
             case Mode:
               return updateMode(current4, workInProgress2, renderLanes2);
@@ -18126,7 +18126,7 @@ var require_react_dom_development = __commonJS({
             case SimpleMemoComponent:
             case FunctionComponent:
             case ForwardRef2:
-            case Fragment12:
+            case Fragment10:
             case Mode:
             case Profiler:
             case ContextConsumer:
@@ -22377,7 +22377,7 @@ var require_react_dom_development = __commonJS({
           return fiber;
         }
         function createFiberFromFragment(elements, mode, lanes, key) {
-          var fiber = createFiber(Fragment12, elements, key, mode);
+          var fiber = createFiber(Fragment10, elements, key, mode);
           fiber.lanes = lanes;
           return fiber;
         }
@@ -24612,7 +24612,7 @@ var require_use_sync_external_store_shim_development = __commonJS({
         return x2 === y2 && (0 !== x2 || 1 / x2 === 1 / y2) || x2 !== x2 && y2 !== y2;
       }
       function useSyncExternalStore$2(subscribe, getSnapshot) {
-        didWarnOld18Alpha || void 0 === React46.startTransition || (didWarnOld18Alpha = true, console.error(
+        didWarnOld18Alpha || void 0 === React44.startTransition || (didWarnOld18Alpha = true, console.error(
           "You are using an outdated, pre-release alpha of React 18 that does not support useSyncExternalStore. The use-sync-external-store shim will not work correctly. Upgrade to a newer pre-release."
         ));
         var value = getSnapshot();
@@ -24622,7 +24622,7 @@ var require_use_sync_external_store_shim_development = __commonJS({
             "The result of getSnapshot should be cached to avoid an infinite loop"
           ), didWarnUncachedGetSnapshot = true);
         }
-        cachedValue = useState16({
+        cachedValue = useState15({
           inst: { value, getSnapshot }
         });
         var inst = cachedValue[0].inst, forceUpdate = cachedValue[1];
@@ -24634,7 +24634,7 @@ var require_use_sync_external_store_shim_development = __commonJS({
           },
           [subscribe, value, getSnapshot]
         );
-        useEffect18(
+        useEffect16(
           function() {
             checkIfSnapshotChanged(inst) && forceUpdate({ inst });
             return subscribe(function() {
@@ -24660,8 +24660,8 @@ var require_use_sync_external_store_shim_development = __commonJS({
         return getSnapshot();
       }
       "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-      var React46 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is4, useState16 = React46.useState, useEffect18 = React46.useEffect, useLayoutEffect9 = React46.useLayoutEffect, useDebugValue2 = React46.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
-      exports.useSyncExternalStore = void 0 !== React46.useSyncExternalStore ? React46.useSyncExternalStore : shim;
+      var React44 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is4, useState15 = React44.useState, useEffect16 = React44.useEffect, useLayoutEffect9 = React44.useLayoutEffect, useDebugValue2 = React44.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+      exports.useSyncExternalStore = void 0 !== React44.useSyncExternalStore ? React44.useSyncExternalStore : shim;
       "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
     })();
   }
@@ -24688,7 +24688,7 @@ var require_with_selector_development = __commonJS({
         return x2 === y2 && (0 !== x2 || 1 / x2 === 1 / y2) || x2 !== x2 && y2 !== y2;
       }
       "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-      var React46 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is4, useSyncExternalStore2 = shim.useSyncExternalStore, useRef17 = React46.useRef, useEffect18 = React46.useEffect, useMemo10 = React46.useMemo, useDebugValue2 = React46.useDebugValue;
+      var React44 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is4, useSyncExternalStore2 = shim.useSyncExternalStore, useRef17 = React44.useRef, useEffect16 = React44.useEffect, useMemo10 = React44.useMemo, useDebugValue2 = React44.useDebugValue;
       exports.useSyncExternalStoreWithSelector = function(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
         var instRef = useRef17(null);
         if (null === instRef.current) {
@@ -24731,7 +24731,7 @@ var require_with_selector_development = __commonJS({
           [getSnapshot, getServerSnapshot, selector, isEqual]
         );
         var value = useSyncExternalStore2(subscribe, instRef[0], instRef[1]);
-        useEffect18(
+        useEffect16(
           function() {
             inst.hasValue = true;
             inst.value = value;
@@ -26562,7 +26562,7 @@ var require_use_sync_external_store_with_selector_development = __commonJS({
         return x2 === y2 && (0 !== x2 || 1 / x2 === 1 / y2) || x2 !== x2 && y2 !== y2;
       }
       "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-      var React46 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is4, useSyncExternalStore2 = React46.useSyncExternalStore, useRef17 = React46.useRef, useEffect18 = React46.useEffect, useMemo10 = React46.useMemo, useDebugValue2 = React46.useDebugValue;
+      var React44 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is4, useSyncExternalStore2 = React44.useSyncExternalStore, useRef17 = React44.useRef, useEffect16 = React44.useEffect, useMemo10 = React44.useMemo, useDebugValue2 = React44.useDebugValue;
       exports.useSyncExternalStoreWithSelector = function(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
         var instRef = useRef17(null);
         if (null === instRef.current) {
@@ -26605,7 +26605,7 @@ var require_use_sync_external_store_with_selector_development = __commonJS({
           [getSnapshot, getServerSnapshot, selector, isEqual]
         );
         var value = useSyncExternalStore2(subscribe, instRef[0], instRef[1]);
-        useEffect18(
+        useEffect16(
           function() {
             inst.hasValue = true;
             inst.value = value;
@@ -26639,7 +26639,7 @@ var require_react_jsx_runtime_development = __commonJS({
     if (true) {
       (function() {
         "use strict";
-        var React46 = require_react();
+        var React44 = require_react();
         var REACT_ELEMENT_TYPE = Symbol.for("react.element");
         var REACT_PORTAL_TYPE = Symbol.for("react.portal");
         var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
@@ -26665,7 +26665,7 @@ var require_react_jsx_runtime_development = __commonJS({
           }
           return null;
         }
-        var ReactSharedInternals = React46.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React44.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function error(format2) {
           {
             {
@@ -27293,7 +27293,7 @@ var require_react_jsx_runtime_development = __commonJS({
         {
           propTypesMisspellWarningShown = false;
         }
-        function isValidElement18(object) {
+        function isValidElement17(object) {
           {
             return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
           }
@@ -27360,11 +27360,11 @@ var require_react_jsx_runtime_development = __commonJS({
             if (isArray2(node)) {
               for (var i = 0; i < node.length; i++) {
                 var child = node[i];
-                if (isValidElement18(child)) {
+                if (isValidElement17(child)) {
                   validateExplicitKey(child, parentType);
                 }
               }
-            } else if (isValidElement18(node)) {
+            } else if (isValidElement17(node)) {
               if (node._store) {
                 node._store.validated = true;
               }
@@ -27375,7 +27375,7 @@ var require_react_jsx_runtime_development = __commonJS({
                   var iterator = iteratorFn.call(node);
                   var step;
                   while (!(step = iterator.next()).done) {
-                    if (isValidElement18(step.value)) {
+                    if (isValidElement17(step.value)) {
                       validateExplicitKey(step.value, parentType);
                     }
                   }
@@ -27515,11 +27515,11 @@ var require_react_jsx_runtime_development = __commonJS({
             return jsxWithValidation(type, props, key, false);
           }
         }
-        var jsx4 = jsxWithValidationDynamic;
-        var jsxs4 = jsxWithValidationStatic;
+        var jsx3 = jsxWithValidationDynamic;
+        var jsxs3 = jsxWithValidationStatic;
         exports.Fragment = REACT_FRAGMENT_TYPE;
-        exports.jsx = jsx4;
-        exports.jsxs = jsxs4;
+        exports.jsx = jsx3;
+        exports.jsxs = jsxs3;
       })();
     }
   }
@@ -27538,11 +27538,11 @@ var require_jsx_runtime = __commonJS({
 });
 
 // src/main.tsx
-var import_react60 = __toESM(require_react(), 1);
+var import_react58 = __toESM(require_react(), 1);
 var import_client = __toESM(require_client(), 1);
 
-// src/component.tsx
-var import_react58 = __toESM(require_react(), 1);
+// src/PortfolioSimulator.tsx
+var import_react57 = __toESM(require_react(), 1);
 
 // node_modules/lucide-react/dist/esm/createLucideIcon.js
 var import_react2 = __toESM(require_react());
@@ -46322,27 +46322,6 @@ var {
 var brushReducer = brushSlice.reducer;
 
 // node_modules/recharts/es6/util/CartesianUtils.js
-function ownKeys32(e, r2) {
-  var t = Object.keys(e);
-  if (Object.getOwnPropertySymbols) {
-    var o = Object.getOwnPropertySymbols(e);
-    r2 && (o = o.filter(function(r3) {
-      return Object.getOwnPropertyDescriptor(e, r3).enumerable;
-    })), t.push.apply(t, o);
-  }
-  return t;
-}
-function _objectSpread32(e) {
-  for (var r2 = 1; r2 < arguments.length; r2++) {
-    var t = null != arguments[r2] ? arguments[r2] : {};
-    r2 % 2 ? ownKeys32(Object(t), true).forEach(function(r3) {
-      _defineProperty33(e, r3, t[r3]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys32(Object(t)).forEach(function(r3) {
-      Object.defineProperty(e, r3, Object.getOwnPropertyDescriptor(t, r3));
-    });
-  }
-  return e;
-}
 function _defineProperty33(e, r2, t) {
   return (r2 = _toPropertyKey33(r2)) in e ? Object.defineProperty(e, r2, { value: t, enumerable: true, configurable: true, writable: true }) : e[r2] = t, e;
 }
@@ -46422,29 +46401,6 @@ var ScaleHelper = class _ScaleHelper {
   }
 };
 _defineProperty33(ScaleHelper, "EPS", 1e-4);
-var createLabeledScales = (options) => {
-  var scales = Object.keys(options).reduce((res, key) => _objectSpread32(_objectSpread32({}, res), {}, {
-    [key]: ScaleHelper.create(options[key])
-  }), {});
-  return _objectSpread32(_objectSpread32({}, scales), {}, {
-    apply(coord) {
-      var {
-        bandAware,
-        position
-      } = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
-      return Object.fromEntries(Object.entries(coord).map((_ref4) => {
-        var [label, value] = _ref4;
-        return [label, scales[label].apply(value, {
-          bandAware,
-          position
-        })];
-      }));
-    },
-    isInRange(coord) {
-      return Object.keys(coord).every((label) => scales[label].isInRange(coord[label]));
-    }
-  });
-};
 function normalizeAngle(angle) {
   return (angle % 180 + 180) % 180;
 }
@@ -46540,186 +46496,10 @@ var ClipPathProvider = (_ref2) => {
     width
   }))), children);
 };
-var useClipPathId = () => {
-  return (0, import_react39.useContext)(ClipPathIdContext);
-};
-
-// node_modules/recharts/es6/cartesian/ReferenceDot.js
-var React28 = __toESM(require_react());
-var import_react40 = __toESM(require_react());
-function ownKeys33(e, r2) {
-  var t = Object.keys(e);
-  if (Object.getOwnPropertySymbols) {
-    var o = Object.getOwnPropertySymbols(e);
-    r2 && (o = o.filter(function(r3) {
-      return Object.getOwnPropertyDescriptor(e, r3).enumerable;
-    })), t.push.apply(t, o);
-  }
-  return t;
-}
-function _objectSpread33(e) {
-  for (var r2 = 1; r2 < arguments.length; r2++) {
-    var t = null != arguments[r2] ? arguments[r2] : {};
-    r2 % 2 ? ownKeys33(Object(t), true).forEach(function(r3) {
-      _defineProperty34(e, r3, t[r3]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys33(Object(t)).forEach(function(r3) {
-      Object.defineProperty(e, r3, Object.getOwnPropertyDescriptor(t, r3));
-    });
-  }
-  return e;
-}
-function _defineProperty34(e, r2, t) {
-  return (r2 = _toPropertyKey34(r2)) in e ? Object.defineProperty(e, r2, { value: t, enumerable: true, configurable: true, writable: true }) : e[r2] = t, e;
-}
-function _toPropertyKey34(t) {
-  var i = _toPrimitive34(t, "string");
-  return "symbol" == typeof i ? i : i + "";
-}
-function _toPrimitive34(t, r2) {
-  if ("object" != typeof t || !t) return t;
-  var e = t[Symbol.toPrimitive];
-  if (void 0 !== e) {
-    var i = e.call(t, r2 || "default");
-    if ("object" != typeof i) return i;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return ("string" === r2 ? String : Number)(t);
-}
-function _extends18() {
-  return _extends18 = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r2 in t) ({}).hasOwnProperty.call(t, r2) && (n[r2] = t[r2]);
-    }
-    return n;
-  }, _extends18.apply(null, arguments);
-}
-var useCoordinate = (x2, y2, xAxisId, yAxisId, ifOverflow) => {
-  var isX = isNumOrStr(x2);
-  var isY = isNumOrStr(y2);
-  var isPanorama = useIsPanorama();
-  var xAxisScale = useAppSelector((state) => selectAxisScale(state, "xAxis", xAxisId, isPanorama));
-  var yAxisScale = useAppSelector((state) => selectAxisScale(state, "yAxis", yAxisId, isPanorama));
-  if (!isX || !isY || xAxisScale == null || yAxisScale == null) {
-    return null;
-  }
-  var scales = createLabeledScales({
-    x: xAxisScale,
-    y: yAxisScale
-  });
-  var result = scales.apply({
-    x: x2,
-    y: y2
-  }, {
-    bandAware: true
-  });
-  if (ifOverflow === "discard" && !scales.isInRange(result)) {
-    return null;
-  }
-  return result;
-};
-function ReportReferenceDot(props) {
-  var dispatch = useAppDispatch();
-  (0, import_react40.useEffect)(() => {
-    dispatch(addDot(props));
-    return () => {
-      dispatch(removeDot(props));
-    };
-  });
-  return null;
-}
-var renderDot = (option, props) => {
-  var dot;
-  if (/* @__PURE__ */ React28.isValidElement(option)) {
-    dot = /* @__PURE__ */ React28.cloneElement(option, props);
-  } else if (typeof option === "function") {
-    dot = option(props);
-  } else {
-    dot = /* @__PURE__ */ React28.createElement(Dot, _extends18({}, props, {
-      cx: props.cx,
-      cy: props.cy,
-      className: "recharts-reference-dot-dot"
-    }));
-  }
-  return dot;
-};
-function ReferenceDotImpl(props) {
-  var {
-    x: x2,
-    y: y2,
-    r: r2
-  } = props;
-  var clipPathId = useClipPathId();
-  var coordinate = useCoordinate(x2, y2, props.xAxisId, props.yAxisId, props.ifOverflow);
-  if (!coordinate) {
-    return null;
-  }
-  var {
-    x: cx,
-    y: cy
-  } = coordinate;
-  var {
-    shape,
-    className,
-    ifOverflow
-  } = props;
-  var clipPath = ifOverflow === "hidden" ? "url(#".concat(clipPathId, ")") : void 0;
-  var dotProps = _objectSpread33(_objectSpread33({
-    clipPath
-  }, svgPropertiesAndEvents(props)), {}, {
-    cx,
-    cy
-  });
-  return /* @__PURE__ */ React28.createElement(ZIndexLayer, {
-    zIndex: props.zIndex
-  }, /* @__PURE__ */ React28.createElement(Layer, {
-    className: clsx("recharts-reference-dot", className)
-  }, renderDot(shape, dotProps), /* @__PURE__ */ React28.createElement(CartesianLabelContextProvider, {
-    x: cx - r2,
-    y: cy - r2,
-    width: 2 * r2,
-    height: 2 * r2,
-    upperWidth: 2 * r2,
-    lowerWidth: 2 * r2
-  }, /* @__PURE__ */ React28.createElement(CartesianLabelFromLabelProp, {
-    label: props.label
-  }), props.children)));
-}
-var referenceDotDefaultProps = {
-  ifOverflow: "discard",
-  xAxisId: 0,
-  yAxisId: 0,
-  r: 10,
-  fill: "#fff",
-  stroke: "#ccc",
-  fillOpacity: 1,
-  strokeWidth: 1,
-  zIndex: DefaultZIndexes.scatter
-};
-function ReferenceDot(outsideProps) {
-  var props = resolveDefaultProps(outsideProps, referenceDotDefaultProps);
-  var {
-    x: x2,
-    y: y2,
-    r: r2,
-    ifOverflow,
-    yAxisId,
-    xAxisId
-  } = props;
-  return /* @__PURE__ */ React28.createElement(React28.Fragment, null, /* @__PURE__ */ React28.createElement(ReportReferenceDot, {
-    y: y2,
-    x: x2,
-    r: r2,
-    yAxisId,
-    xAxisId,
-    ifOverflow
-  }), /* @__PURE__ */ React28.createElement(ReferenceDotImpl, props));
-}
-ReferenceDot.displayName = "ReferenceDot";
 
 // node_modules/recharts/es6/cartesian/CartesianAxis.js
-var React29 = __toESM(require_react());
-var import_react41 = __toESM(require_react());
+var React28 = __toESM(require_react());
+var import_react40 = __toESM(require_react());
 var import_get5 = __toESM(require_get2());
 
 // node_modules/recharts/es6/util/getEveryNthWithCondition.js
@@ -46820,7 +46600,7 @@ function getEquidistantTicks(sign2, boundaries, getTickSize, ticks2, minTickGap)
 }
 
 // node_modules/recharts/es6/cartesian/getTicks.js
-function ownKeys34(e, r2) {
+function ownKeys32(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
@@ -46830,25 +46610,25 @@ function ownKeys34(e, r2) {
   }
   return t;
 }
-function _objectSpread34(e) {
+function _objectSpread32(e) {
   for (var r2 = 1; r2 < arguments.length; r2++) {
     var t = null != arguments[r2] ? arguments[r2] : {};
-    r2 % 2 ? ownKeys34(Object(t), true).forEach(function(r3) {
-      _defineProperty35(e, r3, t[r3]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys34(Object(t)).forEach(function(r3) {
+    r2 % 2 ? ownKeys32(Object(t), true).forEach(function(r3) {
+      _defineProperty34(e, r3, t[r3]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys32(Object(t)).forEach(function(r3) {
       Object.defineProperty(e, r3, Object.getOwnPropertyDescriptor(t, r3));
     });
   }
   return e;
 }
-function _defineProperty35(e, r2, t) {
-  return (r2 = _toPropertyKey35(r2)) in e ? Object.defineProperty(e, r2, { value: t, enumerable: true, configurable: true, writable: true }) : e[r2] = t, e;
+function _defineProperty34(e, r2, t) {
+  return (r2 = _toPropertyKey34(r2)) in e ? Object.defineProperty(e, r2, { value: t, enumerable: true, configurable: true, writable: true }) : e[r2] = t, e;
 }
-function _toPropertyKey35(t) {
-  var i = _toPrimitive35(t, "string");
+function _toPropertyKey34(t) {
+  var i = _toPrimitive34(t, "string");
   return "symbol" == typeof i ? i : i + "";
 }
-function _toPrimitive35(t, r2) {
+function _toPrimitive34(t, r2) {
   if ("object" != typeof t || !t) return t;
   var e = t[Symbol.toPrimitive];
   if (void 0 !== e) {
@@ -46878,11 +46658,11 @@ function getTicksEnd(sign2, boundaries, getTickSize, ticks2, minTickGap) {
     };
     if (i2 === len - 1) {
       var gap = sign2 * (entry.coordinate + sign2 * getSize() / 2 - end);
-      result[i2] = entry = _objectSpread34(_objectSpread34({}, entry), {}, {
+      result[i2] = entry = _objectSpread32(_objectSpread32({}, entry), {}, {
         tickCoord: gap > 0 ? entry.coordinate - gap * sign2 : entry.coordinate
       });
     } else {
-      result[i2] = entry = _objectSpread34(_objectSpread34({}, entry), {}, {
+      result[i2] = entry = _objectSpread32(_objectSpread32({}, entry), {}, {
         tickCoord: entry.coordinate
       });
     }
@@ -46890,7 +46670,7 @@ function getTicksEnd(sign2, boundaries, getTickSize, ticks2, minTickGap) {
       var isShow = isVisible(sign2, entry.tickCoord, getSize, start, end);
       if (isShow) {
         end = entry.tickCoord - sign2 * (getSize() / 2 + minTickGap);
-        result[i2] = _objectSpread34(_objectSpread34({}, entry), {}, {
+        result[i2] = _objectSpread32(_objectSpread32({}, entry), {}, {
           isShow: true
         });
       }
@@ -46912,14 +46692,14 @@ function getTicksStart(sign2, boundaries, getTickSize, ticks2, minTickGap, prese
     var tail = ticks2[len - 1];
     var tailSize = getTickSize(tail, len - 1);
     var tailGap = sign2 * (tail.coordinate + sign2 * tailSize / 2 - end);
-    result[len - 1] = tail = _objectSpread34(_objectSpread34({}, tail), {}, {
+    result[len - 1] = tail = _objectSpread32(_objectSpread32({}, tail), {}, {
       tickCoord: tailGap > 0 ? tail.coordinate - tailGap * sign2 : tail.coordinate
     });
     if (tail.tickCoord != null) {
       var isTailShow = isVisible(sign2, tail.tickCoord, () => tailSize, start, end);
       if (isTailShow) {
         end = tail.tickCoord - sign2 * (tailSize / 2 + minTickGap);
-        result[len - 1] = _objectSpread34(_objectSpread34({}, tail), {}, {
+        result[len - 1] = _objectSpread32(_objectSpread32({}, tail), {}, {
           isShow: true
         });
       }
@@ -46937,11 +46717,11 @@ function getTicksStart(sign2, boundaries, getTickSize, ticks2, minTickGap, prese
     };
     if (i2 === 0) {
       var gap = sign2 * (entry.coordinate - sign2 * getSize() / 2 - start);
-      result[i2] = entry = _objectSpread34(_objectSpread34({}, entry), {}, {
+      result[i2] = entry = _objectSpread32(_objectSpread32({}, entry), {}, {
         tickCoord: gap < 0 ? entry.coordinate - gap * sign2 : entry.coordinate
       });
     } else {
-      result[i2] = entry = _objectSpread34(_objectSpread34({}, entry), {}, {
+      result[i2] = entry = _objectSpread32(_objectSpread32({}, entry), {}, {
         tickCoord: entry.coordinate
       });
     }
@@ -46949,7 +46729,7 @@ function getTicksStart(sign2, boundaries, getTickSize, ticks2, minTickGap, prese
       var isShow = isVisible(sign2, entry.tickCoord, getSize, start, end);
       if (isShow) {
         start = entry.tickCoord + sign2 * (getSize() / 2 + minTickGap);
-        result[i2] = _objectSpread34(_objectSpread34({}, entry), {}, {
+        result[i2] = _objectSpread32(_objectSpread32({}, entry), {}, {
           isShow: true
         });
       }
@@ -47059,16 +46839,16 @@ function _objectWithoutPropertiesLoose13(r2, e) {
   }
   return t;
 }
-function _extends19() {
-  return _extends19 = Object.assign ? Object.assign.bind() : function(n) {
+function _extends18() {
+  return _extends18 = Object.assign ? Object.assign.bind() : function(n) {
     for (var e = 1; e < arguments.length; e++) {
       var t = arguments[e];
       for (var r2 in t) ({}).hasOwnProperty.call(t, r2) && (n[r2] = t[r2]);
     }
     return n;
-  }, _extends19.apply(null, arguments);
+  }, _extends18.apply(null, arguments);
 }
-function ownKeys35(e, r2) {
+function ownKeys33(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
@@ -47078,25 +46858,25 @@ function ownKeys35(e, r2) {
   }
   return t;
 }
-function _objectSpread35(e) {
+function _objectSpread33(e) {
   for (var r2 = 1; r2 < arguments.length; r2++) {
     var t = null != arguments[r2] ? arguments[r2] : {};
-    r2 % 2 ? ownKeys35(Object(t), true).forEach(function(r3) {
-      _defineProperty36(e, r3, t[r3]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys35(Object(t)).forEach(function(r3) {
+    r2 % 2 ? ownKeys33(Object(t), true).forEach(function(r3) {
+      _defineProperty35(e, r3, t[r3]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys33(Object(t)).forEach(function(r3) {
       Object.defineProperty(e, r3, Object.getOwnPropertyDescriptor(t, r3));
     });
   }
   return e;
 }
-function _defineProperty36(e, r2, t) {
-  return (r2 = _toPropertyKey36(r2)) in e ? Object.defineProperty(e, r2, { value: t, enumerable: true, configurable: true, writable: true }) : e[r2] = t, e;
+function _defineProperty35(e, r2, t) {
+  return (r2 = _toPropertyKey35(r2)) in e ? Object.defineProperty(e, r2, { value: t, enumerable: true, configurable: true, writable: true }) : e[r2] = t, e;
 }
-function _toPropertyKey36(t) {
-  var i = _toPrimitive36(t, "string");
+function _toPropertyKey35(t) {
+  var i = _toPrimitive35(t, "string");
   return "symbol" == typeof i ? i : i + "";
 }
-function _toPrimitive36(t, r2) {
+function _toPrimitive35(t, r2) {
   if ("object" != typeof t || !t) return t;
   var e = t[Symbol.toPrimitive];
   if (void 0 !== e) {
@@ -47147,12 +46927,12 @@ function AxisLine(axisLineProps) {
   if (!axisLine) {
     return null;
   }
-  var props = _objectSpread35(_objectSpread35(_objectSpread35({}, otherSvgProps), svgPropertiesNoEvents(axisLine)), {}, {
+  var props = _objectSpread33(_objectSpread33(_objectSpread33({}, otherSvgProps), svgPropertiesNoEvents(axisLine)), {}, {
     fill: "none"
   });
   if (orientation === "top" || orientation === "bottom") {
     var needHeight = +(orientation === "top" && !mirror || orientation === "bottom" && mirror);
-    props = _objectSpread35(_objectSpread35({}, props), {}, {
+    props = _objectSpread33(_objectSpread33({}, props), {}, {
       x1: x2,
       y1: y2 + needHeight * height,
       x2: x2 + width,
@@ -47160,14 +46940,14 @@ function AxisLine(axisLineProps) {
     });
   } else {
     var needWidth = +(orientation === "left" && !mirror || orientation === "right" && mirror);
-    props = _objectSpread35(_objectSpread35({}, props), {}, {
+    props = _objectSpread33(_objectSpread33({}, props), {}, {
       x1: x2 + needWidth * width,
       y1: y2,
       x2: x2 + needWidth * width,
       y2: y2 + height
     });
   }
-  return /* @__PURE__ */ React29.createElement("line", _extends19({}, props, {
+  return /* @__PURE__ */ React28.createElement("line", _extends18({}, props, {
     className: clsx("recharts-cartesian-axis-line", (0, import_get5.default)(axisLine, "className"))
   }));
 }
@@ -47248,12 +47028,12 @@ function TickItem(props) {
   } = props;
   var tickItem;
   var combinedClassName = clsx(tickProps.className, "recharts-cartesian-axis-tick-value");
-  if (/* @__PURE__ */ React29.isValidElement(option)) {
-    tickItem = /* @__PURE__ */ React29.cloneElement(option, _objectSpread35(_objectSpread35({}, tickProps), {}, {
+  if (/* @__PURE__ */ React28.isValidElement(option)) {
+    tickItem = /* @__PURE__ */ React28.cloneElement(option, _objectSpread33(_objectSpread33({}, tickProps), {}, {
       className: combinedClassName
     }));
   } else if (typeof option === "function") {
-    tickItem = option(_objectSpread35(_objectSpread35({}, tickProps), {}, {
+    tickItem = option(_objectSpread33(_objectSpread33({}, tickProps), {}, {
       className: combinedClassName
     }));
   } else {
@@ -47261,13 +47041,13 @@ function TickItem(props) {
     if (typeof option !== "boolean") {
       className = clsx(className, option === null || option === void 0 ? void 0 : option.className);
     }
-    tickItem = /* @__PURE__ */ React29.createElement(Text, _extends19({}, tickProps, {
+    tickItem = /* @__PURE__ */ React28.createElement(Text, _extends18({}, tickProps, {
       className
     }), value);
   }
   return tickItem;
 }
-var Ticks = /* @__PURE__ */ (0, import_react41.forwardRef)((props, ref) => {
+var Ticks = /* @__PURE__ */ (0, import_react40.forwardRef)((props, ref) => {
   var {
     ticks: ticks2 = [],
     tick,
@@ -47291,7 +47071,7 @@ var Ticks = /* @__PURE__ */ (0, import_react41.forwardRef)((props, ref) => {
     events,
     axisType
   } = props;
-  var finalTicks = getTicks(_objectSpread35(_objectSpread35({}, getTicksConfig), {}, {
+  var finalTicks = getTicks(_objectSpread33(_objectSpread33({}, getTicksConfig), {}, {
     ticks: ticks2
   }), fontSize, letterSpacing);
   var textAnchor = getTickTextAnchor(orientation, mirror);
@@ -47302,10 +47082,10 @@ var Ticks = /* @__PURE__ */ (0, import_react41.forwardRef)((props, ref) => {
   if (typeof tickLine === "object") {
     tickLinePropsObject = tickLine;
   }
-  var tickLineProps = _objectSpread35(_objectSpread35({}, axisProps), {}, {
+  var tickLineProps = _objectSpread33(_objectSpread33({}, axisProps), {}, {
     fill: "none"
   }, tickLinePropsObject);
-  var tickLineCoords = finalTicks.map((entry) => _objectSpread35({
+  var tickLineCoords = finalTicks.map((entry) => _objectSpread33({
     entry
   }, getTickLineCoord(entry, x2, y2, width, height, orientation, tickSize, mirror, tickMargin)));
   var tickLines = tickLineCoords.map((_ref2) => {
@@ -47313,10 +47093,10 @@ var Ticks = /* @__PURE__ */ (0, import_react41.forwardRef)((props, ref) => {
       entry,
       line: lineCoord
     } = _ref2;
-    return /* @__PURE__ */ React29.createElement(Layer, {
+    return /* @__PURE__ */ React28.createElement(Layer, {
       className: "recharts-cartesian-axis-tick",
       key: "tick-".concat(entry.value, "-").concat(entry.coordinate, "-").concat(entry.tickCoord)
-    }, tickLine && /* @__PURE__ */ React29.createElement("line", _extends19({}, tickLineProps, lineCoord, {
+    }, tickLine && /* @__PURE__ */ React28.createElement("line", _extends18({}, tickLineProps, lineCoord, {
       className: clsx("recharts-cartesian-axis-tick-line", (0, import_get5.default)(tickLine, "className"))
     })));
   });
@@ -47325,7 +47105,7 @@ var Ticks = /* @__PURE__ */ (0, import_react41.forwardRef)((props, ref) => {
       entry,
       tick: tickCoord
     } = _ref2;
-    var tickProps = _objectSpread35(_objectSpread35(_objectSpread35(_objectSpread35({
+    var tickProps = _objectSpread33(_objectSpread33(_objectSpread33(_objectSpread33({
       // @ts-expect-error textAnchor from axisProps is typed as `string` but Text wants type `TextAnchor`
       textAnchor,
       verticalAnchor
@@ -47341,27 +47121,27 @@ var Ticks = /* @__PURE__ */ (0, import_react41.forwardRef)((props, ref) => {
       tickFormatter,
       padding
     }, tickTextProps);
-    return /* @__PURE__ */ React29.createElement(Layer, _extends19({
+    return /* @__PURE__ */ React28.createElement(Layer, _extends18({
       className: "recharts-cartesian-axis-tick-label",
       key: "tick-label-".concat(entry.value, "-").concat(entry.coordinate, "-").concat(entry.tickCoord)
-    }, adaptEventsOfChild(events, entry, i)), tick && /* @__PURE__ */ React29.createElement(TickItem, {
+    }, adaptEventsOfChild(events, entry, i)), tick && /* @__PURE__ */ React28.createElement(TickItem, {
       option: tick,
       tickProps,
       value: "".concat(typeof tickFormatter === "function" ? tickFormatter(entry.value, i) : entry.value).concat(unit2 || "")
     }));
   });
-  return /* @__PURE__ */ React29.createElement("g", {
+  return /* @__PURE__ */ React28.createElement("g", {
     className: "recharts-cartesian-axis-ticks recharts-".concat(axisType, "-ticks")
-  }, tickLabels.length > 0 && /* @__PURE__ */ React29.createElement(ZIndexLayer, {
+  }, tickLabels.length > 0 && /* @__PURE__ */ React28.createElement(ZIndexLayer, {
     zIndex: DefaultZIndexes.label
-  }, /* @__PURE__ */ React29.createElement("g", {
+  }, /* @__PURE__ */ React28.createElement("g", {
     className: "recharts-cartesian-axis-tick-labels recharts-".concat(axisType, "-tick-labels"),
     ref
-  }, tickLabels)), tickLines.length > 0 && /* @__PURE__ */ React29.createElement("g", {
+  }, tickLabels)), tickLines.length > 0 && /* @__PURE__ */ React28.createElement("g", {
     className: "recharts-cartesian-axis-tick-lines recharts-".concat(axisType, "-tick-lines")
   }, tickLines));
 });
-var CartesianAxisComponent = /* @__PURE__ */ (0, import_react41.forwardRef)((props, ref) => {
+var CartesianAxisComponent = /* @__PURE__ */ (0, import_react40.forwardRef)((props, ref) => {
   var {
     axisLine,
     width,
@@ -47371,10 +47151,10 @@ var CartesianAxisComponent = /* @__PURE__ */ (0, import_react41.forwardRef)((pro
     ticks: ticks2,
     axisType
   } = props, rest = _objectWithoutProperties13(props, _excluded13);
-  var [fontSize, setFontSize] = (0, import_react41.useState)("");
-  var [letterSpacing, setLetterSpacing] = (0, import_react41.useState)("");
-  var tickRefs = (0, import_react41.useRef)(null);
-  (0, import_react41.useImperativeHandle)(ref, () => ({
+  var [fontSize, setFontSize] = (0, import_react40.useState)("");
+  var [letterSpacing, setLetterSpacing] = (0, import_react40.useState)("");
+  var tickRefs = (0, import_react40.useRef)(null);
+  (0, import_react40.useImperativeHandle)(ref, () => ({
     getCalculatedWidth: () => {
       var _props$labelRef;
       return getCalculatedYAxisWidth({
@@ -47386,7 +47166,7 @@ var CartesianAxisComponent = /* @__PURE__ */ (0, import_react41.forwardRef)((pro
       });
     }
   }));
-  var layerRef = (0, import_react41.useCallback)((el) => {
+  var layerRef = (0, import_react40.useCallback)((el) => {
     if (el) {
       var tickNodes = el.getElementsByClassName("recharts-cartesian-axis-tick-value");
       tickRefs.current = tickNodes;
@@ -47408,11 +47188,11 @@ var CartesianAxisComponent = /* @__PURE__ */ (0, import_react41.forwardRef)((pro
   if (width != null && width <= 0 || height != null && height <= 0) {
     return null;
   }
-  return /* @__PURE__ */ React29.createElement(ZIndexLayer, {
+  return /* @__PURE__ */ React28.createElement(ZIndexLayer, {
     zIndex: props.zIndex
-  }, /* @__PURE__ */ React29.createElement(Layer, {
+  }, /* @__PURE__ */ React28.createElement(Layer, {
     className: clsx("recharts-cartesian-axis", className)
-  }, /* @__PURE__ */ React29.createElement(AxisLine, {
+  }, /* @__PURE__ */ React28.createElement(AxisLine, {
     x: props.x,
     y: props.y,
     width,
@@ -47421,7 +47201,7 @@ var CartesianAxisComponent = /* @__PURE__ */ (0, import_react41.forwardRef)((pro
     mirror: props.mirror,
     axisLine,
     otherSvgProps: svgPropertiesNoEvents(props)
-  }), /* @__PURE__ */ React29.createElement(Ticks, {
+  }), /* @__PURE__ */ React28.createElement(Ticks, {
     ref: layerRef,
     axisType,
     events: rest,
@@ -47444,33 +47224,33 @@ var CartesianAxisComponent = /* @__PURE__ */ (0, import_react41.forwardRef)((pro
     width: props.width,
     x: props.x,
     y: props.y
-  }), /* @__PURE__ */ React29.createElement(CartesianLabelContextProvider, {
+  }), /* @__PURE__ */ React28.createElement(CartesianLabelContextProvider, {
     x: props.x,
     y: props.y,
     width: props.width,
     height: props.height,
     lowerWidth: props.width,
     upperWidth: props.width
-  }, /* @__PURE__ */ React29.createElement(CartesianLabelFromLabelProp, {
+  }, /* @__PURE__ */ React28.createElement(CartesianLabelFromLabelProp, {
     label: props.label,
     labelRef: props.labelRef
   }), props.children)));
 });
-var CartesianAxis = /* @__PURE__ */ React29.forwardRef((outsideProps, ref) => {
+var CartesianAxis = /* @__PURE__ */ React28.forwardRef((outsideProps, ref) => {
   var props = resolveDefaultProps(outsideProps, defaultCartesianAxisProps);
-  return /* @__PURE__ */ React29.createElement(CartesianAxisComponent, _extends19({}, props, {
+  return /* @__PURE__ */ React28.createElement(CartesianAxisComponent, _extends18({}, props, {
     ref
   }));
 });
 CartesianAxis.displayName = "CartesianAxis";
 
 // node_modules/recharts/es6/cartesian/CartesianGrid.js
-var React30 = __toESM(require_react());
+var React29 = __toESM(require_react());
 var _excluded14 = ["x1", "y1", "x2", "y2", "key"];
 var _excluded26 = ["offset"];
 var _excluded33 = ["xAxisId", "yAxisId"];
 var _excluded43 = ["xAxisId", "yAxisId"];
-function ownKeys36(e, r2) {
+function ownKeys34(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
@@ -47480,25 +47260,25 @@ function ownKeys36(e, r2) {
   }
   return t;
 }
-function _objectSpread36(e) {
+function _objectSpread34(e) {
   for (var r2 = 1; r2 < arguments.length; r2++) {
     var t = null != arguments[r2] ? arguments[r2] : {};
-    r2 % 2 ? ownKeys36(Object(t), true).forEach(function(r3) {
-      _defineProperty37(e, r3, t[r3]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys36(Object(t)).forEach(function(r3) {
+    r2 % 2 ? ownKeys34(Object(t), true).forEach(function(r3) {
+      _defineProperty36(e, r3, t[r3]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys34(Object(t)).forEach(function(r3) {
       Object.defineProperty(e, r3, Object.getOwnPropertyDescriptor(t, r3));
     });
   }
   return e;
 }
-function _defineProperty37(e, r2, t) {
-  return (r2 = _toPropertyKey37(r2)) in e ? Object.defineProperty(e, r2, { value: t, enumerable: true, configurable: true, writable: true }) : e[r2] = t, e;
+function _defineProperty36(e, r2, t) {
+  return (r2 = _toPropertyKey36(r2)) in e ? Object.defineProperty(e, r2, { value: t, enumerable: true, configurable: true, writable: true }) : e[r2] = t, e;
 }
-function _toPropertyKey37(t) {
-  var i = _toPrimitive37(t, "string");
+function _toPropertyKey36(t) {
+  var i = _toPrimitive36(t, "string");
   return "symbol" == typeof i ? i : i + "";
 }
-function _toPrimitive37(t, r2) {
+function _toPrimitive36(t, r2) {
   if ("object" != typeof t || !t) return t;
   var e = t[Symbol.toPrimitive];
   if (void 0 !== e) {
@@ -47508,14 +47288,14 @@ function _toPrimitive37(t, r2) {
   }
   return ("string" === r2 ? String : Number)(t);
 }
-function _extends20() {
-  return _extends20 = Object.assign ? Object.assign.bind() : function(n) {
+function _extends19() {
+  return _extends19 = Object.assign ? Object.assign.bind() : function(n) {
     for (var e = 1; e < arguments.length; e++) {
       var t = arguments[e];
       for (var r2 in t) ({}).hasOwnProperty.call(t, r2) && (n[r2] = t[r2]);
     }
     return n;
-  }, _extends20.apply(null, arguments);
+  }, _extends19.apply(null, arguments);
 }
 function _objectWithoutProperties14(e, t) {
   if (null == e) return {};
@@ -47550,7 +47330,7 @@ var Background = (props) => {
     height,
     ry
   } = props;
-  return /* @__PURE__ */ React30.createElement("rect", {
+  return /* @__PURE__ */ React29.createElement("rect", {
     x: x2,
     y: y2,
     ry,
@@ -47568,8 +47348,8 @@ function LineItem(_ref2) {
     lineItemProps
   } = _ref2;
   var lineItem;
-  if (/* @__PURE__ */ React30.isValidElement(option)) {
-    lineItem = /* @__PURE__ */ React30.cloneElement(option, lineItemProps);
+  if (/* @__PURE__ */ React29.isValidElement(option)) {
+    lineItem = /* @__PURE__ */ React29.cloneElement(option, lineItemProps);
   } else if (typeof option === "function") {
     lineItem = option(lineItemProps);
   } else {
@@ -47584,7 +47364,7 @@ function LineItem(_ref2) {
     var _ref22 = (_svgPropertiesNoEvent = svgPropertiesNoEvents(others)) !== null && _svgPropertiesNoEvent !== void 0 ? _svgPropertiesNoEvent : {}, {
       offset: __
     } = _ref22, restOfFilteredProps = _objectWithoutProperties14(_ref22, _excluded26);
-    lineItem = /* @__PURE__ */ React30.createElement("line", _extends20({}, restOfFilteredProps, {
+    lineItem = /* @__PURE__ */ React29.createElement("line", _extends19({}, restOfFilteredProps, {
       x1,
       y1,
       x2,
@@ -47610,7 +47390,7 @@ function HorizontalGridLines(props) {
     yAxisId
   } = props, otherLineItemProps = _objectWithoutProperties14(props, _excluded33);
   var items = horizontalPoints.map((entry, i) => {
-    var lineItemProps = _objectSpread36(_objectSpread36({}, otherLineItemProps), {}, {
+    var lineItemProps = _objectSpread34(_objectSpread34({}, otherLineItemProps), {}, {
       x1: x2,
       y1: entry,
       x2: x2 + width,
@@ -47618,13 +47398,13 @@ function HorizontalGridLines(props) {
       key: "line-".concat(i),
       index: i
     });
-    return /* @__PURE__ */ React30.createElement(LineItem, {
+    return /* @__PURE__ */ React29.createElement(LineItem, {
       key: "line-".concat(i),
       option: horizontal,
       lineItemProps
     });
   });
-  return /* @__PURE__ */ React30.createElement("g", {
+  return /* @__PURE__ */ React29.createElement("g", {
     className: "recharts-cartesian-grid-horizontal"
   }, items);
 }
@@ -47643,7 +47423,7 @@ function VerticalGridLines(props) {
     yAxisId
   } = props, otherLineItemProps = _objectWithoutProperties14(props, _excluded43);
   var items = verticalPoints.map((entry, i) => {
-    var lineItemProps = _objectSpread36(_objectSpread36({}, otherLineItemProps), {}, {
+    var lineItemProps = _objectSpread34(_objectSpread34({}, otherLineItemProps), {}, {
       x1: entry,
       y1: y2,
       x2: entry,
@@ -47651,13 +47431,13 @@ function VerticalGridLines(props) {
       key: "line-".concat(i),
       index: i
     });
-    return /* @__PURE__ */ React30.createElement(LineItem, {
+    return /* @__PURE__ */ React29.createElement(LineItem, {
       option: vertical,
       lineItemProps,
       key: "line-".concat(i)
     });
   });
-  return /* @__PURE__ */ React30.createElement("g", {
+  return /* @__PURE__ */ React29.createElement("g", {
     className: "recharts-cartesian-grid-vertical"
   }, items);
 }
@@ -47686,7 +47466,7 @@ function HorizontalStripes(props) {
       return null;
     }
     var colorIndex = i % horizontalFill.length;
-    return /* @__PURE__ */ React30.createElement("rect", {
+    return /* @__PURE__ */ React29.createElement("rect", {
       key: "react-".concat(i),
       y: entry,
       x: x2,
@@ -47698,7 +47478,7 @@ function HorizontalStripes(props) {
       className: "recharts-cartesian-grid-bg"
     });
   });
-  return /* @__PURE__ */ React30.createElement("g", {
+  return /* @__PURE__ */ React29.createElement("g", {
     className: "recharts-cartesian-gridstripes-horizontal"
   }, items);
 }
@@ -47727,7 +47507,7 @@ function VerticalStripes(props) {
       return null;
     }
     var colorIndex = i % verticalFill.length;
-    return /* @__PURE__ */ React30.createElement("rect", {
+    return /* @__PURE__ */ React29.createElement("rect", {
       key: "react-".concat(i),
       x: entry,
       y: y2,
@@ -47739,7 +47519,7 @@ function VerticalStripes(props) {
       className: "recharts-cartesian-grid-bg"
     });
   });
-  return /* @__PURE__ */ React30.createElement("g", {
+  return /* @__PURE__ */ React29.createElement("g", {
     className: "recharts-cartesian-gridstripes-vertical"
   }, items);
 }
@@ -47750,7 +47530,7 @@ var defaultVerticalCoordinatesGenerator = (_ref3, syncWithTicks) => {
     height,
     offset
   } = _ref3;
-  return getCoordinatesOfGrid(getTicks(_objectSpread36(_objectSpread36(_objectSpread36({}, defaultCartesianAxisProps), xAxis), {}, {
+  return getCoordinatesOfGrid(getTicks(_objectSpread34(_objectSpread34(_objectSpread34({}, defaultCartesianAxisProps), xAxis), {}, {
     ticks: getTicksOfAxis(xAxis, true),
     viewBox: {
       x: 0,
@@ -47767,7 +47547,7 @@ var defaultHorizontalCoordinatesGenerator = (_ref4, syncWithTicks) => {
     height,
     offset
   } = _ref4;
-  return getCoordinatesOfGrid(getTicks(_objectSpread36(_objectSpread36(_objectSpread36({}, defaultCartesianAxisProps), yAxis), {}, {
+  return getCoordinatesOfGrid(getTicks(_objectSpread34(_objectSpread34(_objectSpread34({}, defaultCartesianAxisProps), yAxis), {}, {
     ticks: getTicksOfAxis(yAxis, true),
     viewBox: {
       x: 0,
@@ -47798,7 +47578,7 @@ function CartesianGrid(props) {
   var chartWidth = useChartWidth();
   var chartHeight = useChartHeight();
   var offset = useOffsetInternal();
-  var propsIncludingDefaults = _objectSpread36(_objectSpread36({}, resolveDefaultProps(props, defaultCartesianGridProps)), {}, {
+  var propsIncludingDefaults = _objectSpread34(_objectSpread34({}, resolveDefaultProps(props, defaultCartesianGridProps)), {}, {
     x: isNumber(props.x) ? props.x : offset.left,
     y: isNumber(props.y) ? props.y : offset.top,
     width: isNumber(props.width) ? props.width : offset.width,
@@ -47830,7 +47610,7 @@ function CartesianGrid(props) {
   if ((!horizontalPoints || !horizontalPoints.length) && typeof horizontalCoordinatesGenerator === "function") {
     var isHorizontalValues = horizontalValues && horizontalValues.length;
     var generatorResult = horizontalCoordinatesGenerator({
-      yAxis: yAxis ? _objectSpread36(_objectSpread36({}, yAxis), {}, {
+      yAxis: yAxis ? _objectSpread34(_objectSpread34({}, yAxis), {}, {
         ticks: isHorizontalValues ? horizontalValues : yAxis.ticks
       }) : void 0,
       width: chartWidth !== null && chartWidth !== void 0 ? chartWidth : width,
@@ -47845,7 +47625,7 @@ function CartesianGrid(props) {
   if ((!verticalPoints || !verticalPoints.length) && typeof verticalCoordinatesGenerator === "function") {
     var isVerticalValues = verticalValues && verticalValues.length;
     var _generatorResult = verticalCoordinatesGenerator({
-      xAxis: xAxis ? _objectSpread36(_objectSpread36({}, xAxis), {}, {
+      xAxis: xAxis ? _objectSpread34(_objectSpread34({}, xAxis), {}, {
         ticks: isVerticalValues ? verticalValues : xAxis.ticks
       }) : void 0,
       width: chartWidth !== null && chartWidth !== void 0 ? chartWidth : width,
@@ -47857,11 +47637,11 @@ function CartesianGrid(props) {
       verticalPoints = _generatorResult;
     }
   }
-  return /* @__PURE__ */ React30.createElement(ZIndexLayer, {
+  return /* @__PURE__ */ React29.createElement(ZIndexLayer, {
     zIndex: propsIncludingDefaults.zIndex
-  }, /* @__PURE__ */ React30.createElement("g", {
+  }, /* @__PURE__ */ React29.createElement("g", {
     className: "recharts-cartesian-grid"
-  }, /* @__PURE__ */ React30.createElement(Background, {
+  }, /* @__PURE__ */ React29.createElement(Background, {
     fill: propsIncludingDefaults.fill,
     fillOpacity: propsIncludingDefaults.fillOpacity,
     x: propsIncludingDefaults.x,
@@ -47869,16 +47649,16 @@ function CartesianGrid(props) {
     width: propsIncludingDefaults.width,
     height: propsIncludingDefaults.height,
     ry: propsIncludingDefaults.ry
-  }), /* @__PURE__ */ React30.createElement(HorizontalStripes, _extends20({}, propsIncludingDefaults, {
+  }), /* @__PURE__ */ React29.createElement(HorizontalStripes, _extends19({}, propsIncludingDefaults, {
     horizontalPoints
-  })), /* @__PURE__ */ React30.createElement(VerticalStripes, _extends20({}, propsIncludingDefaults, {
+  })), /* @__PURE__ */ React29.createElement(VerticalStripes, _extends19({}, propsIncludingDefaults, {
     verticalPoints
-  })), /* @__PURE__ */ React30.createElement(HorizontalGridLines, _extends20({}, propsIncludingDefaults, {
+  })), /* @__PURE__ */ React29.createElement(HorizontalGridLines, _extends19({}, propsIncludingDefaults, {
     offset,
     horizontalPoints,
     xAxis,
     yAxis
-  })), /* @__PURE__ */ React30.createElement(VerticalGridLines, _extends20({}, propsIncludingDefaults, {
+  })), /* @__PURE__ */ React29.createElement(VerticalGridLines, _extends19({}, propsIncludingDefaults, {
     offset,
     verticalPoints,
     xAxis,
@@ -47917,8 +47697,8 @@ function getRadiusAndStrokeWidthFromDot(dot) {
 }
 
 // node_modules/recharts/es6/cartesian/Area.js
-var React31 = __toESM(require_react());
-var import_react42 = __toESM(require_react());
+var React30 = __toESM(require_react());
+var import_react41 = __toESM(require_react());
 
 // node_modules/recharts/es6/state/selectors/areaSelectors.js
 var selectXAxisWithScale = (state, xAxisId, _yAxisId, isPanorama) => selectAxisWithScale(state, "xAxis", xAxisId, isPanorama);
@@ -47999,14 +47779,14 @@ var selectArea = createSelector([selectChartLayout, selectXAxisWithScale, select
 // node_modules/recharts/es6/cartesian/Area.js
 var _excluded15 = ["id"];
 var _excluded27 = ["activeDot", "animationBegin", "animationDuration", "animationEasing", "connectNulls", "dot", "fill", "fillOpacity", "hide", "isAnimationActive", "legendType", "stroke", "xAxisId", "yAxisId"];
-function _extends21() {
-  return _extends21 = Object.assign ? Object.assign.bind() : function(n) {
+function _extends20() {
+  return _extends20 = Object.assign ? Object.assign.bind() : function(n) {
     for (var e = 1; e < arguments.length; e++) {
       var t = arguments[e];
       for (var r2 in t) ({}).hasOwnProperty.call(t, r2) && (n[r2] = t[r2]);
     }
     return n;
-  }, _extends21.apply(null, arguments);
+  }, _extends20.apply(null, arguments);
 }
 function _objectWithoutProperties15(e, t) {
   if (null == e) return {};
@@ -48026,7 +47806,7 @@ function _objectWithoutPropertiesLoose15(r2, e) {
   }
   return t;
 }
-function ownKeys37(e, r2) {
+function ownKeys35(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
@@ -48036,25 +47816,25 @@ function ownKeys37(e, r2) {
   }
   return t;
 }
-function _objectSpread37(e) {
+function _objectSpread35(e) {
   for (var r2 = 1; r2 < arguments.length; r2++) {
     var t = null != arguments[r2] ? arguments[r2] : {};
-    r2 % 2 ? ownKeys37(Object(t), true).forEach(function(r3) {
-      _defineProperty38(e, r3, t[r3]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys37(Object(t)).forEach(function(r3) {
+    r2 % 2 ? ownKeys35(Object(t), true).forEach(function(r3) {
+      _defineProperty37(e, r3, t[r3]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys35(Object(t)).forEach(function(r3) {
       Object.defineProperty(e, r3, Object.getOwnPropertyDescriptor(t, r3));
     });
   }
   return e;
 }
-function _defineProperty38(e, r2, t) {
-  return (r2 = _toPropertyKey38(r2)) in e ? Object.defineProperty(e, r2, { value: t, enumerable: true, configurable: true, writable: true }) : e[r2] = t, e;
+function _defineProperty37(e, r2, t) {
+  return (r2 = _toPropertyKey37(r2)) in e ? Object.defineProperty(e, r2, { value: t, enumerable: true, configurable: true, writable: true }) : e[r2] = t, e;
 }
-function _toPropertyKey38(t) {
-  var i = _toPrimitive38(t, "string");
+function _toPropertyKey37(t) {
+  var i = _toPrimitive37(t, "string");
   return "symbol" == typeof i ? i : i + "";
 }
-function _toPrimitive38(t, r2) {
+function _toPrimitive37(t, r2) {
   if ("object" != typeof t || !t) return t;
   var e = t[Symbol.toPrimitive];
   if (void 0 !== e) {
@@ -48085,7 +47865,7 @@ var computeLegendPayloadFromAreaData = (props) => {
     payload: props
   }];
 };
-var SetAreaTooltipEntrySettings = /* @__PURE__ */ React31.memo((_ref2) => {
+var SetAreaTooltipEntrySettings = /* @__PURE__ */ React30.memo((_ref2) => {
   var {
     dataKey,
     data,
@@ -48113,7 +47893,7 @@ var SetAreaTooltipEntrySettings = /* @__PURE__ */ React31.memo((_ref2) => {
       unit: unit2
     }
   };
-  return /* @__PURE__ */ React31.createElement(SetTooltipEntrySettings, {
+  return /* @__PURE__ */ React30.createElement(SetTooltipEntrySettings, {
     tooltipEntrySettings
   });
 });
@@ -48129,7 +47909,7 @@ function AreaDotsWrapper(_ref2) {
     dataKey
   } = props;
   var areaProps = svgPropertiesNoEvents(props);
-  return /* @__PURE__ */ React31.createElement(Dots, {
+  return /* @__PURE__ */ React30.createElement(Dots, {
     points,
     dot,
     className: "recharts-area-dots",
@@ -48156,7 +47936,7 @@ function AreaLabelListProvider(_ref3) {
       upperWidth: 0,
       height: 0
     };
-    return _objectSpread37(_objectSpread37({}, viewBox), {}, {
+    return _objectSpread35(_objectSpread35({}, viewBox), {}, {
       value: point4.value,
       payload: point4.payload,
       parentViewBox: void 0,
@@ -48164,7 +47944,7 @@ function AreaLabelListProvider(_ref3) {
       fill: void 0
     });
   });
-  return /* @__PURE__ */ React31.createElement(CartesianLabelListContextProvider, {
+  return /* @__PURE__ */ React30.createElement(CartesianLabelListContextProvider, {
     value: showLabels ? labelListEntries : void 0
   }, children);
 }
@@ -48188,9 +47968,9 @@ function StaticArea(_ref4) {
   } = props, propsWithoutId = _objectWithoutProperties15(props, _excluded15);
   var allOtherProps = svgPropertiesNoEvents(propsWithoutId);
   var propsWithEvents = svgPropertiesAndEvents(propsWithoutId);
-  return /* @__PURE__ */ React31.createElement(React31.Fragment, null, (points === null || points === void 0 ? void 0 : points.length) > 1 && /* @__PURE__ */ React31.createElement(Layer, {
+  return /* @__PURE__ */ React30.createElement(React30.Fragment, null, (points === null || points === void 0 ? void 0 : points.length) > 1 && /* @__PURE__ */ React30.createElement(Layer, {
     clipPath: needClip ? "url(#clipPath-".concat(clipPathId, ")") : void 0
-  }, /* @__PURE__ */ React31.createElement(Curve, _extends21({}, propsWithEvents, {
+  }, /* @__PURE__ */ React30.createElement(Curve, _extends20({}, propsWithEvents, {
     id,
     points,
     connectNulls,
@@ -48199,21 +47979,21 @@ function StaticArea(_ref4) {
     layout,
     stroke: "none",
     className: "recharts-area-area"
-  })), stroke !== "none" && /* @__PURE__ */ React31.createElement(Curve, _extends21({}, allOtherProps, {
+  })), stroke !== "none" && /* @__PURE__ */ React30.createElement(Curve, _extends20({}, allOtherProps, {
     className: "recharts-area-curve",
     layout,
     type,
     connectNulls,
     fill: "none",
     points
-  })), stroke !== "none" && isRange && /* @__PURE__ */ React31.createElement(Curve, _extends21({}, allOtherProps, {
+  })), stroke !== "none" && isRange && /* @__PURE__ */ React30.createElement(Curve, _extends20({}, allOtherProps, {
     className: "recharts-area-curve",
     layout,
     type,
     connectNulls,
     fill: "none",
     points: baseLine
-  }))), /* @__PURE__ */ React31.createElement(AreaDotsWrapper, {
+  }))), /* @__PURE__ */ React30.createElement(AreaDotsWrapper, {
     points,
     props: propsWithoutId,
     clipPathId
@@ -48239,7 +48019,7 @@ function VerticalRect(_ref5) {
     maxX = Math.max(...baseLine.map((entry) => entry.x || 0), maxX);
   }
   if (isNumber(maxX)) {
-    return /* @__PURE__ */ React31.createElement("rect", {
+    return /* @__PURE__ */ React30.createElement("rect", {
       x: 0,
       y: startY < endY ? startY : startY - height,
       width: maxX + (strokeWidth ? parseInt("".concat(strokeWidth), 10) : 1),
@@ -48268,7 +48048,7 @@ function HorizontalRect(_ref6) {
     maxY = Math.max(...baseLine.map((entry) => entry.y || 0), maxY);
   }
   if (isNumber(maxY)) {
-    return /* @__PURE__ */ React31.createElement("rect", {
+    return /* @__PURE__ */ React30.createElement("rect", {
       x: startX < endX ? startX : startX - width,
       y: 0,
       width,
@@ -48286,14 +48066,14 @@ function ClipRect(_ref7) {
     strokeWidth
   } = _ref7;
   if (layout === "vertical") {
-    return /* @__PURE__ */ React31.createElement(VerticalRect, {
+    return /* @__PURE__ */ React30.createElement(VerticalRect, {
       alpha: alpha2,
       points,
       baseLine,
       strokeWidth
     });
   }
-  return /* @__PURE__ */ React31.createElement(HorizontalRect, {
+  return /* @__PURE__ */ React30.createElement(HorizontalRect, {
     alpha: alpha2,
     points,
     baseLine,
@@ -48318,21 +48098,21 @@ function AreaWithAnimation(_ref8) {
     onAnimationStart,
     onAnimationEnd
   } = props;
-  var animationInput = (0, import_react42.useMemo)(() => ({
+  var animationInput = (0, import_react41.useMemo)(() => ({
     points,
     baseLine
   }), [points, baseLine]);
   var animationId = useAnimationId(animationInput, "recharts-area-");
   var layout = useCartesianChartLayout();
-  var [isAnimating, setIsAnimating] = (0, import_react42.useState)(false);
+  var [isAnimating, setIsAnimating] = (0, import_react41.useState)(false);
   var showLabels = !isAnimating;
-  var handleAnimationEnd = (0, import_react42.useCallback)(() => {
+  var handleAnimationEnd = (0, import_react41.useCallback)(() => {
     if (typeof onAnimationEnd === "function") {
       onAnimationEnd();
     }
     setIsAnimating(false);
   }, [onAnimationEnd]);
-  var handleAnimationStart = (0, import_react42.useCallback)(() => {
+  var handleAnimationStart = (0, import_react41.useCallback)(() => {
     if (typeof onAnimationStart === "function") {
       onAnimationStart();
     }
@@ -48343,10 +48123,10 @@ function AreaWithAnimation(_ref8) {
   }
   var prevPoints = previousPointsRef.current;
   var prevBaseLine = previousBaselineRef.current;
-  return /* @__PURE__ */ React31.createElement(AreaLabelListProvider, {
+  return /* @__PURE__ */ React30.createElement(AreaLabelListProvider, {
     showLabels,
     points
-  }, props.children, /* @__PURE__ */ React31.createElement(JavascriptAnimate, {
+  }, props.children, /* @__PURE__ */ React30.createElement(JavascriptAnimate, {
     animationId,
     begin: animationBegin,
     duration: animationDuration,
@@ -48370,7 +48150,7 @@ function AreaWithAnimation(_ref8) {
           var prevPointIndex = Math.floor(index * prevPointsDiffFactor);
           if (prevPoints[prevPointIndex]) {
             var prev = prevPoints[prevPointIndex];
-            return _objectSpread37(_objectSpread37({}, entry), {}, {
+            return _objectSpread35(_objectSpread35({}, entry), {}, {
               x: interpolate(prev.x, entry.x, t),
               y: interpolate(prev.y, entry.y, t)
             });
@@ -48388,7 +48168,7 @@ function AreaWithAnimation(_ref8) {
           var prevPointIndex = Math.floor(index * prevPointsDiffFactor);
           if (Array.isArray(prevBaseLine) && prevBaseLine[prevPointIndex]) {
             var prev = prevBaseLine[prevPointIndex];
-            return _objectSpread37(_objectSpread37({}, entry), {}, {
+            return _objectSpread35(_objectSpread35({}, entry), {}, {
               x: interpolate(prev.x, entry.x, t),
               y: interpolate(prev.y, entry.y, t)
             });
@@ -48400,7 +48180,7 @@ function AreaWithAnimation(_ref8) {
         previousPointsRef.current = stepPoints;
         previousBaselineRef.current = stepBaseLine;
       }
-      return /* @__PURE__ */ React31.createElement(StaticArea, {
+      return /* @__PURE__ */ React30.createElement(StaticArea, {
         points: stepPoints,
         baseLine: stepBaseLine,
         needClip,
@@ -48412,24 +48192,24 @@ function AreaWithAnimation(_ref8) {
       previousPointsRef.current = points;
       previousBaselineRef.current = baseLine;
     }
-    return /* @__PURE__ */ React31.createElement(Layer, null, isAnimationActive && /* @__PURE__ */ React31.createElement("defs", null, /* @__PURE__ */ React31.createElement("clipPath", {
+    return /* @__PURE__ */ React30.createElement(Layer, null, isAnimationActive && /* @__PURE__ */ React30.createElement("defs", null, /* @__PURE__ */ React30.createElement("clipPath", {
       id: "animationClipPath-".concat(clipPathId)
-    }, /* @__PURE__ */ React31.createElement(ClipRect, {
+    }, /* @__PURE__ */ React30.createElement(ClipRect, {
       alpha: t,
       points,
       baseLine,
       layout,
       strokeWidth: props.strokeWidth
-    }))), /* @__PURE__ */ React31.createElement(Layer, {
+    }))), /* @__PURE__ */ React30.createElement(Layer, {
       clipPath: "url(#animationClipPath-".concat(clipPathId, ")")
-    }, /* @__PURE__ */ React31.createElement(StaticArea, {
+    }, /* @__PURE__ */ React30.createElement(StaticArea, {
       points,
       baseLine,
       needClip,
       clipPathId,
       props
     })));
-  }), /* @__PURE__ */ React31.createElement(LabelListFromLabelProp, {
+  }), /* @__PURE__ */ React30.createElement(LabelListFromLabelProp, {
     label: props.label
   }));
 }
@@ -48439,9 +48219,9 @@ function RenderArea(_ref9) {
     clipPathId,
     props
   } = _ref9;
-  var previousPointsRef = (0, import_react42.useRef)(null);
-  var previousBaselineRef = (0, import_react42.useRef)();
-  return /* @__PURE__ */ React31.createElement(AreaWithAnimation, {
+  var previousPointsRef = (0, import_react41.useRef)(null);
+  var previousBaselineRef = (0, import_react41.useRef)();
+  return /* @__PURE__ */ React30.createElement(AreaWithAnimation, {
     needClip,
     clipPathId,
     props,
@@ -48449,7 +48229,7 @@ function RenderArea(_ref9) {
     previousBaselineRef
   });
 }
-var AreaWithState = class extends import_react42.PureComponent {
+var AreaWithState = class extends import_react41.PureComponent {
   render() {
     var {
       hide,
@@ -48479,32 +48259,32 @@ var AreaWithState = class extends import_react42.PureComponent {
     var clipDot = isClipDot(dot);
     var dotSize = r2 * 2 + strokeWidth;
     var activePointsClipPath = needClip ? "url(#clipPath-".concat(clipDot ? "" : "dots-").concat(clipPathId, ")") : void 0;
-    return /* @__PURE__ */ React31.createElement(ZIndexLayer, {
+    return /* @__PURE__ */ React30.createElement(ZIndexLayer, {
       zIndex
-    }, /* @__PURE__ */ React31.createElement(Layer, {
+    }, /* @__PURE__ */ React30.createElement(Layer, {
       className: layerClass
-    }, needClip && /* @__PURE__ */ React31.createElement("defs", null, /* @__PURE__ */ React31.createElement(GraphicalItemClipPath, {
+    }, needClip && /* @__PURE__ */ React30.createElement("defs", null, /* @__PURE__ */ React30.createElement(GraphicalItemClipPath, {
       clipPathId,
       xAxisId,
       yAxisId
-    }), !clipDot && /* @__PURE__ */ React31.createElement("clipPath", {
+    }), !clipDot && /* @__PURE__ */ React30.createElement("clipPath", {
       id: "clipPath-dots-".concat(clipPathId)
-    }, /* @__PURE__ */ React31.createElement("rect", {
+    }, /* @__PURE__ */ React30.createElement("rect", {
       x: left - dotSize / 2,
       y: top - dotSize / 2,
       width: width + dotSize,
       height: height + dotSize
-    }))), /* @__PURE__ */ React31.createElement(RenderArea, {
+    }))), /* @__PURE__ */ React30.createElement(RenderArea, {
       needClip,
       clipPathId,
       props: this.props
-    })), /* @__PURE__ */ React31.createElement(ActivePoints, {
+    })), /* @__PURE__ */ React30.createElement(ActivePoints, {
       points,
       mainColor: getLegendItemColor(this.props.stroke, this.props.fill),
       itemDataKey: this.props.dataKey,
       activeDot: this.props.activeDot,
       clipPath: activePointsClipPath
-    }), this.props.isRange && Array.isArray(baseLine) && /* @__PURE__ */ React31.createElement(ActivePoints, {
+    }), this.props.isRange && Array.isArray(baseLine) && /* @__PURE__ */ React30.createElement(ActivePoints, {
       points: baseLine,
       mainColor: getLegendItemColor(this.props.stroke, this.props.fill),
       itemDataKey: this.props.dataKey,
@@ -48578,7 +48358,7 @@ function AreaImpl(props) {
   if (!points || !points.length) {
     return null;
   }
-  return /* @__PURE__ */ React31.createElement(AreaWithState, _extends21({}, everythingElse, {
+  return /* @__PURE__ */ React30.createElement(AreaWithState, _extends20({}, everythingElse, {
     activeDot,
     animationBegin,
     animationDuration,
@@ -48721,12 +48501,12 @@ function computeArea(_ref0) {
 function AreaFn(outsideProps) {
   var props = resolveDefaultProps(outsideProps, defaultAreaProps);
   var isPanorama = useIsPanorama();
-  return /* @__PURE__ */ React31.createElement(RegisterGraphicalItemId, {
+  return /* @__PURE__ */ React30.createElement(RegisterGraphicalItemId, {
     id: props.id,
     type: "area"
-  }, (id) => /* @__PURE__ */ React31.createElement(React31.Fragment, null, /* @__PURE__ */ React31.createElement(SetLegendPayload, {
+  }, (id) => /* @__PURE__ */ React30.createElement(React30.Fragment, null, /* @__PURE__ */ React30.createElement(SetLegendPayload, {
     legendPayload: computeLegendPayloadFromAreaData(props)
-  }), /* @__PURE__ */ React31.createElement(SetAreaTooltipEntrySettings, {
+  }), /* @__PURE__ */ React30.createElement(SetAreaTooltipEntrySettings, {
     dataKey: props.dataKey,
     data: props.data,
     stroke: props.stroke,
@@ -48736,7 +48516,7 @@ function AreaFn(outsideProps) {
     hide: props.hide,
     unit: props.unit,
     tooltipType: props.tooltipType
-  }), /* @__PURE__ */ React31.createElement(SetCartesianGraphicalItem, {
+  }), /* @__PURE__ */ React30.createElement(SetCartesianGraphicalItem, {
     type: "area",
     id,
     data: props.data,
@@ -48750,16 +48530,16 @@ function AreaFn(outsideProps) {
     baseValue: props.baseValue,
     isPanorama,
     connectNulls: props.connectNulls
-  }), /* @__PURE__ */ React31.createElement(AreaImpl, _extends21({}, props, {
+  }), /* @__PURE__ */ React30.createElement(AreaImpl, _extends20({}, props, {
     id
   }))));
 }
-var Area = /* @__PURE__ */ React31.memo(AreaFn, propsAreEqual);
+var Area = /* @__PURE__ */ React30.memo(AreaFn, propsAreEqual);
 Area.displayName = "Area";
 
 // node_modules/recharts/es6/cartesian/XAxis.js
-var React32 = __toESM(require_react());
-var import_react43 = __toESM(require_react());
+var React31 = __toESM(require_react());
+var import_react42 = __toESM(require_react());
 
 // node_modules/recharts/es6/util/axisPropsAreEqual.js
 var _excluded16 = ["domain", "range"];
@@ -48815,14 +48595,14 @@ function axisPropsAreEqual(prevProps, nextProps) {
 // node_modules/recharts/es6/cartesian/XAxis.js
 var _excluded17 = ["dangerouslySetInnerHTML", "ticks"];
 var _excluded29 = ["id"];
-function _extends22() {
-  return _extends22 = Object.assign ? Object.assign.bind() : function(n) {
+function _extends21() {
+  return _extends21 = Object.assign ? Object.assign.bind() : function(n) {
     for (var e = 1; e < arguments.length; e++) {
       var t = arguments[e];
       for (var r2 in t) ({}).hasOwnProperty.call(t, r2) && (n[r2] = t[r2]);
     }
     return n;
-  }, _extends22.apply(null, arguments);
+  }, _extends21.apply(null, arguments);
 }
 function _objectWithoutProperties17(e, t) {
   if (null == e) return {};
@@ -48844,8 +48624,8 @@ function _objectWithoutPropertiesLoose17(r2, e) {
 }
 function SetXAxisSettings(settings) {
   var dispatch = useAppDispatch();
-  var prevSettingsRef = (0, import_react43.useRef)(null);
-  (0, import_react43.useLayoutEffect)(() => {
+  var prevSettingsRef = (0, import_react42.useRef)(null);
+  (0, import_react42.useLayoutEffect)(() => {
     if (prevSettingsRef.current === null) {
       dispatch(addXAxis(settings));
     } else if (prevSettingsRef.current !== settings) {
@@ -48856,7 +48636,7 @@ function SetXAxisSettings(settings) {
     }
     prevSettingsRef.current = settings;
   }, [settings, dispatch]);
-  (0, import_react43.useLayoutEffect)(() => {
+  (0, import_react42.useLayoutEffect)(() => {
     return () => {
       if (prevSettingsRef.current) {
         dispatch(removeXAxis(prevSettingsRef.current));
@@ -48889,7 +48669,7 @@ var XAxisImpl = (props) => {
   var {
     id
   } = synchronizedSettings, restSynchronizedSettings = _objectWithoutProperties17(synchronizedSettings, _excluded29);
-  return /* @__PURE__ */ React32.createElement(CartesianAxis, _extends22({}, allOtherProps, restSynchronizedSettings, {
+  return /* @__PURE__ */ React31.createElement(CartesianAxis, _extends21({}, allOtherProps, restSynchronizedSettings, {
     scale,
     x: position.x,
     y: position.y,
@@ -48926,7 +48706,7 @@ var xAxisDefaultProps = {
 };
 var XAxisSettingsDispatcher = (outsideProps) => {
   var props = resolveDefaultProps(outsideProps, xAxisDefaultProps);
-  return /* @__PURE__ */ React32.createElement(React32.Fragment, null, /* @__PURE__ */ React32.createElement(SetXAxisSettings, {
+  return /* @__PURE__ */ React31.createElement(React31.Fragment, null, /* @__PURE__ */ React31.createElement(SetXAxisSettings, {
     allowDataOverflow: props.allowDataOverflow,
     allowDecimals: props.allowDecimals,
     allowDuplicatedCategory: props.allowDuplicatedCategory,
@@ -48951,24 +48731,24 @@ var XAxisSettingsDispatcher = (outsideProps) => {
     ticks: props.ticks,
     type: props.type,
     unit: props.unit
-  }), /* @__PURE__ */ React32.createElement(XAxisImpl, props));
+  }), /* @__PURE__ */ React31.createElement(XAxisImpl, props));
 };
-var XAxis = /* @__PURE__ */ React32.memo(XAxisSettingsDispatcher, axisPropsAreEqual);
+var XAxis = /* @__PURE__ */ React31.memo(XAxisSettingsDispatcher, axisPropsAreEqual);
 XAxis.displayName = "XAxis";
 
 // node_modules/recharts/es6/cartesian/YAxis.js
-var React33 = __toESM(require_react());
-var import_react44 = __toESM(require_react());
+var React32 = __toESM(require_react());
+var import_react43 = __toESM(require_react());
 var _excluded18 = ["dangerouslySetInnerHTML", "ticks"];
 var _excluded210 = ["id"];
-function _extends23() {
-  return _extends23 = Object.assign ? Object.assign.bind() : function(n) {
+function _extends22() {
+  return _extends22 = Object.assign ? Object.assign.bind() : function(n) {
     for (var e = 1; e < arguments.length; e++) {
       var t = arguments[e];
       for (var r2 in t) ({}).hasOwnProperty.call(t, r2) && (n[r2] = t[r2]);
     }
     return n;
-  }, _extends23.apply(null, arguments);
+  }, _extends22.apply(null, arguments);
 }
 function _objectWithoutProperties18(e, t) {
   if (null == e) return {};
@@ -48990,8 +48770,8 @@ function _objectWithoutPropertiesLoose18(r2, e) {
 }
 function SetYAxisSettings(settings) {
   var dispatch = useAppDispatch();
-  var prevSettingsRef = (0, import_react44.useRef)(null);
-  (0, import_react44.useLayoutEffect)(() => {
+  var prevSettingsRef = (0, import_react43.useRef)(null);
+  (0, import_react43.useLayoutEffect)(() => {
     if (prevSettingsRef.current === null) {
       dispatch(addYAxis(settings));
     } else if (prevSettingsRef.current !== settings) {
@@ -49002,7 +48782,7 @@ function SetYAxisSettings(settings) {
     }
     prevSettingsRef.current = settings;
   }, [settings, dispatch]);
-  (0, import_react44.useLayoutEffect)(() => {
+  (0, import_react43.useLayoutEffect)(() => {
     return () => {
       if (prevSettingsRef.current) {
         dispatch(removeYAxis(prevSettingsRef.current));
@@ -49019,8 +48799,8 @@ var YAxisImpl = (props) => {
     width,
     label
   } = props;
-  var cartesianAxisRef = (0, import_react44.useRef)(null);
-  var labelRef = (0, import_react44.useRef)(null);
+  var cartesianAxisRef = (0, import_react43.useRef)(null);
+  var labelRef = (0, import_react43.useRef)(null);
   var viewBox = useAppSelector(selectAxisViewBox);
   var isPanorama = useIsPanorama();
   var dispatch = useAppDispatch();
@@ -49030,8 +48810,8 @@ var YAxisImpl = (props) => {
   var position = useAppSelector((state) => selectYAxisPosition(state, yAxisId));
   var cartesianTickItems = useAppSelector((state) => selectTicksOfAxis(state, axisType, yAxisId, isPanorama));
   var synchronizedSettings = useAppSelector((state) => selectYAxisSettingsNoDefaults(state, yAxisId));
-  (0, import_react44.useLayoutEffect)(() => {
-    if (width !== "auto" || !axisSize || isLabelContentAFunction(label) || /* @__PURE__ */ (0, import_react44.isValidElement)(label) || synchronizedSettings == null) {
+  (0, import_react43.useLayoutEffect)(() => {
+    if (width !== "auto" || !axisSize || isLabelContentAFunction(label) || /* @__PURE__ */ (0, import_react43.isValidElement)(label) || synchronizedSettings == null) {
       return;
     }
     var axisComponent = cartesianAxisRef.current;
@@ -49067,7 +48847,7 @@ var YAxisImpl = (props) => {
   var {
     id
   } = synchronizedSettings, restSynchronizedSettings = _objectWithoutProperties18(synchronizedSettings, _excluded210);
-  return /* @__PURE__ */ React33.createElement(CartesianAxis, _extends23({}, allOtherProps, restSynchronizedSettings, {
+  return /* @__PURE__ */ React32.createElement(CartesianAxis, _extends22({}, allOtherProps, restSynchronizedSettings, {
     ref: cartesianAxisRef,
     labelRef,
     scale,
@@ -49111,7 +48891,7 @@ var yAxisDefaultProps = {
 };
 var YAxisSettingsDispatcher = (outsideProps) => {
   var props = resolveDefaultProps(outsideProps, yAxisDefaultProps);
-  return /* @__PURE__ */ React33.createElement(React33.Fragment, null, /* @__PURE__ */ React33.createElement(SetYAxisSettings, {
+  return /* @__PURE__ */ React32.createElement(React32.Fragment, null, /* @__PURE__ */ React32.createElement(SetYAxisSettings, {
     interval: props.interval,
     id: props.yAxisId,
     scale: props.scale,
@@ -49136,18 +48916,18 @@ var YAxisSettingsDispatcher = (outsideProps) => {
     minTickGap: props.minTickGap,
     tick: props.tick,
     tickFormatter: props.tickFormatter
-  }), /* @__PURE__ */ React33.createElement(YAxisImpl, props));
+  }), /* @__PURE__ */ React32.createElement(YAxisImpl, props));
 };
-var YAxis = /* @__PURE__ */ React33.memo(YAxisSettingsDispatcher, axisPropsAreEqual);
+var YAxis = /* @__PURE__ */ React32.memo(YAxisSettingsDispatcher, axisPropsAreEqual);
 YAxis.displayName = "YAxis";
 
 // node_modules/recharts/es6/chart/CartesianChart.js
-var React39 = __toESM(require_react());
-var import_react53 = __toESM(require_react());
+var React38 = __toESM(require_react());
+var import_react52 = __toESM(require_react());
 
 // node_modules/recharts/es6/state/RechartsStoreProvider.js
-var React34 = __toESM(require_react());
-var import_react45 = __toESM(require_react());
+var React33 = __toESM(require_react());
+var import_react44 = __toESM(require_react());
 
 // node_modules/recharts/es6/state/selectors/selectActivePropsFromChartPointer.js
 var pickChartPointer = (_state, chartPointer) => chartPointer;
@@ -49539,7 +49319,7 @@ function RechartsStoreProvider(_ref2) {
     reduxStoreName
   } = _ref2;
   var isPanorama = useIsPanorama();
-  var storeRef = (0, import_react45.useRef)(null);
+  var storeRef = (0, import_react44.useRef)(null);
   if (isPanorama) {
     return children;
   }
@@ -49547,14 +49327,14 @@ function RechartsStoreProvider(_ref2) {
     storeRef.current = createRechartsStore(preloadedState, reduxStoreName);
   }
   var nonNullContext = RechartsReduxContext;
-  return /* @__PURE__ */ React34.createElement(Provider_default, {
+  return /* @__PURE__ */ React33.createElement(Provider_default, {
     context: nonNullContext,
     store: storeRef.current
   }, children);
 }
 
 // node_modules/recharts/es6/state/ReportMainChartProps.js
-var import_react46 = __toESM(require_react());
+var import_react45 = __toESM(require_react());
 function ReportMainChartPropsImpl(_ref2) {
   var {
     layout,
@@ -49562,7 +49342,7 @@ function ReportMainChartPropsImpl(_ref2) {
   } = _ref2;
   var dispatch = useAppDispatch();
   var isPanorama = useIsPanorama();
-  (0, import_react46.useEffect)(() => {
+  (0, import_react45.useEffect)(() => {
     if (!isPanorama) {
       dispatch(setLayout(layout));
       dispatch(setMargin(margin));
@@ -49570,29 +49350,29 @@ function ReportMainChartPropsImpl(_ref2) {
   }, [dispatch, isPanorama, layout, margin]);
   return null;
 }
-var ReportMainChartProps = /* @__PURE__ */ (0, import_react46.memo)(ReportMainChartPropsImpl, propsAreEqual);
+var ReportMainChartProps = /* @__PURE__ */ (0, import_react45.memo)(ReportMainChartPropsImpl, propsAreEqual);
 
 // node_modules/recharts/es6/state/ReportChartProps.js
-var import_react47 = __toESM(require_react());
+var import_react46 = __toESM(require_react());
 function ReportChartProps(props) {
   var dispatch = useAppDispatch();
-  (0, import_react47.useEffect)(() => {
+  (0, import_react46.useEffect)(() => {
     dispatch(updateOptions(props));
   }, [dispatch, props]);
   return null;
 }
 
 // node_modules/recharts/es6/chart/CategoricalChart.js
-var React38 = __toESM(require_react());
-var import_react52 = __toESM(require_react());
+var React37 = __toESM(require_react());
+var import_react51 = __toESM(require_react());
 
 // node_modules/recharts/es6/container/RootSurface.js
-var React36 = __toESM(require_react());
-var import_react49 = __toESM(require_react());
-
-// node_modules/recharts/es6/zIndex/ZIndexPortal.js
 var React35 = __toESM(require_react());
 var import_react48 = __toESM(require_react());
+
+// node_modules/recharts/es6/zIndex/ZIndexPortal.js
+var React34 = __toESM(require_react());
+var import_react47 = __toESM(require_react());
 function ZIndexSvgPortal(_ref2) {
   var {
     zIndex,
@@ -49601,7 +49381,7 @@ function ZIndexSvgPortal(_ref2) {
   var prefix = isPanorama ? "recharts-zindex-panorama-" : "recharts-zindex-";
   var portalId = useUniqueId("".concat(prefix).concat(zIndex));
   var dispatch = useAppDispatch();
-  (0, import_react48.useLayoutEffect)(() => {
+  (0, import_react47.useLayoutEffect)(() => {
     dispatch(registerZIndexPortalId({
       zIndex,
       elementId: portalId,
@@ -49614,7 +49394,7 @@ function ZIndexSvgPortal(_ref2) {
       }));
     };
   }, [dispatch, zIndex, portalId, isPanorama]);
-  return /* @__PURE__ */ React35.createElement("g", {
+  return /* @__PURE__ */ React34.createElement("g", {
     tabIndex: -1,
     id: portalId
   });
@@ -49630,11 +49410,11 @@ function AllZIndexPortals(_ref2) {
   }
   var allNegativeZIndexes = allRegisteredZIndexes.filter((zIndex) => zIndex < 0);
   var allPositiveZIndexes = allRegisteredZIndexes.filter((zIndex) => zIndex > 0);
-  return /* @__PURE__ */ React35.createElement(React35.Fragment, null, allNegativeZIndexes.map((zIndex) => /* @__PURE__ */ React35.createElement(ZIndexSvgPortal, {
+  return /* @__PURE__ */ React34.createElement(React34.Fragment, null, allNegativeZIndexes.map((zIndex) => /* @__PURE__ */ React34.createElement(ZIndexSvgPortal, {
     key: zIndex,
     zIndex,
     isPanorama
-  })), children, allPositiveZIndexes.map((zIndex) => /* @__PURE__ */ React35.createElement(ZIndexSvgPortal, {
+  })), children, allPositiveZIndexes.map((zIndex) => /* @__PURE__ */ React34.createElement(ZIndexSvgPortal, {
     key: zIndex,
     zIndex,
     isPanorama
@@ -49661,14 +49441,14 @@ function _objectWithoutPropertiesLoose19(r2, e) {
   }
   return t;
 }
-function _extends24() {
-  return _extends24 = Object.assign ? Object.assign.bind() : function(n) {
+function _extends23() {
+  return _extends23 = Object.assign ? Object.assign.bind() : function(n) {
     for (var e = 1; e < arguments.length; e++) {
       var t = arguments[e];
       for (var r2 in t) ({}).hasOwnProperty.call(t, r2) && (n[r2] = t[r2]);
     }
     return n;
-  }, _extends24.apply(null, arguments);
+  }, _extends23.apply(null, arguments);
 }
 var FULL_WIDTH_AND_HEIGHT = {
   width: "100%",
@@ -49684,7 +49464,7 @@ var FULL_WIDTH_AND_HEIGHT = {
    */
   display: "block"
 };
-var MainChartSurface = /* @__PURE__ */ (0, import_react49.forwardRef)((props, ref) => {
+var MainChartSurface = /* @__PURE__ */ (0, import_react48.forwardRef)((props, ref) => {
   var width = useChartWidth();
   var height = useChartHeight();
   var hasAccessibilityLayer = useAccessibilityLayer();
@@ -49710,7 +49490,7 @@ var MainChartSurface = /* @__PURE__ */ (0, import_react49.forwardRef)((props, re
       role = hasAccessibilityLayer ? "application" : void 0;
     }
   }
-  return /* @__PURE__ */ React36.createElement(Surface, _extends24({}, otherAttributes, {
+  return /* @__PURE__ */ React35.createElement(Surface, _extends23({}, otherAttributes, {
     title,
     desc,
     role,
@@ -49735,41 +49515,41 @@ var BrushPanoramaSurface = (_ref2) => {
     y: y2,
     x: x2
   } = brushDimensions;
-  return /* @__PURE__ */ React36.createElement(Surface, {
+  return /* @__PURE__ */ React35.createElement(Surface, {
     width,
     height,
     x: x2,
     y: y2
   }, children);
 };
-var RootSurface = /* @__PURE__ */ (0, import_react49.forwardRef)((_ref2, ref) => {
+var RootSurface = /* @__PURE__ */ (0, import_react48.forwardRef)((_ref2, ref) => {
   var {
     children
   } = _ref2, rest = _objectWithoutProperties19(_ref2, _excluded19);
   var isPanorama = useIsPanorama();
   if (isPanorama) {
-    return /* @__PURE__ */ React36.createElement(BrushPanoramaSurface, null, /* @__PURE__ */ React36.createElement(AllZIndexPortals, {
+    return /* @__PURE__ */ React35.createElement(BrushPanoramaSurface, null, /* @__PURE__ */ React35.createElement(AllZIndexPortals, {
       isPanorama: true
     }, children));
   }
-  return /* @__PURE__ */ React36.createElement(MainChartSurface, _extends24({
+  return /* @__PURE__ */ React35.createElement(MainChartSurface, _extends23({
     ref
-  }, rest), /* @__PURE__ */ React36.createElement(AllZIndexPortals, {
+  }, rest), /* @__PURE__ */ React35.createElement(AllZIndexPortals, {
     isPanorama: false
   }, children));
 });
 
 // node_modules/recharts/es6/chart/RechartsWrapper.js
-var React37 = __toESM(require_react());
-var import_react51 = __toESM(require_react());
+var React36 = __toESM(require_react());
+var import_react50 = __toESM(require_react());
 
 // node_modules/recharts/es6/util/useReportScale.js
-var import_react50 = __toESM(require_react());
+var import_react49 = __toESM(require_react());
 function useReportScale() {
   var dispatch = useAppDispatch();
-  var [ref, setRef] = (0, import_react50.useState)(null);
+  var [ref, setRef] = (0, import_react49.useState)(null);
   var scale = useAppSelector(selectContainerScale);
-  (0, import_react50.useEffect)(() => {
+  (0, import_react49.useEffect)(() => {
     if (ref == null) {
       return;
     }
@@ -49783,7 +49563,7 @@ function useReportScale() {
 }
 
 // node_modules/recharts/es6/chart/RechartsWrapper.js
-function ownKeys38(e, r2) {
+function ownKeys36(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
@@ -49793,25 +49573,25 @@ function ownKeys38(e, r2) {
   }
   return t;
 }
-function _objectSpread38(e) {
+function _objectSpread36(e) {
   for (var r2 = 1; r2 < arguments.length; r2++) {
     var t = null != arguments[r2] ? arguments[r2] : {};
-    r2 % 2 ? ownKeys38(Object(t), true).forEach(function(r3) {
-      _defineProperty39(e, r3, t[r3]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys38(Object(t)).forEach(function(r3) {
+    r2 % 2 ? ownKeys36(Object(t), true).forEach(function(r3) {
+      _defineProperty38(e, r3, t[r3]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys36(Object(t)).forEach(function(r3) {
       Object.defineProperty(e, r3, Object.getOwnPropertyDescriptor(t, r3));
     });
   }
   return e;
 }
-function _defineProperty39(e, r2, t) {
-  return (r2 = _toPropertyKey39(r2)) in e ? Object.defineProperty(e, r2, { value: t, enumerable: true, configurable: true, writable: true }) : e[r2] = t, e;
+function _defineProperty38(e, r2, t) {
+  return (r2 = _toPropertyKey38(r2)) in e ? Object.defineProperty(e, r2, { value: t, enumerable: true, configurable: true, writable: true }) : e[r2] = t, e;
 }
-function _toPropertyKey39(t) {
-  var i = _toPrimitive39(t, "string");
+function _toPropertyKey38(t) {
+  var i = _toPrimitive38(t, "string");
   return "symbol" == typeof i ? i : i + "";
 }
-function _toPrimitive39(t, r2) {
+function _toPrimitive38(t, r2) {
   if ("object" != typeof t || !t) return t;
   var e = t[Symbol.toPrimitive];
   if (void 0 !== e) {
@@ -49821,14 +49601,14 @@ function _toPrimitive39(t, r2) {
   }
   return ("string" === r2 ? String : Number)(t);
 }
-function _extends25() {
-  return _extends25 = Object.assign ? Object.assign.bind() : function(n) {
+function _extends24() {
+  return _extends24 = Object.assign ? Object.assign.bind() : function(n) {
     for (var e = 1; e < arguments.length; e++) {
       var t = arguments[e];
       for (var r2 in t) ({}).hasOwnProperty.call(t, r2) && (n[r2] = t[r2]);
     }
     return n;
-  }, _extends25.apply(null, arguments);
+  }, _extends24.apply(null, arguments);
 }
 var EventSynchronizer = () => {
   useSynchronisedEventsFromOtherCharts();
@@ -49846,14 +49626,14 @@ function getNumberOrZero(value) {
   }
   return 0;
 }
-var ResponsiveDiv = /* @__PURE__ */ (0, import_react51.forwardRef)((props, ref) => {
+var ResponsiveDiv = /* @__PURE__ */ (0, import_react50.forwardRef)((props, ref) => {
   var _props$style, _props$style2;
-  var observerRef = (0, import_react51.useRef)(null);
-  var [sizes, setSizes] = (0, import_react51.useState)({
+  var observerRef = (0, import_react50.useRef)(null);
+  var [sizes, setSizes] = (0, import_react50.useState)({
     containerWidth: getNumberOrZero((_props$style = props.style) === null || _props$style === void 0 ? void 0 : _props$style.width),
     containerHeight: getNumberOrZero((_props$style2 = props.style) === null || _props$style2 === void 0 ? void 0 : _props$style2.height)
   });
-  var setContainerSize = (0, import_react51.useCallback)((newWidth, newHeight) => {
+  var setContainerSize = (0, import_react50.useCallback)((newWidth, newHeight) => {
     setSizes((prevState) => {
       var roundedWidth = Math.round(newWidth);
       var roundedHeight = Math.round(newHeight);
@@ -49866,7 +49646,7 @@ var ResponsiveDiv = /* @__PURE__ */ (0, import_react51.forwardRef)((props, ref) 
       };
     });
   }, []);
-  var innerRef = (0, import_react51.useCallback)((node) => {
+  var innerRef = (0, import_react50.useCallback)((node) => {
     if (typeof ref === "function") {
       ref(node);
     }
@@ -49888,7 +49668,7 @@ var ResponsiveDiv = /* @__PURE__ */ (0, import_react51.forwardRef)((props, ref) 
       observerRef.current = observer;
     }
   }, [ref, setContainerSize]);
-  (0, import_react51.useEffect)(() => {
+  (0, import_react50.useEffect)(() => {
     return () => {
       var observer = observerRef.current;
       if (observer != null) {
@@ -49896,23 +49676,23 @@ var ResponsiveDiv = /* @__PURE__ */ (0, import_react51.forwardRef)((props, ref) 
       }
     };
   }, [setContainerSize]);
-  return /* @__PURE__ */ React37.createElement(React37.Fragment, null, /* @__PURE__ */ React37.createElement(ReportChartSize, {
+  return /* @__PURE__ */ React36.createElement(React36.Fragment, null, /* @__PURE__ */ React36.createElement(ReportChartSize, {
     width: sizes.containerWidth,
     height: sizes.containerHeight
-  }), /* @__PURE__ */ React37.createElement("div", _extends25({
+  }), /* @__PURE__ */ React36.createElement("div", _extends24({
     ref: innerRef
   }, props)));
 });
-var ReadSizeOnceDiv = /* @__PURE__ */ (0, import_react51.forwardRef)((props, ref) => {
+var ReadSizeOnceDiv = /* @__PURE__ */ (0, import_react50.forwardRef)((props, ref) => {
   var {
     width,
     height
   } = props;
-  var [sizes, setSizes] = (0, import_react51.useState)({
+  var [sizes, setSizes] = (0, import_react50.useState)({
     containerWidth: getNumberOrZero(width),
     containerHeight: getNumberOrZero(height)
   });
-  var setContainerSize = (0, import_react51.useCallback)((newWidth, newHeight) => {
+  var setContainerSize = (0, import_react50.useCallback)((newWidth, newHeight) => {
     setSizes((prevState) => {
       var roundedWidth = Math.round(newWidth);
       var roundedHeight = Math.round(newHeight);
@@ -49925,7 +49705,7 @@ var ReadSizeOnceDiv = /* @__PURE__ */ (0, import_react51.forwardRef)((props, ref
       };
     });
   }, []);
-  var innerRef = (0, import_react51.useCallback)((node) => {
+  var innerRef = (0, import_react50.useCallback)((node) => {
     if (typeof ref === "function") {
       ref(node);
     }
@@ -49937,43 +49717,43 @@ var ReadSizeOnceDiv = /* @__PURE__ */ (0, import_react51.forwardRef)((props, ref
       setContainerSize(containerWidth, containerHeight);
     }
   }, [ref, setContainerSize]);
-  return /* @__PURE__ */ React37.createElement(React37.Fragment, null, /* @__PURE__ */ React37.createElement(ReportChartSize, {
+  return /* @__PURE__ */ React36.createElement(React36.Fragment, null, /* @__PURE__ */ React36.createElement(ReportChartSize, {
     width: sizes.containerWidth,
     height: sizes.containerHeight
-  }), /* @__PURE__ */ React37.createElement("div", _extends25({
+  }), /* @__PURE__ */ React36.createElement("div", _extends24({
     ref: innerRef
   }, props)));
 });
-var StaticDiv = /* @__PURE__ */ (0, import_react51.forwardRef)((props, ref) => {
+var StaticDiv = /* @__PURE__ */ (0, import_react50.forwardRef)((props, ref) => {
   var {
     width,
     height
   } = props;
-  return /* @__PURE__ */ React37.createElement(React37.Fragment, null, /* @__PURE__ */ React37.createElement(ReportChartSize, {
+  return /* @__PURE__ */ React36.createElement(React36.Fragment, null, /* @__PURE__ */ React36.createElement(ReportChartSize, {
     width,
     height
-  }), /* @__PURE__ */ React37.createElement("div", _extends25({
+  }), /* @__PURE__ */ React36.createElement("div", _extends24({
     ref
   }, props)));
 });
-var NonResponsiveDiv = /* @__PURE__ */ (0, import_react51.forwardRef)((props, ref) => {
+var NonResponsiveDiv = /* @__PURE__ */ (0, import_react50.forwardRef)((props, ref) => {
   var {
     width,
     height
   } = props;
   if (isPercent(width) || isPercent(height)) {
-    return /* @__PURE__ */ React37.createElement(ReadSizeOnceDiv, _extends25({}, props, {
+    return /* @__PURE__ */ React36.createElement(ReadSizeOnceDiv, _extends24({}, props, {
       ref
     }));
   }
-  return /* @__PURE__ */ React37.createElement(StaticDiv, _extends25({}, props, {
+  return /* @__PURE__ */ React36.createElement(StaticDiv, _extends24({}, props, {
     ref
   }));
 });
 function getWrapperDivComponent(responsive) {
   return responsive === true ? ResponsiveDiv : NonResponsiveDiv;
 }
-var RechartsWrapper = /* @__PURE__ */ (0, import_react51.forwardRef)((props, ref) => {
+var RechartsWrapper = /* @__PURE__ */ (0, import_react50.forwardRef)((props, ref) => {
   var {
     children,
     className,
@@ -49994,15 +49774,15 @@ var RechartsWrapper = /* @__PURE__ */ (0, import_react51.forwardRef)((props, ref
     responsive,
     dispatchTouchEvents = true
   } = props;
-  var containerRef = (0, import_react51.useRef)(null);
+  var containerRef = (0, import_react50.useRef)(null);
   var dispatch = useAppDispatch();
-  var [tooltipPortal, setTooltipPortal] = (0, import_react51.useState)(null);
-  var [legendPortal, setLegendPortal] = (0, import_react51.useState)(null);
+  var [tooltipPortal, setTooltipPortal] = (0, import_react50.useState)(null);
+  var [legendPortal, setLegendPortal] = (0, import_react50.useState)(null);
   var setScaleRef = useReportScale();
   var responsiveContainerCalculations = useResponsiveContainerContext();
   var width = (responsiveContainerCalculations === null || responsiveContainerCalculations === void 0 ? void 0 : responsiveContainerCalculations.width) > 0 ? responsiveContainerCalculations.width : widthFromProps;
   var height = (responsiveContainerCalculations === null || responsiveContainerCalculations === void 0 ? void 0 : responsiveContainerCalculations.height) > 0 ? responsiveContainerCalculations.height : heightFromProps;
-  var innerRef = (0, import_react51.useCallback)((node) => {
+  var innerRef = (0, import_react50.useCallback)((node) => {
     setScaleRef(node);
     if (typeof ref === "function") {
       ref(node);
@@ -50013,71 +49793,71 @@ var RechartsWrapper = /* @__PURE__ */ (0, import_react51.forwardRef)((props, ref
       containerRef.current = node;
     }
   }, [setScaleRef, ref, setTooltipPortal, setLegendPortal]);
-  var myOnClick = (0, import_react51.useCallback)((e) => {
+  var myOnClick = (0, import_react50.useCallback)((e) => {
     dispatch(mouseClickAction(e));
     dispatch(externalEventAction({
       handler: onClick,
       reactEvent: e
     }));
   }, [dispatch, onClick]);
-  var myOnMouseEnter = (0, import_react51.useCallback)((e) => {
+  var myOnMouseEnter = (0, import_react50.useCallback)((e) => {
     dispatch(mouseMoveAction(e));
     dispatch(externalEventAction({
       handler: onMouseEnter,
       reactEvent: e
     }));
   }, [dispatch, onMouseEnter]);
-  var myOnMouseLeave = (0, import_react51.useCallback)((e) => {
+  var myOnMouseLeave = (0, import_react50.useCallback)((e) => {
     dispatch(mouseLeaveChart());
     dispatch(externalEventAction({
       handler: onMouseLeave,
       reactEvent: e
     }));
   }, [dispatch, onMouseLeave]);
-  var myOnMouseMove = (0, import_react51.useCallback)((e) => {
+  var myOnMouseMove = (0, import_react50.useCallback)((e) => {
     dispatch(mouseMoveAction(e));
     dispatch(externalEventAction({
       handler: onMouseMove,
       reactEvent: e
     }));
   }, [dispatch, onMouseMove]);
-  var onFocus = (0, import_react51.useCallback)(() => {
+  var onFocus = (0, import_react50.useCallback)(() => {
     dispatch(focusAction());
   }, [dispatch]);
-  var onKeyDown = (0, import_react51.useCallback)((e) => {
+  var onKeyDown = (0, import_react50.useCallback)((e) => {
     dispatch(keyDownAction(e.key));
   }, [dispatch]);
-  var myOnContextMenu = (0, import_react51.useCallback)((e) => {
+  var myOnContextMenu = (0, import_react50.useCallback)((e) => {
     dispatch(externalEventAction({
       handler: onContextMenu,
       reactEvent: e
     }));
   }, [dispatch, onContextMenu]);
-  var myOnDoubleClick = (0, import_react51.useCallback)((e) => {
+  var myOnDoubleClick = (0, import_react50.useCallback)((e) => {
     dispatch(externalEventAction({
       handler: onDoubleClick,
       reactEvent: e
     }));
   }, [dispatch, onDoubleClick]);
-  var myOnMouseDown = (0, import_react51.useCallback)((e) => {
+  var myOnMouseDown = (0, import_react50.useCallback)((e) => {
     dispatch(externalEventAction({
       handler: onMouseDown,
       reactEvent: e
     }));
   }, [dispatch, onMouseDown]);
-  var myOnMouseUp = (0, import_react51.useCallback)((e) => {
+  var myOnMouseUp = (0, import_react50.useCallback)((e) => {
     dispatch(externalEventAction({
       handler: onMouseUp,
       reactEvent: e
     }));
   }, [dispatch, onMouseUp]);
-  var myOnTouchStart = (0, import_react51.useCallback)((e) => {
+  var myOnTouchStart = (0, import_react50.useCallback)((e) => {
     dispatch(externalEventAction({
       handler: onTouchStart,
       reactEvent: e
     }));
   }, [dispatch, onTouchStart]);
-  var myOnTouchMove = (0, import_react51.useCallback)((e) => {
+  var myOnTouchMove = (0, import_react50.useCallback)((e) => {
     if (dispatchTouchEvents) {
       dispatch(touchEventAction(e));
     }
@@ -50086,22 +49866,22 @@ var RechartsWrapper = /* @__PURE__ */ (0, import_react51.forwardRef)((props, ref
       reactEvent: e
     }));
   }, [dispatch, dispatchTouchEvents, onTouchMove]);
-  var myOnTouchEnd = (0, import_react51.useCallback)((e) => {
+  var myOnTouchEnd = (0, import_react50.useCallback)((e) => {
     dispatch(externalEventAction({
       handler: onTouchEnd,
       reactEvent: e
     }));
   }, [dispatch, onTouchEnd]);
   var WrapperDiv = getWrapperDivComponent(responsive);
-  return /* @__PURE__ */ React37.createElement(TooltipPortalContext.Provider, {
+  return /* @__PURE__ */ React36.createElement(TooltipPortalContext.Provider, {
     value: tooltipPortal
-  }, /* @__PURE__ */ React37.createElement(LegendPortalContext.Provider, {
+  }, /* @__PURE__ */ React36.createElement(LegendPortalContext.Provider, {
     value: legendPortal
-  }, /* @__PURE__ */ React37.createElement(WrapperDiv, {
+  }, /* @__PURE__ */ React36.createElement(WrapperDiv, {
     width: width !== null && width !== void 0 ? width : style === null || style === void 0 ? void 0 : style.width,
     height: height !== null && height !== void 0 ? height : style === null || style === void 0 ? void 0 : style.height,
     className: clsx("recharts-wrapper", className),
-    style: _objectSpread38({
+    style: _objectSpread36({
       position: "relative",
       cursor: "default",
       width,
@@ -50121,7 +49901,7 @@ var RechartsWrapper = /* @__PURE__ */ (0, import_react51.forwardRef)((props, ref
     onTouchMove: myOnTouchMove,
     onTouchStart: myOnTouchStart,
     ref: innerRef
-  }, /* @__PURE__ */ React37.createElement(EventSynchronizer, null), children)));
+  }, /* @__PURE__ */ React36.createElement(EventSynchronizer, null), children)));
 });
 
 // node_modules/recharts/es6/chart/CategoricalChart.js
@@ -50144,7 +49924,7 @@ function _objectWithoutPropertiesLoose20(r2, e) {
   }
   return t;
 }
-var CategoricalChart = /* @__PURE__ */ (0, import_react52.forwardRef)((props, ref) => {
+var CategoricalChart = /* @__PURE__ */ (0, import_react51.forwardRef)((props, ref) => {
   var {
     width,
     height,
@@ -50158,16 +49938,16 @@ var CategoricalChart = /* @__PURE__ */ (0, import_react52.forwardRef)((props, re
   } = props, others = _objectWithoutProperties20(props, _excluded20);
   var attrs = svgPropertiesNoEvents(others);
   if (compact) {
-    return /* @__PURE__ */ React38.createElement(React38.Fragment, null, /* @__PURE__ */ React38.createElement(ReportChartSize, {
+    return /* @__PURE__ */ React37.createElement(React37.Fragment, null, /* @__PURE__ */ React37.createElement(ReportChartSize, {
       width,
       height
-    }), /* @__PURE__ */ React38.createElement(RootSurface, {
+    }), /* @__PURE__ */ React37.createElement(RootSurface, {
       otherAttributes: attrs,
       title,
       desc
     }, children));
   }
-  return /* @__PURE__ */ React38.createElement(RechartsWrapper, {
+  return /* @__PURE__ */ React37.createElement(RechartsWrapper, {
     className,
     style,
     width,
@@ -50184,23 +49964,23 @@ var CategoricalChart = /* @__PURE__ */ (0, import_react52.forwardRef)((props, re
     onTouchStart: props.onTouchStart,
     onTouchMove: props.onTouchMove,
     onTouchEnd: props.onTouchEnd
-  }, /* @__PURE__ */ React38.createElement(RootSurface, {
+  }, /* @__PURE__ */ React37.createElement(RootSurface, {
     otherAttributes: attrs,
     title,
     desc,
     ref
-  }, /* @__PURE__ */ React38.createElement(ClipPathProvider, null, children)));
+  }, /* @__PURE__ */ React37.createElement(ClipPathProvider, null, children)));
 });
 
 // node_modules/recharts/es6/chart/CartesianChart.js
-function _extends26() {
-  return _extends26 = Object.assign ? Object.assign.bind() : function(n) {
+function _extends25() {
+  return _extends25 = Object.assign ? Object.assign.bind() : function(n) {
     for (var e = 1; e < arguments.length; e++) {
       var t = arguments[e];
       for (var r2 in t) ({}).hasOwnProperty.call(t, r2) && (n[r2] = t[r2]);
     }
     return n;
-  }, _extends26.apply(null, arguments);
+  }, _extends25.apply(null, arguments);
 }
 var defaultMargin = {
   top: 5,
@@ -50219,7 +49999,7 @@ var defaultCartesianChartProps = {
   stackOffset: "none",
   syncMethod: "index"
 };
-var CartesianChart = /* @__PURE__ */ (0, import_react53.forwardRef)(function CartesianChart2(props, ref) {
+var CartesianChart = /* @__PURE__ */ (0, import_react52.forwardRef)(function CartesianChart2(props, ref) {
   var _categoricalChartProp;
   var rootChartProps = resolveDefaultProps(props.categoricalChartProps, defaultCartesianChartProps);
   var {
@@ -50236,17 +50016,17 @@ var CartesianChart = /* @__PURE__ */ (0, import_react53.forwardRef)(function Car
     tooltipPayloadSearcher,
     eventEmitter: void 0
   };
-  return /* @__PURE__ */ React39.createElement(RechartsStoreProvider, {
+  return /* @__PURE__ */ React38.createElement(RechartsStoreProvider, {
     preloadedState: {
       options
     },
     reduxStoreName: (_categoricalChartProp = categoricalChartProps.id) !== null && _categoricalChartProp !== void 0 ? _categoricalChartProp : chartName
-  }, /* @__PURE__ */ React39.createElement(ChartDataContextProvider, {
+  }, /* @__PURE__ */ React38.createElement(ChartDataContextProvider, {
     chartData: categoricalChartProps.data
-  }), /* @__PURE__ */ React39.createElement(ReportMainChartProps, {
+  }), /* @__PURE__ */ React38.createElement(ReportMainChartProps, {
     layout: rootChartProps.layout,
     margin: rootChartProps.margin
-  }), /* @__PURE__ */ React39.createElement(ReportChartProps, {
+  }), /* @__PURE__ */ React38.createElement(ReportChartProps, {
     baseValue: rootChartProps.baseValue,
     accessibilityLayer: rootChartProps.accessibilityLayer,
     barCategoryGap: rootChartProps.barCategoryGap,
@@ -50258,24 +50038,24 @@ var CartesianChart = /* @__PURE__ */ (0, import_react53.forwardRef)(function Car
     syncMethod: rootChartProps.syncMethod,
     className: rootChartProps.className,
     reverseStackOrder: rootChartProps.reverseStackOrder
-  }), /* @__PURE__ */ React39.createElement(CategoricalChart, _extends26({}, rootChartProps, {
+  }), /* @__PURE__ */ React38.createElement(CategoricalChart, _extends25({}, rootChartProps, {
     ref
   })));
 });
 
 // node_modules/recharts/es6/chart/PieChart.js
-var React41 = __toESM(require_react());
-var import_react56 = __toESM(require_react());
+var React40 = __toESM(require_react());
+var import_react55 = __toESM(require_react());
 
 // node_modules/recharts/es6/chart/PolarChart.js
-var import_react55 = __toESM(require_react());
-var React40 = __toESM(require_react());
+var import_react54 = __toESM(require_react());
+var React39 = __toESM(require_react());
 
 // node_modules/recharts/es6/state/ReportPolarOptions.js
-var import_react54 = __toESM(require_react());
+var import_react53 = __toESM(require_react());
 function ReportPolarOptions(props) {
   var dispatch = useAppDispatch();
-  (0, import_react54.useEffect)(() => {
+  (0, import_react53.useEffect)(() => {
     dispatch(updatePolarOptions(props));
   }, [dispatch, props]);
   return null;
@@ -50283,14 +50063,14 @@ function ReportPolarOptions(props) {
 
 // node_modules/recharts/es6/chart/PolarChart.js
 var _excluded21 = ["layout"];
-function _extends27() {
-  return _extends27 = Object.assign ? Object.assign.bind() : function(n) {
+function _extends26() {
+  return _extends26 = Object.assign ? Object.assign.bind() : function(n) {
     for (var e = 1; e < arguments.length; e++) {
       var t = arguments[e];
       for (var r2 in t) ({}).hasOwnProperty.call(t, r2) && (n[r2] = t[r2]);
     }
     return n;
-  }, _extends27.apply(null, arguments);
+  }, _extends26.apply(null, arguments);
 }
 function _objectWithoutProperties21(e, t) {
   if (null == e) return {};
@@ -50331,7 +50111,7 @@ var defaultPolarChartProps = {
   innerRadius: 0,
   outerRadius: "80%"
 };
-var PolarChart = /* @__PURE__ */ (0, import_react55.forwardRef)(function PolarChart2(props, ref) {
+var PolarChart = /* @__PURE__ */ (0, import_react54.forwardRef)(function PolarChart2(props, ref) {
   var _polarChartProps$id;
   var polarChartProps = resolveDefaultProps(props.categoricalChartProps, defaultPolarChartProps);
   var {
@@ -50350,17 +50130,17 @@ var PolarChart = /* @__PURE__ */ (0, import_react55.forwardRef)(function PolarCh
     tooltipPayloadSearcher,
     eventEmitter: void 0
   };
-  return /* @__PURE__ */ React40.createElement(RechartsStoreProvider, {
+  return /* @__PURE__ */ React39.createElement(RechartsStoreProvider, {
     preloadedState: {
       options
     },
     reduxStoreName: (_polarChartProps$id = polarChartProps.id) !== null && _polarChartProps$id !== void 0 ? _polarChartProps$id : chartName
-  }, /* @__PURE__ */ React40.createElement(ChartDataContextProvider, {
+  }, /* @__PURE__ */ React39.createElement(ChartDataContextProvider, {
     chartData: polarChartProps.data
-  }), /* @__PURE__ */ React40.createElement(ReportMainChartProps, {
+  }), /* @__PURE__ */ React39.createElement(ReportMainChartProps, {
     layout,
     margin: polarChartProps.margin
-  }), /* @__PURE__ */ React40.createElement(ReportChartProps, {
+  }), /* @__PURE__ */ React39.createElement(ReportChartProps, {
     baseValue: void 0,
     accessibilityLayer: polarChartProps.accessibilityLayer,
     barCategoryGap: polarChartProps.barCategoryGap,
@@ -50372,20 +50152,20 @@ var PolarChart = /* @__PURE__ */ (0, import_react55.forwardRef)(function PolarCh
     syncMethod: polarChartProps.syncMethod,
     className: polarChartProps.className,
     reverseStackOrder: polarChartProps.reverseStackOrder
-  }), /* @__PURE__ */ React40.createElement(ReportPolarOptions, {
+  }), /* @__PURE__ */ React39.createElement(ReportPolarOptions, {
     cx: polarChartProps.cx,
     cy: polarChartProps.cy,
     startAngle: polarChartProps.startAngle,
     endAngle: polarChartProps.endAngle,
     innerRadius: polarChartProps.innerRadius,
     outerRadius: polarChartProps.outerRadius
-  }), /* @__PURE__ */ React40.createElement(CategoricalChart, _extends27({}, otherCategoricalProps, {
+  }), /* @__PURE__ */ React39.createElement(CategoricalChart, _extends26({}, otherCategoricalProps, {
     ref
   })));
 });
 
 // node_modules/recharts/es6/chart/PieChart.js
-function ownKeys39(e, r2) {
+function ownKeys37(e, r2) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
@@ -50395,25 +50175,25 @@ function ownKeys39(e, r2) {
   }
   return t;
 }
-function _objectSpread39(e) {
+function _objectSpread37(e) {
   for (var r2 = 1; r2 < arguments.length; r2++) {
     var t = null != arguments[r2] ? arguments[r2] : {};
-    r2 % 2 ? ownKeys39(Object(t), true).forEach(function(r3) {
-      _defineProperty40(e, r3, t[r3]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys39(Object(t)).forEach(function(r3) {
+    r2 % 2 ? ownKeys37(Object(t), true).forEach(function(r3) {
+      _defineProperty39(e, r3, t[r3]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys37(Object(t)).forEach(function(r3) {
       Object.defineProperty(e, r3, Object.getOwnPropertyDescriptor(t, r3));
     });
   }
   return e;
 }
-function _defineProperty40(e, r2, t) {
-  return (r2 = _toPropertyKey40(r2)) in e ? Object.defineProperty(e, r2, { value: t, enumerable: true, configurable: true, writable: true }) : e[r2] = t, e;
+function _defineProperty39(e, r2, t) {
+  return (r2 = _toPropertyKey39(r2)) in e ? Object.defineProperty(e, r2, { value: t, enumerable: true, configurable: true, writable: true }) : e[r2] = t, e;
 }
-function _toPropertyKey40(t) {
-  var i = _toPrimitive40(t, "string");
+function _toPropertyKey39(t) {
+  var i = _toPrimitive39(t, "string");
   return "symbol" == typeof i ? i : i + "";
 }
-function _toPrimitive40(t, r2) {
+function _toPrimitive39(t, r2) {
   if ("object" != typeof t || !t) return t;
   var e = t[Symbol.toPrimitive];
   if (void 0 !== e) {
@@ -50424,14 +50204,14 @@ function _toPrimitive40(t, r2) {
   return ("string" === r2 ? String : Number)(t);
 }
 var allowedTooltipTypes = ["item"];
-var defaultPieChartProps = _objectSpread39(_objectSpread39({}, defaultPolarChartProps), {}, {
+var defaultPieChartProps = _objectSpread37(_objectSpread37({}, defaultPolarChartProps), {}, {
   layout: "centric",
   startAngle: 0,
   endAngle: 360
 });
-var PieChart = /* @__PURE__ */ (0, import_react56.forwardRef)((props, ref) => {
+var PieChart = /* @__PURE__ */ (0, import_react55.forwardRef)((props, ref) => {
   var propsWithDefaults = resolveDefaultProps(props, defaultPieChartProps);
-  return /* @__PURE__ */ React41.createElement(PolarChart, {
+  return /* @__PURE__ */ React40.createElement(PolarChart, {
     chartName: "PieChart",
     defaultTooltipEventType: "item",
     validateTooltipEventTypes: allowedTooltipTypes,
@@ -50442,11 +50222,11 @@ var PieChart = /* @__PURE__ */ (0, import_react56.forwardRef)((props, ref) => {
 });
 
 // node_modules/recharts/es6/chart/AreaChart.js
-var React42 = __toESM(require_react());
-var import_react57 = __toESM(require_react());
+var React41 = __toESM(require_react());
+var import_react56 = __toESM(require_react());
 var allowedTooltipTypes2 = ["axis"];
-var AreaChart = /* @__PURE__ */ (0, import_react57.forwardRef)((props, ref) => {
-  return /* @__PURE__ */ React42.createElement(CartesianChart, {
+var AreaChart = /* @__PURE__ */ (0, import_react56.forwardRef)((props, ref) => {
+  return /* @__PURE__ */ React41.createElement(CartesianChart, {
     chartName: "AreaChart",
     defaultTooltipEventType: "axis",
     validateTooltipEventTypes: allowedTooltipTypes2,
@@ -50456,1924 +50236,9 @@ var AreaChart = /* @__PURE__ */ (0, import_react57.forwardRef)((props, ref) => {
   });
 });
 
-// src/component.tsx
+// src/PortfolioSimulator.tsx
 var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
 var COLORS = {
-  primary: "#56C596",
-  // Mint Green
-  primaryDark: "#3aa87b",
-  bg: "#FAFAFA",
-  card: "#FFFFFF",
-  textMain: "#1A1A1A",
-  textSecondary: "#9CA3AF",
-  border: "#F3F4F6",
-  inputBg: "#F9FAFB",
-  accentLight: "#E6F7F0",
-  blue: "#5D9CEC",
-  yellow: "#F59E0B",
-  red: "#FF6B6B",
-  orange: "#F2994A",
-  orangeLight: "#FFF7ED",
-  saveGreen: "#4D7C0F",
-  tableHeader: "#2563EB"
-};
-var NumberControl = ({
-  value,
-  onChange,
-  min: min2 = 0,
-  max: max2 = 1e7,
-  step = 1,
-  label,
-  suffix: suffix2,
-  prefix
-}) => {
-  const handleDec = () => {
-    const num = parseFloat(value) || 0;
-    if (num - step >= min2) onChange(Math.round((num - step) * 100) / 100 + "");
-  };
-  const handleInc = () => {
-    const num = parseFloat(value) || 0;
-    if (num + step <= max2) onChange(Math.round((num + step) * 100) / 100 + "");
-  };
-  const handleChange = (e) => {
-    const raw = e.target.value.replace(/,/g, "");
-    const val = raw.replace(/[^0-9.]/g, "");
-    onChange(val);
-  };
-  const btnStyle = {
-    width: "32px",
-    height: "32px",
-    borderRadius: "8px",
-    border: "none",
-    backgroundColor: "white",
-    color: COLORS.primary,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    cursor: "pointer",
-    boxShadow: "0 2px 4px rgba(0,0,0,0.05)"
-  };
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
-    backgroundColor: COLORS.inputBg,
-    borderRadius: "12px",
-    padding: "6px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: "8px",
-    height: "44px"
-  }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: handleDec, style: btnStyle, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Minus, { size: 16, strokeWidth: 3 }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: "4px" }, children: [
-      prefix && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "16px", fontWeight: 700, color: COLORS.textMain }, children: prefix }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-        "input",
-        {
-          type: "text",
-          value: value ? Number(value).toLocaleString() : "",
-          onChange: handleChange,
-          style: {
-            width: "100%",
-            border: "none",
-            background: "transparent",
-            textAlign: "center",
-            fontSize: "16px",
-            fontWeight: 700,
-            color: COLORS.textMain,
-            outline: "none"
-          }
-        }
-      ),
-      suffix2 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "14px", color: COLORS.textSecondary, fontWeight: 500 }, children: suffix2 })
-    ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: handleInc, style: btnStyle, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { size: 16, strokeWidth: 3 }) })
-  ] });
-};
-var DEFAULT_VALUES = {
-  currentAge: "35",
-  income: "60000",
-  savings: "30000",
-  contributions: "500",
-  budget: "2561",
-  otherIncome: "0",
-  retirementAge: "67",
-  lifeExpectancy: "95",
-  preRetireRate: "7",
-  postRetireRate: "5",
-  inflation: "3",
-  incomeIncrease: "2",
-  contributionMode: "$",
-  budgetMode: "$"
-};
-var STORAGE_KEY = "RETIREMENT_CALCULATOR_DATA";
-var EXPIRATION_DAYS = 30;
-var loadSavedData = () => {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      const { data, timestamp } = JSON.parse(saved);
-      const now = (/* @__PURE__ */ new Date()).getTime();
-      const daysDiff = (now - timestamp) / (1e3 * 60 * 60 * 24);
-      if (daysDiff < EXPIRATION_DAYS) {
-        const merged = {
-          "Retirement Calculator": { values: { ...DEFAULT_VALUES }, touched: {}, result: null }
-        };
-        if (data["Retirement Calculator"]) {
-          merged["Retirement Calculator"] = {
-            ...merged["Retirement Calculator"],
-            ...data["Retirement Calculator"],
-            values: { ...merged["Retirement Calculator"].values, ...data["Retirement Calculator"].values }
-          };
-        }
-        return merged;
-      }
-    }
-  } catch (e) {
-    console.error("Failed to load saved data", e);
-  }
-  return {
-    "Retirement Calculator": { values: { ...DEFAULT_VALUES }, touched: {}, result: null }
-  };
-};
-function RetirementCalculatorHelloWorld({ initialData: initialData2 }) {
-  const [calculatorType, setCalculatorType] = (0, import_react58.useState)("Retirement Calculator");
-  const [isAnalyzing, setIsAnalyzing] = (0, import_react58.useState)(false);
-  const [calculators, setCalculators] = (0, import_react58.useState)(() => {
-    const loaded = loadSavedData();
-    if (initialData2 && Object.keys(initialData2).length > 0) {
-      try {
-        const current3 = loaded["Retirement Calculator"];
-        loaded["Retirement Calculator"] = {
-          ...current3,
-          values: {
-            ...current3.values,
-            currentAge: initialData2.current_age ? String(initialData2.current_age) : current3.values.currentAge,
-            income: initialData2.annual_pre_tax_income ? String(initialData2.annual_pre_tax_income) : current3.values.income,
-            savings: initialData2.current_retirement_savings ? String(initialData2.current_retirement_savings) : current3.values.savings,
-            contributions: initialData2.monthly_contributions ? String(initialData2.monthly_contributions) : current3.values.contributions,
-            budget: initialData2.monthly_budget_in_retirement ? String(initialData2.monthly_budget_in_retirement) : current3.values.budget,
-            otherIncome: initialData2.other_retirement_income ? String(initialData2.other_retirement_income) : current3.values.otherIncome,
-            retirementAge: initialData2.retirement_age ? String(initialData2.retirement_age) : current3.values.retirementAge,
-            lifeExpectancy: initialData2.life_expectancy ? String(initialData2.life_expectancy) : current3.values.lifeExpectancy,
-            preRetireRate: initialData2.pre_retirement_rate_of_return ? String(initialData2.pre_retirement_rate_of_return) : current3.values.preRetireRate,
-            postRetireRate: initialData2.post_retirement_rate_of_return ? String(initialData2.post_retirement_rate_of_return) : current3.values.postRetireRate,
-            inflation: initialData2.inflation_rate ? String(initialData2.inflation_rate) : current3.values.inflation,
-            incomeIncrease: initialData2.annual_income_increase ? String(initialData2.annual_income_increase) : current3.values.incomeIncrease
-          },
-          touched: {}
-          // Reset touched on fresh load
-        };
-      } catch (e) {
-        console.error("Failed to apply initialData:", e);
-      }
-    }
-    return loaded;
-  });
-  const [showSubscribeModal, setShowSubscribeModal] = (0, import_react58.useState)(false);
-  const [email, setEmail] = (0, import_react58.useState)("");
-  const [subscribeStatus, setSubscribeStatus] = (0, import_react58.useState)("idle");
-  const [subscribeMessage, setSubscribeMessage] = (0, import_react58.useState)("");
-  const [showBanner, setShowBanner] = (0, import_react58.useState)(true);
-  const [personalNotes, setPersonalNotes] = (0, import_react58.useState)("");
-  const [showFeedbackModal, setShowFeedbackModal] = (0, import_react58.useState)(false);
-  const [feedbackText, setFeedbackText] = (0, import_react58.useState)("");
-  const [feedbackStatus, setFeedbackStatus] = (0, import_react58.useState)("idle");
-  const handleSubscribe = async () => {
-    if (!email || !email.includes("@")) {
-      setSubscribeMessage("Please enter a valid email.");
-      setSubscribeStatus("error");
-      return;
-    }
-    setSubscribeStatus("loading");
-    try {
-      const response = await fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          topicId: "retirement-news",
-          topicName: "Retirement Calculator Updates"
-        })
-      });
-      const data = await response.json();
-      if (response.ok && data.success) {
-        setSubscribeStatus("success");
-        setSubscribeMessage(data.message);
-        setTimeout(() => {
-          setShowSubscribeModal(false);
-          setEmail("");
-          setSubscribeStatus("idle");
-          setSubscribeMessage("");
-        }, 3e3);
-      } else {
-        setSubscribeStatus("error");
-        setSubscribeMessage(data.error || "Failed to subscribe.");
-      }
-    } catch (e) {
-      console.error("Subscribe error:", e);
-      setSubscribeStatus("error");
-      setSubscribeMessage("Network error. Please try again.");
-    }
-  };
-  const handleFeedbackSubmit = async () => {
-    if (!feedbackText.trim()) return;
-    setFeedbackStatus("submitting");
-    try {
-      const response = await fetch("/api/track", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          event: "user_feedback",
-          data: {
-            feedback: feedbackText,
-            calculatorType
-          }
-        })
-      });
-      if (response.ok) {
-        setFeedbackStatus("success");
-        setTimeout(() => {
-          setShowFeedbackModal(false);
-          setFeedbackText("");
-          setFeedbackStatus("idle");
-        }, 2e3);
-      } else {
-        setFeedbackStatus("error");
-      }
-    } catch (e) {
-      console.error("Feedback error:", e);
-      setFeedbackStatus("error");
-    }
-  };
-  (0, import_react58.useEffect)(() => {
-    const dataToSave = {
-      data: calculators,
-      timestamp: (/* @__PURE__ */ new Date()).getTime()
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
-  }, [calculators]);
-  const currentCalc = calculators[calculatorType];
-  const {
-    currentAge,
-    income,
-    savings,
-    contributions,
-    budget,
-    otherIncome,
-    retirementAge,
-    lifeExpectancy,
-    preRetireRate,
-    postRetireRate,
-    inflation,
-    incomeIncrease,
-    contributionMode,
-    budgetMode
-  } = currentCalc.values;
-  const updateVal = (field, value) => {
-    setCalculators((prev) => {
-      const next = { ...prev };
-      next[calculatorType] = {
-        ...next[calculatorType],
-        values: {
-          ...next[calculatorType].values,
-          [field]: value
-        },
-        touched: {
-          ...next[calculatorType].touched,
-          [field]: true
-        }
-      };
-      return next;
-    });
-  };
-  const updateResult = (result) => {
-    setCalculators((prev) => ({
-      ...prev,
-      [calculatorType]: {
-        ...prev[calculatorType],
-        result
-      }
-    }));
-  };
-  const calculateRetirement = () => {
-    const currentAgeNum = parseFloat(currentAge);
-    const retirementAgeNum = parseFloat(retirementAge);
-    const lifeExpectancyNum = parseFloat(lifeExpectancy);
-    const incomeNum = parseFloat(income);
-    let savingsNum = parseFloat(savings);
-    if (isNaN(currentAgeNum) || isNaN(retirementAgeNum) || isNaN(incomeNum) || isNaN(savingsNum)) {
-      console.warn("Calculation skipped due to invalid inputs:", { currentAge, retirementAge, income, savings });
-      return;
-    }
-    const preRate = parseFloat(preRetireRate) / 100;
-    const postRate = parseFloat(postRetireRate) / 100;
-    const infl = parseFloat(inflation) / 100;
-    const incIncrease = parseFloat(incomeIncrease) / 100;
-    const noteText = personalNotes.toLowerCase();
-    let budgetAdj = 0;
-    let incomeAdj = 0;
-    let savingsAdj = 0;
-    const sentences = noteText.split(/[.!?]+/).filter((s2) => s2.trim().length > 0);
-    for (const sentence of sentences) {
-      const amountMatch = sentence.match(/[\$]?([0-9,]+)/);
-      if (amountMatch) {
-        const amount = parseFloat(amountMatch[1].replace(/,/g, ""));
-        if (!isNaN(amount) && amount > 0) {
-          const isMonthly = sentence.includes("month") || sentence.includes("/mo");
-          const multiplier = isMonthly ? 12 : 1;
-          const isRecurring = isMonthly || sentence.includes("year") || sentence.includes("annual");
-          if (isRecurring) {
-            if (sentence.includes("pension") || sentence.includes("social security") || sentence.includes("annuity") || sentence.includes("earn") || sentence.includes("salary") || sentence.includes("rent") || sentence.includes("income")) {
-              incomeAdj += amount * multiplier;
-            } else if (sentence.includes("save") || sentence.includes("cut") || sentence.includes("reduce") || sentence.includes("lower")) {
-              budgetAdj -= amount * multiplier;
-            } else {
-              budgetAdj += amount * multiplier;
-            }
-          } else {
-            if (sentence.includes("inherit") || sentence.includes("gift") || sentence.includes("sell") || sentence.includes("windfall") || sentence.includes("bonus") || sentence.includes("profit")) {
-              savingsAdj += amount;
-            } else if (sentence.includes("debt") || sentence.includes("loan") || sentence.includes("owe") || sentence.includes("cost") || sentence.includes("buy") || sentence.includes("purchase") || sentence.includes("spend") || sentence.includes("pay") || sentence.includes("college") || sentence.includes("wedding") || sentence.includes("renovation") || sentence.includes("surgery")) {
-              savingsAdj -= amount;
-            }
-          }
-        }
-      }
-    }
-    if (noteText.includes("wife") || noteText.includes("husband") || noteText.includes("spouse") || noteText.includes("sick") || noteText.includes("care") || noteText.includes("disabled") || noteText.includes("support") || noteText.includes("mother") || noteText.includes("father")) {
-      budgetAdj += 1500 * 12;
-    }
-    const yearsPre = retirementAgeNum - currentAgeNum;
-    const yearsPost = lifeExpectancyNum - retirementAgeNum;
-    const annualExpensesToday = parseFloat(budget) * 12 + budgetAdj;
-    const annualIncomeToday = parseFloat(otherIncome) * 12 + incomeAdj;
-    const monthlyShortfallToday = Math.max(0, parseFloat(budget) - parseFloat(otherIncome));
-    const annualShortfallToday = monthlyShortfallToday * 12;
-    const annualShortfallAtRetire = annualShortfallToday * Math.pow(1 + infl, yearsPre);
-    const annualExpensesAtRetire = annualExpensesToday * Math.pow(1 + infl, yearsPre);
-    const annualIncomeAtRetire = annualIncomeToday * Math.pow(1 + infl, yearsPre);
-    const safeWithdrawalRate = 0.04;
-    let grossNeedAtRetirement = 0;
-    let incomeValueAtRetirement = 0;
-    let netNeedAtRetirement = 0;
-    for (let i = 0; i < yearsPost; i++) {
-      const yearlyExpense = annualExpensesAtRetire * Math.pow(1 + infl, i);
-      const yearlyIncome = annualIncomeAtRetire * Math.pow(1 + infl, i);
-      const yearlyShortfall = annualShortfallAtRetire * Math.pow(1 + infl, i);
-      const discountFactor = Math.pow(1 + safeWithdrawalRate, i);
-      grossNeedAtRetirement += yearlyExpense / discountFactor;
-      incomeValueAtRetirement += yearlyIncome / discountFactor;
-      netNeedAtRetirement += yearlyShortfall / discountFactor;
-    }
-    const fvSavings = savingsNum * Math.pow(1 + preRate, yearsPre);
-    const gap = netNeedAtRetirement - fvSavings;
-    let initialAnnualContribNeeded = 0;
-    let accumFactor = 0;
-    for (let k2 = 0; k2 < yearsPre; k2++) {
-      accumFactor += Math.pow(1 + incIncrease, k2) * Math.pow(1 + preRate, yearsPre - 1 - k2);
-    }
-    if (accumFactor > 0) {
-      initialAnnualContribNeeded = gap / accumFactor;
-    }
-    let annualContrib = parseFloat(contributions);
-    if (contributionMode === "%") {
-      annualContrib = incomeNum * (parseFloat(contributions) / 100);
-    } else {
-      annualContrib = annualContrib * 12;
-    }
-    const fvInitial = savingsNum * Math.pow(1 + preRate, yearsPre);
-    let fvContributions = 0;
-    if (contributionMode === "$") {
-      fvContributions = annualContrib * (Math.pow(1 + preRate, yearsPre) - 1) / preRate;
-    } else {
-      if (Math.abs(preRate - incIncrease) < 1e-4) {
-        fvContributions = annualContrib * yearsPre * Math.pow(1 + preRate, yearsPre - 1);
-      } else {
-        fvContributions = annualContrib * (Math.pow(1 + preRate, yearsPre) - Math.pow(1 + incIncrease, yearsPre)) / (preRate - incIncrease);
-      }
-    }
-    const whatYouHaveLiquid = Math.round(fvInitial + fvContributions);
-    let collegeCost = 0;
-    if (helpWithCollege && familyPlan !== "none") {
-      collegeCost = familyPlan === "small" ? 3e5 : 6e5;
-    }
-    const totalWealthAtRetirement = whatYouHaveLiquid + incomeValueAtRetirement + savingsAdj - collegeCost;
-    const graphData = [];
-    let simCurrent = savingsNum;
-    let simIdeal = savingsNum;
-    let simSalary = incomeNum;
-    let simCurrentContrib = annualContrib;
-    let simIdealContrib = Math.max(0, initialAnnualContribNeeded);
-    let runOutAgeCurrent = null;
-    let runOutAgeIdeal = null;
-    const totalYears = lifeExpectancyNum - currentAgeNum;
-    for (let yr = 0; yr <= totalYears; yr++) {
-      const age = currentAgeNum + yr;
-      const isRetired = age > retirementAgeNum;
-      graphData.push({
-        age,
-        current: Math.round(simCurrent),
-        recommended: Math.round(simIdeal)
-      });
-      if (isRetired) {
-        const yearsIntoRetirement = age - retirementAgeNum;
-        const payout = annualShortfallAtRetire * Math.pow(1 + infl, yearsIntoRetirement - 1);
-        if (simCurrent > 0) {
-          simCurrent = simCurrent * (1 + postRate) - payout;
-          if (simCurrent < 0) {
-            simCurrent = 0;
-            if (!runOutAgeCurrent) runOutAgeCurrent = age;
-          }
-        }
-        if (simIdeal > 0) {
-          simIdeal = simIdeal * (1 + postRate) - payout;
-          if (simIdeal < 0) {
-            simIdeal = 0;
-            if (!runOutAgeIdeal) runOutAgeIdeal = age;
-          }
-        }
-      } else {
-        simCurrent = simCurrent * (1 + preRate) + simCurrentContrib;
-        simIdeal = simIdeal * (1 + preRate) + simIdealContrib;
-        simSalary *= 1 + incIncrease;
-        if (contributionMode === "%") {
-          simCurrentContrib = simSalary * (parseFloat(contributions) / 100);
-        }
-        simIdealContrib *= 1 + incIncrease;
-      }
-    }
-    const whatYouNeed = grossNeedAtRetirement;
-    updateResult({
-      have: Math.round(totalWealthAtRetirement),
-      need: Math.round(whatYouNeed),
-      graphData,
-      runOutAgeCurrent: runOutAgeCurrent || lifeExpectancyNum,
-      runOutAgeIdeal: runOutAgeIdeal || lifeExpectancyNum,
-      monthlyContribNeeded: Math.round(initialAnnualContribNeeded / 12),
-      currentMonthlyContrib: Math.round(simCurrentContrib / 12),
-      monthlyShortfall: monthlyShortfallToday
-    });
-  };
-  const calculate2 = () => {
-    calculateRetirement();
-  };
-  (0, import_react58.useEffect)(() => {
-    calculate2();
-  }, [currentCalc.values, personalNotes]);
-  const [showAdvanced, setShowAdvanced] = (0, import_react58.useState)(false);
-  const [resultView, setResultView] = (0, import_react58.useState)("graph");
-  const toggleMode = (field) => {
-    const current3 = currentCalc.values[field];
-    updateVal(field, current3 === "$" ? "%" : "$");
-  };
-  (0, import_react58.useEffect)(() => {
-    const incomeNum = parseFloat(income);
-    if (!isNaN(incomeNum) && !currentCalc.touched.budget) {
-      const suggestedAnnualBudget = incomeNum * 0.75;
-      const suggestedMonthlyBudget = Math.round(suggestedAnnualBudget / 12);
-      setCalculators((prev) => {
-        const next = { ...prev };
-        next[calculatorType] = {
-          ...next[calculatorType],
-          values: {
-            ...next[calculatorType].values,
-            budget: String(suggestedMonthlyBudget)
-          }
-          // Do NOT mark as touched so it continues to update until user manually overrides
-        };
-        return next;
-      });
-    }
-  }, [income, currentCalc.touched.budget, calculatorType]);
-  const handleInvestmentStrategy = (strategy) => {
-    let pre = "6";
-    let post = "5";
-    if (strategy === "conservative") {
-      pre = "4";
-      post = "3";
-    } else if (strategy === "aggressive") {
-      pre = "9";
-      post = "7";
-    } else {
-      pre = "7";
-      post = "5";
-    }
-    setCalculators((prev) => {
-      const next = { ...prev };
-      next[calculatorType] = {
-        ...next[calculatorType],
-        values: {
-          ...next[calculatorType].values,
-          preRetireRate: pre,
-          postRetireRate: post
-        },
-        touched: {
-          ...next[calculatorType].touched,
-          preRetireRate: true,
-          postRetireRate: true
-        }
-      };
-      return next;
-    });
-  };
-  const resetToDefaults = () => {
-    localStorage.removeItem(STORAGE_KEY);
-    setCalculators((prev) => {
-      const next = { ...prev };
-      next[calculatorType] = {
-        values: {
-          ...DEFAULT_VALUES,
-          preRetireRate: "7",
-          // Moderate investment strategy
-          postRetireRate: "5"
-        },
-        touched: {},
-        result: null
-      };
-      return next;
-    });
-    setTravelPlan("moderate");
-    setFamilyPlan("none");
-    setHelpWithCollege(false);
-    setSavingsDetails({ savings: "", checking: "", crypto: "", retirement: "", stockPortfolio: "" });
-    setIncomeDetails({ socialSecurity: "", realEstate: "", trust: "", investments: "", other: "" });
-    setPersonalNotes("");
-  };
-  const [travelPlan, setTravelPlan] = (0, import_react58.useState)("moderate");
-  const [familyPlan, setFamilyPlan] = (0, import_react58.useState)("none");
-  const [helpWithCollege, setHelpWithCollege] = (0, import_react58.useState)(false);
-  const getTravelCost = (plan) => {
-    if (plan === "low") return 200;
-    if (plan === "moderate") return 800;
-    return 2500;
-  };
-  const handleTravelPlanChange = (newPlan) => {
-    const oldCost = getTravelCost(travelPlan);
-    const newCost = getTravelCost(newPlan);
-    const diff = newCost - oldCost;
-    const currentBudget = parseFloat(budget) || 0;
-    const newBudget = Math.max(0, currentBudget + diff);
-    setTravelPlan(newPlan);
-    updateVal("budget", String(Math.round(newBudget)));
-  };
-  const getFamilyCost = (plan) => {
-    if (plan === "none") return 0;
-    if (plan === "small") return 300;
-    return 600;
-  };
-  const getCollegeContribReduction = (plan) => {
-    if (plan === "none") return 0;
-    if (plan === "small") return 400;
-    return 800;
-  };
-  const handleFamilyPlanChange = (newPlan) => {
-    const oldCost = getFamilyCost(familyPlan);
-    const newCost = getFamilyCost(newPlan);
-    const budgetDiff = newCost - oldCost;
-    const currentBudget = parseFloat(budget) || 0;
-    const newBudget = Math.max(0, currentBudget + budgetDiff);
-    setFamilyPlan(newPlan);
-    updateVal("budget", String(Math.round(newBudget)));
-  };
-  const handleCollegeToggle = (checked) => {
-    setHelpWithCollege(checked);
-  };
-  const applySmartBudget = () => {
-    const incomeNum = parseFloat(income);
-    if (!isNaN(incomeNum)) {
-      const suggested = Math.round(incomeNum * 0.75 / 12);
-      updateVal("budget", String(suggested));
-    }
-  };
-  const [savingsDetails, setSavingsDetails] = (0, import_react58.useState)({
-    savings: "",
-    checking: "",
-    crypto: "",
-    retirement: "",
-    stockPortfolio: ""
-  });
-  const [showSavingsModal, setShowSavingsModal] = (0, import_react58.useState)(false);
-  const [incomeDetails, setIncomeDetails] = (0, import_react58.useState)({
-    socialSecurity: "",
-    realEstate: "",
-    trust: "",
-    investments: "",
-    other: ""
-  });
-  const [showIncomeModal, setShowIncomeModal] = (0, import_react58.useState)(false);
-  const updateSavingsTotal = (details) => {
-    const total = [
-      details.savings,
-      details.checking,
-      details.crypto,
-      details.retirement,
-      details.stockPortfolio
-    ].reduce((acc, val) => acc + (parseFloat(val) || 0), 0);
-    updateVal("savings", String(total));
-  };
-  const handleSavingsDetailChange = (field, value) => {
-    const newDetails = { ...savingsDetails, [field]: value };
-    setSavingsDetails(newDetails);
-    updateSavingsTotal(newDetails);
-  };
-  const updateIncomeTotal = (details) => {
-    const total = [
-      details.socialSecurity,
-      details.realEstate,
-      details.trust,
-      details.investments,
-      details.other
-    ].reduce((acc, val) => acc + (parseFloat(val) || 0), 0);
-    updateVal("otherIncome", String(total));
-  };
-  const handleIncomeDetailChange = (field, value) => {
-    const newDetails = { ...incomeDetails, [field]: value };
-    setIncomeDetails(newDetails);
-    updateIncomeTotal(newDetails);
-  };
-  const handleEstimateSocialSecurity = () => {
-    const annualIncome = parseFloat(income) || 0;
-    const estimated = Math.min(Math.round(annualIncome * 0.4 / 12), 3800);
-    const newDetails = { ...incomeDetails, socialSecurity: String(estimated) };
-    setIncomeDetails(newDetails);
-    updateIncomeTotal(newDetails);
-  };
-  const generateTips = () => {
-    if (!currentCalc.result) return [];
-    const tips = [];
-    const { have, need, monthlyContribNeeded, currentMonthlyContrib } = currentCalc.result;
-    const shortfall = need - have;
-    const incomeNum = parseFloat(income);
-    if (shortfall > 0) {
-      tips.push({
-        title: "Increase Monthly Savings",
-        desc: `You are saving $${currentMonthlyContrib.toLocaleString()}/mo. To reach your goal, aim for $${monthlyContribNeeded.toLocaleString()}/mo (+$${(monthlyContribNeeded - currentMonthlyContrib).toLocaleString()}).`,
-        icon: "\u{1F4B0}",
-        priority: "high"
-      });
-    }
-    if (incomeNum > 0) {
-      const currentRate = currentMonthlyContrib * 12 / incomeNum;
-      const targetRate = 0.15;
-      if (currentRate < targetRate) {
-        const targetMonthly = Math.round(incomeNum * targetRate / 12);
-        tips.push({
-          title: "Boost Your Savings Rate",
-          desc: `Your savings rate is ${(currentRate * 100).toFixed(1)}%. Experts recommend 15% ($${targetMonthly.toLocaleString()}/mo) for a secure retirement.`,
-          icon: "\u{1F4C8}",
-          priority: "high"
-        });
-      }
-    }
-    const budgetNum = parseFloat(budget);
-    if (incomeNum > 0 && budgetNum * 12 > incomeNum * 0.85) {
-      const targetBudget = Math.round(incomeNum * 0.8 / 12);
-      tips.push({
-        title: "Review Retirement Budget",
-        desc: `Your planned spending ($${budgetNum.toLocaleString()}/mo) is high relative to your income. Reducing it to ~$${targetBudget.toLocaleString()}/mo would drastically lower your savings target.`,
-        icon: "\u{1F4C9}",
-        priority: "medium"
-      });
-    }
-    if (shortfall > 0 && (preRetireRate === "4" || preRetireRate === "6")) {
-      tips.push({
-        title: "Optimize Asset Allocation",
-        desc: "Your 4-6% return assumption is conservative. A balanced portfolio (60/40 stocks/bonds) historically returns ~7-8% over long periods.",
-        icon: "\u{1F4CA}",
-        priority: "medium"
-      });
-    }
-    if (shortfall > 0 && parseInt(retirementAge) < 67) {
-      tips.push({
-        title: "Consider Delaying Retirement",
-        desc: `Retiring at ${parseInt(retirementAge) + 2} instead of ${retirementAge} gives your money 2 more years to grow and reduces the withdrawal period.`,
-        icon: "\u23F3",
-        priority: "medium"
-      });
-    }
-    const fillerTips = [
-      {
-        title: "Maximize Tax Advantages",
-        desc: `Ensure you are contributing at least enough to get any employer 401(k) match (often free money!).`,
-        icon: "\u{1F3DB}\uFE0F",
-        priority: "low"
-      },
-      {
-        title: "Emergency Fund",
-        desc: `Before aggressive investing, ensure you have 3-6 months of expenses ($${(budgetNum * 3).toLocaleString()} - $${(budgetNum * 6).toLocaleString()}) in cash.`,
-        icon: "\u{1F6E1}\uFE0F",
-        priority: "low"
-      },
-      {
-        title: "Debt Management",
-        desc: "Pay off high-interest debt (>7%) before increasing retirement contributions further.",
-        icon: "\u{1F4B3}",
-        priority: "low"
-      }
-    ];
-    let fillerIndex = 0;
-    while (tips.length < 3 && fillerIndex < fillerTips.length) {
-      const isDuplicate = tips.some((t) => t.title === fillerTips[fillerIndex].title);
-      if (!isDuplicate) {
-        tips.push(fillerTips[fillerIndex]);
-      }
-      fillerIndex++;
-    }
-    return tips;
-  };
-  const styles = {
-    container: {
-      width: "100%",
-      maxWidth: "600px",
-      margin: "0 auto",
-      backgroundColor: COLORS.bg,
-      fontFamily: "'Inter', sans-serif",
-      padding: "20px",
-      boxSizing: "border-box"
-    },
-    title: {
-      fontSize: "28px",
-      fontWeight: 800,
-      color: COLORS.textMain,
-      marginBottom: "10px",
-      textAlign: "left"
-    },
-    subheader: {
-      fontSize: "14px",
-      color: COLORS.textSecondary,
-      marginBottom: "20px",
-      marginTop: "-5px"
-    },
-    card: {
-      backgroundColor: COLORS.card,
-      borderRadius: "24px",
-      padding: "24px",
-      boxShadow: "0 10px 40px -10px rgba(0,0,0,0.08)",
-      marginBottom: "20px"
-    },
-    row: {
-      display: "flex",
-      alignItems: "flex-start",
-      marginBottom: "20px",
-      gap: "16px"
-    },
-    column: {
-      flex: 1,
-      display: "flex",
-      flexDirection: "column"
-    },
-    label: {
-      fontWeight: 600,
-      color: COLORS.textMain,
-      fontSize: "15px",
-      marginBottom: "0px"
-    },
-    subheaderLabel: {
-      fontSize: "12px",
-      color: COLORS.textSecondary,
-      fontWeight: 400,
-      marginTop: "0px",
-      marginBottom: "8px",
-      lineHeight: "1.3",
-      maxWidth: "90%"
-    },
-    toggleContainer: {
-      display: "flex",
-      gap: "4px",
-      backgroundColor: COLORS.inputBg,
-      borderRadius: "8px",
-      padding: "2px",
-      alignItems: "center"
-    },
-    toggleBtn: (isActive) => ({
-      padding: "4px 12px",
-      borderRadius: "6px",
-      cursor: "pointer",
-      fontWeight: 600,
-      fontSize: "14px",
-      color: isActive ? "white" : COLORS.textSecondary,
-      backgroundColor: isActive ? COLORS.blue : "transparent",
-      transition: "all 0.2s"
-    }),
-    buttonRow: {
-      display: "flex",
-      gap: "12px",
-      marginTop: "10px"
-    },
-    calcButton: {
-      flex: 1,
-      backgroundColor: COLORS.primary,
-      color: "white",
-      border: "none",
-      padding: "14px",
-      borderRadius: "16px",
-      fontSize: "16px",
-      fontWeight: 700,
-      cursor: "pointer",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: "8px",
-      boxShadow: "0 4px 12px rgba(86, 197, 150, 0.2)"
-    },
-    resultCard: {
-      backgroundColor: COLORS.card,
-      borderRadius: "24px",
-      padding: "24px",
-      boxShadow: "0 10px 40px -10px rgba(0,0,0,0.08)",
-      marginTop: "24px"
-    },
-    resultHeader: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: "20px",
-      borderBottom: `1px solid ${COLORS.border}`,
-      paddingBottom: "16px"
-    },
-    resultTitle: {
-      fontSize: "18px",
-      fontWeight: 700,
-      color: COLORS.textMain
-    },
-    list: {
-      fontSize: "14px",
-      lineHeight: "1.8",
-      color: COLORS.textSecondary,
-      backgroundColor: COLORS.inputBg,
-      padding: "16px",
-      borderRadius: "16px"
-    },
-    listItem: {
-      display: "flex",
-      justifyContent: "space-between",
-      marginBottom: "8px",
-      borderBottom: "1px dashed #E5E7EB",
-      paddingBottom: "8px"
-    },
-    footer: {
-      display: "flex",
-      justifyContent: "center",
-      gap: "24px",
-      marginTop: "40px",
-      paddingTop: "24px",
-      borderTop: `1px solid ${COLORS.border}`
-    },
-    footerBtn: {
-      display: "flex",
-      alignItems: "center",
-      gap: "8px",
-      background: "none",
-      border: "none",
-      cursor: "pointer",
-      color: COLORS.textSecondary,
-      fontSize: "14px",
-      fontWeight: 600,
-      transition: "color 0.2s",
-      padding: "8px"
-    },
-    sectionTitle: {
-      fontSize: "20px",
-      fontWeight: 700,
-      color: COLORS.textMain,
-      marginBottom: "16px",
-      paddingLeft: "4px"
-    },
-    bottomModalOverlay: {
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: "rgba(0,0,0,0.5)",
-      display: "flex",
-      alignItems: "flex-end",
-      justifyContent: "center",
-      zIndex: 1e3,
-      padding: "20px",
-      paddingBottom: "40px"
-    },
-    modalOverlay: {
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: "rgba(0,0,0,0.5)",
-      display: "flex",
-      alignItems: "flex-start",
-      justifyContent: "center",
-      zIndex: 1e3,
-      padding: "20px",
-      paddingTop: "40px",
-      overflowY: "auto"
-    },
-    modalContent: {
-      backgroundColor: "white",
-      borderRadius: "24px",
-      padding: "24px",
-      width: "100%",
-      maxWidth: "560px",
-      boxShadow: "0 20px 60px -10px rgba(0,0,0,0.2)",
-      position: "relative"
-    },
-    modalClose: {
-      position: "absolute",
-      top: "16px",
-      right: "16px",
-      background: "none",
-      border: "none",
-      cursor: "pointer",
-      color: COLORS.textSecondary,
-      padding: "8px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
-    },
-    input: {
-      width: "100%",
-      padding: "12px 16px",
-      borderRadius: "12px",
-      border: `1px solid ${COLORS.border}`,
-      fontSize: "16px",
-      backgroundColor: COLORS.inputBg,
-      color: COLORS.textMain,
-      marginBottom: "16px",
-      boxSizing: "border-box",
-      outline: "none"
-    },
-    headerRow: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: "10px"
-    },
-    strategyBtn: (active) => ({
-      flex: 1,
-      padding: "8px",
-      borderRadius: "8px",
-      border: active ? `2px solid ${COLORS.primary}` : `1px solid ${COLORS.border}`,
-      backgroundColor: active ? COLORS.accentLight : "white",
-      color: active ? COLORS.primaryDark : COLORS.textSecondary,
-      fontWeight: 700,
-      fontSize: "12px",
-      cursor: "pointer",
-      textAlign: "center"
-    }),
-    subscribeBtn: {
-      display: "flex",
-      alignItems: "center",
-      gap: "8px",
-      padding: "10px 16px",
-      backgroundColor: COLORS.primary,
-      color: "white",
-      borderRadius: "24px",
-      border: "none",
-      fontSize: "13px",
-      fontWeight: 700,
-      cursor: "pointer",
-      textDecoration: "none",
-      transition: "transform 0.2s, box-shadow 0.2s",
-      boxShadow: "0 4px 12px rgba(86, 197, 150, 0.25)",
-      whiteSpace: "nowrap"
-    }
-  };
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.container, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.headerRow, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.title, children: "The Retirement Planner Pro" }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { ...styles.subheader, display: "flex", alignItems: "center", gap: 6 }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { size: 16, color: COLORS.primary }),
-      " Aligned with Certified Financial Planner\u2122 (CFP\xAE) principles"
-    ] }),
-    showBanner && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
-      backgroundColor: COLORS.accentLight,
-      borderRadius: "16px",
-      padding: "16px",
-      marginBottom: "24px",
-      marginTop: "16px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      flexWrap: "wrap",
-      gap: "12px",
-      position: "relative"
-    }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: "14px", fontWeight: 600, color: COLORS.primaryDark, paddingRight: "24px" }, children: "Want expert tips to reach your goals faster?" }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 12 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { style: { ...styles.subscribeBtn, marginRight: 24 }, className: "btn-press", onClick: () => setShowSubscribeModal(true), children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Mail, { size: 14 }),
-          "Subscribe"
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          "div",
-          {
-            style: { cursor: "pointer", padding: 4, position: "absolute", top: 8, right: 8, color: COLORS.textSecondary },
-            onClick: () => setShowBanner(false),
-            children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { size: 16 })
-          }
-        )
-      ] })
-    ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.card, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.row, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.column, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Current age" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.subheaderLabel, children: "Age you are now" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            NumberControl,
-            {
-              value: currentAge,
-              onChange: (v) => updateVal("currentAge", v),
-              min: 18,
-              max: 100
-            }
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.column, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Annual pre-tax income" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.subheaderLabel, children: "Your yearly earnings before tax" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            NumberControl,
-            {
-              value: income,
-              onChange: (v) => updateVal("income", v),
-              min: 0,
-              max: 1e7,
-              step: 1e3,
-              prefix: "$"
-            }
-          )
-        ] })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.row, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.column, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Current Savings" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.subheaderLabel, children: "Total amount saved for retirement" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            NumberControl,
-            {
-              value: savings,
-              onChange: (v) => updateVal("savings", v),
-              min: 0,
-              max: 1e7,
-              step: 1e3,
-              prefix: "$"
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            "div",
-            {
-              style: { fontSize: 12, color: COLORS.primary, fontWeight: 700, cursor: "pointer", display: "flex", justifyContent: "flex-end", marginTop: 4 },
-              onClick: () => setShowSavingsModal(true),
-              children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "+ Add Details" })
-            }
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.column, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Other Monthly Income" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.subheaderLabel, children: "Monthly income from other sources" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            NumberControl,
-            {
-              value: otherIncome,
-              onChange: (v) => updateVal("otherIncome", v),
-              min: 0,
-              max: 1e5,
-              step: 100,
-              prefix: "$"
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            "div",
-            {
-              style: { fontSize: 12, color: COLORS.primary, fontWeight: 700, cursor: "pointer", display: "flex", justifyContent: "flex-end", marginTop: 4 },
-              onClick: () => setShowIncomeModal(true),
-              children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "+ Add Details" })
-            }
-          )
-        ] })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.row, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.column, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Monthly contributions" }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.subheaderLabel, children: "Amount you save each month" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            NumberControl,
-            {
-              value: contributions,
-              onChange: (v) => updateVal("contributions", v),
-              min: 0,
-              max: 1e5,
-              step: 100,
-              prefix: "$"
-            }
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.column, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Monthly budget in retirement" }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.subheaderLabel, children: "Estimated monthly spending" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            NumberControl,
-            {
-              value: budget,
-              onChange: (v) => updateVal("budget", v),
-              min: 0,
-              max: 1e5,
-              step: 100,
-              prefix: "$"
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            "div",
-            {
-              style: { fontSize: 12, color: COLORS.primary, fontWeight: 700, cursor: "pointer", display: "flex", justifyContent: "flex-end", marginTop: 4 },
-              onClick: applySmartBudget,
-              children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "\u{1FA84} Estimate" })
-            }
-          )
-        ] })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-        "div",
-        {
-          style: { display: "flex", alignItems: "center", gap: 8, cursor: "pointer", marginTop: 20, marginBottom: 20, color: COLORS.blue, fontWeight: 700, fontSize: 14 },
-          onClick: () => setShowAdvanced(!showAdvanced),
-          children: [
-            showAdvanced ? "HIDE ADVANCED DETAILS" : "ADVANCED DETAILS",
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronDown, { size: 16, style: { transform: showAdvanced ? "rotate(180deg)" : "none", transition: "transform 0.2s" } })
-          ]
-        }
-      ),
-      showAdvanced && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.row, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.column, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Retirement age" }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.subheaderLabel, children: "Age you plan to retire" }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-              NumberControl,
-              {
-                value: retirementAge,
-                onChange: (v) => updateVal("retirementAge", v),
-                min: parseInt(currentAge) + 1,
-                max: 100
-              }
-            )
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.column, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Life expectancy" }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.subheaderLabel, children: "Estimated age of lifespan" }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-              NumberControl,
-              {
-                value: lifeExpectancy,
-                onChange: (v) => updateVal("lifeExpectancy", v),
-                min: parseInt(retirementAge) + 1,
-                max: 120
-              }
-            )
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 16, marginTop: 16 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 14, fontWeight: 600, color: COLORS.textMain, marginBottom: 8 }, children: "Investment Strategy" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 8 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.strategyBtn(preRetireRate === "4" && postRetireRate === "3"), onClick: () => handleInvestmentStrategy("conservative"), children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Conservative" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "Bonds & Stability" })
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.strategyBtn(preRetireRate === "7" && postRetireRate === "5"), onClick: () => handleInvestmentStrategy("moderate"), children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Moderate" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "Balanced Growth" })
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.strategyBtn(preRetireRate === "9" && postRetireRate === "7"), onClick: () => handleInvestmentStrategy("aggressive"), children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Aggressive" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "Max Returns" })
-            ] })
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 16 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 14, fontWeight: 600, color: COLORS.textMain, marginBottom: 8 }, children: "Post-Retirement Travel Plans" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 8 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.strategyBtn(travelPlan === "low"), onClick: () => handleTravelPlanChange("low"), children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Conservative" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "Local trips" })
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.strategyBtn(travelPlan === "moderate"), onClick: () => handleTravelPlanChange("moderate"), children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Moderate" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "1-2 trips/year" })
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.strategyBtn(travelPlan === "high"), onClick: () => handleTravelPlanChange("high"), children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Aggressive" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "Frequent travel" })
-            ] })
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 16 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 14, fontWeight: 600, color: COLORS.textMain, marginBottom: 8 }, children: "Family Plans" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 8, marginBottom: 12 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.strategyBtn(familyPlan === "none"), onClick: () => handleFamilyPlanChange("none"), children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "No Family" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "No children" })
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.strategyBtn(familyPlan === "small"), onClick: () => handleFamilyPlanChange("small"), children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Small Family" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "1-2 children" })
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.strategyBtn(familyPlan === "large"), onClick: () => handleFamilyPlanChange("large"), children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Large Family" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "3+ children" })
-            ] })
-          ] }),
-          familyPlan !== "none" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { style: { display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 13, color: COLORS.textSecondary }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-              "input",
-              {
-                type: "checkbox",
-                checked: helpWithCollege,
-                onChange: (e) => handleCollegeToggle(e.target.checked),
-                style: { width: 16, height: 16, accentColor: COLORS.primary }
-              }
-            ),
-            "Check here if you plan to help with college tuition"
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 16, borderTop: `1px dashed ${COLORS.border}`, paddingTop: 16 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 14, fontWeight: 600, color: COLORS.textMain, marginBottom: 8 }, children: "Additional Notes" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 12, color: COLORS.textSecondary, marginBottom: 8, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }, children: "Add any extra details about your retirement plans here." }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            "textarea",
-            {
-              value: personalNotes,
-              onChange: (e) => setPersonalNotes(e.target.value),
-              placeholder: "Type here...",
-              style: {
-                width: "100%",
-                height: "52px",
-                padding: "10px 12px",
-                borderRadius: "12px",
-                border: `1px solid ${COLORS.border}`,
-                fontSize: "14px",
-                fontFamily: "inherit",
-                marginBottom: "8px",
-                resize: "vertical",
-                backgroundColor: COLORS.card,
-                boxSizing: "border-box"
-              }
-            }
-          )
-        ] })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.buttonRow, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "btn-press", style: styles.calcButton, onClick: calculate2, disabled: isAnalyzing, children: isAnalyzing ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Loader, { size: 20, className: "spin" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-        "Calculate ",
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Play, { size: 20, fill: "white" })
-      ] }) }) })
-    ] }),
-    currentCalc.result && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.resultCard, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.resultHeader, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: styles.resultTitle, children: [
-        "Retirement savings at age ",
-        currentCalc.values.retirementAge
-      ] }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 24, gap: 16 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 14, color: COLORS.textMain, marginBottom: 4 }, children: "What you'll have" }),
-          (() => {
-            const have = currentCalc.result.have;
-            const need = currentCalc.result.need;
-            const ratio = need > 0 ? have / need : 1;
-            let color2 = COLORS.primary;
-            let message = "You're on track!";
-            if (ratio < 0.8) {
-              color2 = COLORS.red;
-              message = "You're falling short.";
-            } else if (ratio < 1) {
-              color2 = COLORS.yellow;
-              message = "You're getting close.";
-            }
-            return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 28, fontWeight: 800, color: color2 }, children: [
-                "$",
-                have.toLocaleString()
-              ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 14, fontWeight: 600, color: color2, marginTop: 4 }, children: message })
-            ] });
-          })()
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, borderLeft: `1px solid ${COLORS.border}`, paddingLeft: 16 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 14, color: COLORS.textMain, marginBottom: 4 }, children: "What you'll need" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 28, fontWeight: 800, color: COLORS.textMain }, children: [
-            "$",
-            currentCalc.result.need.toLocaleString()
-          ] })
-        ] })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", borderBottom: `1px solid ${COLORS.border}`, marginBottom: 24 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          "div",
-          {
-            style: { padding: "8px 16px", borderBottom: resultView === "graph" ? `2px solid ${COLORS.primary}` : "none", fontWeight: 700, color: resultView === "graph" ? COLORS.primary : COLORS.textSecondary, cursor: "pointer", fontSize: 12, letterSpacing: 1 },
-            onClick: () => setResultView("graph"),
-            children: "GRAPH VIEW"
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          "div",
-          {
-            style: { padding: "8px 16px", borderBottom: resultView === "summary" ? `2px solid ${COLORS.primary}` : "none", fontWeight: 700, color: resultView === "summary" ? COLORS.primary : COLORS.textSecondary, cursor: "pointer", fontSize: 12, letterSpacing: 1 },
-            onClick: () => setResultView("summary"),
-            children: "SUMMARY VIEW"
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          "div",
-          {
-            style: { padding: "8px 16px", borderBottom: resultView === "tips" ? `2px solid ${COLORS.primary}` : "none", fontWeight: 700, color: resultView === "tips" ? COLORS.primary : COLORS.textSecondary, cursor: "pointer", fontSize: 12, letterSpacing: 1 },
-            onClick: () => setResultView("tips"),
-            children: "TIPS"
-          }
-        )
-      ] }),
-      resultView === "graph" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { height: 300, width: "100%", fontSize: 12 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ResponsiveContainer, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(AreaChart, { data: currentCalc.result.graphData, margin: { top: 10, right: 10, left: -20, bottom: 0 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("linearGradient", { id: "colorCurrent", x1: "0", y1: "0", x2: "0", y2: "1", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", { offset: "5%", stopColor: COLORS.primary, stopOpacity: 0.1 }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", { offset: "95%", stopColor: COLORS.primary, stopOpacity: 0 })
-          ] }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartesianGrid, { strokeDasharray: "3 3", vertical: false, stroke: COLORS.border }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(XAxis, { dataKey: "age", tick: { fill: COLORS.textSecondary }, tickLine: false, axisLine: { stroke: COLORS.border }, minTickGap: 30 }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(YAxis, { tick: { fill: COLORS.textSecondary }, tickFormatter: (val) => `$${(val / 1e6).toFixed(1)}m`, tickLine: false, axisLine: false }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            Tooltip,
-            {
-              content: ({ active, payload, label }) => {
-                if (active && payload && payload.length) {
-                  const rec = payload.find((p) => p.name === "Recommended")?.value;
-                  const cur = payload.find((p) => p.name === "Current path")?.value;
-                  const diff = cur !== void 0 && rec !== void 0 ? cur - rec : 0;
-                  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: "white", padding: 12, borderRadius: 8, boxShadow: "0 4px 12px rgba(0,0,0,0.1)", border: "1px solid #E5E7EB" }, children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontWeight: 600, marginBottom: 8, fontSize: 12, color: COLORS.textSecondary }, children: [
-                      "Age ",
-                      label
-                    ] }),
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", gap: 16, marginBottom: 4 }, children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: COLORS.blue, fontWeight: 600, fontSize: 12 }, children: "Recommended" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontWeight: 700, color: COLORS.textMain, fontSize: 12 }, children: [
-                        "$",
-                        rec?.toLocaleString()
-                      ] })
-                    ] }),
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", gap: 16, marginBottom: 8 }, children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: COLORS.primary, fontWeight: 600, fontSize: 12 }, children: "Current path" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontWeight: 700, color: COLORS.textMain, fontSize: 12 }, children: [
-                        "$",
-                        cur?.toLocaleString()
-                      ] })
-                    ] }),
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", gap: 16, borderTop: "1px dashed #E5E7EB", paddingTop: 4 }, children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: COLORS.textSecondary, fontSize: 12 }, children: "Difference" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontWeight: 700, color: diff >= 0 ? COLORS.primary : COLORS.red, fontSize: 12 }, children: [
-                        diff >= 0 ? "+" : "",
-                        "$",
-                        diff.toLocaleString()
-                      ] })
-                    ] })
-                  ] });
-                }
-                return null;
-              }
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Area, { type: "monotone", dataKey: "recommended", stroke: COLORS.blue, strokeDasharray: "5 5", fill: "transparent", strokeWidth: 2, name: "Recommended" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Area, { type: "monotone", dataKey: "current", stroke: COLORS.primary, fill: "url(#colorCurrent)", strokeWidth: 2, name: "Current path" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ReferenceDot, { x: parseInt(currentCalc.values.retirementAge), y: currentCalc.result.have, r: 4, fill: COLORS.primary, stroke: "white", strokeWidth: 2 }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ReferenceDot, { x: parseInt(currentCalc.values.retirementAge), y: currentCalc.result.need, r: 4, fill: COLORS.blue, stroke: "white", strokeWidth: 2 })
-        ] }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "center", gap: 16, marginTop: 8 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 4 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 12, height: 2, backgroundColor: COLORS.blue } }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: COLORS.textSecondary, fontSize: 12 }, children: "Recommended" })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 4 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 12, height: 2, backgroundColor: COLORS.primary } }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: COLORS.textSecondary, fontSize: 12 }, children: "Current path" })
-          ] })
-        ] })
-      ] }),
-      resultView === "summary" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.list, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 20, borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 12 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontWeight: 800, color: COLORS.textMain, fontSize: 16 }, children: "Plan Analysis" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 13, color: COLORS.textSecondary }, children: "Comparison of your current trajectory vs. your goals" })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 24 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 14, fontWeight: 600, color: COLORS.textMain, marginBottom: 8 }, children: "Monthly Contributions" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 12, backgroundColor: "white", padding: 16, borderRadius: 12, border: `1px solid ${COLORS.border}`, boxShadow: "0 2px 4px rgba(0,0,0,0.02)" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 12, color: COLORS.textSecondary, marginBottom: 4, fontWeight: 500 }, children: "Current Contribution" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 18, fontWeight: 800, color: COLORS.textMain }, children: [
-                "$",
-                currentCalc.result.currentMonthlyContrib.toLocaleString()
-              ] })
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: COLORS.textSecondary, opacity: 0.5 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { size: 24 }) }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 12, color: COLORS.textSecondary, marginBottom: 4, fontWeight: 500 }, children: "Required Contribution" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 18, fontWeight: 800, color: COLORS.blue }, children: [
-                "$",
-                currentCalc.result.monthlyContribNeeded.toLocaleString()
-              ] })
-            ] })
-          ] }),
-          (() => {
-            const diff = currentCalc.result.monthlyContribNeeded - currentCalc.result.currentMonthlyContrib;
-            if (diff > 0) {
-              return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 13, color: COLORS.textSecondary, marginTop: 8, paddingLeft: 4, display: "flex", gap: 6 }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "\u{1F4A1}" }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
-                  "To meet your goal, increase contributions by ",
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontWeight: 700, color: COLORS.textMain }, children: [
-                    "$",
-                    diff.toLocaleString()
-                  ] }),
-                  " /mo."
-                ] })
-              ] });
-            } else {
-              return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 13, color: COLORS.primary, marginTop: 8, paddingLeft: 4, fontWeight: 600, display: "flex", gap: 6 }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "\u2705" }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "You are contributing enough to meet your goal!" })
-              ] });
-            }
-          })()
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 24 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 14, fontWeight: 600, color: COLORS.textMain, marginBottom: 8 }, children: "Total Savings at Retirement" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 12, backgroundColor: "white", padding: 16, borderRadius: 12, border: `1px solid ${COLORS.border}`, boxShadow: "0 2px 4px rgba(0,0,0,0.02)" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 12, color: COLORS.textSecondary, marginBottom: 4, fontWeight: 500 }, children: "Projected Outcome" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 18, fontWeight: 800, color: COLORS.textMain }, children: [
-                "$",
-                currentCalc.result.have.toLocaleString()
-              ] })
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: COLORS.textSecondary, opacity: 0.5 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { size: 24 }) }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 12, color: COLORS.textSecondary, marginBottom: 4, fontWeight: 500 }, children: "Retirement Goal" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 18, fontWeight: 800, color: COLORS.blue }, children: [
-                "$",
-                currentCalc.result.need.toLocaleString()
-              ] })
-            ] })
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 14, fontWeight: 600, color: COLORS.textMain, marginBottom: 8 }, children: "Sustainability" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 12, backgroundColor: "white", padding: 16, borderRadius: 12, border: `1px solid ${COLORS.border}`, boxShadow: "0 2px 4px rgba(0,0,0,0.02)" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 12, color: COLORS.textSecondary, marginBottom: 4, fontWeight: 500 }, children: "Funds last until" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 18, fontWeight: 800, color: currentCalc.result.runOutAgeCurrent < parseInt(currentCalc.values.lifeExpectancy) ? COLORS.red : COLORS.primary }, children: [
-                "Age ",
-                currentCalc.result.runOutAgeCurrent
-              ] })
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: COLORS.textSecondary, opacity: 0.5 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { size: 24 }) }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 12, color: COLORS.textSecondary, marginBottom: 4, fontWeight: 500 }, children: "Target Duration" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 18, fontWeight: 800, color: COLORS.blue }, children: [
-                "Age ",
-                currentCalc.values.lifeExpectancy,
-                "+"
-              ] })
-            ] })
-          ] })
-        ] })
-      ] }),
-      resultView === "tips" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.list, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 20, borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 12 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontWeight: 800, color: COLORS.textMain, fontSize: 16 }, children: "Personalized Recommendations" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 13, color: COLORS.textSecondary }, children: "Actionable steps to improve your retirement outlook" })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 16 }, children: generateTips().map((tip, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: "white", padding: 16, borderRadius: 12, border: `1px solid ${COLORS.border}`, boxShadow: "0 2px 4px rgba(0,0,0,0.02)", display: "flex", gap: 16 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 24, backgroundColor: COLORS.inputBg, width: 48, height: 48, borderRadius: 24, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }, children: tip.icon }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 14, fontWeight: 700, color: COLORS.textMain, marginBottom: 4 }, children: tip.title }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.5 }, children: tip.desc })
-          ] })
-        ] }, idx)) })
-      ] })
-    ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
-      backgroundColor: COLORS.card,
-      borderRadius: "16px",
-      padding: "16px",
-      boxShadow: "0 4px 12px -4px rgba(0,0,0,0.05)",
-      marginBottom: "20px",
-      marginTop: "24px"
-    }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
-        fontSize: "14px",
-        fontWeight: 600,
-        color: COLORS.textSecondary,
-        marginBottom: "12px",
-        textAlign: "center"
-      }, children: "Related Calculators" }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
-        display: "flex",
-        flexDirection: "column",
-        gap: "8px",
-        width: "100%"
-      }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: "8px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-            "button",
-            {
-              className: "btn-press",
-              style: {
-                flex: 1,
-                padding: "12px 10px",
-                backgroundColor: COLORS.inputBg,
-                border: `1px solid ${COLORS.border}`,
-                borderRadius: "10px",
-                color: COLORS.primary,
-                fontWeight: 600,
-                fontSize: "14px",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "6px"
-              },
-              onMouseEnter: (e) => {
-                e.currentTarget.style.backgroundColor = COLORS.accentLight;
-                e.currentTarget.style.borderColor = COLORS.primary;
-              },
-              onMouseLeave: (e) => {
-                e.currentTarget.style.backgroundColor = COLORS.inputBg;
-                e.currentTarget.style.borderColor = COLORS.border;
-              },
-              children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, { size: 16 }),
-                "Retirement Calculator"
-              ]
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-            "button",
-            {
-              className: "btn-press",
-              style: {
-                flex: 1,
-                padding: "12px 10px",
-                backgroundColor: COLORS.inputBg,
-                border: `1px solid ${COLORS.border}`,
-                borderRadius: "10px",
-                color: COLORS.primary,
-                fontWeight: 600,
-                fontSize: "14px",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "6px"
-              },
-              onMouseEnter: (e) => {
-                e.currentTarget.style.backgroundColor = COLORS.accentLight;
-                e.currentTarget.style.borderColor = COLORS.primary;
-              },
-              onMouseLeave: (e) => {
-                e.currentTarget.style.backgroundColor = COLORS.inputBg;
-                e.currentTarget.style.borderColor = COLORS.border;
-              },
-              children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Target, { size: 16 }),
-                "Mortgage Calculator"
-              ]
-            }
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", justifyContent: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-          "button",
-          {
-            className: "btn-press",
-            style: {
-              flex: "0 1 50%",
-              padding: "12px 10px",
-              backgroundColor: COLORS.inputBg,
-              border: `1px solid ${COLORS.border}`,
-              borderRadius: "10px",
-              color: COLORS.primary,
-              fontWeight: 600,
-              fontSize: "14px",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "6px"
-            },
-            onMouseEnter: (e) => {
-              e.currentTarget.style.backgroundColor = COLORS.accentLight;
-              e.currentTarget.style.borderColor = COLORS.primary;
-            },
-            onMouseLeave: (e) => {
-              e.currentTarget.style.backgroundColor = COLORS.inputBg;
-              e.currentTarget.style.borderColor = COLORS.border;
-            },
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { size: 16 }),
-              "Portfolio Analyzer"
-            ]
-          }
-        ) })
-      ] })
-    ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.footer, className: "no-print", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { style: styles.footerBtn, onClick: () => setShowSubscribeModal(true), className: "btn-press", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Mail, { size: 16 }),
-        " Subscribe"
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { style: styles.footerBtn, onClick: resetToDefaults, className: "btn-press", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RotateCcw, { size: 16 }),
-        " Reset"
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { style: styles.footerBtn, className: "btn-press", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Heart, { size: 16 }),
-        " Donate"
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { style: styles.footerBtn, onClick: () => setShowFeedbackModal(true), className: "btn-press", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MessageSquare, { size: 16 }),
-        " Feedback"
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { style: styles.footerBtn, onClick: () => window.print(), className: "btn-press", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { size: 16 }),
-        " Print"
-      ] })
-    ] }),
-    showFeedbackModal && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.bottomModalOverlay, onClick: () => setShowFeedbackModal(false), children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.modalContent, onClick: (e) => e.stopPropagation(), children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { style: styles.modalClose, onClick: () => setShowFeedbackModal(false), children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { size: 20 }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: "24px", fontWeight: 800, marginBottom: "8px", color: COLORS.textMain }, children: "Feedback" }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: "14px", color: COLORS.textSecondary, marginBottom: "24px" }, children: "Help us improve the calculator." }),
-      feedbackStatus === "success" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { textAlign: "center", padding: "20px", color: COLORS.primary, fontWeight: 600 }, children: "Thanks for your feedback!" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          "textarea",
-          {
-            style: { ...styles.input, height: "120px", resize: "none", fontFamily: "inherit" },
-            placeholder: "Tell us what you think...",
-            value: feedbackText,
-            onChange: (e) => setFeedbackText(e.target.value)
-          }
-        ),
-        feedbackStatus === "error" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: COLORS.red, fontSize: "14px", marginBottom: "10px" }, children: "Failed to send. Please try again." }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          "button",
-          {
-            style: { ...styles.calcButton, width: "100%" },
-            onClick: handleFeedbackSubmit,
-            disabled: feedbackStatus === "submitting" || !feedbackText.trim(),
-            className: "btn-press",
-            children: feedbackStatus === "submitting" ? "Sending..." : "Send Feedback"
-          }
-        )
-      ] })
-    ] }) }),
-    showSavingsModal && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.modalOverlay, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.modalContent, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { style: styles.modalClose, onClick: () => setShowSavingsModal(false), children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { size: 20 }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { marginBottom: 24, textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 20, fontWeight: 800, color: COLORS.textMain, marginBottom: 8 }, children: "Current Savings Breakdown" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Savings Account" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            NumberControl,
-            {
-              value: savingsDetails.savings,
-              onChange: (v) => handleSavingsDetailChange("savings", v),
-              prefix: "$"
-            }
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Checking Account" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            NumberControl,
-            {
-              value: savingsDetails.checking,
-              onChange: (v) => handleSavingsDetailChange("checking", v),
-              prefix: "$"
-            }
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Stock Portfolio" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            NumberControl,
-            {
-              value: savingsDetails.stockPortfolio,
-              onChange: (v) => handleSavingsDetailChange("stockPortfolio", v),
-              prefix: "$"
-            }
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Crypto Accounts" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            NumberControl,
-            {
-              value: savingsDetails.crypto,
-              onChange: (v) => handleSavingsDetailChange("crypto", v),
-              prefix: "$"
-            }
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "401k / Retirement Accounts" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            NumberControl,
-            {
-              value: savingsDetails.retirement,
-              onChange: (v) => handleSavingsDetailChange("retirement", v),
-              prefix: "$"
-            }
-          )
-        ] })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-        "button",
-        {
-          onClick: () => setShowSavingsModal(false),
-          style: {
-            marginTop: 24,
-            width: "100%",
-            padding: "14px",
-            borderRadius: "12px",
-            border: "none",
-            backgroundColor: COLORS.primary,
-            color: "white",
-            fontSize: "16px",
-            fontWeight: 700,
-            cursor: "pointer"
-          },
-          children: "Save"
-        }
-      )
-    ] }) }),
-    showIncomeModal && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.modalOverlay, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.modalContent, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { style: styles.modalClose, onClick: () => setShowIncomeModal(false), children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { size: 20 }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 24, textAlign: "center" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 20, fontWeight: 800, color: COLORS.textMain, marginBottom: 8 }, children: "Other Monthly Income" }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 14, color: COLORS.textSecondary }, children: "Enter monthly income amounts" })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Social Security Payment" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            NumberControl,
-            {
-              value: incomeDetails.socialSecurity,
-              onChange: (v) => handleIncomeDetailChange("socialSecurity", v),
-              prefix: "$"
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            "div",
-            {
-              style: { fontSize: 12, color: COLORS.primary, fontWeight: 700, cursor: "pointer", display: "flex", justifyContent: "flex-end", marginTop: 4 },
-              onClick: handleEstimateSocialSecurity,
-              children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "\u{1FA84} Estimate" })
-            }
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Real Estate" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            NumberControl,
-            {
-              value: incomeDetails.realEstate,
-              onChange: (v) => handleIncomeDetailChange("realEstate", v),
-              prefix: "$"
-            }
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Trust Fund" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            NumberControl,
-            {
-              value: incomeDetails.trust,
-              onChange: (v) => handleIncomeDetailChange("trust", v),
-              prefix: "$"
-            }
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Investment Funds" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            NumberControl,
-            {
-              value: incomeDetails.investments,
-              onChange: (v) => handleIncomeDetailChange("investments", v),
-              prefix: "$"
-            }
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Other" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            NumberControl,
-            {
-              value: incomeDetails.other,
-              onChange: (v) => handleIncomeDetailChange("other", v),
-              prefix: "$"
-            }
-          )
-        ] })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-        "button",
-        {
-          onClick: () => setShowIncomeModal(false),
-          style: {
-            marginTop: 24,
-            width: "100%",
-            padding: "14px",
-            borderRadius: "12px",
-            border: "none",
-            backgroundColor: COLORS.primary,
-            color: "white",
-            fontSize: "16px",
-            fontWeight: 700,
-            cursor: "pointer"
-          },
-          children: "Save"
-        }
-      )
-    ] }) }),
-    showSubscribeModal && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.modalOverlay, onClick: () => setShowSubscribeModal(false), children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.modalContent, onClick: (e) => e.stopPropagation(), children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { style: styles.modalClose, onClick: () => setShowSubscribeModal(false), children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { size: 20 }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: "24px", fontWeight: 800, marginBottom: "8px", color: COLORS.textMain }, children: "Sign Up For Retirement Tips" }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: "14px", color: COLORS.textSecondary, marginBottom: "24px" }, children: "Get personalized recommendations to improve your retirement planning." }),
-      subscribeStatus === "success" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center", padding: "20px", color: COLORS.primary, fontWeight: 600 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: "40px", marginBottom: "10px" }, children: "\u{1F389}" }),
-        subscribeMessage
-      ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: "16px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", { style: { display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "8px", color: COLORS.textMain }, children: "Email Address" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-            "input",
-            {
-              style: styles.input,
-              placeholder: "you@example.com",
-              value: email,
-              onChange: (e) => setEmail(e.target.value)
-            }
-          )
-        ] }),
-        subscribeStatus === "error" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: COLORS.red, fontSize: "14px", marginBottom: "16px", textAlign: "center" }, children: subscribeMessage }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          "button",
-          {
-            style: { ...styles.calcButton, width: "100%" },
-            onClick: handleSubscribe,
-            disabled: subscribeStatus === "loading",
-            className: "btn-press",
-            children: subscribeStatus === "loading" ? "Subscribing..." : "Subscribe"
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: "11px", color: COLORS.textSecondary, textAlign: "center", marginTop: "12px", lineHeight: 1.4 }, children: "By subscribing, you agree to receive emails. Unsubscribe anytime. We retain your email until you unsubscribe." })
-      ] })
-    ] }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: `
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none; 
-            margin: 0; 
-        }
-        .btn-press {
-          transition: transform 0.1s ease, opacity 0.2s;
-        }
-        .btn-press:active {
-          transform: scale(0.95);
-        }
-        .btn-press:hover {
-          opacity: 0.7;
-        }
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .spin {
-            animation: spin 1s linear infinite;
-        }
-        @media print {
-          body {
-            background-color: white;
-          }
-          .no-print {
-            display: none !important;
-          }
-        }
-      ` })
-  ] });
-}
-
-// src/PortfolioSimulator.tsx
-var import_react59 = __toESM(require_react(), 1);
-var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
-var COLORS2 = {
   primary: "#56C596",
   primaryDark: "#3aa87b",
   bg: "#FAFAFA",
@@ -52402,7 +50267,7 @@ var ASSET_ASSUMPTIONS = {
   startups: { mean: 0.2, stdDev: 0.7, name: "Startup Investments" },
   other: { mean: 0.06, stdDev: 0.15, name: "Other" }
 };
-var NumberControl2 = ({ value, onChange, min: min2 = 0, max: max2 = 1e7, step = 1, suffix: suffix2, prefix, disabled = false }) => {
+var NumberControl = ({ value, onChange, min: min2 = 0, max: max2 = 1e7, step = 1, suffix: suffix2, prefix, disabled = false }) => {
   const handleDec = () => {
     if (disabled) return;
     const num = parseFloat(value) || 0;
@@ -52418,15 +50283,15 @@ var NumberControl2 = ({ value, onChange, min: min2 = 0, max: max2 = 1e7, step = 
     const val = e.target.value.replace(/,/g, "").replace(/[^0-9.]/g, "");
     onChange(val);
   };
-  const btnStyle = { width: "32px", height: "32px", borderRadius: "8px", border: "none", backgroundColor: disabled ? COLORS2.border : "white", color: disabled ? COLORS2.textSecondary : COLORS2.primary, display: "flex", alignItems: "center", justifyContent: "center", cursor: disabled ? "not-allowed" : "pointer", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" };
-  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { backgroundColor: COLORS2.inputBg, borderRadius: "12px", padding: "6px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px", height: "44px", opacity: disabled ? 0.6 : 1 }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: handleDec, style: btnStyle, disabled, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Minus, { size: 16, strokeWidth: 3 }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { flex: 1, textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: "4px" }, children: [
-      prefix && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: "16px", fontWeight: 700, color: COLORS2.textMain }, children: prefix }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { type: "text", value: value ? Number(value).toLocaleString() : "", onChange: handleChange, disabled, style: { width: "100%", border: "none", background: "transparent", textAlign: "center", fontSize: "16px", fontWeight: 700, color: COLORS2.textMain, outline: "none" } }),
-      suffix2 && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: "14px", color: COLORS2.textSecondary, fontWeight: 500 }, children: suffix2 })
+  const btnStyle = { width: "32px", height: "32px", borderRadius: "8px", border: "none", backgroundColor: disabled ? COLORS.border : "white", color: disabled ? COLORS.textSecondary : COLORS.primary, display: "flex", alignItems: "center", justifyContent: "center", cursor: disabled ? "not-allowed" : "pointer", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" };
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: COLORS.inputBg, borderRadius: "12px", padding: "6px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px", height: "44px", opacity: disabled ? 0.6 : 1 }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: handleDec, style: btnStyle, disabled, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Minus, { size: 16, strokeWidth: 3 }) }),
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: "4px" }, children: [
+      prefix && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "16px", fontWeight: 700, color: COLORS.textMain }, children: prefix }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "text", value: value ? Number(value).toLocaleString() : "", onChange: handleChange, disabled, style: { width: "100%", border: "none", background: "transparent", textAlign: "center", fontSize: "16px", fontWeight: 700, color: COLORS.textMain, outline: "none" } }),
+      suffix2 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "14px", color: COLORS.textSecondary, fontWeight: 500 }, children: suffix2 })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { onClick: handleInc, style: btnStyle, disabled, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Plus, { size: 16, strokeWidth: 3 }) })
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: handleInc, style: btnStyle, disabled, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { size: 16, strokeWidth: 3 }) })
   ] });
 };
 var ASSET_TOOLTIPS = {
@@ -52452,14 +50317,14 @@ var ASSET_LINKS = {
   other: "https://en.wikipedia.org/wiki/Investment"
 };
 var InfoTooltip = ({ text, link, children }) => {
-  const [show, setShow] = import_react59.default.useState(false);
-  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { position: "relative", display: "inline-flex" }, onMouseEnter: () => setShow(true), onMouseLeave: () => setShow(false), children: [
+  const [show, setShow] = import_react57.default.useState(false);
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { position: "relative", display: "inline-flex" }, onMouseEnter: () => setShow(true), onMouseLeave: () => setShow(false), children: [
     children,
-    show && text && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { position: "absolute", bottom: "100%", left: "50%", transform: "translateX(-50%)", marginBottom: 6, padding: "8px 12px", backgroundColor: "#333", color: "white", fontSize: 11, borderRadius: 8, whiteSpace: "normal", zIndex: 1e3, width: 200, textAlign: "center", boxShadow: "0 4px 12px rgba(0,0,0,0.2)" }, onMouseEnter: () => setShow(true), onMouseLeave: () => setShow(false), children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { marginBottom: link ? 8 : 0 }, children: text }),
-      link && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("a", { href: link, target: "_blank", rel: "noopener noreferrer", style: { color: COLORS2.primary, fontSize: 10, fontWeight: 700, textDecoration: "none", display: "inline-block", padding: "4px 8px", backgroundColor: "rgba(255,255,255,0.1)", borderRadius: 4 }, children: "LEARN MORE" }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)", borderLeft: "6px solid transparent", borderRight: "6px solid transparent", borderTop: "6px solid #333" } }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { position: "absolute", width: "100%", height: "20px", top: "100%", left: 0 } })
+    show && text && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { position: "absolute", bottom: "100%", left: "50%", transform: "translateX(-50%)", marginBottom: 6, padding: "8px 12px", backgroundColor: "#333", color: "white", fontSize: 11, borderRadius: 8, whiteSpace: "normal", zIndex: 1e3, width: 200, textAlign: "center", boxShadow: "0 4px 12px rgba(0,0,0,0.2)" }, onMouseEnter: () => setShow(true), onMouseLeave: () => setShow(false), children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { marginBottom: link ? 8 : 0 }, children: text }),
+      link && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", { href: link, target: "_blank", rel: "noopener noreferrer", style: { color: COLORS.primary, fontSize: 10, fontWeight: 700, textDecoration: "none", display: "inline-block", padding: "4px 8px", backgroundColor: "rgba(255,255,255,0.1)", borderRadius: 4 }, children: "LEARN MORE" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)", borderLeft: "6px solid transparent", borderRight: "6px solid transparent", borderTop: "6px solid #333" } }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { position: "absolute", width: "100%", height: "20px", top: "100%", left: 0 } })
     ] })
   ] });
 };
@@ -52468,19 +50333,19 @@ var AllocationSlider = ({ label, value, onChange, color: color2, inputMode = "pe
   const sliderPercent = inputMode === "percent" ? numVal : Math.min(numVal / maxDollar * 100, 100);
   const tooltipText = fieldKey ? ASSET_TOOLTIPS[fieldKey] : "";
   const tooltipLink = fieldKey ? ASSET_LINKS[fieldKey] : "";
-  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { width: "calc(50% - 8px)", flexShrink: 0, marginBottom: 12 }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 5, minWidth: 0 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontWeight: 600, color: COLORS2.textMain, fontSize: 13, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }, children: label }),
-        tooltipText && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(InfoTooltip, { text: tooltipText, link: tooltipLink, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 14, height: 14, borderRadius: "50%", backgroundColor: COLORS2.border, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 9, fontWeight: 700, color: COLORS2.textSecondary, flexShrink: 0 }, children: "i" }) })
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { width: "calc(50% - 8px)", flexShrink: 0, marginBottom: 12 }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 5, minWidth: 0 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontWeight: 600, color: COLORS.textMain, fontSize: 13, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }, children: label }),
+        tooltipText && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(InfoTooltip, { text: tooltipText, link: tooltipLink, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 14, height: 14, borderRadius: "50%", backgroundColor: COLORS.border, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 9, fontWeight: 700, color: COLORS.textSecondary, flexShrink: 0 }, children: "i" }) })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 4, backgroundColor: COLORS2.inputBg, padding: "6px 10px", borderRadius: 8, borderLeft: "none", width: inputMode === "dollar" ? 110 : 65, justifyContent: "center", flexShrink: 0 }, children: [
-        inputMode === "dollar" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: COLORS2.primary, fontWeight: 600, fontSize: 13 }, children: "$" }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { type: "text", value: inputMode === "dollar" ? numVal > 0 ? numVal.toLocaleString() : value : value, onChange: (e) => onChange(e.target.value.replace(/,/g, "").replace(/[^0-9]/g, "")), placeholder: "0", style: { width: inputMode === "dollar" ? 75 : 32, border: "none", background: "transparent", textAlign: "right", fontSize: 14, fontWeight: 700, color: COLORS2.textMain, outline: "none" } }),
-        inputMode === "percent" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: COLORS2.textSecondary, fontWeight: 600, fontSize: 13 }, children: "%" })
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 4, backgroundColor: COLORS.inputBg, padding: "6px 10px", borderRadius: 8, borderLeft: "none", width: inputMode === "dollar" ? 110 : 65, justifyContent: "center", flexShrink: 0 }, children: [
+        inputMode === "dollar" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: COLORS.primary, fontWeight: 600, fontSize: 13 }, children: "$" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "text", value: inputMode === "dollar" ? numVal > 0 ? numVal.toLocaleString() : value : value, onChange: (e) => onChange(e.target.value.replace(/,/g, "").replace(/[^0-9]/g, "")), placeholder: "0", style: { width: inputMode === "dollar" ? 75 : 32, border: "none", background: "transparent", textAlign: "right", fontSize: 14, fontWeight: 700, color: COLORS.textMain, outline: "none" } }),
+        inputMode === "percent" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: COLORS.textSecondary, fontWeight: 600, fontSize: 13 }, children: "%" })
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { type: "range", min: 0, max: inputMode === "percent" ? 100 : maxDollar, value: numVal, onChange: (e) => onChange(e.target.value), style: { width: "100%", height: 6, borderRadius: 3, appearance: "none", background: `linear-gradient(to right, ${color2} 0%, ${color2} ${sliderPercent}%, ${COLORS2.border} ${sliderPercent}%, ${COLORS2.border} 100%)`, cursor: "pointer" } })
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "range", min: 0, max: inputMode === "percent" ? 100 : maxDollar, value: numVal, onChange: (e) => onChange(e.target.value), style: { width: "100%", height: 6, borderRadius: 3, appearance: "none", background: `linear-gradient(to right, ${color2} 0%, ${color2} ${sliderPercent}%, ${COLORS.border} ${sliderPercent}%, ${COLORS.border} 100%)`, cursor: "pointer" } })
   ] });
 };
 function runMonteCarloSimulation(allocation, timeHorizon, annualContribution, initialInvestment, inputMode, investmentGoal, numSimulations = 500) {
@@ -52570,22 +50435,22 @@ function runMonteCarloSimulation(allocation, timeHorizon, annualContribution, in
   return { results, stats };
 }
 function PortfolioSimulator({ initialData: initialData2 }) {
-  const [allocation, setAllocation] = (0, import_react59.useState)({ stocks: "60", bonds: "25", cash: "5", realEstate: "5", crypto: "0", fourOhOneK: "0", altInvestments: "0", startups: "0", other: "5" });
-  const [timeHorizon, setTimeHorizon] = (0, import_react59.useState)("10");
-  const [inputMode, setInputMode] = (0, import_react59.useState)("percent");
-  const [annualContribution, setAnnualContribution] = (0, import_react59.useState)("6000");
-  const [initialInvestment, setInitialInvestment] = (0, import_react59.useState)("10000");
-  const [investmentGoal, setInvestmentGoal] = (0, import_react59.useState)("growth");
-  const [activePreset, setActivePreset] = (0, import_react59.useState)("balanced");
-  const [isSimulating, setIsSimulating] = (0, import_react59.useState)(false);
-  const [simulationResult, setSimulationResult] = (0, import_react59.useState)(null);
-  const [showAdvanced, setShowAdvanced] = (0, import_react59.useState)(false);
-  const [resultView, setResultView] = (0, import_react59.useState)("projection");
-  const [showSubscribeModal, setShowSubscribeModal] = (0, import_react59.useState)(false);
-  const [email, setEmail] = (0, import_react59.useState)("");
-  const [subscribeStatus, setSubscribeStatus] = (0, import_react59.useState)("idle");
-  const [subscribeMessage, setSubscribeMessage] = (0, import_react59.useState)("");
-  const [showBanner, setShowBanner] = (0, import_react59.useState)(true);
+  const [allocation, setAllocation] = (0, import_react57.useState)({ stocks: "60", bonds: "25", cash: "5", realEstate: "5", crypto: "0", fourOhOneK: "0", altInvestments: "0", startups: "0", other: "5" });
+  const [timeHorizon, setTimeHorizon] = (0, import_react57.useState)("10");
+  const [inputMode, setInputMode] = (0, import_react57.useState)("percent");
+  const [annualContribution, setAnnualContribution] = (0, import_react57.useState)("6000");
+  const [initialInvestment, setInitialInvestment] = (0, import_react57.useState)("10000");
+  const [investmentGoal, setInvestmentGoal] = (0, import_react57.useState)("growth");
+  const [activePreset, setActivePreset] = (0, import_react57.useState)("balanced");
+  const [isSimulating, setIsSimulating] = (0, import_react57.useState)(false);
+  const [simulationResult, setSimulationResult] = (0, import_react57.useState)(null);
+  const [showAdvanced, setShowAdvanced] = (0, import_react57.useState)(false);
+  const [resultView, setResultView] = (0, import_react57.useState)("projection");
+  const [showSubscribeModal, setShowSubscribeModal] = (0, import_react57.useState)(false);
+  const [email, setEmail] = (0, import_react57.useState)("");
+  const [subscribeStatus, setSubscribeStatus] = (0, import_react57.useState)("idle");
+  const [subscribeMessage, setSubscribeMessage] = (0, import_react57.useState)("");
+  const [showBanner, setShowBanner] = (0, import_react57.useState)(true);
   const handleSubscribe = async () => {
     if (!email || !email.includes("@")) {
       setSubscribeMessage("Please enter a valid email.");
@@ -52623,9 +50488,42 @@ function PortfolioSimulator({ initialData: initialData2 }) {
       setSubscribeMessage("Network error. Please try again.");
     }
   };
-  const totalAllocation = (0, import_react59.useMemo)(() => (parseFloat(allocation.stocks) || 0) + (parseFloat(allocation.bonds) || 0) + (parseFloat(allocation.cash) || 0) + (parseFloat(allocation.realEstate) || 0) + (parseFloat(allocation.crypto) || 0) + (parseFloat(allocation.fourOhOneK) || 0) + (parseFloat(allocation.altInvestments) || 0) + (parseFloat(allocation.startups) || 0) + (parseFloat(allocation.other) || 0), [allocation]);
+  const [showFeedbackModal, setShowFeedbackModal] = (0, import_react57.useState)(false);
+  const [feedbackText, setFeedbackText] = (0, import_react57.useState)("");
+  const [feedbackStatus, setFeedbackStatus] = (0, import_react57.useState)("idle");
+  const handleFeedbackSubmit = async () => {
+    if (!feedbackText.trim()) return;
+    setFeedbackStatus("submitting");
+    try {
+      const response = await fetch("/api/track", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          event: "user_feedback",
+          data: {
+            feedback: feedbackText,
+            calculatorType: "Portfolio Optimizer"
+          }
+        })
+      });
+      if (response.ok) {
+        setFeedbackStatus("success");
+        setTimeout(() => {
+          setShowFeedbackModal(false);
+          setFeedbackText("");
+          setFeedbackStatus("idle");
+        }, 2e3);
+      } else {
+        setFeedbackStatus("error");
+      }
+    } catch (e) {
+      console.error("Feedback error:", e);
+      setFeedbackStatus("error");
+    }
+  };
+  const totalAllocation = (0, import_react57.useMemo)(() => (parseFloat(allocation.stocks) || 0) + (parseFloat(allocation.bonds) || 0) + (parseFloat(allocation.cash) || 0) + (parseFloat(allocation.realEstate) || 0) + (parseFloat(allocation.crypto) || 0) + (parseFloat(allocation.fourOhOneK) || 0) + (parseFloat(allocation.altInvestments) || 0) + (parseFloat(allocation.startups) || 0) + (parseFloat(allocation.other) || 0), [allocation]);
   const allocationValid = inputMode === "dollar" ? totalAllocation > 0 : totalAllocation === 100;
-  (0, import_react59.useEffect)(() => {
+  (0, import_react57.useEffect)(() => {
     if (allocationValid) runSimulation();
   }, [allocation, timeHorizon, annualContribution, initialInvestment, inputMode, investmentGoal]);
   const runSimulation = () => {
@@ -52711,30 +50609,30 @@ function PortfolioSimulator({ initialData: initialData2 }) {
     { name: "Other", value: suggestedAllocation.other, color: ALLOCATION_COLORS[8] }
   ].filter((d) => d.value > 0);
   const styles = {
-    container: { width: "100%", maxWidth: "600px", margin: "0 auto", backgroundColor: COLORS2.bg, fontFamily: "'Inter', sans-serif", padding: "20px", boxSizing: "border-box", minHeight: "101vh" },
-    card: { backgroundColor: COLORS2.card, borderRadius: "24px", padding: "24px", boxShadow: "0 10px 40px -10px rgba(0,0,0,0.08)", marginBottom: "20px", width: "100%", boxSizing: "border-box" },
+    container: { width: "100%", maxWidth: "600px", margin: "0 auto", backgroundColor: COLORS.bg, fontFamily: "'Inter', sans-serif", padding: "20px", boxSizing: "border-box", minHeight: "101vh" },
+    card: { backgroundColor: COLORS.card, borderRadius: "24px", padding: "24px", boxShadow: "0 10px 40px -10px rgba(0,0,0,0.08)", marginBottom: "20px", width: "100%", boxSizing: "border-box" },
     row: { display: "flex", alignItems: "flex-start", marginBottom: "20px", gap: "16px" },
     column: { flex: 1, display: "flex", flexDirection: "column" },
-    label: { fontWeight: 600, color: COLORS2.textMain, fontSize: "15px", marginBottom: "0px" },
-    subheaderLabel: { fontSize: "12px", color: COLORS2.textSecondary, fontWeight: 400, marginTop: "0px", marginBottom: "8px", lineHeight: "1.3" },
-    calcButton: { flex: 1, backgroundColor: COLORS2.primary, color: "white", border: "none", padding: "14px", borderRadius: "16px", fontSize: "16px", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", boxShadow: "0 4px 12px rgba(86, 197, 150, 0.2)" },
-    strategyBtn: (active) => ({ flex: 1, padding: "8px", borderRadius: "8px", border: active ? `2px solid ${COLORS2.primary}` : `1px solid ${COLORS2.border}`, backgroundColor: active ? COLORS2.accentLight : "white", color: active ? COLORS2.primaryDark : COLORS2.textSecondary, fontWeight: 700, fontSize: "12px", cursor: "pointer", textAlign: "center" }),
-    resultCard: { backgroundColor: COLORS2.card, borderRadius: "24px", padding: "24px", boxShadow: "0 10px 40px -10px rgba(0,0,0,0.08)", marginTop: "24px" },
-    footer: { display: "flex", justifyContent: "center", gap: "24px", marginTop: "40px", paddingTop: "24px", borderTop: `1px solid ${COLORS2.border}` },
-    footerBtn: { display: "flex", alignItems: "center", gap: "8px", background: "none", border: "none", cursor: "pointer", color: COLORS2.textSecondary, fontSize: "14px", fontWeight: 600, padding: "8px" },
+    label: { fontWeight: 600, color: COLORS.textMain, fontSize: "15px", marginBottom: "0px" },
+    subheaderLabel: { fontSize: "12px", color: COLORS.textSecondary, fontWeight: 400, marginTop: "0px", marginBottom: "8px", lineHeight: "1.3" },
+    calcButton: { flex: 1, backgroundColor: COLORS.primary, color: "white", border: "none", padding: "14px", borderRadius: "16px", fontSize: "16px", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", boxShadow: "0 4px 12px rgba(86, 197, 150, 0.2)" },
+    strategyBtn: (active) => ({ flex: 1, padding: "8px", borderRadius: "8px", border: active ? `2px solid ${COLORS.primary}` : `1px solid ${COLORS.border}`, backgroundColor: active ? COLORS.accentLight : "white", color: active ? COLORS.primaryDark : COLORS.textSecondary, fontWeight: 700, fontSize: "12px", cursor: "pointer", textAlign: "center" }),
+    resultCard: { backgroundColor: COLORS.card, borderRadius: "24px", padding: "24px", boxShadow: "0 10px 40px -10px rgba(0,0,0,0.08)", marginTop: "24px" },
+    footer: { display: "flex", justifyContent: "center", gap: "24px", marginTop: "40px", paddingTop: "24px", borderTop: `1px solid ${COLORS.border}` },
+    footerBtn: { display: "flex", alignItems: "center", gap: "8px", background: "none", border: "none", cursor: "pointer", color: COLORS.textSecondary, fontSize: "14px", fontWeight: 600, padding: "8px" },
     modalOverlay: { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", display: "flex", alignItems: "flex-start", justifyContent: "center", zIndex: 1e3, padding: "20px", paddingTop: "40px", overflowY: "auto" },
     modalContent: { backgroundColor: "white", borderRadius: "24px", padding: "24px", width: "100%", maxWidth: "560px", boxShadow: "0 20px 60px -10px rgba(0,0,0,0.2)", position: "relative" },
-    modalClose: { position: "absolute", top: "16px", right: "16px", background: "none", border: "none", cursor: "pointer", color: COLORS2.textSecondary, padding: "8px", display: "flex", alignItems: "center", justifyContent: "center" },
-    input: { width: "100%", padding: "12px 16px", borderRadius: "12px", border: `1px solid ${COLORS2.border}`, fontSize: "16px", backgroundColor: COLORS2.inputBg, color: COLORS2.textMain, marginBottom: "16px", boxSizing: "border-box", outline: "none" }
+    modalClose: { position: "absolute", top: "16px", right: "16px", background: "none", border: "none", cursor: "pointer", color: COLORS.textSecondary, padding: "8px", display: "flex", alignItems: "center", justifyContent: "center" },
+    input: { width: "100%", padding: "12px 16px", borderRadius: "12px", border: `1px solid ${COLORS.border}`, fontSize: "16px", backgroundColor: COLORS.inputBg, color: COLORS.textMain, marginBottom: "16px", boxSizing: "border-box", outline: "none" }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles.container, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: "28px", fontWeight: 800, color: COLORS2.textMain, marginBottom: "10px" }, children: "The Strategic Portfolio Simulator" }),
-    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontSize: "14px", color: COLORS2.textSecondary, marginBottom: "20px", display: "flex", alignItems: "center", gap: 6 }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Check, { size: 16, color: COLORS2.primary }),
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.container, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: "28px", fontWeight: 800, color: COLORS.textMain, marginBottom: "10px" }, children: "The Strategic Portfolio Simulator" }),
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: "14px", color: COLORS.textSecondary, marginBottom: "20px", display: "flex", alignItems: "center", gap: 6 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { size: 16, color: COLORS.primary }),
       " Aligned with Modern Portfolio Theory (MPT) & Historical Market Data\u2122"
     ] }),
-    showBanner && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: {
-      backgroundColor: COLORS2.accentLight,
+    showBanner && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+      backgroundColor: COLORS.accentLight,
       borderRadius: "16px",
       padding: "16px",
       marginBottom: "24px",
@@ -52746,14 +50644,14 @@ function PortfolioSimulator({ initialData: initialData2 }) {
       gap: "12px",
       position: "relative"
     }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: "14px", fontWeight: 600, color: COLORS2.primaryDark, paddingRight: "24px" }, children: "Want expert tips to reach your goals faster?" }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 12 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("button", { className: "btn-press", onClick: () => setShowSubscribeModal(true), style: {
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: "14px", fontWeight: 600, color: COLORS.primaryDark, paddingRight: "24px" }, children: "Want expert tips to reach your goals faster?" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 12 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { className: "btn-press", onClick: () => setShowSubscribeModal(true), style: {
           display: "flex",
           alignItems: "center",
           gap: "8px",
           padding: "10px 16px",
-          backgroundColor: COLORS2.primary,
+          backgroundColor: COLORS.primary,
           color: "white",
           borderRadius: "24px",
           border: "none",
@@ -52763,207 +50661,207 @@ function PortfolioSimulator({ initialData: initialData2 }) {
           boxShadow: "0 4px 12px rgba(86, 197, 150, 0.25)",
           marginRight: 24
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Mail, { size: 14 }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Mail, { size: 14 }),
           "Subscribe"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
           "div",
           {
-            style: { cursor: "pointer", padding: 4, position: "absolute", top: 8, right: 8, color: COLORS2.textSecondary },
+            style: { cursor: "pointer", padding: 4, position: "absolute", top: 8, right: 8, color: COLORS.textSecondary },
             onClick: () => setShowBanner(false),
-            children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(X, { size: 16 })
+            children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { size: 16 })
           }
         )
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { backgroundColor: COLORS2.accentLight, borderRadius: "16px", padding: "16px", marginBottom: "24px", display: "flex", alignItems: "center", gap: "12px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Info, { size: 20, color: COLORS2.primaryDark, style: { flexShrink: 0 } }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontSize: "13px", color: COLORS2.primaryDark, lineHeight: 1.5 }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: COLORS.accentLight, borderRadius: "16px", padding: "16px", marginBottom: "24px", display: "flex", alignItems: "center", gap: "12px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Info, { size: 20, color: COLORS.primaryDark, style: { flexShrink: 0 } }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: "13px", color: COLORS.primaryDark, lineHeight: 1.5 }, children: [
         "This tool is for ",
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("strong", { children: "educational purposes only" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "educational purposes only" }),
         ". Results are hypothetical projections and do not guarantee future performance."
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles.card, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 16, fontWeight: 700, color: COLORS2.textMain }, children: "Your Portfolio Allocation" }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 4, backgroundColor: COLORS2.inputBg, borderRadius: 8, padding: 2 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { ...styles.strategyBtn(inputMode === "percent"), padding: "6px 12px", fontSize: 13 }, onClick: () => handleModeSwitch("percent"), children: "%" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { ...styles.strategyBtn(inputMode === "dollar"), padding: "6px 12px", fontSize: 13 }, onClick: () => handleModeSwitch("dollar"), children: "$" })
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.card, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 16, fontWeight: 700, color: COLORS.textMain }, children: "Your Portfolio Allocation" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 4, backgroundColor: COLORS.inputBg, borderRadius: 8, padding: 2 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { ...styles.strategyBtn(inputMode === "percent"), padding: "6px 12px", fontSize: 13 }, onClick: () => handleModeSwitch("percent"), children: "%" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { ...styles.strategyBtn(inputMode === "dollar"), padding: "6px 12px", fontSize: 13 }, onClick: () => handleModeSwitch("dollar"), children: "$" })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { marginBottom: 20, padding: 12, backgroundColor: COLORS2.inputBg, borderRadius: 12 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 12, color: COLORS2.textSecondary, marginBottom: 8, fontWeight: 600 }, children: "\u26A1 Choose a starting allocation preset:" }),
-        inputMode === "percent" ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 8 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles.strategyBtn(activePreset === "conservative"), onClick: () => applyPercentPreset("conservative"), children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { children: "Conservative" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "Low risk" })
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 20, padding: 12, backgroundColor: COLORS.inputBg, borderRadius: 12 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 12, color: COLORS.textSecondary, marginBottom: 8, fontWeight: 600 }, children: "\u26A1 Choose a starting allocation preset:" }),
+        inputMode === "percent" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 8 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.strategyBtn(activePreset === "conservative"), onClick: () => applyPercentPreset("conservative"), children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Conservative" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "Low risk" })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles.strategyBtn(activePreset === "balanced"), onClick: () => applyPercentPreset("balanced"), children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { children: "Balanced" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "Moderate" })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.strategyBtn(activePreset === "balanced"), onClick: () => applyPercentPreset("balanced"), children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Balanced" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "Moderate" })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles.strategyBtn(activePreset === "aggressive"), onClick: () => applyPercentPreset("aggressive"), children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { children: "Aggressive" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "High risk" })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.strategyBtn(activePreset === "aggressive"), onClick: () => applyPercentPreset("aggressive"), children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Aggressive" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "High risk" })
           ] })
-        ] }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 8 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles.strategyBtn(activePreset === "early"), onClick: () => applyDollarPreset("early"), children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { children: "Early Life" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "20s-30s" })
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 8 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.strategyBtn(activePreset === "early"), onClick: () => applyDollarPreset("early"), children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Early Life" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "20s-30s" })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles.strategyBtn(activePreset === "mid"), onClick: () => applyDollarPreset("mid"), children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { children: "Mid Life" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "40s-50s" })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.strategyBtn(activePreset === "mid"), onClick: () => applyDollarPreset("mid"), children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Mid Life" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "40s-50s" })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles.strategyBtn(activePreset === "late"), onClick: () => applyDollarPreset("late"), children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { children: "Late Life" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "60s+" })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.strategyBtn(activePreset === "late"), onClick: () => applyDollarPreset("late"), children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Late Life" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "60s+" })
           ] })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", flexWrap: "wrap", gap: 16, width: "100%" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(AllocationSlider, { label: "Stocks", value: allocation.stocks, onChange: (v) => handleAllocationChange("stocks", v), color: ALLOCATION_COLORS[0], inputMode, fieldKey: "stocks" }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(AllocationSlider, { label: "Bonds", value: allocation.bonds, onChange: (v) => handleAllocationChange("bonds", v), color: ALLOCATION_COLORS[1], inputMode, fieldKey: "bonds" }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(AllocationSlider, { label: "401k", value: allocation.fourOhOneK, onChange: (v) => handleAllocationChange("fourOhOneK", v), color: ALLOCATION_COLORS[5], inputMode, fieldKey: "fourOhOneK" }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(AllocationSlider, { label: "Cash", value: allocation.cash, onChange: (v) => handleAllocationChange("cash", v), color: ALLOCATION_COLORS[2], inputMode, fieldKey: "cash" }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(AllocationSlider, { label: "Real Estate", value: allocation.realEstate, onChange: (v) => handleAllocationChange("realEstate", v), color: ALLOCATION_COLORS[3], inputMode, fieldKey: "realEstate" }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(AllocationSlider, { label: "Crypto", value: allocation.crypto, onChange: (v) => handleAllocationChange("crypto", v), color: ALLOCATION_COLORS[4], inputMode, fieldKey: "crypto" }),
-        inputMode === "dollar" ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(AllocationSlider, { label: "Other", value: allocation.other, onChange: (v) => handleAllocationChange("other", v), color: ALLOCATION_COLORS[8], inputMode, fieldKey: "other" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(AllocationSlider, { label: "Alt Investments", value: allocation.altInvestments, onChange: (v) => handleAllocationChange("altInvestments", v), color: ALLOCATION_COLORS[6], inputMode, fieldKey: "altInvestments" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(AllocationSlider, { label: "Startups", value: allocation.startups, onChange: (v) => handleAllocationChange("startups", v), color: ALLOCATION_COLORS[7], inputMode, fieldKey: "startups" })
-        ] }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(AllocationSlider, { label: "Alt Investments", value: allocation.altInvestments, onChange: (v) => handleAllocationChange("altInvestments", v), color: ALLOCATION_COLORS[6], inputMode, fieldKey: "altInvestments" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(AllocationSlider, { label: "Startups", value: allocation.startups, onChange: (v) => handleAllocationChange("startups", v), color: ALLOCATION_COLORS[7], inputMode, fieldKey: "startups" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(AllocationSlider, { label: "Other", value: allocation.other, onChange: (v) => handleAllocationChange("other", v), color: ALLOCATION_COLORS[8], inputMode, fieldKey: "other" })
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexWrap: "wrap", gap: 16, width: "100%" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AllocationSlider, { label: "Stocks", value: allocation.stocks, onChange: (v) => handleAllocationChange("stocks", v), color: ALLOCATION_COLORS[0], inputMode, fieldKey: "stocks" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AllocationSlider, { label: "Bonds", value: allocation.bonds, onChange: (v) => handleAllocationChange("bonds", v), color: ALLOCATION_COLORS[1], inputMode, fieldKey: "bonds" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AllocationSlider, { label: "401k", value: allocation.fourOhOneK, onChange: (v) => handleAllocationChange("fourOhOneK", v), color: ALLOCATION_COLORS[5], inputMode, fieldKey: "fourOhOneK" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AllocationSlider, { label: "Cash", value: allocation.cash, onChange: (v) => handleAllocationChange("cash", v), color: ALLOCATION_COLORS[2], inputMode, fieldKey: "cash" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AllocationSlider, { label: "Real Estate", value: allocation.realEstate, onChange: (v) => handleAllocationChange("realEstate", v), color: ALLOCATION_COLORS[3], inputMode, fieldKey: "realEstate" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AllocationSlider, { label: "Crypto", value: allocation.crypto, onChange: (v) => handleAllocationChange("crypto", v), color: ALLOCATION_COLORS[4], inputMode, fieldKey: "crypto" }),
+        inputMode === "dollar" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AllocationSlider, { label: "Other", value: allocation.other, onChange: (v) => handleAllocationChange("other", v), color: ALLOCATION_COLORS[8], inputMode, fieldKey: "other" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AllocationSlider, { label: "Alt Investments", value: allocation.altInvestments, onChange: (v) => handleAllocationChange("altInvestments", v), color: ALLOCATION_COLORS[6], inputMode, fieldKey: "altInvestments" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AllocationSlider, { label: "Startups", value: allocation.startups, onChange: (v) => handleAllocationChange("startups", v), color: ALLOCATION_COLORS[7], inputMode, fieldKey: "startups" })
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AllocationSlider, { label: "Alt Investments", value: allocation.altInvestments, onChange: (v) => handleAllocationChange("altInvestments", v), color: ALLOCATION_COLORS[6], inputMode, fieldKey: "altInvestments" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AllocationSlider, { label: "Startups", value: allocation.startups, onChange: (v) => handleAllocationChange("startups", v), color: ALLOCATION_COLORS[7], inputMode, fieldKey: "startups" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AllocationSlider, { label: "Other", value: allocation.other, onChange: (v) => handleAllocationChange("other", v), color: ALLOCATION_COLORS[8], inputMode, fieldKey: "other" })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", backgroundColor: allocationValid ? COLORS2.accentLight : COLORS2.orangeLight, borderRadius: 12, marginTop: 16, marginBottom: 20 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { fontWeight: 600, color: allocationValid ? COLORS2.primaryDark : COLORS2.orange }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", backgroundColor: allocationValid ? COLORS.accentLight : COLORS.orangeLight, borderRadius: 12, marginTop: 16, marginBottom: 20 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontWeight: 600, color: allocationValid ? COLORS.primaryDark : COLORS.orange }, children: [
           "Total ",
           inputMode === "percent" ? "Allocation" : "Portfolio"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { fontWeight: 800, fontSize: 18, color: allocationValid ? COLORS2.primary : COLORS2.orange }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontWeight: 800, fontSize: 18, color: allocationValid ? COLORS.primary : COLORS.orange }, children: [
           inputMode === "percent" ? `${totalAllocation}%` : `$${totalAllocation.toLocaleString()}`,
-          inputMode === "percent" && !allocationValid && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 12, fontWeight: 400, marginLeft: 8 }, children: "(must equal 100%)" })
+          inputMode === "percent" && !allocationValid && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 12, fontWeight: 400, marginLeft: 8 }, children: "(must equal 100%)" })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles.row, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles.column, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: styles.label, children: "Time Horizon" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: styles.subheaderLabel, children: "Years until you need the money" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(NumberControl2, { value: timeHorizon, onChange: setTimeHorizon, min: 1, max: 50, suffix: "years" })
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.row, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.column, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Time Horizon" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.subheaderLabel, children: "Years until you need the money" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(NumberControl, { value: timeHorizon, onChange: setTimeHorizon, min: 1, max: 50, suffix: "years" })
         ] }),
-        inputMode === "percent" && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles.column, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: styles.label, children: "Initial Investment" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: styles.subheaderLabel, children: "Starting portfolio value" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(NumberControl2, { value: initialInvestment, onChange: setInitialInvestment, min: 0, max: 1e8, step: 1e3, prefix: "$" })
+        inputMode === "percent" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.column, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Initial Investment" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.subheaderLabel, children: "Starting portfolio value" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(NumberControl, { value: initialInvestment, onChange: setInitialInvestment, min: 0, max: 1e8, step: 1e3, prefix: "$" })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, cursor: "pointer", marginTop: 10, marginBottom: 10, color: COLORS2.blue, fontWeight: 700, fontSize: 14 }, onClick: () => setShowAdvanced(!showAdvanced), children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8, cursor: "pointer", marginTop: 10, marginBottom: 10, color: COLORS.blue, fontWeight: 700, fontSize: 14 }, onClick: () => setShowAdvanced(!showAdvanced), children: [
         showAdvanced ? "HIDE ADVANCED OPTIONS" : "ADVANCED OPTIONS",
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ChevronDown, { size: 16, style: { transform: showAdvanced ? "rotate(180deg)" : "none", transition: "transform 0.2s" } })
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronDown, { size: 16, style: { transform: showAdvanced ? "rotate(180deg)" : "none", transition: "transform 0.2s" } })
       ] }),
-      showAdvanced && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { marginBottom: 16 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: styles.label, children: "Annual Contribution" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: styles.subheaderLabel, children: "Amount you plan to add each year" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(NumberControl2, { value: annualContribution, onChange: setAnnualContribution, min: 0, max: 1e6, step: 500, prefix: "$" })
+      showAdvanced && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 16 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.label, children: "Annual Contribution" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.subheaderLabel, children: "Amount you plan to add each year" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(NumberControl, { value: annualContribution, onChange: setAnnualContribution, min: 0, max: 1e6, step: 500, prefix: "$" })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { marginBottom: 16 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 14, fontWeight: 600, color: COLORS2.textMain, marginBottom: 8 }, children: "Investment Goal" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", gap: 8 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles.strategyBtn(investmentGoal === "preservation"), onClick: () => setInvestmentGoal("preservation"), children: [
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { children: "Preservation" }),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "Protect capital" })
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 16 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 14, fontWeight: 600, color: COLORS.textMain, marginBottom: 8 }, children: "Investment Goal" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 8 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.strategyBtn(investmentGoal === "preservation"), onClick: () => setInvestmentGoal("preservation"), children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Preservation" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "Protect capital" })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles.strategyBtn(investmentGoal === "income"), onClick: () => setInvestmentGoal("income"), children: [
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { children: "Income" }),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "Steady returns" })
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.strategyBtn(investmentGoal === "income"), onClick: () => setInvestmentGoal("income"), children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Income" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "Steady returns" })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles.strategyBtn(investmentGoal === "growth"), onClick: () => setInvestmentGoal("growth"), children: [
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { children: "Growth" }),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "Maximize value" })
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.strategyBtn(investmentGoal === "growth"), onClick: () => setInvestmentGoal("growth"), children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Growth" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 10, fontWeight: 400, marginTop: 2 }, children: "Maximize value" })
             ] })
           ] })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", gap: 12, marginTop: 20 }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { className: "btn-press", style: { ...styles.calcButton, opacity: allocationValid ? 1 : 0.5 }, onClick: runSimulation, disabled: !allocationValid || isSimulating, children: isSimulating ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Loader, { size: 20, className: "spin" }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 12, marginTop: 20 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "btn-press", style: { ...styles.calcButton, opacity: allocationValid ? 1 : 0.5 }, onClick: runSimulation, disabled: !allocationValid || isSimulating, children: isSimulating ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Loader, { size: 20, className: "spin" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
         "Run Simulation ",
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Play, { size: 20, fill: "white" })
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Play, { size: 20, fill: "white" })
       ] }) }) })
     ] }),
-    simulationResult && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles.resultCard, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", borderBottom: `1px solid ${COLORS2.border}`, paddingBottom: "16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: "18px", fontWeight: 700, color: COLORS2.textMain }, children: "Simulation Results" }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(InfoTooltip, { text: "Based on 500 Monte Carlo simulations. 'Expected' is the average outcome. 'Possible Range' shows the 10th (Worst Case) to 90th (Best Case) percentile outcomes. Volatility calculations assume moderate correlation between asset classes.", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(CircleQuestionMark, { size: 16, color: COLORS2.textSecondary, style: { cursor: "pointer" } }) })
+    simulationResult && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.resultCard, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", borderBottom: `1px solid ${COLORS.border}`, paddingBottom: "16px" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: "18px", fontWeight: 700, color: COLORS.textMain }, children: "Simulation Results" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(InfoTooltip, { text: "Based on 500 Monte Carlo simulations. 'Expected' is the average outcome. 'Possible Range' shows the 10th (Worst Case) to 90th (Best Case) percentile outcomes. Volatility calculations assume moderate correlation between asset classes.", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleQuestionMark, { size: 16, color: COLORS.textSecondary, style: { cursor: "pointer" } }) })
       ] }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 24, gap: 16 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { flex: 1 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 14, color: COLORS2.textMain, marginBottom: 4 }, children: "Expected Value" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontSize: 28, fontWeight: 800, color: COLORS2.primary }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 24, gap: 16 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 14, color: COLORS.textMain, marginBottom: 4 }, children: "Expected Value" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 28, fontWeight: 800, color: COLORS.primary }, children: [
             "$",
             Math.round(simulationResult.stats.finalExpected).toLocaleString()
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontSize: 12, color: COLORS2.textSecondary, marginTop: 4 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 12, color: COLORS.textSecondary, marginTop: 4 }, children: [
             "Median: $",
             Math.round(simulationResult.stats.finalMedian).toLocaleString()
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { flex: 1, borderLeft: `1px solid ${COLORS2.border}`, paddingLeft: 16 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 14, color: COLORS2.textMain, marginBottom: 4 }, children: "Possible Range" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontSize: 16, fontWeight: 700, color: COLORS2.textMain }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, borderLeft: `1px solid ${COLORS.border}`, paddingLeft: 16 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 14, color: COLORS.textMain, marginBottom: 4 }, children: "Possible Range" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 16, fontWeight: 700, color: COLORS.textMain }, children: [
             "$",
             Math.round(simulationResult.stats.finalP10).toLocaleString(),
             " - $",
             Math.round(simulationResult.stats.finalP90).toLocaleString()
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 12, color: COLORS2.textSecondary, marginTop: 4 }, children: "10th to 90th percentile" })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 12, color: COLORS.textSecondary, marginTop: 4 }, children: "10th to 90th percentile" })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", borderBottom: `1px solid ${COLORS2.border}`, marginBottom: 24 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { padding: "8px 16px", borderBottom: resultView === "projection" ? `2px solid ${COLORS2.primary}` : "none", fontWeight: 700, color: resultView === "projection" ? COLORS2.primary : COLORS2.textSecondary, cursor: "pointer", fontSize: 12, letterSpacing: 1 }, onClick: () => setResultView("projection"), children: "PROJECTION" }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { padding: "8px 16px", borderBottom: resultView === "allocation" ? `2px solid ${COLORS2.primary}` : "none", fontWeight: 700, color: resultView === "allocation" ? COLORS2.primary : COLORS2.textSecondary, cursor: "pointer", fontSize: 12, letterSpacing: 1 }, onClick: () => setResultView("allocation"), children: "ALLOCATION" }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { padding: "8px 16px", borderBottom: resultView === "summary" ? `2px solid ${COLORS2.primary}` : "none", fontWeight: 700, color: resultView === "summary" ? COLORS2.primary : COLORS2.textSecondary, cursor: "pointer", fontSize: 12, letterSpacing: 1 }, onClick: () => setResultView("summary"), children: "SUMMARY" })
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", borderBottom: `1px solid ${COLORS.border}`, marginBottom: 24 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "8px 16px", borderBottom: resultView === "projection" ? `2px solid ${COLORS.primary}` : "none", fontWeight: 700, color: resultView === "projection" ? COLORS.primary : COLORS.textSecondary, cursor: "pointer", fontSize: 12, letterSpacing: 1 }, onClick: () => setResultView("projection"), children: "PROJECTION" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "8px 16px", borderBottom: resultView === "allocation" ? `2px solid ${COLORS.primary}` : "none", fontWeight: 700, color: resultView === "allocation" ? COLORS.primary : COLORS.textSecondary, cursor: "pointer", fontSize: 12, letterSpacing: 1 }, onClick: () => setResultView("allocation"), children: "ALLOCATION" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "8px 16px", borderBottom: resultView === "summary" ? `2px solid ${COLORS.primary}` : "none", fontWeight: 700, color: resultView === "summary" ? COLORS.primary : COLORS.textSecondary, cursor: "pointer", fontSize: 12, letterSpacing: 1 }, onClick: () => setResultView("summary"), children: "SUMMARY" })
       ] }),
-      resultView === "projection" && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { height: 300, width: "100%", fontSize: 12 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ResponsiveContainer, { children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(AreaChart, { data: simulationResult.results, margin: { top: 10, right: 10, left: -20, bottom: 0 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("linearGradient", { id: "colorP90", x1: "0", y1: "0", x2: "0", y2: "1", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("stop", { offset: "5%", stopColor: COLORS2.primary, stopOpacity: 0.1 }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("stop", { offset: "95%", stopColor: COLORS2.primary, stopOpacity: 0 })
+      resultView === "projection" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { height: 300, width: "100%", fontSize: 12 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ResponsiveContainer, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(AreaChart, { data: simulationResult.results, margin: { top: 10, right: 10, left: -20, bottom: 0 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("linearGradient", { id: "colorP90", x1: "0", y1: "0", x2: "0", y2: "1", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", { offset: "5%", stopColor: COLORS.primary, stopOpacity: 0.1 }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", { offset: "95%", stopColor: COLORS.primary, stopOpacity: 0 })
           ] }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(CartesianGrid, { strokeDasharray: "3 3", vertical: false, stroke: COLORS2.border }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(XAxis, { dataKey: "year", tick: { fill: COLORS2.textSecondary }, tickLine: false, axisLine: { stroke: COLORS2.border }, tickFormatter: (val) => `Yr ${val}` }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(YAxis, { tick: { fill: COLORS2.textSecondary }, tickFormatter: (val) => val >= 1e6 ? `$${(val / 1e6).toFixed(1)}M` : `$${(val / 1e3).toFixed(0)}K`, tickLine: false, axisLine: false }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Tooltip, { content: ({ active, payload, label }) => {
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CartesianGrid, { strokeDasharray: "3 3", vertical: false, stroke: COLORS.border }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(XAxis, { dataKey: "year", tick: { fill: COLORS.textSecondary }, tickLine: false, axisLine: { stroke: COLORS.border }, tickFormatter: (val) => `Yr ${val}` }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(YAxis, { tick: { fill: COLORS.textSecondary }, tickFormatter: (val) => val >= 1e6 ? `$${(val / 1e6).toFixed(1)}M` : `$${(val / 1e3).toFixed(0)}K`, tickLine: false, axisLine: false }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Tooltip, { content: ({ active, payload, label }) => {
             if (active && payload && payload.length) {
               const data = payload[0].payload;
-              return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { backgroundColor: "white", padding: 12, borderRadius: 8, boxShadow: "0 4px 12px rgba(0,0,0,0.1)", border: "1px solid #E5E7EB" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontWeight: 600, marginBottom: 8, fontSize: 12, color: COLORS2.textSecondary }, children: [
+              return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: "white", padding: 12, borderRadius: 8, boxShadow: "0 4px 12px rgba(0,0,0,0.1)", border: "1px solid #E5E7EB" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontWeight: 600, marginBottom: 8, fontSize: 12, color: COLORS.textSecondary }, children: [
                   "Year ",
                   label
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { marginBottom: 4 }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: COLORS2.primary, fontWeight: 600, fontSize: 12 }, children: "Best Case:" }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 4 }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: COLORS.primary, fontWeight: 600, fontSize: 12 }, children: "Best Case:" }),
                   " ",
-                  /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { fontWeight: 700 }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontWeight: 700 }, children: [
                     "$",
                     data.p90.toLocaleString()
                   ] })
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { marginBottom: 4 }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: COLORS2.blue, fontWeight: 600, fontSize: 12 }, children: "Median:" }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 4 }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: COLORS.blue, fontWeight: 600, fontSize: 12 }, children: "Median:" }),
                   " ",
-                  /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { fontWeight: 700 }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontWeight: 700 }, children: [
                     "$",
                     data.median.toLocaleString()
                   ] })
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: COLORS2.red, fontWeight: 600, fontSize: 12 }, children: "Worst Case:" }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: COLORS.red, fontWeight: 600, fontSize: 12 }, children: "Worst Case:" }),
                   " ",
-                  /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { fontWeight: 700 }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontWeight: 700 }, children: [
                     "$",
                     data.p10.toLocaleString()
                   ] })
@@ -52972,51 +50870,51 @@ function PortfolioSimulator({ initialData: initialData2 }) {
             }
             return null;
           } }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Area, { type: "monotone", dataKey: "p90", stroke: COLORS2.primary, strokeDasharray: "3 3", strokeWidth: 1, fill: "url(#colorP90)", name: "90th" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Area, { type: "monotone", dataKey: "p10", stroke: COLORS2.red, strokeDasharray: "3 3", fill: "transparent", strokeWidth: 1, name: "10th" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Area, { type: "monotone", dataKey: "median", stroke: COLORS2.blue, fill: "transparent", strokeWidth: 2, name: "Median" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Area, { type: "monotone", dataKey: "expected", stroke: COLORS2.primary, fill: "transparent", strokeWidth: 2, name: "Expected" })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Area, { type: "monotone", dataKey: "p90", stroke: COLORS.primary, strokeDasharray: "3 3", strokeWidth: 1, fill: "url(#colorP90)", name: "90th" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Area, { type: "monotone", dataKey: "p10", stroke: COLORS.red, strokeDasharray: "3 3", fill: "transparent", strokeWidth: 1, name: "10th" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Area, { type: "monotone", dataKey: "median", stroke: COLORS.blue, fill: "transparent", strokeWidth: 2, name: "Median" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Area, { type: "monotone", dataKey: "expected", stroke: COLORS.primary, fill: "transparent", strokeWidth: 2, name: "Expected" })
         ] }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", justifyContent: "center", gap: 16, marginTop: 8, flexWrap: "wrap" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 4 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 12, height: 2, backgroundColor: COLORS2.primary } }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: COLORS2.textSecondary, fontSize: 11 }, children: "Expected" })
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "center", gap: 16, marginTop: 8, flexWrap: "wrap" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 4 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 12, height: 2, backgroundColor: COLORS.primary } }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: COLORS.textSecondary, fontSize: 11 }, children: "Expected" })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 4 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 12, height: 2, backgroundColor: COLORS2.primary, borderStyle: "dashed" } }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: COLORS2.textSecondary, fontSize: 11 }, children: "Best Case" })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 4 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 12, height: 2, backgroundColor: COLORS.primary, borderStyle: "dashed" } }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: COLORS.textSecondary, fontSize: 11 }, children: "Best Case" })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 4 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 12, height: 2, backgroundColor: COLORS2.blue } }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: COLORS2.textSecondary, fontSize: 11 }, children: "Median" })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 4 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 12, height: 2, backgroundColor: COLORS.blue } }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: COLORS.textSecondary, fontSize: 11 }, children: "Median" })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 4 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 12, height: 2, backgroundColor: COLORS2.red, borderStyle: "dashed" } }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { color: COLORS2.textSecondary, fontSize: 11 }, children: "Worst Case" })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 4 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 12, height: 2, backgroundColor: COLORS.red, borderStyle: "dashed" } }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: COLORS.textSecondary, fontSize: 11 }, children: "Worst Case" })
           ] })
         ] })
       ] }),
-      resultView === "allocation" && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", padding: "0 16px", marginBottom: 24 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { flex: 1.2 } }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 12, fontWeight: 600, color: COLORS2.textSecondary, marginBottom: 8 }, children: "Current" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 120, height: 120 }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ResponsiveContainer, { children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(PieChart, { children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Pie, { data: pieData, cx: "50%", cy: "50%", innerRadius: 30, outerRadius: 50, dataKey: "value", stroke: "none", children: pieData.map((entry, index) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Cell, { fill: entry.color }, `cell-${index}`)) }) }) }) })
+      resultView === "allocation" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", padding: "0 16px", marginBottom: 24 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { flex: 1.2 } }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 12, fontWeight: 600, color: COLORS.textSecondary, marginBottom: 8 }, children: "Current" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 120, height: 120 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ResponsiveContainer, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PieChart, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Pie, { data: pieData, cx: "50%", cy: "50%", innerRadius: 30, outerRadius: 50, dataKey: "value", stroke: "none", children: pieData.map((entry, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Cell, { fill: entry.color }, `cell-${index}`)) }) }) }) })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 40, display: "flex", justifyContent: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ArrowRight, { size: 20, color: COLORS2.textSecondary, strokeWidth: 2.5 }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 12, fontWeight: 600, color: COLORS2.textSecondary, marginBottom: 8 }, children: "Optimized" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 120, height: 120 }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ResponsiveContainer, { children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(PieChart, { children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Pie, { data: suggestedPieData, cx: "50%", cy: "50%", innerRadius: 30, outerRadius: 50, dataKey: "value", stroke: "none", children: suggestedPieData.map((entry, index) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Cell, { fill: entry.color }, `cell-${index}`)) }) }) }) })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 40, display: "flex", justifyContent: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { size: 20, color: COLORS.textSecondary, strokeWidth: 2.5 }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 12, fontWeight: 600, color: COLORS.textSecondary, marginBottom: 8 }, children: "Optimized" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 120, height: 120 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ResponsiveContainer, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PieChart, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Pie, { data: suggestedPieData, cx: "50%", cy: "50%", innerRadius: 30, outerRadius: 50, dataKey: "value", stroke: "none", children: suggestedPieData.map((entry, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Cell, { fill: entry.color }, `cell-${index}`)) }) }) }) })
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { backgroundColor: COLORS2.card, borderRadius: 12, overflow: "hidden" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", padding: "12px 16px", backgroundColor: COLORS2.inputBg, borderBottom: `1px solid ${COLORS2.border}`, fontSize: 12, fontWeight: 600, color: COLORS2.textSecondary }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { flex: 1.2 }, children: "Asset Class" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { flex: 1, textAlign: "center" }, children: "Your Allocation" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 40 } }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { flex: 1, textAlign: "center" }, children: "Ideal Allocation" })
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: COLORS.card, borderRadius: 12, overflow: "hidden" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", padding: "12px 16px", backgroundColor: COLORS.inputBg, borderBottom: `1px solid ${COLORS.border}`, fontSize: 12, fontWeight: 600, color: COLORS.textSecondary }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { flex: 1.2 }, children: "Asset Class" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { flex: 1, textAlign: "center" }, children: "Your Allocation" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 40 } }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { flex: 1, textAlign: "center" }, children: "Ideal Allocation" })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { padding: "0 16px" }, children: suggestedPieData.map((item, idx) => {
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "0 16px" }, children: suggestedPieData.map((item, idx) => {
             const userItem = pieData.find((p) => p.name === item.name);
             const userValue = userItem ? userItem.value : 0;
             const userTotal = inputMode === "dollar" ? totalAllocation : 100;
@@ -53024,25 +50922,25 @@ function PortfolioSimulator({ initialData: initialData2 }) {
             const targetPct = item.value;
             const diff = targetPct - userPct;
             const isDiff = Math.abs(diff) >= 1;
-            return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "flex", alignItems: "center", padding: "12px 0", borderBottom: idx === suggestedPieData.length - 1 ? "none" : `1px solid ${COLORS2.border}` }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { flex: 1.2, display: "flex", alignItems: "center", gap: 8 }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 10, height: 10, borderRadius: 3, backgroundColor: item.color, flexShrink: 0 } }),
-                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 13, fontWeight: 600, color: COLORS2.textMain }, children: item.name })
+            return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", padding: "12px 0", borderBottom: idx === suggestedPieData.length - 1 ? "none" : `1px solid ${COLORS.border}` }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1.2, display: "flex", alignItems: "center", gap: 8 }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 10, height: 10, borderRadius: 3, backgroundColor: item.color, flexShrink: 0 } }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, fontWeight: 600, color: COLORS.textMain }, children: item.name })
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { flex: 1, textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { fontSize: 13, fontWeight: 600, color: COLORS2.textMain }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { flex: 1, textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 13, fontWeight: 600, color: COLORS.textMain }, children: [
                 Math.round(userPct),
                 "%"
               ] }) }),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { width: 40, textAlign: "center", display: "flex", justifyContent: "center" }, children: isDiff && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ArrowRight, { size: 16, color: COLORS2.textSecondary, strokeWidth: 2.5 }) }),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { flex: 1, textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("span", { style: { fontSize: 13, fontWeight: 700, color: isDiff ? COLORS2.primary : COLORS2.textMain }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 40, textAlign: "center", display: "flex", justifyContent: "center" }, children: isDiff && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { size: 16, color: COLORS.textSecondary, strokeWidth: 2.5 }) }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { flex: 1, textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 13, fontWeight: 700, color: isDiff ? COLORS.primary : COLORS.textMain }, children: [
                 targetPct,
                 "%"
               ] }) })
             ] }, idx);
           }) })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { marginTop: 16, padding: 12, backgroundColor: COLORS2.inputBg, borderRadius: 12, fontSize: 12, color: COLORS2.textSecondary, lineHeight: 1.5 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("strong", { style: { color: COLORS2.textMain }, children: "Note:" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginTop: 16, padding: 12, backgroundColor: COLORS.inputBg, borderRadius: 12, fontSize: 12, color: COLORS.textSecondary, lineHeight: 1.5 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { style: { color: COLORS.textMain }, children: "Note:" }),
           ' "Ideal Allocation" is derived from Modern Portfolio Theory (MPT) and historical market data, tailored to your goal (',
           investmentGoal,
           ") and time horizon (",
@@ -53050,115 +50948,115 @@ function PortfolioSimulator({ initialData: initialData2 }) {
           " years). This is a general guideline, not personalized financial advice."
         ] })
       ] }),
-      resultView === "summary" && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { backgroundColor: COLORS2.inputBg, padding: 16, borderRadius: 16, fontSize: 14 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { marginBottom: 20, borderBottom: `1px solid ${COLORS2.border}`, paddingBottom: 12 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontWeight: 800, color: COLORS2.textMain, fontSize: 16 }, children: "Portfolio Statistics" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 13, color: COLORS2.textSecondary }, children: "Based on 500 Monte Carlo simulations" })
+      resultView === "summary" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: COLORS.inputBg, padding: 16, borderRadius: 16, fontSize: 14 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 20, borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 12 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontWeight: 800, color: COLORS.textMain, fontSize: 16 }, children: "Portfolio Statistics" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 13, color: COLORS.textSecondary }, children: "Based on 500 Monte Carlo simulations" })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { backgroundColor: "white", padding: 16, borderRadius: 12, border: `1px solid ${COLORS2.border}` }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 12, color: COLORS2.textSecondary, marginBottom: 4 }, children: "Expected Annual Return" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontSize: 24, fontWeight: 800, color: COLORS2.primary }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: "white", padding: 16, borderRadius: 12, border: `1px solid ${COLORS.border}` }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 12, color: COLORS.textSecondary, marginBottom: 4 }, children: "Expected Annual Return" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 24, fontWeight: 800, color: COLORS.primary }, children: [
               (simulationResult.stats.expectedReturn * 100).toFixed(1),
               "%"
             ] })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { backgroundColor: "white", padding: 16, borderRadius: 12, border: `1px solid ${COLORS2.border}` }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 12, color: COLORS2.textSecondary, marginBottom: 4 }, children: "Volatility (Std Dev)" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontSize: 24, fontWeight: 800, color: COLORS2.orange }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: "white", padding: 16, borderRadius: 12, border: `1px solid ${COLORS.border}` }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 12, color: COLORS.textSecondary, marginBottom: 4 }, children: "Volatility (Std Dev)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 24, fontWeight: 800, color: COLORS.orange }, children: [
               (simulationResult.stats.volatility * 100).toFixed(1),
               "%"
             ] })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { backgroundColor: "white", padding: 16, borderRadius: 12, border: `1px solid ${COLORS2.border}` }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 12, color: COLORS2.textSecondary, marginBottom: 4 }, children: "Sharpe Ratio" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 24, fontWeight: 800, color: COLORS2.blue }, children: simulationResult.stats.sharpeRatio.toFixed(2) }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 11, color: COLORS2.textSecondary }, children: "Risk-adjusted return" })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: "white", padding: 16, borderRadius: 12, border: `1px solid ${COLORS.border}` }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 12, color: COLORS.textSecondary, marginBottom: 4 }, children: "Sharpe Ratio" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 24, fontWeight: 800, color: COLORS.blue }, children: simulationResult.stats.sharpeRatio.toFixed(2) }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 11, color: COLORS.textSecondary }, children: "Risk-adjusted return" })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { backgroundColor: "white", padding: 16, borderRadius: 12, border: `1px solid ${COLORS2.border}` }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 12, color: COLORS2.textSecondary, marginBottom: 4 }, children: "Max Drawdown" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontSize: 24, fontWeight: 800, color: COLORS2.red }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: "white", padding: 16, borderRadius: 12, border: `1px solid ${COLORS.border}` }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 12, color: COLORS.textSecondary, marginBottom: 4 }, children: "Max Drawdown" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 24, fontWeight: 800, color: COLORS.red }, children: [
               "-",
               (simulationResult.stats.maxDrawdown * 100).toFixed(0),
               "%"
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: 11, color: COLORS2.textSecondary }, children: "Worst peak-to-trough" })
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 11, color: COLORS.textSecondary }, children: "Worst peak-to-trough" })
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { marginTop: 24 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontWeight: 700, color: COLORS2.textMain, fontSize: 14, marginBottom: 12 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginTop: 24 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontWeight: 700, color: COLORS.textMain, fontSize: 14, marginBottom: 12 }, children: [
             "Possible Outcomes After ",
             timeHorizon,
             " Years"
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { backgroundColor: "white", borderRadius: 12, overflow: "hidden", border: `1px solid ${COLORS2.border}` }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", backgroundColor: COLORS2.inputBg, padding: "12px 16px", fontWeight: 700, fontSize: 12, color: COLORS2.textSecondary }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { children: "Scenario" }),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { textAlign: "right" }, children: "Portfolio Value" })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: "white", borderRadius: 12, overflow: "hidden", border: `1px solid ${COLORS.border}` }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", backgroundColor: COLORS.inputBg, padding: "12px 16px", fontWeight: 700, fontSize: 12, color: COLORS.textSecondary }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: "Scenario" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { textAlign: "right" }, children: "Portfolio Value" })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", padding: "12px 16px", borderBottom: `1px solid ${COLORS2.border}` }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: COLORS2.primary, fontWeight: 600 }, children: "Best Case (90th)" }),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { textAlign: "right", fontWeight: 700 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", padding: "12px 16px", borderBottom: `1px solid ${COLORS.border}` }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: COLORS.primary, fontWeight: 600 }, children: "Best Case (90th)" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "right", fontWeight: 700 }, children: [
                 "$",
                 Math.round(simulationResult.stats.finalP90).toLocaleString()
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", padding: "12px 16px", borderBottom: `1px solid ${COLORS2.border}` }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: COLORS2.blue, fontWeight: 600 }, children: "Median" }),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { textAlign: "right", fontWeight: 700 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", padding: "12px 16px", borderBottom: `1px solid ${COLORS.border}` }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: COLORS.blue, fontWeight: 600 }, children: "Median" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "right", fontWeight: 700 }, children: [
                 "$",
                 Math.round(simulationResult.stats.finalMedian).toLocaleString()
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", padding: "12px 16px", borderBottom: `1px solid ${COLORS2.border}` }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: COLORS2.orange, fontWeight: 600 }, children: "Expected" }),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { textAlign: "right", fontWeight: 700 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", padding: "12px 16px", borderBottom: `1px solid ${COLORS.border}` }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: COLORS.orange, fontWeight: 600 }, children: "Expected" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "right", fontWeight: 700 }, children: [
                 "$",
                 Math.round(simulationResult.stats.finalExpected).toLocaleString()
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", padding: "12px 16px" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: COLORS2.red, fontWeight: 600 }, children: "Worst Case (10th)" }),
-              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { textAlign: "right", fontWeight: 700 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", padding: "12px 16px" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: COLORS.red, fontWeight: 600 }, children: "Worst Case (10th)" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "right", fontWeight: 700 }, children: [
                 "$",
                 Math.round(simulationResult.stats.finalP10).toLocaleString()
               ] })
             ] })
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { marginTop: 24, padding: 16, backgroundColor: "white", borderRadius: 12, border: `1px solid ${COLORS2.border}` }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontWeight: 700, color: COLORS2.textMain, fontSize: 14, marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(CircleQuestionMark, { size: 16, color: COLORS2.blue }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginTop: 24, padding: 16, backgroundColor: "white", borderRadius: 12, border: `1px solid ${COLORS.border}` }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontWeight: 700, color: COLORS.textMain, fontSize: 14, marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleQuestionMark, { size: 16, color: COLORS.blue }),
             "What This Means"
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontSize: 13, color: COLORS2.textSecondary, lineHeight: 1.7 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 13, color: COLORS.textSecondary, lineHeight: 1.7 }, children: [
             "Based on your inputs, if you invest ",
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("strong", { style: { color: COLORS2.textMain }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("strong", { style: { color: COLORS.textMain }, children: [
               "$",
               inputMode === "dollar" ? totalAllocation.toLocaleString() : parseInt(initialInvestment).toLocaleString()
             ] }),
             " today and contribute ",
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("strong", { style: { color: COLORS2.textMain }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("strong", { style: { color: COLORS.textMain }, children: [
               "$",
               parseInt(annualContribution).toLocaleString(),
               "/year"
             ] }),
             ", your portfolio ",
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("em", { children: "might" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("em", { children: "might" }),
             " grow to approximately ",
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("strong", { style: { color: COLORS2.primary }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("strong", { style: { color: COLORS.primary }, children: [
               "$",
               Math.round(simulationResult.stats.finalExpected).toLocaleString()
             ] }),
             " over ",
             timeHorizon,
             " years. Due to market volatility, actual results could range from ",
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("strong", { style: { color: COLORS2.red }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("strong", { style: { color: COLORS.red }, children: [
               "$",
               Math.round(simulationResult.stats.finalP10).toLocaleString()
             ] }),
             " to ",
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("strong", { style: { color: COLORS2.primary }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("strong", { style: { color: COLORS.primary }, children: [
               "$",
               Math.round(simulationResult.stats.finalP90).toLocaleString()
             ] }),
@@ -53167,28 +51065,189 @@ function PortfolioSimulator({ initialData: initialData2 }) {
         ] })
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { backgroundColor: COLORS2.orangeLight, borderRadius: "16px", padding: "16px", marginTop: "24px", display: "flex", gap: "12px", alignItems: "flex-start" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Info, { size: 20, color: COLORS2.orange, style: { flexShrink: 0, marginTop: 2 } }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { fontSize: "12px", color: COLORS2.orange, lineHeight: 1.6 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("strong", { children: "Important Disclaimer:" }),
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: COLORS.orangeLight, borderRadius: "16px", padding: "16px", marginTop: "24px", display: "flex", gap: "12px", alignItems: "flex-start" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Info, { size: 20, color: COLORS.orange, style: { flexShrink: 0, marginTop: 2 } }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: "12px", color: COLORS.orange, lineHeight: 1.6 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Important Disclaimer:" }),
         " This simulation is for educational purposes only and does not constitute financial advice. Results are hypothetical projections based on historical return assumptions. Actual market performance varies significantly, past performance does not guarantee future results, and you may lose money. Consult a licensed financial advisor before making investment decisions."
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: styles.footer, className: "no-print", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("button", { style: styles.footerBtn, onClick: resetToDefaults, className: "btn-press", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(RotateCcw, { size: 16 }),
-      " Reset"
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+      backgroundColor: "white",
+      padding: "20px",
+      borderRadius: "24px",
+      boxShadow: "0 4px 12px -4px rgba(0,0,0,0.05)",
+      marginBottom: "20px",
+      marginTop: "24px"
+    }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
+        fontSize: "14px",
+        fontWeight: 600,
+        color: COLORS.textSecondary,
+        marginBottom: "12px",
+        textAlign: "center"
+      }, children: "Related Calculators" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+        display: "flex",
+        flexDirection: "column",
+        gap: "8px",
+        width: "100%"
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: "8px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", { href: "/", style: { textDecoration: "none", flex: 1 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+            "button",
+            {
+              className: "btn-press",
+              style: {
+                width: "100%",
+                padding: "12px 10px",
+                backgroundColor: COLORS.inputBg,
+                border: `1px solid ${COLORS.border}`,
+                borderRadius: "10px",
+                color: COLORS.primary,
+                fontWeight: 600,
+                fontSize: "14px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "6px"
+              },
+              onMouseEnter: (e) => {
+                e.currentTarget.style.backgroundColor = COLORS.accentLight;
+                e.currentTarget.style.borderColor = COLORS.primary;
+              },
+              onMouseLeave: (e) => {
+                e.currentTarget.style.backgroundColor = COLORS.inputBg;
+                e.currentTarget.style.borderColor = COLORS.border;
+              },
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, { size: 16 }),
+                "Retirement Calculator"
+              ]
+            }
+          ) }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", { href: "/", style: { textDecoration: "none", flex: 1 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+            "button",
+            {
+              className: "btn-press",
+              style: {
+                width: "100%",
+                padding: "12px 10px",
+                backgroundColor: COLORS.inputBg,
+                border: `1px solid ${COLORS.border}`,
+                borderRadius: "10px",
+                color: COLORS.primary,
+                fontWeight: 600,
+                fontSize: "14px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "6px"
+              },
+              onMouseEnter: (e) => {
+                e.currentTarget.style.backgroundColor = COLORS.accentLight;
+                e.currentTarget.style.borderColor = COLORS.primary;
+              },
+              onMouseLeave: (e) => {
+                e.currentTarget.style.backgroundColor = COLORS.inputBg;
+                e.currentTarget.style.borderColor = COLORS.border;
+              },
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Target, { size: 16 }),
+                "Mortgage Calculator"
+              ]
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", justifyContent: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+          "button",
+          {
+            className: "btn-press",
+            style: {
+              flex: "0 1 50%",
+              padding: "12px 10px",
+              backgroundColor: COLORS.inputBg,
+              border: `1px solid ${COLORS.border}`,
+              borderRadius: "10px",
+              color: COLORS.primary,
+              fontWeight: 600,
+              fontSize: "14px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "6px"
+            },
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { size: 16 }),
+              "Portfolio Analyzer"
+            ]
+          }
+        ) })
+      ] })
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.footer, className: "no-print", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { style: styles.footerBtn, onClick: () => setShowSubscribeModal(true), className: "btn-press", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Mail, { size: 16 }),
+        " Subscribe"
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { style: styles.footerBtn, onClick: resetToDefaults, className: "btn-press", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RotateCcw, { size: 16 }),
+        " Reset"
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { style: styles.footerBtn, className: "btn-press", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Heart, { size: 16 }),
+        " Donate"
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { style: styles.footerBtn, onClick: () => setShowFeedbackModal(true), className: "btn-press", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MessageSquare, { size: 16 }),
+        " Feedback"
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { style: styles.footerBtn, onClick: () => window.print(), className: "btn-press", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { size: 16 }),
+        " Print"
+      ] })
+    ] }),
+    showFeedbackModal && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.modalOverlay, onClick: () => setShowFeedbackModal(false), children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.modalContent, onClick: (e) => e.stopPropagation(), children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { style: styles.modalClose, onClick: () => setShowFeedbackModal(false), children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { size: 20 }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: "24px", fontWeight: 800, marginBottom: "8px", color: COLORS.textMain }, children: "Feedback" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: "14px", color: COLORS.textSecondary, marginBottom: "24px" }, children: "Help us improve the calculator." }),
+      feedbackStatus === "success" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { textAlign: "center", padding: "20px", color: COLORS.primary, fontWeight: 600 }, children: "Thanks for your feedback!" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+          "textarea",
+          {
+            style: { ...styles.input, height: "120px", resize: "none", fontFamily: "inherit" },
+            placeholder: "Tell us what you think...",
+            value: feedbackText,
+            onChange: (e) => setFeedbackText(e.target.value)
+          }
+        ),
+        feedbackStatus === "error" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: COLORS.red, fontSize: "14px", marginBottom: "10px" }, children: "Failed to send. Please try again." }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+          "button",
+          {
+            style: { ...styles.calcButton, width: "100%" },
+            onClick: handleFeedbackSubmit,
+            disabled: feedbackStatus === "submitting" || !feedbackText.trim(),
+            className: "btn-press",
+            children: feedbackStatus === "submitting" ? "Sending..." : "Send Feedback"
+          }
+        )
+      ] })
     ] }) }),
-    showSubscribeModal && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: styles.modalOverlay, onClick: () => setShowSubscribeModal(false), children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles.modalContent, onClick: (e) => e.stopPropagation(), children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { style: styles.modalClose, onClick: () => setShowSubscribeModal(false), children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(X, { size: 20 }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: "24px", fontWeight: 800, marginBottom: "8px", color: COLORS2.textMain }, children: "Sign Up For Portfolio Tips" }),
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: "14px", color: COLORS2.textSecondary, marginBottom: "24px" }, children: "Get personalized recommendations to improve your investment strategy." }),
-      subscribeStatus === "success" ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { textAlign: "center", padding: "20px", color: COLORS2.primary, fontWeight: 600 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: "40px", marginBottom: "10px" }, children: "\u{1F389}" }),
+    showSubscribeModal && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.modalOverlay, onClick: () => setShowSubscribeModal(false), children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.modalContent, onClick: (e) => e.stopPropagation(), children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { style: styles.modalClose, onClick: () => setShowSubscribeModal(false), children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { size: 20 }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: "24px", fontWeight: 800, marginBottom: "8px", color: COLORS.textMain }, children: "Sign Up For Portfolio Tips" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: "14px", color: COLORS.textSecondary, marginBottom: "24px" }, children: "Get personalized recommendations to improve your investment strategy." }),
+      subscribeStatus === "success" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center", padding: "20px", color: COLORS.primary, fontWeight: 600 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: "40px", marginBottom: "10px" }, children: "\u{1F389}" }),
         subscribeMessage
-      ] }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { marginBottom: "16px" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("label", { style: { display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "8px", color: COLORS2.textMain }, children: "Email Address" }),
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+      ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: "16px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", { style: { display: "block", fontSize: "14px", fontWeight: 600, marginBottom: "8px", color: COLORS.textMain }, children: "Email Address" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
             "input",
             {
               style: styles.input,
@@ -53198,8 +51257,8 @@ function PortfolioSimulator({ initialData: initialData2 }) {
             }
           )
         ] }),
-        subscribeStatus === "error" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { color: COLORS2.red, fontSize: "14px", marginBottom: "16px", textAlign: "center" }, children: subscribeMessage }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+        subscribeStatus === "error" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: COLORS.red, fontSize: "14px", marginBottom: "16px", textAlign: "center" }, children: subscribeMessage }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
           "button",
           {
             style: { ...styles.calcButton, width: "100%" },
@@ -53209,16 +51268,16 @@ function PortfolioSimulator({ initialData: initialData2 }) {
             children: subscribeStatus === "loading" ? "Subscribing..." : "Subscribe"
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { fontSize: "11px", color: COLORS2.textSecondary, textAlign: "center", marginTop: "12px", lineHeight: 1.4 }, children: "By subscribing, you agree to receive emails. Unsubscribe anytime. We retain your email until you unsubscribe." })
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: "11px", color: COLORS.textSecondary, textAlign: "center", marginTop: "12px", lineHeight: 1.4 }, children: "By subscribing, you agree to receive emails. Unsubscribe anytime. We retain your email until you unsubscribe." })
       ] })
     ] }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("style", { children: `input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; } input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: ${COLORS2.primary}; cursor: pointer; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.2); margin-top: -6px; } .btn-press { transition: transform 0.1s ease, opacity 0.2s; } .btn-press:active { transform: scale(0.95); } .btn-press:hover { opacity: 0.7; } @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } .spin { animation: spin 1s linear infinite; } @media print { .no-print { display: none !important; } }` })
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: `input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; } input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: ${COLORS.primary}; cursor: pointer; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.2); margin-top: -6px; } .btn-press { transition: transform 0.1s ease, opacity 0.2s; } .btn-press:active { transform: scale(0.95); } .btn-press:hover { opacity: 0.7; } @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } .spin { animation: spin 1s linear infinite; } @media print { .no-print { display: none !important; } }` })
   ] });
 }
 
 // src/main.tsx
-var import_jsx_runtime3 = __toESM(require_jsx_runtime(), 1);
-var ErrorBoundary = class extends import_react60.default.Component {
+var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
+var ErrorBoundary = class extends import_react58.default.Component {
   constructor(props) {
     super(props);
     this.state = { hasError: false };
@@ -53246,14 +51305,14 @@ var ErrorBoundary = class extends import_react60.default.Component {
   }
   render() {
     if (this.state.hasError) {
-      return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: { padding: 20, textAlign: "center", fontFamily: "sans-serif", color: "#DC2626", wordBreak: "break-word" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("h3", { children: "Something went wrong." }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { children: "Please try refreshing the page." }),
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("details", { style: { marginTop: 10, textAlign: "left", fontSize: "12px", color: "#666" }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("summary", { children: "Debug Error Details" }),
-          /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("pre", { style: { whiteSpace: "pre-wrap", background: "#f5f5f5", padding: 10, borderRadius: 4 }, children: [
+      return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: { padding: 20, textAlign: "center", fontFamily: "sans-serif", color: "#DC2626", wordBreak: "break-word" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h3", { children: "Something went wrong." }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { children: "Please try refreshing the page." }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("details", { style: { marginTop: 10, textAlign: "left", fontSize: "12px", color: "#666" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("summary", { children: "Debug Error Details" }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("pre", { style: { whiteSpace: "pre-wrap", background: "#f5f5f5", padding: 10, borderRadius: 4 }, children: [
             this.state.error?.toString(),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("br", {}),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("br", {}),
             this.state.error?.stack
           ] })
         ] })
@@ -53290,7 +51349,7 @@ var getHydrationData = () => {
   return {};
 };
 console.log("[Main] Retirement Calculator main.tsx loading...");
-var COLORS3 = {
+var COLORS2 = {
   primary: "#56C596",
   primaryDark: "#3aa87b",
   bg: "#FAFAFA",
@@ -53300,64 +51359,8 @@ var COLORS3 = {
   accentLight: "#E6F7F0",
   blue: "#5D9CEC"
 };
-function AppWithToolSwitcher({ initialData: initialData2 }) {
-  const [activeTool, setActiveTool] = (0, import_react60.useState)("retirement");
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: { backgroundColor: COLORS3.bg, minHeight: "100vh" }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: {
-      maxWidth: "600px",
-      margin: "0 auto",
-      padding: "20px 20px 0 20px",
-      fontFamily: "'Inter', sans-serif"
-    }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: {
-      display: "flex",
-      backgroundColor: COLORS3.border,
-      borderRadius: "16px",
-      padding: "4px",
-      marginBottom: "20px"
-    }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-        "button",
-        {
-          onClick: () => setActiveTool("retirement"),
-          style: {
-            flex: 1,
-            padding: "12px 16px",
-            borderRadius: "12px",
-            border: "none",
-            backgroundColor: activeTool === "retirement" ? "white" : "transparent",
-            color: activeTool === "retirement" ? COLORS3.textMain : COLORS3.textSecondary,
-            fontWeight: 700,
-            fontSize: "14px",
-            cursor: "pointer",
-            transition: "all 0.2s",
-            boxShadow: activeTool === "retirement" ? "0 2px 8px rgba(0,0,0,0.08)" : "none"
-          },
-          children: "\u{1F3E6} Retirement Planner"
-        }
-      ),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-        "button",
-        {
-          onClick: () => setActiveTool("portfolio"),
-          style: {
-            flex: 1,
-            padding: "12px 16px",
-            borderRadius: "12px",
-            border: "none",
-            backgroundColor: activeTool === "portfolio" ? "white" : "transparent",
-            color: activeTool === "portfolio" ? COLORS3.textMain : COLORS3.textSecondary,
-            fontWeight: 700,
-            fontSize: "14px",
-            cursor: "pointer",
-            transition: "all 0.2s",
-            boxShadow: activeTool === "portfolio" ? "0 2px 8px rgba(0,0,0,0.08)" : "none"
-          },
-          children: "\u{1F4CA} Portfolio Simulator"
-        }
-      )
-    ] }) }),
-    activeTool === "retirement" ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(RetirementCalculatorHelloWorld, { initialData: initialData2 }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(PortfolioSimulator, { initialData: initialData2 })
-  ] });
+function App({ initialData: initialData2 }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { backgroundColor: COLORS2.bg, minHeight: "100vh" }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(PortfolioSimulator, { initialData: initialData2 }) });
 }
 var container = document.getElementById("retirement-calculator-root");
 if (!container) {
@@ -53366,7 +51369,7 @@ if (!container) {
 var root = (0, import_client.createRoot)(container);
 var renderApp = (data) => {
   root.render(
-    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_react60.default.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(ErrorBoundary, { children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(AppWithToolSwitcher, { initialData: data }, Date.now()) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_react58.default.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ErrorBoundary, { children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(App, { initialData: data }, Date.now()) }) })
   );
 };
 var initialData = getHydrationData();

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 
-import RetirementCalculatorHelloWorld from "./component";
 import PortfolioSimulator from "./PortfolioSimulator";
 
 class ErrorBoundary extends React.Component<
@@ -122,70 +121,10 @@ const COLORS = {
   blue: "#5D9CEC"
 };
 
-function AppWithToolSwitcher({ initialData }: { initialData: any }) {
-  const [activeTool, setActiveTool] = useState<"retirement" | "portfolio">("retirement");
-
+function App({ initialData }: { initialData: any }) {
   return (
     <div style={{ backgroundColor: COLORS.bg, minHeight: "100vh" }}>
-      {/* Tool Switcher Tabs */}
-      <div style={{
-        maxWidth: "600px",
-        margin: "0 auto",
-        padding: "20px 20px 0 20px",
-        fontFamily: "'Inter', sans-serif"
-      }}>
-        <div style={{
-          display: "flex",
-          backgroundColor: COLORS.border,
-          borderRadius: "16px",
-          padding: "4px",
-          marginBottom: "20px"
-        }}>
-          <button
-            onClick={() => setActiveTool("retirement")}
-            style={{
-              flex: 1,
-              padding: "12px 16px",
-              borderRadius: "12px",
-              border: "none",
-              backgroundColor: activeTool === "retirement" ? "white" : "transparent",
-              color: activeTool === "retirement" ? COLORS.textMain : COLORS.textSecondary,
-              fontWeight: 700,
-              fontSize: "14px",
-              cursor: "pointer",
-              transition: "all 0.2s",
-              boxShadow: activeTool === "retirement" ? "0 2px 8px rgba(0,0,0,0.08)" : "none"
-            }}
-          >
-            🏦 Retirement Planner
-          </button>
-          <button
-            onClick={() => setActiveTool("portfolio")}
-            style={{
-              flex: 1,
-              padding: "12px 16px",
-              borderRadius: "12px",
-              border: "none",
-              backgroundColor: activeTool === "portfolio" ? "white" : "transparent",
-              color: activeTool === "portfolio" ? COLORS.textMain : COLORS.textSecondary,
-              fontWeight: 700,
-              fontSize: "14px",
-              cursor: "pointer",
-              transition: "all 0.2s",
-              boxShadow: activeTool === "portfolio" ? "0 2px 8px rgba(0,0,0,0.08)" : "none"
-            }}
-          >
-            📊 Portfolio Simulator
-          </button>
-        </div>
-      </div>
-
-      {/* Render Active Tool */}
-      {activeTool === "retirement" ? (
-        <RetirementCalculatorHelloWorld initialData={initialData} />
-      ) : (
-        <PortfolioSimulator initialData={initialData} />
-      )}
+      <PortfolioSimulator initialData={initialData} />
     </div>
   );
 }
@@ -203,7 +142,7 @@ const renderApp = (data: any) => {
   root.render(
     <React.StrictMode>
       <ErrorBoundary>
-        <AppWithToolSwitcher key={Date.now()} initialData={data} />
+        <App key={Date.now()} initialData={data} />
       </ErrorBoundary>
     </React.StrictMode>
   );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import {
-  RotateCcw, Play, Minus, Plus, ChevronDown, Loader, HelpCircle, Info, X, ArrowRight, Check, Mail
+  RotateCcw, Play, Minus, Plus, ChevronDown, Loader, HelpCircle, Info, X, ArrowRight, Check, Mail, TrendingUp, Target, MessageSquare, Heart, Printer
 } from "lucide-react";
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -218,7 +218,7 @@ export default function PortfolioSimulator({ initialData }: { initialData?: any 
   const [annualContribution, setAnnualContribution] = useState("6000");
   const [initialInvestment, setInitialInvestment] = useState("10000");
   const [investmentGoal, setInvestmentGoal] = useState("growth");
-  const [activePreset, setActivePreset] = useState("balanced");
+  const [activePreset, setActivePreset] = useState<string | null>("balanced");
   const [isSimulating, setIsSimulating] = useState(false);
   const [simulationResult, setSimulationResult] = useState<{ results: SimulationResult[]; stats: PortfolioStats } | null>(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -270,6 +270,45 @@ export default function PortfolioSimulator({ initialData }: { initialData?: any 
         setSubscribeMessage("Network error. Please try again.");
     }
   };
+
+  // Feedback State
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [feedbackText, setFeedbackText] = useState("");
+  const [feedbackStatus, setFeedbackStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+
+  const handleFeedbackSubmit = async () => {
+    if (!feedbackText.trim()) return;
+
+    setFeedbackStatus("submitting");
+    try {
+        const response = await fetch("/api/track", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                event: "user_feedback",
+                data: {
+                    feedback: feedbackText,
+                    calculatorType: "Portfolio Optimizer"
+                }
+            })
+        });
+
+        if (response.ok) {
+            setFeedbackStatus("success");
+            setTimeout(() => {
+                setShowFeedbackModal(false);
+                setFeedbackText("");
+                setFeedbackStatus("idle");
+            }, 2000);
+        } else {
+            setFeedbackStatus("error");
+        }
+    } catch (e) {
+        console.error("Feedback error:", e);
+        setFeedbackStatus("error");
+    }
+  };
+
 
   const totalAllocation = useMemo(() => (parseFloat(allocation.stocks) || 0) + (parseFloat(allocation.bonds) || 0) + (parseFloat(allocation.cash) || 0) + (parseFloat(allocation.realEstate) || 0) + (parseFloat(allocation.crypto) || 0) + (parseFloat(allocation.fourOhOneK) || 0) + (parseFloat(allocation.altInvestments) || 0) + (parseFloat(allocation.startups) || 0) + (parseFloat(allocation.other) || 0), [allocation]);
   const allocationValid = inputMode === "dollar" ? totalAllocation > 0 : totalAllocation === 100;
@@ -620,7 +659,181 @@ export default function PortfolioSimulator({ initialData }: { initialData?: any 
         <div style={{ fontSize: "12px", color: COLORS.orange, lineHeight: 1.6 }}><strong>Important Disclaimer:</strong> This simulation is for educational purposes only and does not constitute financial advice. Results are hypothetical projections based on historical return assumptions. Actual market performance varies significantly, past performance does not guarantee future results, and you may lose money. Consult a licensed financial advisor before making investment decisions.</div>
       </div>
 
-      <div style={styles.footer} className="no-print"><button style={styles.footerBtn} onClick={resetToDefaults} className="btn-press"><RotateCcw size={16} /> Reset</button></div>
+      <div style={{
+          backgroundColor: "white",
+          padding: "20px",
+          borderRadius: "24px",
+          boxShadow: "0 4px 12px -4px rgba(0,0,0,0.05)",
+          marginBottom: "20px",
+          marginTop: "24px"
+      }}>
+          <div style={{
+              fontSize: "14px", 
+              fontWeight: 600, 
+              color: COLORS.textSecondary,
+              marginBottom: "12px",
+              textAlign: "center"
+          }}>
+              Related Calculators
+          </div>
+          <div style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+              width: "100%"
+          }}>
+              <div style={{ display: "flex", gap: "8px" }}>
+                  <a href="/" style={{ textDecoration: "none", flex: 1 }}>
+                  <button 
+                    className="btn-press"
+                    style={{
+                        width: "100%",
+                        padding: "12px 10px",
+                        backgroundColor: COLORS.inputBg,
+                        border: `1px solid ${COLORS.border}`,
+                        borderRadius: "10px",
+                        color: COLORS.primary,
+                        fontWeight: 600,
+                        fontSize: "14px",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "6px"
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = COLORS.accentLight;
+                        e.currentTarget.style.borderColor = COLORS.primary;
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = COLORS.inputBg;
+                        e.currentTarget.style.borderColor = COLORS.border;
+                    }}
+                  >
+                      <TrendingUp size={16} />
+                      Retirement Calculator
+                  </button>
+                  </a>
+                  <a href="/" style={{ textDecoration: "none", flex: 1 }}>
+                  <button 
+                    className="btn-press"
+                    style={{
+                        width: "100%",
+                        padding: "12px 10px",
+                        backgroundColor: COLORS.inputBg,
+                        border: `1px solid ${COLORS.border}`,
+                        borderRadius: "10px",
+                        color: COLORS.primary,
+                        fontWeight: 600,
+                        fontSize: "14px",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "6px"
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = COLORS.accentLight;
+                        e.currentTarget.style.borderColor = COLORS.primary;
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = COLORS.inputBg;
+                        e.currentTarget.style.borderColor = COLORS.border;
+                    }}
+                  >
+                      <Target size={16} />
+                      Mortgage Calculator
+                  </button>
+                  </a>
+              </div>
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                  <button 
+                    className="btn-press"
+                    style={{
+                        flex: "0 1 50%",
+                        padding: "12px 10px",
+                        backgroundColor: COLORS.inputBg,
+                        border: `1px solid ${COLORS.border}`,
+                        borderRadius: "10px",
+                        color: COLORS.primary,
+                        fontWeight: 600,
+                        fontSize: "14px",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "6px"
+                    }}
+                  >
+                      <Check size={16} />
+                      Portfolio Analyzer
+                  </button>
+              </div>
+          </div>
+      </div>
+
+      <div style={styles.footer} className="no-print">
+        <button style={styles.footerBtn} onClick={() => setShowSubscribeModal(true)} className="btn-press">
+          <Mail size={16} /> Subscribe
+        </button>
+        <button style={styles.footerBtn} onClick={resetToDefaults} className="btn-press">
+          <RotateCcw size={16} /> Reset
+        </button>
+        <button style={styles.footerBtn} className="btn-press">
+          <Heart size={16} /> Donate
+        </button>
+        <button style={styles.footerBtn} onClick={() => setShowFeedbackModal(true)} className="btn-press">
+          <MessageSquare size={16} /> Feedback
+        </button>
+        <button style={styles.footerBtn} onClick={() => window.print()} className="btn-press">
+          <Printer size={16} /> Print
+        </button>
+      </div>
+
+      {showFeedbackModal && (
+        <div style={styles.modalOverlay} onClick={() => setShowFeedbackModal(false)}>
+          <div style={styles.modalContent} onClick={e => e.stopPropagation()}>
+            <button style={styles.modalClose} onClick={() => setShowFeedbackModal(false)}>
+              <X size={20} />
+            </button>
+            
+            <div style={{fontSize: "24px", fontWeight: 800, marginBottom: "8px", color: COLORS.textMain}}>
+              Feedback
+            </div>
+            <div style={{fontSize: "14px", color: COLORS.textSecondary, marginBottom: "24px"}}>
+              Help us improve the calculator.
+            </div>
+
+            {feedbackStatus === "success" ? (
+                <div style={{textAlign: "center", padding: "20px", color: COLORS.primary, fontWeight: 600}}>
+                    Thanks for your feedback!
+                </div>
+            ) : (
+                <>
+                    <textarea 
+                        style={{...styles.input, height: "120px", resize: "none", fontFamily: "inherit"}}
+                        placeholder="Tell us what you think..."
+                        value={feedbackText}
+                        onChange={(e) => setFeedbackText(e.target.value)}
+                    />
+                    {feedbackStatus === "error" && (
+                        <div style={{color: COLORS.red, fontSize: "14px", marginBottom: "10px"}}>
+                            Failed to send. Please try again.
+                        </div>
+                    )}
+                    <button 
+                        style={{...styles.calcButton, width: "100%"}} 
+                        onClick={handleFeedbackSubmit}
+                        disabled={feedbackStatus === "submitting" || !feedbackText.trim()}
+                        className="btn-press"
+                    >
+                        {feedbackStatus === "submitting" ? "Sending..." : "Send Feedback"}
+                    </button>
+                </>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Subscription Modal */}
       {showSubscribeModal && (
