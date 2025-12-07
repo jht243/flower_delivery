@@ -464,7 +464,7 @@ export default function PortfolioSimulator({ initialData }: { initialData?: any 
 
       <div style={{ backgroundColor: COLORS.accentLight, borderRadius: "16px", padding: "16px", marginBottom: "24px", display: "flex", alignItems: "center", gap: "12px" }}>
         <Info size={20} color={COLORS.primaryDark} style={{ flexShrink: 0 }} />
-        <div style={{ fontSize: "13px", color: COLORS.primaryDark, lineHeight: 1.5 }}>This tool is for <strong>educational purposes only</strong>. Results are hypothetical projections and do not guarantee future performance.</div>
+        <div style={{ fontSize: "13px", color: COLORS.primaryDark, lineHeight: 1.5 }}>This tool is for <strong>educational purposes only</strong>. Results are hypothetical.</div>
       </div>
 
       <div style={styles.card}>

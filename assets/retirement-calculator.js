@@ -50679,7 +50679,7 @@ function PortfolioSimulator({ initialData: initialData2 }) {
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: "13px", color: COLORS.primaryDark, lineHeight: 1.5 }, children: [
         "This tool is for ",
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "educational purposes only" }),
-        ". Results are hypothetical projections and do not guarantee future performance."
+        ". Results are hypothetical."
       ] })
     ] }),
     /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.card, children: [
