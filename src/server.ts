@@ -277,12 +277,12 @@ function widgetMeta(widget: CryptoPortfolioOptimizerWidget, bustCache: boolean =
 const widgets: CryptoPortfolioOptimizerWidget[] = [
   {
     id: "crypto-portfolio-optimizer",
-    title: "Crypto Yield Optimizer — Simulate the best DeFi strategies to optimize passive income on your crypto",
+    title: "Crypto Yield Optimizer — Simulate the best DeFi strategies to optimize passive income on a crypto portfolio",
     templateUri: `ui://widget/crypto-portfolio-optimizer.html?v=${VERSION}`,
     invoking:
       "Opening the Crypto Yield Optimizer...",
     invoked:
-      "Here is the Crypto Yield Optimizer. Enter your crypto holdings to see how much passive income you could be earning with staking, lending, and other DeFi strategies.",
+      "Here is the Crypto Yield Optimizer. Enter portfolio holdings to see how much passive income the portfolio could be earning with staking, lending, and other DeFi strategies.",
     html: readWidgetHtml("crypto-portfolio-optimizer"),
   },
 ];
@@ -354,7 +354,7 @@ const toolInputParser = z.object({
 const tools: Tool[] = widgets.map((widget) => ({
   name: widget.id,
   description:
-    "Use this for crypto yield optimization. Helps users find the best DeFi strategies to earn passive income on their crypto holdings. Call this tool immediately with NO arguments to let the user enter their data manually. Only provide arguments if the user has explicitly stated them.",
+    "Use this to simulate crypto yield optimization. Helps users simulate the best DeFi strategies to earn passive income on crypto portfolios. Call this tool immediately with NO arguments to let the user enter their data manually. Only provide arguments if the user has explicitly stated them.",
   inputSchema: toolInputSchema,
   outputSchema: {
     type: "object",
@@ -403,7 +403,7 @@ const resources: Resource[] = widgets.map((widget) => ({
   uri: widget.templateUri,
   name: widget.title,
   description:
-    "HTML template for the Crypto Yield Optimizer widget that helps find DeFi strategies for passive income.",
+    "HTML template for the Crypto Yield Optimizer widget that helps find simulate Decentralized Finance (DeFi) strategies and optimize yield on crypto portfolios.",
   mimeType: "text/html+skybridge",
   _meta: widgetMeta(widget),
 }));
@@ -423,7 +423,7 @@ function createCryptoYieldOptimizerServer(): Server {
       name: "crypto-yield-optimizer",
       version: "0.1.0",
       description:
-        "Crypto Yield Optimizer helps users find the best DeFi strategies to earn passive income on their crypto holdings.",
+        "Crypto Yield Optimizer helps users simulate the best DeFi strategies to discover passive income on a crypto (Bitcoin, Ethereum, Solana, etc.) portfolio.",
     },
     {
       capabilities: {
@@ -454,7 +454,7 @@ function createCryptoYieldOptimizerServer(): Server {
       }
 
       // Inject current FRED rate into HTML before sending to ChatGPT
-      // (Logic removed for portfolio optimizer)
+      // (Logic removed for yield optimizer)
       const htmlToSend = widget.html;
 
       return {
@@ -709,7 +709,7 @@ function createCryptoYieldOptimizerServer(): Server {
           ? `Crypto Yield Optimizer ready. Portfolio value: $${summary.total_portfolio.toLocaleString()}. ${
               summary.potential_annual_yield > 0 ? `Potential yield: $${summary.potential_annual_yield.toLocaleString()}/year at ~${summary.optimized_apy}% APY.` : ''
             } Use the widget to explore yield strategies.`
-          : "Crypto Yield Optimizer is ready. Enter your crypto holdings to see how much passive income you could be earning with DeFi strategies.";
+          : "Crypto Yield Optimizer is ready. Enter portfolio composition to see how much passive income could be earned with DeFi strategies.";
 
         return {
           content: [{ type: "text", text: contentText }],
@@ -910,8 +910,8 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
       : "N/A";
 
   const paramUsage: Record<string, number> = {};
-  const portfolioStatusDist: Record<string, number> = {};
-  const riskToleranceDist: Record<string, number> = {};
+  const yieldStatusDist: Record<string, number> = {};
+  const riskPreferenceDist: Record<string, number> = {};
   
   successLogs.forEach((log) => {
     if (log.params) {
@@ -920,15 +920,15 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
           paramUsage[key] = (paramUsage[key] || 0) + 1;
         }
       });
-      // Track risk tolerance distribution
-      if (log.params.risk_tolerance) {
-        const risk = log.params.risk_tolerance;
-        riskToleranceDist[risk] = (riskToleranceDist[risk] || 0) + 1;
+      // Track risk preference distribution
+      if (log.params.risk_preference) {
+        const risk = log.params.risk_preference;
+        riskPreferenceDist[risk] = (riskPreferenceDist[risk] || 0) + 1;
       }
     }
-    if (log.structuredContent?.summary?.portfolio_status) {
-       const cat = log.structuredContent.summary.portfolio_status;
-       portfolioStatusDist[cat] = (portfolioStatusDist[cat] || 0) + 1;
+    if (log.structuredContent?.summary?.yield_status) {
+       const cat = log.structuredContent.summary.yield_status;
+       yieldStatusDist[cat] = (yieldStatusDist[cat] || 0) + 1;
     }
   });
   
@@ -938,48 +938,48 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
     widgetInteractions[humanName] = (widgetInteractions[humanName] || 0) + 1;
   });
   
-  // Initial investment distribution
-  const investmentDistribution: Record<string, number> = {};
+  // Crypto holdings distribution (BTC)
+  const btcHoldingsDist: Record<string, number> = {};
   successLogs.forEach((log) => {
-    if (log.params?.initial_investment) {
-      const amount = log.params.initial_investment;
+    if (log.params?.btc) {
+      const amount = log.params.btc;
       let bucket = "Unknown";
-      if (amount < 10000) bucket = "Under $10k";
+      if (amount < 1000) bucket = "Under $1k";
+      else if (amount < 10000) bucket = "$1k-$10k";
       else if (amount < 50000) bucket = "$10k-$50k";
       else if (amount < 100000) bucket = "$50k-$100k";
-      else if (amount < 500000) bucket = "$100k-$500k";
-      else bucket = "$500k+";
-      investmentDistribution[bucket] = (investmentDistribution[bucket] || 0) + 1;
+      else bucket = "$100k+";
+      btcHoldingsDist[bucket] = (btcHoldingsDist[bucket] || 0) + 1;
     }
   });
 
-  // Annual contribution distribution
-  const contributionDistribution: Record<string, number> = {};
+  // ETH holdings distribution
+  const ethHoldingsDist: Record<string, number> = {};
   successLogs.forEach((log) => {
-    if (log.params?.annual_contribution) {
-      const amount = log.params.annual_contribution;
+    if (log.params?.eth) {
+      const amount = log.params.eth;
       let bucket = "Unknown";
-      if (amount < 5000) bucket = "Under $5k";
-      else if (amount < 10000) bucket = "$5k-$10k";
-      else if (amount < 20000) bucket = "$10k-$20k";
-      else if (amount < 50000) bucket = "$20k-$50k";
-      else bucket = "$50k+";
-      contributionDistribution[bucket] = (contributionDistribution[bucket] || 0) + 1;
+      if (amount < 1000) bucket = "Under $1k";
+      else if (amount < 10000) bucket = "$1k-$10k";
+      else if (amount < 50000) bucket = "$10k-$50k";
+      else if (amount < 100000) bucket = "$50k-$100k";
+      else bucket = "$100k+";
+      ethHoldingsDist[bucket] = (ethHoldingsDist[bucket] || 0) + 1;
     }
   });
 
-  // Time horizon distribution
-  const timeHorizonDist: Record<string, number> = {};
+  // Current yield distribution
+  const currentYieldDist: Record<string, number> = {};
   successLogs.forEach((log) => {
-    if (log.params?.time_horizon) {
-      const years = log.params.time_horizon;
+    if (log.params?.current_yield_percent !== undefined) {
+      const yieldPct = log.params.current_yield_percent;
       let bucket = "Unknown";
-      if (years <= 5) bucket = "0-5 years";
-      else if (years <= 10) bucket = "6-10 years";
-      else if (years <= 20) bucket = "11-20 years";
-      else if (years <= 30) bucket = "21-30 years";
-      else bucket = "30+ years";
-      timeHorizonDist[bucket] = (timeHorizonDist[bucket] || 0) + 1;
+      if (yieldPct === 0) bucket = "0% (None)";
+      else if (yieldPct < 3) bucket = "0-3%";
+      else if (yieldPct < 6) bucket = "3-6%";
+      else if (yieldPct < 10) bucket = "6-10%";
+      else bucket = "10%+";
+      currentYieldDist[bucket] = (currentYieldDist[bucket] || 0) + 1;
     }
   });
 
@@ -1007,7 +1007,7 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Crypto Portfolio Optimizer Analytics</title>
+  <title>Crypto Yield Optimizer Analytics</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; padding: 20px; }
@@ -1034,7 +1034,7 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
 </head>
 <body>
   <div class="container">
-    <h1>📊 Crypto Portfolio Optimizer Analytics</h1>
+    <h1>📊 Crypto Yield Optimizer Analytics</h1>
     <p class="subtitle">Last 7 days • Auto-refresh every 60s</p>
     
     <div class="grid">
@@ -1092,11 +1092,11 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
 
     <div class="grid" style="margin-bottom: 20px;">
       <div class="card">
-        <h2>Portfolio Status</h2>
+        <h2>Yield Status</h2>
         <table>
           <thead><tr><th>Status</th><th>Count</th></tr></thead>
           <tbody>
-            ${Object.entries(portfolioStatusDist).length > 0 ? Object.entries(portfolioStatusDist)
+            ${Object.entries(yieldStatusDist).length > 0 ? Object.entries(yieldStatusDist)
               .sort((a, b) => (b[1] as number) - (a[1] as number))
               .map(
                 ([cat, count]) => `
@@ -1155,11 +1155,11 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
 
     <div class="grid" style="margin-bottom: 20px;">
       <div class="card">
-        <h2>Initial Investment</h2>
+        <h2>BTC Holdings</h2>
         <table>
           <thead><tr><th>Amount</th><th>Users</th></tr></thead>
           <tbody>
-            ${Object.entries(investmentDistribution).length > 0 ? Object.entries(investmentDistribution)
+            ${Object.entries(btcHoldingsDist).length > 0 ? Object.entries(btcHoldingsDist)
               .sort((a, b) => (b[1] as number) - (a[1] as number))
               .map(
                 ([amount, count]) => `
@@ -1175,11 +1175,11 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
       </div>
       
       <div class="card">
-        <h2>Annual Contribution</h2>
+        <h2>ETH Holdings</h2>
         <table>
           <thead><tr><th>Amount</th><th>Users</th></tr></thead>
           <tbody>
-            ${Object.entries(contributionDistribution).length > 0 ? Object.entries(contributionDistribution)
+            ${Object.entries(ethHoldingsDist).length > 0 ? Object.entries(ethHoldingsDist)
               .sort((a, b) => (b[1] as number) - (a[1] as number))
               .map(
                 ([amount, count]) => `
@@ -1195,16 +1195,16 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
       </div>
       
       <div class="card">
-        <h2>Time Horizon</h2>
+        <h2>Current Yield %</h2>
         <table>
-          <thead><tr><th>Duration</th><th>Users</th></tr></thead>
+          <thead><tr><th>APY Range</th><th>Users</th></tr></thead>
           <tbody>
-            ${Object.entries(timeHorizonDist).length > 0 ? Object.entries(timeHorizonDist)
+            ${Object.entries(currentYieldDist).length > 0 ? Object.entries(currentYieldDist)
               .sort((a, b) => (b[1] as number) - (a[1] as number))
               .map(
-                ([years, count]) => `
+                ([yieldRange, count]) => `
               <tr>
-                <td>${years}</td>
+                <td>${yieldRange}</td>
                 <td>${count}</td>
               </tr>
             `
@@ -1505,7 +1505,7 @@ async function handleSubscribe(req: IncomingMessage, res: ServerResponse) {
     const parsed = JSON.parse(body);
     const email = parsed.email;
     const topicId = parsed.topicId || parsed.settlementId || "crypto-portfolio-optimizer";
-    const topicName = parsed.topicName || parsed.settlementName || "Crypto Portfolio Optimizer Updates";
+    const topicName = parsed.topicName || parsed.settlementName || "Crypto Yield Optimizer Updates";
     if (!email || !email.includes("@")) {
       res.writeHead(400).end(JSON.stringify({ error: "Invalid email address" }));
       return;
@@ -1765,7 +1765,7 @@ function startMonitoring() {
 
 httpServer.listen(port, () => {
   startMonitoring();
-  console.log(`Portfolio Optimizer MCP server listening on http://localhost:${port}`);
+  console.log(`Crypto Yield Optimizer MCP server listening on http://localhost:${port}`);
   console.log(`  SSE stream: GET http://localhost:${port}${ssePath}`);
   console.log(
     `  Message post endpoint: POST http://localhost:${port}${postPath}?sessionId=...`
