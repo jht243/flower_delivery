@@ -115,7 +115,7 @@ function App({ initialData }: { initialData: any }) {
 }
 
 // Get initial data
-const container = document.getElementById("travel-checklist-root") || document.getElementById("crypto-portfolio-optimizer-root");
+const container = document.getElementById("travel-checklist-root");
 
 if (!container) {
   throw new Error("travel-checklist-root element not found");

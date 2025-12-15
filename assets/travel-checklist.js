@@ -27666,7 +27666,7 @@ console.log("[Main] Travel Checklist main.tsx loading...");
 function App({ initialData: initialData2 }) {
   return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(TravelChecklist, { initialData: initialData2 });
 }
-var container = document.getElementById("travel-checklist-root") || document.getElementById("crypto-portfolio-optimizer-root");
+var container = document.getElementById("travel-checklist-root");
 if (!container) {
   throw new Error("travel-checklist-root element not found");
 }
