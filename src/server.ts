@@ -247,7 +247,10 @@ function widgetMeta(widget: TravelChecklistWidget, bustCache: boolean = false) {
     "openai/widgetPrefersBorder": true,
     "openai/widgetCSP": {
       connect_domains: [
-        "https://travel-checklist-q79n.onrender.com"
+        "https://travel-checklist-q79n.onrender.com",
+        "https://nominatim.openstreetmap.org",
+        "https://api.open-meteo.com",
+        "https://geocoding-api.open-meteo.com"
       ],
       resource_domains: [
         "https://travel-checklist-q79n.onrender.com"
