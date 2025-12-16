@@ -309,6 +309,7 @@ const toolInputSchema = {
     has_infants: { type: "boolean", description: "Whether traveling with infants." },
     has_pets: { type: "boolean", description: "Whether traveling with pets." },
     activities: { type: "array", items: { type: "string" }, description: "Planned activities (hiking, beach, camping, etc.)." },
+    presets: { type: "array", items: { type: "string", enum: ["lightSleeper", "gymRat", "yoga", "swimmer", "remoteWorker", "contentCreator", "gamer", "photographer"] }, description: "Traveler presets - lightSleeper (mentions sleep issues, light sleeper), gymRat (gym, workout, fitness), yoga, swimmer (swimming, pool), remoteWorker (remote work, digital nomad), contentCreator (influencer, content creator, vlogger), gamer (gaming), photographer (photography)." },
   },
   required: [],
   additionalProperties: false,
@@ -337,6 +338,7 @@ const toolInputParser = z.object({
   has_infants: z.boolean().optional(),
   has_pets: z.boolean().optional(),
   activities: z.array(z.string()).optional(),
+  presets: z.array(z.enum(["lightSleeper", "gymRat", "yoga", "swimmer", "remoteWorker", "contentCreator", "gamer", "photographer"])).optional(),
 });
 
 const tools: Tool[] = widgets.map((widget) => ({
@@ -571,6 +573,20 @@ function createTravelChecklistServer(): Server {
             else if (/beach|swim|ocean|resort/i.test(userText)) args.purpose = "beach";
             else if (/hike|hiking|adventure|camping|outdoor/i.test(userText)) args.purpose = "adventure";
             else if (/city|urban|sightseeing|museum/i.test(userText)) args.purpose = "city";
+          }
+          
+          // Infer presets from keywords
+          if (!args.presets || args.presets.length === 0) {
+            const inferredPresets: ("lightSleeper" | "gymRat" | "yoga" | "swimmer" | "remoteWorker" | "contentCreator" | "gamer" | "photographer")[] = [];
+            if (/light\s*sleeper|trouble\s*sleep|insomnia|sleep\s*issues|noise\s*sensitive/i.test(userText)) inferredPresets.push("lightSleeper");
+            if (/gym|workout|fitness|exercise|weight\s*train|lift\s*weight/i.test(userText)) inferredPresets.push("gymRat");
+            if (/yoga|meditat|stretch/i.test(userText)) inferredPresets.push("yoga");
+            if (/swim|pool|lap\s*swim/i.test(userText)) inferredPresets.push("swimmer");
+            if (/remote\s*work|digital\s*nomad|work\s*remote|laptop|home\s*office/i.test(userText)) inferredPresets.push("remoteWorker");
+            if (/content\s*creat|influencer|vlog|youtube|tiktok|social\s*media/i.test(userText)) inferredPresets.push("contentCreator");
+            if (/gamer|gaming|video\s*game|nintendo|switch|playstation|xbox/i.test(userText)) inferredPresets.push("gamer");
+            if (/photograph|camera|dslr|mirrorless|shoot\s*photo/i.test(userText)) inferredPresets.push("photographer");
+            if (inferredPresets.length > 0) args.presets = inferredPresets;
           }
 
         } catch (e) {

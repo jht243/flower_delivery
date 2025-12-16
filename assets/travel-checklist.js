@@ -26232,6 +26232,9 @@ function TravelChecklist({ initialData: initialData2 }) {
       if (Array.isArray(initialData2.activities)) {
         updates.activities = initialData2.activities;
       }
+      if (Array.isArray(initialData2.presets) && initialData2.presets.length > 0) {
+        updates.presets = initialData2.presets;
+      }
       const newTravelers = [...DEFAULT_PROFILE.travelers];
       let hasTravelerData = false;
       if (initialData2.adult_males && Number(initialData2.adult_males) > 0) {

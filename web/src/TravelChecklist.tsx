@@ -1579,6 +1579,11 @@ export default function TravelChecklist({ initialData }: { initialData?: any }) 
         updates.activities = initialData.activities;
       }
       
+      // Presets (traveler types like lightSleeper, gymRat, etc.)
+      if (Array.isArray(initialData.presets) && initialData.presets.length > 0) {
+        updates.presets = initialData.presets;
+      }
+      
       // Travelers - build from detailed breakdown or total count
       const newTravelers = [...DEFAULT_PROFILE.travelers];
       let hasTravelerData = false;
