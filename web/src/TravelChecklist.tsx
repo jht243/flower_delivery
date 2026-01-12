@@ -393,6 +393,17 @@ const loadSavedData = () => {
         if (data?.profile && typeof data.profile.presets === 'undefined') {
           data.profile.presets = [];
         }
+        // Recalculate tripDuration from dates to fix any stale values
+        if (data?.profile?.startDate && data?.profile?.endDate) {
+          const [startYear, startMonth, startDay] = data.profile.startDate.split('-').map(Number);
+          const [endYear, endMonth, endDay] = data.profile.endDate.split('-').map(Number);
+          const start = new Date(startYear, startMonth - 1, startDay);
+          const end = new Date(endYear, endMonth - 1, endDay);
+          const diff = Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+          if (diff > 0) {
+            data.profile.tripDuration = diff;
+          }
+        }
         return data;
       }
     }
