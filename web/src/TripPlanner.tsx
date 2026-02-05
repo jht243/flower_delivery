@@ -101,11 +101,13 @@ const getStatusColor = (status: BookingStatus) => {
 
 const parseTripDescription = (text: string): Partial<TripLeg>[] => {
   const legs: Partial<TripLeg>[] = [];
+  const months: Record<string, string> = {
+    january: "01", february: "02", march: "03", april: "04", may: "05", june: "06",
+    july: "07", august: "08", september: "09", october: "10", november: "11", december: "12",
+    jan: "01", feb: "02", mar: "03", apr: "04", jun: "06", jul: "07", aug: "08", sep: "09", oct: "10", nov: "11", dec: "12"
+  };
+  
   const extractDate = (t: string): string | undefined => {
-    const months: Record<string, string> = {
-      january: "01", february: "02", march: "03", april: "04", may: "05", june: "06",
-      july: "07", august: "08", september: "09", october: "10", november: "11", december: "12",
-    };
     const match = t.match(/(\w+)\s+(\d{1,2})(?:st|nd|rd|th)?,?\s*(\d{4})?/i);
     if (match) {
       const month = months[match[1].toLowerCase()];
@@ -118,35 +120,106 @@ const parseTripDescription = (text: string): Partial<TripLeg>[] => {
     return undefined;
   };
 
-  const outbound = text.match(/fly(?:ing)?\s+(?:from\s+)?([A-Za-z\s,]+?)\s+to\s+([A-Za-z\s,]+?)(?:\s+on\s+([A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)?,?\s*\d{0,4}))?/i);
-  if (outbound) {
-    const from = outbound[1].trim().replace(/,\s*$/, "");
-    const to = outbound[2].trim().replace(/,\s*$/, "");
-    legs.push({ type: "flight", status: "pending", title: `Flight: ${from} → ${to}`, from, to, date: outbound[3] ? extractDate(outbound[3]) || "" : "" });
-  }
-
-  const returnMatch = text.match(/return(?:ing)?\s+(?:to\s+)?([A-Za-z\s,]+?)(?:\s+on\s+([A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)?,?\s*\d{0,4}))?(?:\s*\.|$)/i);
-  if (returnMatch && outbound) {
-    const returnTo = returnMatch[1].trim().replace(/,\s*$/, "");
-    const outboundTo = outbound[2].trim().replace(/,\s*$/, "");
-    legs.push({ type: "flight", status: "pending", title: `Flight: ${outboundTo} → ${returnTo}`, from: outboundTo, to: returnTo, date: returnMatch[2] ? extractDate(returnMatch[2]) || "" : "" });
-  }
-
-  if (legs.length >= 2) {
-    const outboundLeg = legs[0];
-    if (outboundLeg?.to) {
-      legs.push({ type: "hotel", status: "pending", title: `Hotel in ${outboundLeg.to}`, location: outboundLeg.to, date: outboundLeg.date });
+  // Extract all dates from text for trip duration calculation
+  const allDates: string[] = [];
+  const dateRegex = /(\w+)\s+(\d{1,2})(?:st|nd|rd|th)?,?\s*(\d{4})?/gi;
+  let dateMatch;
+  while ((dateMatch = dateRegex.exec(text)) !== null) {
+    const month = months[dateMatch[1].toLowerCase()];
+    if (month) {
+      const day = dateMatch[2].padStart(2, "0");
+      const year = dateMatch[3] || new Date().getFullYear().toString();
+      allDates.push(`${year}-${month}-${day}`);
     }
   }
 
-  legs.filter(l => l.type === "flight").forEach((flight, idx) => {
-    if (idx === 0 && flight.from) {
-      legs.push({ type: "car", status: "pending", title: `Transport to ${flight.from} Airport`, to: `${flight.from} Airport`, date: flight.date });
-    }
-    if (flight.to) {
-      legs.push({ type: "car", status: "pending", title: `Transport from ${flight.to} Airport`, from: `${flight.to} Airport`, date: flight.date });
-    }
-  });
+  // Better regex: match "from X to Y" where X and Y are city names (words only, stop at common keywords)
+  const flightMatch = text.match(/(?:fly(?:ing)?|flight)\s+(?:from\s+)?([A-Za-z][A-Za-z\s]*?)\s+to\s+([A-Za-z][A-Za-z\s]*?)(?=\s+(?:on|and|then|,|\.|$)|\s*$)/i);
+  
+  let fromCity = "";
+  let toCity = "";
+  let outboundDate = allDates[0] || "";
+  let returnDate = allDates[1] || "";
+  
+  if (flightMatch) {
+    fromCity = flightMatch[1].trim();
+    toCity = flightMatch[2].trim();
+    
+    // Create outbound flight
+    legs.push({ 
+      type: "flight", 
+      status: "pending", 
+      title: `Flight: ${fromCity} → ${toCity}`, 
+      from: fromCity, 
+      to: toCity, 
+      date: outboundDate 
+    });
+  }
+
+  // Check for return flight
+  const returnMatch = text.match(/return(?:ing)?\s+(?:to\s+)?([A-Za-z][A-Za-z\s]*?)(?=\s+(?:on|and|then|,|\.|$)|\s*$)/i);
+  if (returnMatch && fromCity) {
+    const returnTo = returnMatch[1].trim();
+    legs.push({ 
+      type: "flight", 
+      status: "pending", 
+      title: `Flight: ${toCity} → ${returnTo}`, 
+      from: toCity, 
+      to: returnTo, 
+      date: returnDate 
+    });
+  }
+
+  // Add hotel if we have a destination (even with just one flight)
+  if (toCity) {
+    legs.push({ 
+      type: "hotel", 
+      status: "pending", 
+      title: `Hotel in ${toCity}`, 
+      location: toCity, 
+      date: outboundDate,
+      endDate: returnDate || outboundDate
+    });
+  }
+
+  // Add transport legs
+  if (fromCity) {
+    legs.push({ 
+      type: "car", 
+      status: "pending", 
+      title: `Transport to ${fromCity} Airport`, 
+      to: `${fromCity} Airport`, 
+      date: outboundDate 
+    });
+  }
+  
+  if (toCity) {
+    legs.push({ 
+      type: "car", 
+      status: "pending", 
+      title: `Transport from ${toCity} Airport`, 
+      from: `${toCity} Airport`, 
+      date: outboundDate 
+    });
+  }
+  
+  // Add return transport if there's a return flight
+  if (returnMatch && toCity && fromCity) {
+    legs.push({ 
+      type: "car", 
+      status: "pending", 
+      title: `Transport to ${toCity} Airport`, 
+      to: `${toCity} Airport`, 
+      date: returnDate 
+    });
+    legs.push({ 
+      type: "car", 
+      status: "pending", 
+      title: `Transport from ${fromCity} Airport`, 
+      from: `${fromCity} Airport`, 
+      date: returnDate 
+    });
+  }
 
   return legs;
 };
@@ -258,6 +331,144 @@ const ProgressSummary = ({ legs }: { legs: TripLeg[] }) => {
   );
 };
 
+// Day-by-Day View Component
+const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, expandedLegs, toggleLegExpand }: { 
+  legs: TripLeg[]; 
+  onUpdateLeg: (id: string, u: Partial<TripLeg>) => void; 
+  onDeleteLeg: (id: string) => void;
+  expandedLegs: Set<string>;
+  toggleLegExpand: (id: string) => void;
+}) => {
+  // Group legs by date
+  const legsByDate = useMemo(() => {
+    const groups: Record<string, TripLeg[]> = {};
+    const noDateLegs: TripLeg[] = [];
+    
+    legs.forEach(leg => {
+      if (leg.date) {
+        if (!groups[leg.date]) groups[leg.date] = [];
+        groups[leg.date].push(leg);
+      } else {
+        noDateLegs.push(leg);
+      }
+    });
+    
+    // Sort dates
+    const sortedDates = Object.keys(groups).sort();
+    
+    return { groups, sortedDates, noDateLegs };
+  }, [legs]);
+
+  const formatDayHeader = (dateStr: string, dayNum: number): string => {
+    try {
+      const date = new Date(dateStr + "T00:00:00");
+      const weekday = date.toLocaleDateString("en-US", { weekday: "long" });
+      const monthDay = date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      return `Day ${dayNum} — ${weekday}, ${monthDay}`;
+    } catch {
+      return `Day ${dayNum}`;
+    }
+  };
+
+  const getDayStatus = (dayLegs: TripLeg[]): { allBooked: boolean; hasUrgent: boolean } => {
+    const allBooked = dayLegs.every(l => l.status === "booked");
+    const hasUrgent = dayLegs.some(l => l.status === "urgent");
+    return { allBooked, hasUrgent };
+  };
+
+  return (
+    <div>
+      {legsByDate.sortedDates.map((date, idx) => {
+        const dayLegs = legsByDate.groups[date];
+        const { allBooked, hasUrgent } = getDayStatus(dayLegs);
+        const statusColor = allBooked ? COLORS.booked : hasUrgent ? COLORS.urgent : COLORS.pending;
+        
+        return (
+          <div key={date} style={{ marginBottom: 24 }}>
+            {/* Day Header */}
+            <div style={{ 
+              display: "flex", 
+              alignItems: "center", 
+              gap: 12, 
+              marginBottom: 12,
+              padding: "12px 16px",
+              backgroundColor: allBooked ? COLORS.bookedBg : hasUrgent ? COLORS.urgentBg : COLORS.pendingBg,
+              borderRadius: 12,
+              borderLeft: `4px solid ${statusColor}`
+            }}>
+              <div style={{ 
+                width: 36, height: 36, borderRadius: "50%", 
+                backgroundColor: statusColor, color: "white",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontWeight: 700, fontSize: 14
+              }}>
+                {idx + 1}
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 700, fontSize: 15, color: COLORS.textMain }}>
+                  {formatDayHeader(date, idx + 1)}
+                </div>
+                <div style={{ fontSize: 12, color: COLORS.textSecondary }}>
+                  {dayLegs.length} item{dayLegs.length !== 1 ? "s" : ""} • {dayLegs.filter(l => l.status === "booked").length} booked
+                </div>
+              </div>
+              {allBooked && <CheckCircle2 size={24} color={COLORS.booked} />}
+              {hasUrgent && !allBooked && <AlertCircle size={24} color={COLORS.urgent} />}
+            </div>
+            
+            {/* Day's Legs */}
+            <div style={{ paddingLeft: 20 }}>
+              {dayLegs.map(leg => (
+                <TripLegCard 
+                  key={leg.id} 
+                  leg={leg} 
+                  onUpdate={u => onUpdateLeg(leg.id, u)} 
+                  onDelete={() => onDeleteLeg(leg.id)} 
+                  isExpanded={expandedLegs.has(leg.id)} 
+                  onToggleExpand={() => toggleLegExpand(leg.id)} 
+                />
+              ))}
+            </div>
+          </div>
+        );
+      })}
+      
+      {/* Legs without dates */}
+      {legsByDate.noDateLegs.length > 0 && (
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ 
+            display: "flex", 
+            alignItems: "center", 
+            gap: 12, 
+            marginBottom: 12,
+            padding: "12px 16px",
+            backgroundColor: COLORS.borderLight,
+            borderRadius: 12,
+            borderLeft: `4px solid ${COLORS.textMuted}`
+          }}>
+            <Calendar size={20} color={COLORS.textMuted} />
+            <div style={{ fontWeight: 700, fontSize: 15, color: COLORS.textSecondary }}>
+              No Date Set
+            </div>
+          </div>
+          <div style={{ paddingLeft: 20 }}>
+            {legsByDate.noDateLegs.map(leg => (
+              <TripLegCard 
+                key={leg.id} 
+                leg={leg} 
+                onUpdate={u => onUpdateLeg(leg.id, u)} 
+                onDelete={() => onDeleteLeg(leg.id)} 
+                isExpanded={expandedLegs.has(leg.id)} 
+                onToggleExpand={() => toggleLegExpand(leg.id)} 
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const AddLegModal = ({ onAdd, onClose }: { onAdd: (l: Partial<TripLeg>) => void; onClose: () => void }) => {
   const [type, setType] = useState<LegType>("flight");
   const [formData, setFormData] = useState<Partial<TripLeg>>({ status: "pending", title: "", date: "" });
@@ -365,10 +576,16 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
           <>
             <ProgressSummary legs={trip.legs} />
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-              <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: COLORS.textMain }}>Trip Itinerary</h3>
+              <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: COLORS.textMain }}>Day-by-Day Itinerary</h3>
               <button onClick={() => setShowAddModal(true)} style={{ padding: "10px 16px", borderRadius: 10, border: "none", backgroundColor: COLORS.primary, color: "white", fontSize: 14, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}><Plus size={18} /> Add Leg</button>
             </div>
-            {sortedLegs.map(leg => <TripLegCard key={leg.id} leg={leg} onUpdate={u => handleUpdateLeg(leg.id, u)} onDelete={() => handleDeleteLeg(leg.id)} isExpanded={expandedLegs.has(leg.id)} onToggleExpand={() => toggleLegExpand(leg.id)} />)}
+            <DayByDayView 
+              legs={trip.legs} 
+              onUpdateLeg={handleUpdateLeg} 
+              onDeleteLeg={handleDeleteLeg} 
+              expandedLegs={expandedLegs} 
+              toggleLegExpand={toggleLegExpand} 
+            />
           </>
         )}
       </div>

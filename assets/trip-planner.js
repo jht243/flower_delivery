@@ -24831,21 +24831,32 @@ var getStatusColor = (status) => {
 };
 var parseTripDescription = (text) => {
   const legs = [];
+  const months = {
+    january: "01",
+    february: "02",
+    march: "03",
+    april: "04",
+    may: "05",
+    june: "06",
+    july: "07",
+    august: "08",
+    september: "09",
+    october: "10",
+    november: "11",
+    december: "12",
+    jan: "01",
+    feb: "02",
+    mar: "03",
+    apr: "04",
+    jun: "06",
+    jul: "07",
+    aug: "08",
+    sep: "09",
+    oct: "10",
+    nov: "11",
+    dec: "12"
+  };
   const extractDate = (t) => {
-    const months = {
-      january: "01",
-      february: "02",
-      march: "03",
-      april: "04",
-      may: "05",
-      june: "06",
-      july: "07",
-      august: "08",
-      september: "09",
-      october: "10",
-      november: "11",
-      december: "12"
-    };
     const match = t.match(/(\w+)\s+(\d{1,2})(?:st|nd|rd|th)?,?\s*(\d{4})?/i);
     if (match) {
       const month = months[match[1].toLowerCase()];
@@ -24857,32 +24868,90 @@ var parseTripDescription = (text) => {
     }
     return void 0;
   };
-  const outbound = text.match(/fly(?:ing)?\s+(?:from\s+)?([A-Za-z\s,]+?)\s+to\s+([A-Za-z\s,]+?)(?:\s+on\s+([A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)?,?\s*\d{0,4}))?/i);
-  if (outbound) {
-    const from = outbound[1].trim().replace(/,\s*$/, "");
-    const to = outbound[2].trim().replace(/,\s*$/, "");
-    legs.push({ type: "flight", status: "pending", title: `Flight: ${from} \u2192 ${to}`, from, to, date: outbound[3] ? extractDate(outbound[3]) || "" : "" });
-  }
-  const returnMatch = text.match(/return(?:ing)?\s+(?:to\s+)?([A-Za-z\s,]+?)(?:\s+on\s+([A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)?,?\s*\d{0,4}))?(?:\s*\.|$)/i);
-  if (returnMatch && outbound) {
-    const returnTo = returnMatch[1].trim().replace(/,\s*$/, "");
-    const outboundTo = outbound[2].trim().replace(/,\s*$/, "");
-    legs.push({ type: "flight", status: "pending", title: `Flight: ${outboundTo} \u2192 ${returnTo}`, from: outboundTo, to: returnTo, date: returnMatch[2] ? extractDate(returnMatch[2]) || "" : "" });
-  }
-  if (legs.length >= 2) {
-    const outboundLeg = legs[0];
-    if (outboundLeg?.to) {
-      legs.push({ type: "hotel", status: "pending", title: `Hotel in ${outboundLeg.to}`, location: outboundLeg.to, date: outboundLeg.date });
+  const allDates = [];
+  const dateRegex = /(\w+)\s+(\d{1,2})(?:st|nd|rd|th)?,?\s*(\d{4})?/gi;
+  let dateMatch;
+  while ((dateMatch = dateRegex.exec(text)) !== null) {
+    const month = months[dateMatch[1].toLowerCase()];
+    if (month) {
+      const day = dateMatch[2].padStart(2, "0");
+      const year = dateMatch[3] || (/* @__PURE__ */ new Date()).getFullYear().toString();
+      allDates.push(`${year}-${month}-${day}`);
     }
   }
-  legs.filter((l) => l.type === "flight").forEach((flight, idx) => {
-    if (idx === 0 && flight.from) {
-      legs.push({ type: "car", status: "pending", title: `Transport to ${flight.from} Airport`, to: `${flight.from} Airport`, date: flight.date });
-    }
-    if (flight.to) {
-      legs.push({ type: "car", status: "pending", title: `Transport from ${flight.to} Airport`, from: `${flight.to} Airport`, date: flight.date });
-    }
-  });
+  const flightMatch = text.match(/(?:fly(?:ing)?|flight)\s+(?:from\s+)?([A-Za-z][A-Za-z\s]*?)\s+to\s+([A-Za-z][A-Za-z\s]*?)(?=\s+(?:on|and|then|,|\.|$)|\s*$)/i);
+  let fromCity = "";
+  let toCity = "";
+  let outboundDate = allDates[0] || "";
+  let returnDate = allDates[1] || "";
+  if (flightMatch) {
+    fromCity = flightMatch[1].trim();
+    toCity = flightMatch[2].trim();
+    legs.push({
+      type: "flight",
+      status: "pending",
+      title: `Flight: ${fromCity} \u2192 ${toCity}`,
+      from: fromCity,
+      to: toCity,
+      date: outboundDate
+    });
+  }
+  const returnMatch = text.match(/return(?:ing)?\s+(?:to\s+)?([A-Za-z][A-Za-z\s]*?)(?=\s+(?:on|and|then|,|\.|$)|\s*$)/i);
+  if (returnMatch && fromCity) {
+    const returnTo = returnMatch[1].trim();
+    legs.push({
+      type: "flight",
+      status: "pending",
+      title: `Flight: ${toCity} \u2192 ${returnTo}`,
+      from: toCity,
+      to: returnTo,
+      date: returnDate
+    });
+  }
+  if (toCity) {
+    legs.push({
+      type: "hotel",
+      status: "pending",
+      title: `Hotel in ${toCity}`,
+      location: toCity,
+      date: outboundDate,
+      endDate: returnDate || outboundDate
+    });
+  }
+  if (fromCity) {
+    legs.push({
+      type: "car",
+      status: "pending",
+      title: `Transport to ${fromCity} Airport`,
+      to: `${fromCity} Airport`,
+      date: outboundDate
+    });
+  }
+  if (toCity) {
+    legs.push({
+      type: "car",
+      status: "pending",
+      title: `Transport from ${toCity} Airport`,
+      from: `${toCity} Airport`,
+      date: outboundDate
+    });
+  }
+  if (returnMatch && toCity && fromCity) {
+    legs.push({
+      type: "car",
+      status: "pending",
+      title: `Transport to ${toCity} Airport`,
+      to: `${toCity} Airport`,
+      date: returnDate
+    });
+    legs.push({
+      type: "car",
+      status: "pending",
+      title: `Transport from ${fromCity} Airport`,
+      from: `${fromCity} Airport`,
+      date: returnDate
+    });
+  }
   return legs;
 };
 var StatusBadge = ({ status, onClick }) => {
@@ -25054,6 +25123,119 @@ var ProgressSummary = ({ legs }) => {
     ] })
   ] });
 };
+var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, expandedLegs, toggleLegExpand }) => {
+  const legsByDate = (0, import_react3.useMemo)(() => {
+    const groups = {};
+    const noDateLegs = [];
+    legs.forEach((leg) => {
+      if (leg.date) {
+        if (!groups[leg.date]) groups[leg.date] = [];
+        groups[leg.date].push(leg);
+      } else {
+        noDateLegs.push(leg);
+      }
+    });
+    const sortedDates = Object.keys(groups).sort();
+    return { groups, sortedDates, noDateLegs };
+  }, [legs]);
+  const formatDayHeader = (dateStr, dayNum) => {
+    try {
+      const date = /* @__PURE__ */ new Date(dateStr + "T00:00:00");
+      const weekday = date.toLocaleDateString("en-US", { weekday: "long" });
+      const monthDay = date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      return `Day ${dayNum} \u2014 ${weekday}, ${monthDay}`;
+    } catch {
+      return `Day ${dayNum}`;
+    }
+  };
+  const getDayStatus = (dayLegs) => {
+    const allBooked = dayLegs.every((l) => l.status === "booked");
+    const hasUrgent = dayLegs.some((l) => l.status === "urgent");
+    return { allBooked, hasUrgent };
+  };
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+    legsByDate.sortedDates.map((date, idx) => {
+      const dayLegs = legsByDate.groups[date];
+      const { allBooked, hasUrgent } = getDayStatus(dayLegs);
+      const statusColor = allBooked ? COLORS.booked : hasUrgent ? COLORS.urgent : COLORS.pending;
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 24 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          marginBottom: 12,
+          padding: "12px 16px",
+          backgroundColor: allBooked ? COLORS.bookedBg : hasUrgent ? COLORS.urgentBg : COLORS.pendingBg,
+          borderRadius: 12,
+          borderLeft: `4px solid ${statusColor}`
+        }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
+            width: 36,
+            height: 36,
+            borderRadius: "50%",
+            backgroundColor: statusColor,
+            color: "white",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontWeight: 700,
+            fontSize: 14
+          }, children: idx + 1 }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontWeight: 700, fontSize: 15, color: COLORS.textMain }, children: formatDayHeader(date, idx + 1) }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 12, color: COLORS.textSecondary }, children: [
+              dayLegs.length,
+              " item",
+              dayLegs.length !== 1 ? "s" : "",
+              " \u2022 ",
+              dayLegs.filter((l) => l.status === "booked").length,
+              " booked"
+            ] })
+          ] }),
+          allBooked && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { size: 24, color: COLORS.booked }),
+          hasUrgent && !allBooked && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { size: 24, color: COLORS.urgent })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { paddingLeft: 20 }, children: dayLegs.map((leg) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+          TripLegCard,
+          {
+            leg,
+            onUpdate: (u) => onUpdateLeg(leg.id, u),
+            onDelete: () => onDeleteLeg(leg.id),
+            isExpanded: expandedLegs.has(leg.id),
+            onToggleExpand: () => toggleLegExpand(leg.id)
+          },
+          leg.id
+        )) })
+      ] }, date);
+    }),
+    legsByDate.noDateLegs.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 24 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 12,
+        marginBottom: 12,
+        padding: "12px 16px",
+        backgroundColor: COLORS.borderLight,
+        borderRadius: 12,
+        borderLeft: `4px solid ${COLORS.textMuted}`
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { size: 20, color: COLORS.textMuted }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontWeight: 700, fontSize: 15, color: COLORS.textSecondary }, children: "No Date Set" })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { paddingLeft: 20 }, children: legsByDate.noDateLegs.map((leg) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+        TripLegCard,
+        {
+          leg,
+          onUpdate: (u) => onUpdateLeg(leg.id, u),
+          onDelete: () => onDeleteLeg(leg.id),
+          isExpanded: expandedLegs.has(leg.id),
+          onToggleExpand: () => toggleLegExpand(leg.id)
+        },
+        leg.id
+      )) })
+    ] })
+  ] });
+};
 var AddLegModal = ({ onAdd, onClose }) => {
   const [type, setType] = (0, import_react3.useState)("flight");
   const [formData, setFormData] = (0, import_react3.useState)({ status: "pending", title: "", date: "" });
@@ -25198,13 +25380,22 @@ function TripPlanner({ initialData: initialData2 }) {
     ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProgressSummary, { legs: trip.legs }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { style: { margin: 0, fontSize: 16, fontWeight: 700, color: COLORS.textMain }, children: "Trip Itinerary" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { style: { margin: 0, fontSize: 16, fontWeight: 700, color: COLORS.textMain }, children: "Day-by-Day Itinerary" }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { onClick: () => setShowAddModal(true), style: { padding: "10px 16px", borderRadius: 10, border: "none", backgroundColor: COLORS.primary, color: "white", fontSize: 14, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { size: 18 }),
           " Add Leg"
         ] })
       ] }),
-      sortedLegs.map((leg) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TripLegCard, { leg, onUpdate: (u) => handleUpdateLeg(leg.id, u), onDelete: () => handleDeleteLeg(leg.id), isExpanded: expandedLegs.has(leg.id), onToggleExpand: () => toggleLegExpand(leg.id) }, leg.id))
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+        DayByDayView,
+        {
+          legs: trip.legs,
+          onUpdateLeg: handleUpdateLeg,
+          onDeleteLeg: handleDeleteLeg,
+          expandedLegs,
+          toggleLegExpand
+        }
+      )
     ] }) }),
     showAddModal && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AddLegModal, { onAdd: handleAddLeg, onClose: () => setShowAddModal(false) })
   ] });
