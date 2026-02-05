@@ -657,7 +657,7 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
                     isBooked={hotelBooked}
                     isExpanded={expanded === "hotel"}
                     onClick={() => toggleCategory(date, "hotel")}
-                    label={dayData.hotels.some(h => h.isContinuation) ? "Staying" : "Lodging"}
+                    label="Lodging"
                   />
                   {/* 2. Activities */}
                   <CategoryIcon 
@@ -703,16 +703,8 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
                 )}
                 {expanded === "hotel" && (
                   <>
-                    {dayData.hotels.length > 0 ? dayData.hotels.map(({ leg, isContinuation }) => (
-                      isContinuation ? (
-                        <div key={`${leg.id}-${date}`} style={{ padding: "10px 14px", backgroundColor: COLORS.hotelBg, borderRadius: 10, display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-                          <Hotel size={18} color={COLORS.hotel} />
-                          <span style={{ fontSize: 13, color: COLORS.hotel, fontWeight: 500 }}>Staying at {leg.hotelName || leg.location || "hotel"}</span>
-                          {leg.status === "booked" && <CheckCircle2 size={14} color={COLORS.booked} style={{ marginLeft: "auto" }} />}
-                        </div>
-                      ) : (
-                        <TripLegCard key={leg.id} leg={leg} onUpdate={u => onUpdateLeg(leg.id, u)} onDelete={() => onDeleteLeg(leg.id)} isExpanded={expandedLegs.has(leg.id)} onToggleExpand={() => toggleLegExpand(leg.id)} />
-                      )
+                    {dayData.hotels.length > 0 ? dayData.hotels.map(({ leg }) => (
+                        <TripLegCard key={`${leg.id}-${date}`} leg={leg} onUpdate={u => onUpdateLeg(leg.id, u)} onDelete={() => onDeleteLeg(leg.id)} isExpanded={expandedLegs.has(leg.id)} onToggleExpand={() => toggleLegExpand(leg.id)} />
                     )) : (
                       <button onClick={() => onAddLeg({ type: "hotel", date, status: "pending", title: "", location: "" })} style={{ width: "100%", padding: 12, borderRadius: 10, border: `2px dashed ${COLORS.hotel}`, backgroundColor: COLORS.hotelBg, color: COLORS.hotel, fontSize: 13, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                         <Plus size={16} /> Add Hotel

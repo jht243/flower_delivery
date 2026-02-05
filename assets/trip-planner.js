@@ -25211,7 +25211,7 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, to
                 isBooked: hotelBooked,
                 isExpanded: expanded === "hotel",
                 onClick: () => toggleCategory(date, "hotel"),
-                label: dayData.hotels.some((h) => h.isContinuation) ? "Staying" : "Lodging"
+                label: "Lodging"
               }
             ),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
@@ -25248,14 +25248,7 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, to
         })(),
         expanded && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "8px 12px" }, children: [
           expanded === "flight" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: dayData.flights.map((leg) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TripLegCard, { leg, onUpdate: (u) => onUpdateLeg(leg.id, u), onDelete: () => onDeleteLeg(leg.id), isExpanded: expandedLegs.has(leg.id), onToggleExpand: () => toggleLegExpand(leg.id) }, leg.id)) }),
-          expanded === "hotel" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: dayData.hotels.length > 0 ? dayData.hotels.map(({ leg, isContinuation }) => isContinuation ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "10px 14px", backgroundColor: COLORS.hotelBg, borderRadius: 10, display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Hotel, { size: 18, color: COLORS.hotel }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 13, color: COLORS.hotel, fontWeight: 500 }, children: [
-              "Staying at ",
-              leg.hotelName || leg.location || "hotel"
-            ] }),
-            leg.status === "booked" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { size: 14, color: COLORS.booked, style: { marginLeft: "auto" } })
-          ] }, `${leg.id}-${date}`) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TripLegCard, { leg, onUpdate: (u) => onUpdateLeg(leg.id, u), onDelete: () => onDeleteLeg(leg.id), isExpanded: expandedLegs.has(leg.id), onToggleExpand: () => toggleLegExpand(leg.id) }, leg.id)) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { onClick: () => onAddLeg({ type: "hotel", date, status: "pending", title: "", location: "" }), style: { width: "100%", padding: 12, borderRadius: 10, border: `2px dashed ${COLORS.hotel}`, backgroundColor: COLORS.hotelBg, color: COLORS.hotel, fontSize: 13, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }, children: [
+          expanded === "hotel" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: dayData.hotels.length > 0 ? dayData.hotels.map(({ leg }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TripLegCard, { leg, onUpdate: (u) => onUpdateLeg(leg.id, u), onDelete: () => onDeleteLeg(leg.id), isExpanded: expandedLegs.has(leg.id), onToggleExpand: () => toggleLegExpand(leg.id) }, `${leg.id}-${date}`)) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { onClick: () => onAddLeg({ type: "hotel", date, status: "pending", title: "", location: "" }), style: { width: "100%", padding: 12, borderRadius: 10, border: `2px dashed ${COLORS.hotel}`, backgroundColor: COLORS.hotelBg, color: COLORS.hotel, fontSize: 13, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { size: 16 }),
             " Add Hotel"
           ] }) }),
