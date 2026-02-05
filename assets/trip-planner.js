@@ -25090,7 +25090,9 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, to
     legs.forEach((leg) => {
       if (leg.type === "hotel" && leg.date) {
         const checkIn = /* @__PURE__ */ new Date(leg.date + "T00:00:00");
-        const checkOut = leg.endDate ? /* @__PURE__ */ new Date(leg.endDate + "T00:00:00") : checkIn;
+        const lastDay = allDays.length > 0 ? allDays[allDays.length - 1] : leg.date;
+        const checkOutDate = leg.endDate || returnDate || lastDay;
+        const checkOut = /* @__PURE__ */ new Date(checkOutDate + "T00:00:00");
         const current = new Date(checkIn);
         let isFirst = true;
         while (current < checkOut) {
