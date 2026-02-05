@@ -24599,15 +24599,19 @@ var __iconNode9 = [
 ];
 var CircleCheck = createLucideIcon("circle-check", __iconNode9);
 
+// node_modules/lucide-react/dist/esm/icons/circle.js
+var __iconNode10 = [["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]];
+var Circle = createLucideIcon("circle", __iconNode10);
+
 // node_modules/lucide-react/dist/esm/icons/clock.js
-var __iconNode10 = [
+var __iconNode11 = [
   ["path", { d: "M12 6v6l4 2", key: "mmk7yg" }],
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }]
 ];
-var Clock = createLucideIcon("clock", __iconNode10);
+var Clock = createLucideIcon("clock", __iconNode11);
 
 // node_modules/lucide-react/dist/esm/icons/file-text.js
-var __iconNode11 = [
+var __iconNode12 = [
   [
     "path",
     {
@@ -24620,10 +24624,10 @@ var __iconNode11 = [
   ["path", { d: "M16 13H8", key: "t4e002" }],
   ["path", { d: "M16 17H8", key: "z1uh3a" }]
 ];
-var FileText = createLucideIcon("file-text", __iconNode11);
+var FileText = createLucideIcon("file-text", __iconNode12);
 
 // node_modules/lucide-react/dist/esm/icons/hotel.js
-var __iconNode12 = [
+var __iconNode13 = [
   ["path", { d: "M10 22v-6.57", key: "1wmca3" }],
   ["path", { d: "M12 11h.01", key: "z322tv" }],
   ["path", { d: "M12 7h.01", key: "1ivr5q" }],
@@ -24635,10 +24639,10 @@ var __iconNode12 = [
   ["path", { d: "M8 7h.01", key: "1vti4s" }],
   ["rect", { x: "4", y: "2", width: "16", height: "20", rx: "2", key: "1uxh74" }]
 ];
-var Hotel = createLucideIcon("hotel", __iconNode12);
+var Hotel = createLucideIcon("hotel", __iconNode13);
 
 // node_modules/lucide-react/dist/esm/icons/map-pin.js
-var __iconNode13 = [
+var __iconNode14 = [
   [
     "path",
     {
@@ -24648,10 +24652,10 @@ var __iconNode13 = [
   ],
   ["circle", { cx: "12", cy: "10", r: "3", key: "ilqhr7" }]
 ];
-var MapPin = createLucideIcon("map-pin", __iconNode13);
+var MapPin = createLucideIcon("map-pin", __iconNode14);
 
 // node_modules/lucide-react/dist/esm/icons/pen-line.js
-var __iconNode14 = [
+var __iconNode15 = [
   ["path", { d: "M13 21h8", key: "1jsn5i" }],
   [
     "path",
@@ -24661,10 +24665,10 @@ var __iconNode14 = [
     }
   ]
 ];
-var PenLine = createLucideIcon("pen-line", __iconNode14);
+var PenLine = createLucideIcon("pen-line", __iconNode15);
 
 // node_modules/lucide-react/dist/esm/icons/plane.js
-var __iconNode15 = [
+var __iconNode16 = [
   [
     "path",
     {
@@ -24673,24 +24677,38 @@ var __iconNode15 = [
     }
   ]
 ];
-var Plane = createLucideIcon("plane", __iconNode15);
+var Plane = createLucideIcon("plane", __iconNode16);
 
 // node_modules/lucide-react/dist/esm/icons/plus.js
-var __iconNode16 = [
+var __iconNode17 = [
   ["path", { d: "M5 12h14", key: "1ays0h" }],
   ["path", { d: "M12 5v14", key: "s699le" }]
 ];
-var Plus = createLucideIcon("plus", __iconNode16);
+var Plus = createLucideIcon("plus", __iconNode17);
 
 // node_modules/lucide-react/dist/esm/icons/rotate-ccw.js
-var __iconNode17 = [
+var __iconNode18 = [
   ["path", { d: "M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8", key: "1357e3" }],
   ["path", { d: "M3 3v5h5", key: "1xhq8a" }]
 ];
-var RotateCcw = createLucideIcon("rotate-ccw", __iconNode17);
+var RotateCcw = createLucideIcon("rotate-ccw", __iconNode18);
+
+// node_modules/lucide-react/dist/esm/icons/save.js
+var __iconNode19 = [
+  [
+    "path",
+    {
+      d: "M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z",
+      key: "1c8476"
+    }
+  ],
+  ["path", { d: "M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7", key: "1ydtos" }],
+  ["path", { d: "M7 3v4a1 1 0 0 0 1 1h7", key: "t51u73" }]
+];
+var Save = createLucideIcon("save", __iconNode19);
 
 // node_modules/lucide-react/dist/esm/icons/ship.js
-var __iconNode18 = [
+var __iconNode20 = [
   ["path", { d: "M12 10.189V14", key: "1p8cqu" }],
   ["path", { d: "M12 2v3", key: "qbqxhf" }],
   ["path", { d: "M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6", key: "qpkstq" }],
@@ -24709,10 +24727,10 @@ var __iconNode18 = [
     }
   ]
 ];
-var Ship = createLucideIcon("ship", __iconNode18);
+var Ship = createLucideIcon("ship", __iconNode20);
 
 // node_modules/lucide-react/dist/esm/icons/sparkles.js
-var __iconNode19 = [
+var __iconNode21 = [
   [
     "path",
     {
@@ -24724,10 +24742,10 @@ var __iconNode19 = [
   ["path", { d: "M22 4h-4", key: "gwowj6" }],
   ["circle", { cx: "4", cy: "20", r: "2", key: "6kqj1y" }]
 ];
-var Sparkles = createLucideIcon("sparkles", __iconNode19);
+var Sparkles = createLucideIcon("sparkles", __iconNode21);
 
 // node_modules/lucide-react/dist/esm/icons/tram-front.js
-var __iconNode20 = [
+var __iconNode22 = [
   ["rect", { width: "16", height: "16", x: "4", y: "3", rx: "2", key: "1wxw4b" }],
   ["path", { d: "M4 11h16", key: "mpoxn0" }],
   ["path", { d: "M12 3v8", key: "1h2ygw" }],
@@ -24736,33 +24754,33 @@ var __iconNode20 = [
   ["path", { d: "M8 15h.01", key: "a7atzg" }],
   ["path", { d: "M16 15h.01", key: "rnfrdf" }]
 ];
-var TramFront = createLucideIcon("tram-front", __iconNode20);
+var TramFront = createLucideIcon("tram-front", __iconNode22);
 
 // node_modules/lucide-react/dist/esm/icons/trash-2.js
-var __iconNode21 = [
+var __iconNode23 = [
   ["path", { d: "M10 11v6", key: "nco0om" }],
   ["path", { d: "M14 11v6", key: "outv1u" }],
   ["path", { d: "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6", key: "miytrc" }],
   ["path", { d: "M3 6h18", key: "d0wm0j" }],
   ["path", { d: "M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2", key: "e791ji" }]
 ];
-var Trash2 = createLucideIcon("trash-2", __iconNode21);
+var Trash2 = createLucideIcon("trash-2", __iconNode23);
 
 // node_modules/lucide-react/dist/esm/icons/users.js
-var __iconNode22 = [
+var __iconNode24 = [
   ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
   ["path", { d: "M16 3.128a4 4 0 0 1 0 7.744", key: "16gr8j" }],
   ["path", { d: "M22 21v-2a4 4 0 0 0-3-3.87", key: "kshegd" }],
   ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
 ];
-var Users = createLucideIcon("users", __iconNode22);
+var Users = createLucideIcon("users", __iconNode24);
 
 // node_modules/lucide-react/dist/esm/icons/x.js
-var __iconNode23 = [
+var __iconNode25 = [
   ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
   ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
 ];
-var X = createLucideIcon("x", __iconNode23);
+var X = createLucideIcon("x", __iconNode25);
 
 // src/TripPlanner.tsx
 var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
@@ -24778,36 +24796,29 @@ if (typeof document !== "undefined") {
   document.head.appendChild(styleEl);
 }
 var COLORS = {
-  primary: "#FF6B00",
-  // Bright orange accent from design
-  primaryDark: "#E65100",
-  bg: "#F2F2F7",
-  // Light gray background
+  primary: "#56C596",
+  primaryDark: "#3aa87b",
+  bg: "#FAFAFA",
   card: "#FFFFFF",
-  textMain: "#1C1C1E",
-  // Dark text
-  textSecondary: "#8E8E93",
-  textMuted: "#AEAEB2",
-  border: "#E5E5EA",
-  borderLight: "#F2F2F7",
-  flight: "#007AFF",
-  // System blue
-  flightBg: "#E5F1FF",
-  hotel: "#AF52DE",
-  // System purple
-  hotelBg: "#F5E6FF",
-  transport: "#FF9500",
-  // System orange
-  transportBg: "#FFF1CC",
-  booked: "#34C759",
-  // System green
-  bookedBg: "#E0F8E5",
-  pending: "#FF9500",
-  pendingBg: "#FFF1CC",
-  urgent: "#FF3B30",
-  urgentBg: "#FFE5E5",
-  accentLight: "#FFF1E5"
-  // Very light orange for backgrounds
+  textMain: "#1A1A1A",
+  textSecondary: "#6B7280",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F3F4F6",
+  inputBg: "#F9FAFB",
+  accentLight: "#E6F7F0",
+  booked: "#10B981",
+  bookedBg: "#D1FAE5",
+  pending: "#F59E0B",
+  pendingBg: "#FEF3C7",
+  urgent: "#EF4444",
+  urgentBg: "#FEE2E2",
+  flight: "#3B82F6",
+  flightBg: "#DBEAFE",
+  hotel: "#8B5CF6",
+  hotelBg: "#EDE9FE",
+  transport: "#F97316",
+  transportBg: "#FFEDD5"
 };
 var STORAGE_KEY = "TRIP_PLANNER_DATA";
 var generateId = () => Math.random().toString(36).substr(2, 9);
@@ -24848,6 +24859,25 @@ var getLegColor = (type) => {
       return { main: COLORS.transport, bg: COLORS.transportBg };
   }
 };
+var getStatusColor = (status) => {
+  switch (status) {
+    case "booked":
+      return { main: COLORS.booked, bg: COLORS.bookedBg };
+    case "pending":
+      return { main: COLORS.pending, bg: COLORS.pendingBg };
+    case "urgent":
+      return { main: COLORS.urgent, bg: COLORS.urgentBg };
+  }
+};
+var StatusIcon = ({ status }) => {
+  const colors = getStatusColor(status);
+  const icons = {
+    booked: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { size: 18 }),
+    pending: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Circle, { size: 18 }),
+    urgent: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { size: 18 })
+  };
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: colors.main }, title: status, children: icons[status] });
+};
 var AddDetailsButton = ({ onClick }) => {
   return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
     "button",
@@ -24877,114 +24907,160 @@ var TripLegCard = ({ leg, onUpdate, onDelete, isExpanded, onToggleExpand }) => {
   const [isEditing, setIsEditing] = (0, import_react3.useState)(false);
   const [editData, setEditData] = (0, import_react3.useState)(leg);
   const legColors = getLegColor(leg.type);
+  const cycleStatus = () => {
+    const order = ["pending", "booked", "urgent"];
+    const next = order[(order.indexOf(leg.status) + 1) % order.length];
+    onUpdate({ status: next });
+  };
   if (isEditing) {
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: "#FFFFFF", borderRadius: 20, padding: 20, marginBottom: 16, boxShadow: "0 4px 20px rgba(0,0,0,0.06)" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 20, alignItems: "center" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontWeight: 700, fontSize: 17, color: COLORS.textMain }, children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: COLORS.card, borderRadius: 16, border: `2px solid ${legColors.main}`, padding: 20, marginBottom: 12 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 16 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontWeight: 700, fontSize: 16 }, children: [
           "Edit ",
           leg.type
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 10 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => {
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 8 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { onClick: () => {
             onUpdate(editData);
             setIsEditing(false);
-          }, style: { padding: "10px 20px", borderRadius: 14, border: "none", backgroundColor: COLORS.primary, color: "white", fontWeight: 600, cursor: "pointer", fontSize: 14 }, children: "Save" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => setIsEditing(false), style: { padding: "10px 20px", borderRadius: 14, border: `1px solid ${COLORS.border}`, backgroundColor: "transparent", cursor: "pointer", fontSize: 14, color: COLORS.textSecondary }, children: "Cancel" })
+          }, style: { padding: "8px 16px", borderRadius: 8, border: "none", backgroundColor: COLORS.primary, color: "white", fontWeight: 600, cursor: "pointer" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Save, { size: 16 }),
+            " Save"
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => setIsEditing(false), style: { padding: "8px 16px", borderRadius: 8, border: `1px solid ${COLORS.border}`, backgroundColor: "white", cursor: "pointer" }, children: "Cancel" })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: editData.title, onChange: (e) => setEditData({ ...editData, title: e.target.value }), placeholder: "Title", style: { padding: "14px 16px", borderRadius: 14, border: "none", backgroundColor: COLORS.bg, fontSize: 15, gridColumn: "1 / -1", fontWeight: 500 } }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "date", value: editData.date, onChange: (e) => setEditData({ ...editData, date: e.target.value }), style: { padding: "14px 16px", borderRadius: 14, border: "none", backgroundColor: COLORS.bg, fontSize: 15 } }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "time", value: editData.time || "", onChange: (e) => setEditData({ ...editData, time: e.target.value }), style: { padding: "14px 16px", borderRadius: 14, border: "none", backgroundColor: COLORS.bg, fontSize: 15 } }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: editData.from || "", onChange: (e) => setEditData({ ...editData, from: e.target.value }), placeholder: "From", style: { padding: "14px 16px", borderRadius: 14, border: "none", backgroundColor: COLORS.bg, fontSize: 15 } }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: editData.to || "", onChange: (e) => setEditData({ ...editData, to: e.target.value }), placeholder: "To", style: { padding: "14px 16px", borderRadius: 14, border: "none", backgroundColor: COLORS.bg, fontSize: 15 } }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: editData.confirmationNumber || "", onChange: (e) => setEditData({ ...editData, confirmationNumber: e.target.value }), placeholder: "Confirmation #", style: { padding: "14px 16px", borderRadius: 14, border: "none", backgroundColor: COLORS.bg, fontSize: 15, gridColumn: "1 / -1" } })
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: editData.title, onChange: (e) => setEditData({ ...editData, title: e.target.value }), placeholder: "Title", style: { padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, gridColumn: "1 / -1" } }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "date", value: editData.date, onChange: (e) => setEditData({ ...editData, date: e.target.value }), style: { padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}` } }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "time", value: editData.time || "", onChange: (e) => setEditData({ ...editData, time: e.target.value }), style: { padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}` } }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: editData.from || "", onChange: (e) => setEditData({ ...editData, from: e.target.value }), placeholder: "From", style: { padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}` } }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: editData.to || "", onChange: (e) => setEditData({ ...editData, to: e.target.value }), placeholder: "To", style: { padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}` } }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: editData.confirmationNumber || "", onChange: (e) => setEditData({ ...editData, confirmationNumber: e.target.value }), placeholder: "Confirmation #", style: { padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, gridColumn: "1 / -1" } })
       ] })
     ] });
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 20,
-    marginBottom: 16,
-    boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
-    border: "1px solid rgba(0,0,0,0.03)",
-    transition: "all 0.2s ease",
-    overflow: "hidden"
-  }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { onClick: onToggleExpand, style: { padding: "20px", display: "flex", alignItems: "center", gap: 18, cursor: "pointer" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
-        width: 52,
-        height: 52,
-        borderRadius: 16,
-        backgroundColor: legColors.bg,
-        color: legColors.main,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexShrink: 0
-      }, children: getLegIcon(leg.type, 26) }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, minWidth: 0 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontWeight: 700, fontSize: 17, color: COLORS.textMain, marginBottom: 6, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }, children: leg.title }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }, children: [
-          leg.time && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { display: "flex", alignItems: "center", gap: 6, fontSize: 14, color: COLORS.textSecondary, fontWeight: 500 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { size: 16 }),
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: COLORS.card, borderRadius: 16, border: `1px solid ${leg.status === "booked" ? COLORS.booked : COLORS.border}`, borderLeft: `4px solid ${legColors.main}`, marginBottom: 12 }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { onClick: onToggleExpand, style: { padding: "16px 20px", display: "flex", alignItems: "center", gap: 16, cursor: "pointer" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 44, height: 44, borderRadius: 12, backgroundColor: legColors.bg, color: legColors.main, display: "flex", alignItems: "center", justifyContent: "center" }, children: getLegIcon(leg.type, 22) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontWeight: 700, fontSize: 15, color: COLORS.textMain, marginBottom: 4 }, children: leg.title }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }, children: [
+          leg.date && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { display: "flex", alignItems: "center", gap: 4, fontSize: 13, color: COLORS.textSecondary }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { size: 14 }),
+            formatDate(leg.date)
+          ] }),
+          leg.time && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { display: "flex", alignItems: "center", gap: 4, fontSize: 13, color: COLORS.textSecondary }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { size: 14 }),
             leg.time
           ] }),
-          leg.flightNumber && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 12, padding: "4px 10px", borderRadius: 8, backgroundColor: legColors.bg, color: legColors.main, fontWeight: 600 }, children: leg.flightNumber })
+          leg.flightNumber && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, color: legColors.main, fontWeight: 600 }, children: leg.flightNumber })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", alignItems: "center", gap: 14 }, children: leg.status === "booked" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 36, height: 36, borderRadius: "50%", backgroundColor: COLORS.bookedBg, color: COLORS.booked, display: "flex", alignItems: "center", justifyContent: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { size: 20 }) }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AddDetailsButton, { onClick: () => setIsEditing(true) }) })
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StatusIcon, { status: leg.status }),
+      leg.status === "pending" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AddDetailsButton, { onClick: () => setIsEditing(true) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: COLORS.textSecondary }, children: isExpanded ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronUp, { size: 20 }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronDown, { size: 20 }) })
     ] }),
-    isExpanded && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "0 20px 20px", borderTop: `1px dashed ${COLORS.borderLight}`, paddingTop: 20 }, children: [
+    isExpanded && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "0 20px 16px", borderTop: `1px solid ${COLORS.borderLight}`, paddingTop: 16 }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }, children: [
         leg.from && leg.to && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 12, fontWeight: 700, color: COLORS.textMuted, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Route" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 15, fontWeight: 600, color: COLORS.textMain, display: "flex", alignItems: "center", gap: 10 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 11, fontWeight: 600, color: COLORS.textMuted, marginBottom: 4, textTransform: "uppercase" }, children: "Route" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 14, display: "flex", alignItems: "center", gap: 8 }, children: [
             leg.from,
             " ",
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { size: 16, color: COLORS.textMuted }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { size: 14 }),
             " ",
             leg.to
           ] })
         ] }),
         leg.location && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 12, fontWeight: 700, color: COLORS.textMuted, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Location" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 15, fontWeight: 600, color: COLORS.textMain }, children: leg.location })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 11, fontWeight: 600, color: COLORS.textMuted, marginBottom: 4, textTransform: "uppercase" }, children: "Location" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 14 }, children: leg.location })
         ] }),
         leg.confirmationNumber && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 12, fontWeight: 700, color: COLORS.textMuted, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.5px" }, children: "Confirmation #" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 15, fontFamily: "monospace", fontWeight: 600, color: COLORS.textMain, backgroundColor: COLORS.bg, padding: "4px 8px", borderRadius: 6, display: "inline-block" }, children: leg.confirmationNumber })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 11, fontWeight: 600, color: COLORS.textMuted, marginBottom: 4, textTransform: "uppercase" }, children: "Confirmation #" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 14, fontFamily: "monospace", fontWeight: 600 }, children: leg.confirmationNumber })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 10, marginTop: 24 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 8, marginTop: 16 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { onClick: (e) => {
           e.stopPropagation();
           setIsEditing(true);
-        }, style: { padding: "10px 20px", borderRadius: 14, border: "none", backgroundColor: COLORS.bg, color: COLORS.textMain, fontSize: 14, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PenLine, { size: 16 }),
+        }, style: { padding: "8px 14px", borderRadius: 8, border: `1px solid ${COLORS.border}`, backgroundColor: "white", fontSize: 13, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PenLine, { size: 14 }),
           " Edit"
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { onClick: (e) => {
           e.stopPropagation();
           onDelete();
-        }, style: { padding: "10px 20px", borderRadius: 14, border: "none", backgroundColor: COLORS.urgentBg, color: COLORS.urgent, fontSize: 14, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { size: 16 }),
+        }, style: { padding: "8px 14px", borderRadius: 8, border: `1px solid ${COLORS.urgent}`, backgroundColor: "white", color: COLORS.urgent, fontSize: 13, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { size: 14 }),
           " Delete"
         ] })
       ] })
     ] })
   ] });
 };
-var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, expandedLegs, toggleLegExpand, departureDate, returnDate }) => {
-  const [collapsedDays, setCollapsedDays] = (0, import_react3.useState)(/* @__PURE__ */ new Set());
-  const toggleDayCollapse = (date) => {
-    setCollapsedDays((prev) => {
-      const next = new Set(prev);
-      if (next.has(date)) next.delete(date);
-      else next.add(date);
-      return next;
-    });
+var CategoryIcon = ({
+  type,
+  hasItem,
+  isBooked,
+  isExpanded,
+  onClick,
+  label
+}) => {
+  const config = {
+    flight: { icon: Plane, color: COLORS.flight, bg: COLORS.flightBg, name: "Flight" },
+    hotel: { icon: Hotel, color: COLORS.hotel, bg: COLORS.hotelBg, name: "Hotel" },
+    transport: { icon: Car, color: COLORS.transport, bg: COLORS.transportBg, name: "Transport" },
+    activity: { icon: MapPin, color: "#EC4899", bg: "#FCE7F3", name: "Activity" }
   };
+  const { icon: Icon2, color, bg, name } = config[type];
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+    "div",
+    {
+      onClick,
+      style: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 4,
+        cursor: hasItem ? "pointer" : "default",
+        opacity: hasItem ? 1 : 0.3
+      },
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+          width: 44,
+          height: 44,
+          borderRadius: 12,
+          backgroundColor: hasItem ? bg : COLORS.borderLight,
+          border: isExpanded ? `2px solid ${color}` : `1px solid ${hasItem ? color : COLORS.border}`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "relative"
+        }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon2, { size: 20, color: hasItem ? color : COLORS.textMuted }),
+          hasItem && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
+            position: "absolute",
+            top: -4,
+            right: -4,
+            width: 16,
+            height: 16,
+            borderRadius: "50%",
+            backgroundColor: isBooked ? COLORS.booked : COLORS.pending,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
+          }, children: isBooked ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { size: 10, color: "white" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Circle, { size: 8, color: "white" }) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 10, color: hasItem ? COLORS.textMain : COLORS.textMuted, fontWeight: 500 }, children: label || name })
+      ]
+    }
+  );
+};
+var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, expandedLegs, toggleLegExpand, departureDate, returnDate }) => {
+  const [expandedCategory, setExpandedCategory] = (0, import_react3.useState)({});
   const allDays = (0, import_react3.useMemo)(() => {
     const days = [];
     if (departureDate) {
@@ -25002,7 +25078,7 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, expandedLegs, toggleLegExp
     const groups = {};
     const noDateLegs = [];
     allDays.forEach((day) => {
-      groups[day] = [];
+      groups[day] = { flights: [], hotels: [], transport: [], activities: [] };
     });
     legs.forEach((leg) => {
       if (leg.type === "hotel" && leg.date) {
@@ -25012,130 +25088,145 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, expandedLegs, toggleLegExp
         let isFirst = true;
         while (current < checkOut) {
           const dateStr = current.toISOString().split("T")[0];
-          if (!groups[dateStr]) groups[dateStr] = [];
-          groups[dateStr].push({ leg, isHotelContinuation: !isFirst });
+          if (groups[dateStr]) {
+            groups[dateStr].hotels.push({ leg, isContinuation: !isFirst });
+          }
           current.setDate(current.getDate() + 1);
           isFirst = false;
         }
-      } else if (leg.date) {
-        if (!groups[leg.date]) groups[leg.date] = [];
-        groups[leg.date].push({ leg });
-      } else {
+      } else if (leg.date && groups[leg.date]) {
+        if (leg.type === "flight") groups[leg.date].flights.push(leg);
+        else if (["car", "train", "bus", "ferry"].includes(leg.type)) groups[leg.date].transport.push(leg);
+        else groups[leg.date].activities.push(leg);
+      } else if (!leg.date) {
         noDateLegs.push(leg);
       }
     });
-    const sortedDates = allDays.length > 0 ? allDays : Object.keys(groups).sort();
-    return { groups, sortedDates, noDateLegs };
+    return { groups, sortedDates: allDays, noDateLegs };
   }, [legs, allDays]);
   const formatDayHeader = (dateStr, dayNum) => {
     try {
       const date = /* @__PURE__ */ new Date(dateStr + "T00:00:00");
-      return {
-        day: `Day ${dayNum}`,
-        date: date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })
-      };
+      return `Day ${dayNum} \xB7 ${date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}`;
     } catch {
-      return { day: `Day ${dayNum}`, date: "" };
+      return `Day ${dayNum}`;
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 24 }, children: [
+  const toggleCategory = (date, category) => {
+    setExpandedCategory((prev) => ({
+      ...prev,
+      [date]: prev[date] === category ? null : category
+    }));
+  };
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
     legsByDate.sortedDates.map((date, idx) => {
-      const dayItems = legsByDate.groups[date] || [];
-      const isCollapsed = collapsedDays.has(date);
-      const hasItems = dayItems.length > 0;
-      const headerInfo = formatDayHeader(date, idx + 1);
-      return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { position: "relative" }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-          "div",
-          {
-            onClick: () => toggleDayCollapse(date),
-            style: {
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "16px 4px 12px",
-              marginBottom: 12,
-              cursor: "pointer",
-              position: "sticky",
-              top: 0,
-              backgroundColor: COLORS.bg,
-              zIndex: 10,
-              borderBottom: isCollapsed ? "none" : `1px solid ${COLORS.borderLight}`
-            },
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "baseline", gap: 12 }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, fontWeight: 700, color: COLORS.textSecondary, textTransform: "uppercase", letterSpacing: "1px" }, children: headerInfo.day }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 16, fontWeight: 700, color: COLORS.textMain }, children: headerInfo.date })
-              ] }),
-              hasItems && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: COLORS.textMuted }, children: isCollapsed ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronDown, { size: 18 }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronUp, { size: 18 }) })
-            ]
-          }
-        ),
-        !isCollapsed && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 12 }, children: hasItems ? dayItems.map(({ leg, isHotelContinuation }) => isHotelContinuation ? (
-          // Minimalist hotel continuation
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+      const dayData = legsByDate.groups[date];
+      const expanded = expandedCategory[date];
+      const flightBooked = dayData.flights.some((f) => f.status === "booked");
+      const hotelBooked = dayData.hotels.some((h) => h.leg.status === "booked");
+      const transportBooked = dayData.transport.some((t) => t.status === "booked");
+      const activityBooked = dayData.activities.some((a) => a.status === "booked");
+      const hasAny = dayData.flights.length > 0 || dayData.hotels.length > 0 || dayData.transport.length > 0 || dayData.activities.length > 0;
+      const allBooked = hasAny && (dayData.flights.length === 0 || flightBooked) && (dayData.hotels.length === 0 || hotelBooked) && (dayData.transport.length === 0 || transportBooked) && (dayData.activities.length === 0 || activityBooked);
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+        marginBottom: 12,
+        backgroundColor: COLORS.card,
+        borderRadius: 12,
+        border: `1px solid ${allBooked ? COLORS.booked : COLORS.border}`,
+        overflow: "hidden"
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          padding: "10px 14px",
+          backgroundColor: allBooked ? COLORS.bookedBg : COLORS.borderLight,
+          borderBottom: `1px solid ${COLORS.border}`
+        }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
+            width: 28,
+            height: 28,
+            borderRadius: "50%",
+            backgroundColor: allBooked ? COLORS.booked : hasAny ? COLORS.pending : COLORS.textMuted,
+            color: "white",
             display: "flex",
             alignItems: "center",
-            gap: 12,
-            padding: "12px 16px",
-            backgroundColor: "rgba(255, 255, 255, 0.6)",
-            borderRadius: 16,
-            border: "1px dashed #E5E5EA",
-            color: COLORS.textSecondary,
-            fontSize: 13
-          }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Hotel, { size: 16, color: COLORS.hotel }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontWeight: 500 }, children: [
-              "Continuing stay at ",
-              leg.hotelName || leg.location || "Hotel"
-            ] })
-          ] }, `${leg.id}-${date}`)
-        ) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          TripLegCard,
-          {
-            leg,
-            onUpdate: (u) => onUpdateLeg(leg.id, u),
-            onDelete: () => onDeleteLeg(leg.id),
-            isExpanded: expandedLegs.has(leg.id),
-            onToggleExpand: () => toggleLegExpand(leg.id)
-          },
-          leg.id
-        )) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
-          padding: "24px",
-          borderRadius: 16,
-          border: "2px dashed #E5E5EA",
+            justifyContent: "center",
+            fontWeight: 700,
+            fontSize: 12
+          }, children: idx + 1 }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontWeight: 600, fontSize: 14, color: COLORS.textMain }, children: formatDayHeader(date, idx + 1) }),
+          allBooked && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { size: 18, color: COLORS.booked, style: { marginLeft: "auto" } })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
           display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 8,
-          color: COLORS.textMuted
+          justifyContent: "space-around",
+          padding: "12px 8px",
+          borderBottom: expanded ? `1px solid ${COLORS.border}` : "none"
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 14, fontWeight: 500 }, children: "Nothing planned yet" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { style: {
-            color: COLORS.primary,
-            background: "none",
-            border: "none",
-            fontSize: 13,
-            fontWeight: 600,
-            cursor: "pointer",
-            padding: "4px 8px"
-          }, children: "+ Add activity" })
-        ] }) })
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+            CategoryIcon,
+            {
+              type: "flight",
+              hasItem: dayData.flights.length > 0,
+              isBooked: flightBooked,
+              isExpanded: expanded === "flight",
+              onClick: () => dayData.flights.length > 0 && toggleCategory(date, "flight")
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+            CategoryIcon,
+            {
+              type: "hotel",
+              hasItem: dayData.hotels.length > 0,
+              isBooked: hotelBooked,
+              isExpanded: expanded === "hotel",
+              onClick: () => dayData.hotels.length > 0 && toggleCategory(date, "hotel"),
+              label: dayData.hotels.some((h) => h.isContinuation) ? "Staying" : "Hotel"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+            CategoryIcon,
+            {
+              type: "transport",
+              hasItem: dayData.transport.length > 0,
+              isBooked: transportBooked,
+              isExpanded: expanded === "transport",
+              onClick: () => dayData.transport.length > 0 && toggleCategory(date, "transport")
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+            CategoryIcon,
+            {
+              type: "activity",
+              hasItem: dayData.activities.length > 0,
+              isBooked: activityBooked,
+              isExpanded: expanded === "activity",
+              onClick: () => dayData.activities.length > 0 && toggleCategory(date, "activity")
+            }
+          )
+        ] }),
+        expanded && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "8px 12px" }, children: [
+          expanded === "flight" && dayData.flights.map((leg) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TripLegCard, { leg, onUpdate: (u) => onUpdateLeg(leg.id, u), onDelete: () => onDeleteLeg(leg.id), isExpanded: expandedLegs.has(leg.id), onToggleExpand: () => toggleLegExpand(leg.id) }, leg.id)),
+          expanded === "hotel" && dayData.hotels.map(({ leg, isContinuation }) => isContinuation ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "10px 14px", backgroundColor: COLORS.hotelBg, borderRadius: 10, display: "flex", alignItems: "center", gap: 10 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Hotel, { size: 18, color: COLORS.hotel }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 13, color: COLORS.hotel, fontWeight: 500 }, children: [
+              "Staying at ",
+              leg.hotelName || leg.location || "hotel"
+            ] }),
+            leg.status === "booked" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { size: 14, color: COLORS.booked, style: { marginLeft: "auto" } })
+          ] }, `${leg.id}-${date}`) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TripLegCard, { leg, onUpdate: (u) => onUpdateLeg(leg.id, u), onDelete: () => onDeleteLeg(leg.id), isExpanded: expandedLegs.has(leg.id), onToggleExpand: () => toggleLegExpand(leg.id) }, leg.id)),
+          expanded === "transport" && dayData.transport.map((leg) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TripLegCard, { leg, onUpdate: (u) => onUpdateLeg(leg.id, u), onDelete: () => onDeleteLeg(leg.id), isExpanded: expandedLegs.has(leg.id), onToggleExpand: () => toggleLegExpand(leg.id) }, leg.id)),
+          expanded === "activity" && dayData.activities.map((leg) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TripLegCard, { leg, onUpdate: (u) => onUpdateLeg(leg.id, u), onDelete: () => onDeleteLeg(leg.id), isExpanded: expandedLegs.has(leg.id), onToggleExpand: () => toggleLegExpand(leg.id) }, leg.id))
+        ] })
       ] }, date);
     }),
-    legsByDate.noDateLegs.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginTop: 24 }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { style: { fontSize: 16, fontWeight: 700, color: COLORS.textMain, marginBottom: 16 }, children: "Unscheduled Items" }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 12 }, children: legsByDate.noDateLegs.map((leg) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-        TripLegCard,
-        {
-          leg,
-          onUpdate: (u) => onUpdateLeg(leg.id, u),
-          onDelete: () => onDeleteLeg(leg.id),
-          isExpanded: expandedLegs.has(leg.id),
-          onToggleExpand: () => toggleLegExpand(leg.id)
-        },
-        leg.id
-      )) })
+    legsByDate.noDateLegs.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 12, backgroundColor: COLORS.card, borderRadius: 12, border: `1px solid ${COLORS.border}`, overflow: "hidden" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "10px 14px", backgroundColor: COLORS.borderLight, borderBottom: `1px solid ${COLORS.border}`, display: "flex", alignItems: "center", gap: 10 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { size: 18, color: COLORS.textMuted }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontWeight: 600, fontSize: 14, color: COLORS.textSecondary }, children: "No Date Set" })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "8px 12px" }, children: legsByDate.noDateLegs.map((leg) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TripLegCard, { leg, onUpdate: (u) => onUpdateLeg(leg.id, u), onDelete: () => onDeleteLeg(leg.id), isExpanded: expandedLegs.has(leg.id), onToggleExpand: () => toggleLegExpand(leg.id) }, leg.id)) })
     ] })
   ] });
 };
@@ -25567,18 +25658,17 @@ function TripPlanner({ initialData: initialData2 }) {
       (() => {
         const datesComplete = trip.departureDate && (trip.tripType === "one_way" || trip.returnDate);
         return datesComplete ? (
-          // Collapsed view - pill-shaped modern summary
+          // Collapsed view - just show summary
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
             "div",
             {
               onClick: () => setTrip((t) => ({ ...t, departureDate: void 0, returnDate: void 0, updatedAt: Date.now() })),
               style: {
-                backgroundColor: "#FFFFFF",
-                borderRadius: 24,
-                padding: "16px 20px",
-                marginBottom: 20,
-                boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
-                border: "1px solid rgba(0,0,0,0.02)",
+                backgroundColor: COLORS.card,
+                borderRadius: 12,
+                padding: "12px 16px",
+                marginBottom: 16,
+                border: `1px solid ${COLORS.border}`,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
@@ -25586,37 +25676,37 @@ function TripPlanner({ initialData: initialData2 }) {
               },
               children: [
                 /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 16 }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8 }, children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 32, height: 32, borderRadius: "50%", backgroundColor: COLORS.primary, display: "flex", alignItems: "center", justifyContent: "center", color: "white" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { size: 16 }) }),
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 15, fontWeight: 700, color: COLORS.textMain }, children: formatDate(trip.departureDate) })
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 6 }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { size: 16, color: COLORS.primary }),
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, fontWeight: 600, color: COLORS.textMain }, children: formatDate(trip.departureDate) })
                   ] }),
                   trip.tripType !== "one_way" && trip.returnDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { size: 16, color: COLORS.textMuted }),
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 15, fontWeight: 700, color: COLORS.textMain }, children: formatDate(trip.returnDate) })
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { size: 14, color: COLORS.textMuted }),
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, fontWeight: 600, color: COLORS.textMain }, children: formatDate(trip.returnDate) })
                   ] }),
                   /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: {
-                    fontSize: 12,
-                    padding: "4px 10px",
-                    borderRadius: 12,
+                    fontSize: 11,
+                    padding: "2px 8px",
+                    borderRadius: 4,
                     backgroundColor: COLORS.accentLight,
                     color: COLORS.primaryDark,
-                    fontWeight: 700
+                    fontWeight: 600
                   }, children: trip.tripType === "one_way" ? "One Way" : trip.tripType === "round_trip" ? "Round Trip" : "Multi-City" })
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 32, height: 32, borderRadius: "50%", backgroundColor: COLORS.bg, display: "flex", alignItems: "center", justifyContent: "center", color: COLORS.textSecondary }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PenLine, { size: 16 }) })
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PenLine, { size: 16, color: COLORS.textSecondary })
               ]
             }
           )
         ) : (
-          // Expanded view - modern form with pill inputs
+          // Expanded view - full form
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
-            backgroundColor: "#FFFFFF",
-            borderRadius: 24,
-            padding: 24,
-            marginBottom: 20,
-            boxShadow: "0 4px 20px rgba(0,0,0,0.06)"
+            backgroundColor: COLORS.card,
+            borderRadius: 16,
+            padding: 16,
+            marginBottom: 16,
+            border: `1px solid ${COLORS.border}`
           }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 8, marginBottom: 20, backgroundColor: COLORS.bg, padding: 4, borderRadius: 16 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 8, marginBottom: 16 }, children: [
               { value: "one_way", label: "One Way" },
               { value: "round_trip", label: "Round Trip" },
               { value: "multi_city", label: "Multi-City" }
@@ -25627,24 +25717,22 @@ function TripPlanner({ initialData: initialData2 }) {
                 style: {
                   flex: 1,
                   padding: "10px 12px",
-                  borderRadius: 12,
-                  border: "none",
-                  backgroundColor: trip.tripType === opt.value ? "#FFFFFF" : "transparent",
-                  color: trip.tripType === opt.value ? COLORS.textMain : COLORS.textSecondary,
-                  fontWeight: 700,
-                  fontSize: 14,
-                  cursor: "pointer",
-                  boxShadow: trip.tripType === opt.value ? "0 2px 8px rgba(0,0,0,0.08)" : "none",
-                  transition: "all 0.2s"
+                  borderRadius: 10,
+                  border: trip.tripType === opt.value ? `2px solid ${COLORS.primary}` : `1px solid ${COLORS.border}`,
+                  backgroundColor: trip.tripType === opt.value ? COLORS.accentLight : "white",
+                  color: trip.tripType === opt.value ? COLORS.primaryDark : COLORS.textSecondary,
+                  fontWeight: 600,
+                  fontSize: 13,
+                  cursor: "pointer"
                 },
                 children: opt.label
               },
               opt.value
             )) }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: trip.tripType === "one_way" ? "1fr" : "1fr 1fr", gap: 16 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: trip.tripType === "one_way" ? "1fr" : "1fr 1fr", gap: 12 }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", { style: { display: "block", fontSize: 13, fontWeight: 700, color: COLORS.textSecondary, marginBottom: 8, marginLeft: 4 }, children: "Departure Date" }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { position: "relative" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", { style: { display: "block", fontSize: 12, fontWeight: 600, color: COLORS.textSecondary, marginBottom: 6 }, children: "Departure Date" }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
                   "input",
                   {
                     type: "date",
@@ -25676,7 +25764,7 @@ function TripPlanner({ initialData: initialData2 }) {
                       boxSizing: "border-box"
                     }
                   }
-                ) })
+                )
               ] }),
               trip.tripType !== "one_way" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", { style: { display: "block", fontSize: 12, fontWeight: 600, color: COLORS.textSecondary, marginBottom: 6 }, children: "Return Date" }),
@@ -26070,6 +26158,14 @@ lucide-react/dist/esm/icons/circle-check.js:
    * See the LICENSE file in the root directory of this source tree.
    *)
 
+lucide-react/dist/esm/icons/circle.js:
+  (**
+   * @license lucide-react v0.554.0 - ISC
+   *
+   * This source code is licensed under the ISC license.
+   * See the LICENSE file in the root directory of this source tree.
+   *)
+
 lucide-react/dist/esm/icons/clock.js:
   (**
    * @license lucide-react v0.554.0 - ISC
@@ -26127,6 +26223,14 @@ lucide-react/dist/esm/icons/plus.js:
    *)
 
 lucide-react/dist/esm/icons/rotate-ccw.js:
+  (**
+   * @license lucide-react v0.554.0 - ISC
+   *
+   * This source code is licensed under the ISC license.
+   * See the LICENSE file in the root directory of this source tree.
+   *)
+
+lucide-react/dist/esm/icons/save.js:
   (**
    * @license lucide-react v0.554.0 - ISC
    *

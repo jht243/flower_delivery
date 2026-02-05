@@ -21,28 +21,29 @@ if (typeof document !== 'undefined') {
 }
 
 const COLORS = {
-  primary: "#FF6B00", // Bright orange accent from design
-  primaryDark: "#E65100",
-  bg: "#F2F2F7", // Light gray background
+  primary: "#56C596",
+  primaryDark: "#3aa87b",
+  bg: "#FAFAFA",
   card: "#FFFFFF",
-  textMain: "#1C1C1E", // Dark text
-  textSecondary: "#8E8E93",
-  textMuted: "#AEAEB2",
-  border: "#E5E5EA",
-  borderLight: "#F2F2F7",
-  flight: "#007AFF", // System blue
-  flightBg: "#E5F1FF",
-  hotel: "#AF52DE", // System purple
-  hotelBg: "#F5E6FF",
-  transport: "#FF9500", // System orange
-  transportBg: "#FFF1CC",
-  booked: "#34C759", // System green
-  bookedBg: "#E0F8E5",
-  pending: "#FF9500",
-  pendingBg: "#FFF1CC",
-  urgent: "#FF3B30",
-  urgentBg: "#FFE5E5",
-  accentLight: "#FFF1E5" // Very light orange for backgrounds
+  textMain: "#1A1A1A",
+  textSecondary: "#6B7280",
+  textMuted: "#9CA3AF",
+  border: "#E5E7EB",
+  borderLight: "#F3F4F6",
+  inputBg: "#F9FAFB",
+  accentLight: "#E6F7F0",
+  booked: "#10B981",
+  bookedBg: "#D1FAE5",
+  pending: "#F59E0B",
+  pendingBg: "#FEF3C7",
+  urgent: "#EF4444",
+  urgentBg: "#FEE2E2",
+  flight: "#3B82F6",
+  flightBg: "#DBEAFE",
+  hotel: "#8B5CF6",
+  hotelBg: "#EDE9FE",
+  transport: "#F97316",
+  transportBg: "#FFEDD5",
 };
 
 type BookingStatus = "booked" | "pending" | "urgent";
@@ -319,97 +320,60 @@ const TripLegCard = ({ leg, onUpdate, onDelete, isExpanded, onToggleExpand }: { 
   const [editData, setEditData] = useState(leg);
   const legColors = getLegColor(leg.type);
 
+  const cycleStatus = () => {
+    const order: BookingStatus[] = ["pending", "booked", "urgent"];
+    const next = order[(order.indexOf(leg.status) + 1) % order.length];
+    onUpdate({ status: next });
+  };
+
   if (isEditing) {
     return (
-      <div style={{ backgroundColor: "#FFFFFF", borderRadius: 20, padding: 20, marginBottom: 16, boxShadow: "0 4px 20px rgba(0,0,0,0.06)" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 20, alignItems: "center" }}>
-          <span style={{ fontWeight: 700, fontSize: 17, color: COLORS.textMain }}>Edit {leg.type}</span>
-          <div style={{ display: "flex", gap: 10 }}>
-            <button onClick={() => { onUpdate(editData); setIsEditing(false); }} style={{ padding: "10px 20px", borderRadius: 14, border: "none", backgroundColor: COLORS.primary, color: "white", fontWeight: 600, cursor: "pointer", fontSize: 14 }}>Save</button>
-            <button onClick={() => setIsEditing(false)} style={{ padding: "10px 20px", borderRadius: 14, border: `1px solid ${COLORS.border}`, backgroundColor: "transparent", cursor: "pointer", fontSize: 14, color: COLORS.textSecondary }}>Cancel</button>
+      <div style={{ backgroundColor: COLORS.card, borderRadius: 16, border: `2px solid ${legColors.main}`, padding: 20, marginBottom: 12 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
+          <span style={{ fontWeight: 700, fontSize: 16 }}>Edit {leg.type}</span>
+          <div style={{ display: "flex", gap: 8 }}>
+            <button onClick={() => { onUpdate(editData); setIsEditing(false); }} style={{ padding: "8px 16px", borderRadius: 8, border: "none", backgroundColor: COLORS.primary, color: "white", fontWeight: 600, cursor: "pointer" }}><Save size={16} /> Save</button>
+            <button onClick={() => setIsEditing(false)} style={{ padding: "8px 16px", borderRadius: 8, border: `1px solid ${COLORS.border}`, backgroundColor: "white", cursor: "pointer" }}>Cancel</button>
           </div>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-          <input value={editData.title} onChange={e => setEditData({ ...editData, title: e.target.value })} placeholder="Title" style={{ padding: "14px 16px", borderRadius: 14, border: "none", backgroundColor: COLORS.bg, fontSize: 15, gridColumn: "1 / -1", fontWeight: 500 }} />
-          <input type="date" value={editData.date} onChange={e => setEditData({ ...editData, date: e.target.value })} style={{ padding: "14px 16px", borderRadius: 14, border: "none", backgroundColor: COLORS.bg, fontSize: 15 }} />
-          <input type="time" value={editData.time || ""} onChange={e => setEditData({ ...editData, time: e.target.value })} style={{ padding: "14px 16px", borderRadius: 14, border: "none", backgroundColor: COLORS.bg, fontSize: 15 }} />
-          <input value={editData.from || ""} onChange={e => setEditData({ ...editData, from: e.target.value })} placeholder="From" style={{ padding: "14px 16px", borderRadius: 14, border: "none", backgroundColor: COLORS.bg, fontSize: 15 }} />
-          <input value={editData.to || ""} onChange={e => setEditData({ ...editData, to: e.target.value })} placeholder="To" style={{ padding: "14px 16px", borderRadius: 14, border: "none", backgroundColor: COLORS.bg, fontSize: 15 }} />
-          <input value={editData.confirmationNumber || ""} onChange={e => setEditData({ ...editData, confirmationNumber: e.target.value })} placeholder="Confirmation #" style={{ padding: "14px 16px", borderRadius: 14, border: "none", backgroundColor: COLORS.bg, fontSize: 15, gridColumn: "1 / -1" }} />
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <input value={editData.title} onChange={e => setEditData({ ...editData, title: e.target.value })} placeholder="Title" style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, gridColumn: "1 / -1" }} />
+          <input type="date" value={editData.date} onChange={e => setEditData({ ...editData, date: e.target.value })} style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}` }} />
+          <input type="time" value={editData.time || ""} onChange={e => setEditData({ ...editData, time: e.target.value })} style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}` }} />
+          <input value={editData.from || ""} onChange={e => setEditData({ ...editData, from: e.target.value })} placeholder="From" style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}` }} />
+          <input value={editData.to || ""} onChange={e => setEditData({ ...editData, to: e.target.value })} placeholder="To" style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}` }} />
+          <input value={editData.confirmationNumber || ""} onChange={e => setEditData({ ...editData, confirmationNumber: e.target.value })} placeholder="Confirmation #" style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, gridColumn: "1 / -1" }} />
         </div>
       </div>
     );
   }
 
   return (
-    <div style={{ 
-      backgroundColor: "#FFFFFF", 
-      borderRadius: 20, 
-      marginBottom: 16, 
-      boxShadow: "0 2px 12px rgba(0,0,0,0.04)", 
-      border: "1px solid rgba(0,0,0,0.03)",
-      transition: "all 0.2s ease",
-      overflow: "hidden"
-    }}>
-      <div onClick={onToggleExpand} style={{ padding: "20px", display: "flex", alignItems: "center", gap: 18, cursor: "pointer" }}>
-        {/* Icon Box */}
-        <div style={{ 
-          width: 52, height: 52, borderRadius: 16, 
-          backgroundColor: legColors.bg, color: legColors.main, 
-          display: "flex", alignItems: "center", justifyContent: "center",
-          flexShrink: 0
-        }}>
-          {getLegIcon(leg.type, 26)}
-        </div>
-        
-        {/* Content */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontWeight: 700, fontSize: 17, color: COLORS.textMain, marginBottom: 6, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-            {leg.title}
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
-            {leg.time && <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 14, color: COLORS.textSecondary, fontWeight: 500 }}><Clock size={16} />{leg.time}</span>}
-            {leg.flightNumber && <span style={{ fontSize: 12, padding: "4px 10px", borderRadius: 8, backgroundColor: legColors.bg, color: legColors.main, fontWeight: 600 }}>{leg.flightNumber}</span>}
+    <div style={{ backgroundColor: COLORS.card, borderRadius: 16, border: `1px solid ${leg.status === "booked" ? COLORS.booked : COLORS.border}`, borderLeft: `4px solid ${legColors.main}`, marginBottom: 12 }}>
+      <div onClick={onToggleExpand} style={{ padding: "16px 20px", display: "flex", alignItems: "center", gap: 16, cursor: "pointer" }}>
+        <div style={{ width: 44, height: 44, borderRadius: 12, backgroundColor: legColors.bg, color: legColors.main, display: "flex", alignItems: "center", justifyContent: "center" }}>{getLegIcon(leg.type, 22)}</div>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontWeight: 700, fontSize: 15, color: COLORS.textMain, marginBottom: 4 }}>{leg.title}</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+            {leg.date && <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 13, color: COLORS.textSecondary }}><Calendar size={14} />{formatDate(leg.date)}</span>}
+            {leg.time && <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 13, color: COLORS.textSecondary }}><Clock size={14} />{leg.time}</span>}
+            {leg.flightNumber && <span style={{ fontSize: 13, color: legColors.main, fontWeight: 600 }}>{leg.flightNumber}</span>}
           </div>
         </div>
-        
-        {/* Status/Action */}
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          {leg.status === "booked" ? (
-            <div style={{ width: 36, height: 36, borderRadius: "50%", backgroundColor: COLORS.bookedBg, color: COLORS.booked, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <CheckCircle2 size={20} />
-            </div>
-          ) : (
-            <AddDetailsButton onClick={() => setIsEditing(true)} />
-          )}
-        </div>
+        <StatusIcon status={leg.status} />
+        {leg.status === "pending" && <AddDetailsButton onClick={() => setIsEditing(true)} />}
+        <div style={{ color: COLORS.textSecondary }}>{isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}</div>
       </div>
-      
       {isExpanded && (
-        <div style={{ padding: "0 20px 20px", borderTop: `1px dashed ${COLORS.borderLight}`, paddingTop: 20 }}>
+        <div style={{ padding: "0 20px 16px", borderTop: `1px solid ${COLORS.borderLight}`, paddingTop: 16 }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
-            {leg.from && leg.to && 
-              <div>
-                <div style={{ fontSize: 12, fontWeight: 700, color: COLORS.textMuted, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.5px" }}>Route</div>
-                <div style={{ fontSize: 15, fontWeight: 600, color: COLORS.textMain, display: "flex", alignItems: "center", gap: 10 }}>{leg.from} <ArrowRight size={16} color={COLORS.textMuted} /> {leg.to}</div>
-              </div>
-            }
-            {leg.location && 
-              <div>
-                <div style={{ fontSize: 12, fontWeight: 700, color: COLORS.textMuted, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.5px" }}>Location</div>
-                <div style={{ fontSize: 15, fontWeight: 600, color: COLORS.textMain }}>{leg.location}</div>
-              </div>
-            }
-            {leg.confirmationNumber && 
-              <div>
-                <div style={{ fontSize: 12, fontWeight: 700, color: COLORS.textMuted, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.5px" }}>Confirmation #</div>
-                <div style={{ fontSize: 15, fontFamily: "monospace", fontWeight: 600, color: COLORS.textMain, backgroundColor: COLORS.bg, padding: "4px 8px", borderRadius: 6, display: "inline-block" }}>{leg.confirmationNumber}</div>
-              </div>
-            }
+            {leg.from && leg.to && <div><div style={{ fontSize: 11, fontWeight: 600, color: COLORS.textMuted, marginBottom: 4, textTransform: "uppercase" }}>Route</div><div style={{ fontSize: 14, display: "flex", alignItems: "center", gap: 8 }}>{leg.from} <ArrowRight size={14} /> {leg.to}</div></div>}
+            {leg.location && <div><div style={{ fontSize: 11, fontWeight: 600, color: COLORS.textMuted, marginBottom: 4, textTransform: "uppercase" }}>Location</div><div style={{ fontSize: 14 }}>{leg.location}</div></div>}
+            {leg.confirmationNumber && <div><div style={{ fontSize: 11, fontWeight: 600, color: COLORS.textMuted, marginBottom: 4, textTransform: "uppercase" }}>Confirmation #</div><div style={{ fontSize: 14, fontFamily: "monospace", fontWeight: 600 }}>{leg.confirmationNumber}</div></div>}
           </div>
-          <div style={{ display: "flex", gap: 10, marginTop: 24 }}>
-            <button onClick={e => { e.stopPropagation(); setIsEditing(true); }} style={{ padding: "10px 20px", borderRadius: 14, border: "none", backgroundColor: COLORS.bg, color: COLORS.textMain, fontSize: 14, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }}><Edit3 size={16} /> Edit</button>
-            <button onClick={e => { e.stopPropagation(); onDelete(); }} style={{ padding: "10px 20px", borderRadius: 14, border: "none", backgroundColor: COLORS.urgentBg, color: COLORS.urgent, fontSize: 14, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }}><Trash2 size={16} /> Delete</button>
+          <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
+            <button onClick={e => { e.stopPropagation(); setIsEditing(true); }} style={{ padding: "8px 14px", borderRadius: 8, border: `1px solid ${COLORS.border}`, backgroundColor: "white", fontSize: 13, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}><Edit3 size={14} /> Edit</button>
+            <button onClick={e => { e.stopPropagation(); onDelete(); }} style={{ padding: "8px 14px", borderRadius: 8, border: `1px solid ${COLORS.urgent}`, backgroundColor: "white", color: COLORS.urgent, fontSize: 13, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}><Trash2 size={14} /> Delete</button>
           </div>
         </div>
       )}
@@ -448,7 +412,61 @@ const ProgressSummary = ({ legs }: { legs: TripLeg[] }) => {
   );
 };
 
-// Day-by-Day View Component - Clean, modern, card-based
+// Category icon component for day guide
+const CategoryIcon = ({ 
+  type, hasItem, isBooked, isExpanded, onClick, label 
+}: { 
+  type: "flight" | "hotel" | "transport" | "activity"; 
+  hasItem: boolean; 
+  isBooked: boolean; 
+  isExpanded: boolean;
+  onClick: () => void;
+  label?: string;
+}) => {
+  const config = {
+    flight: { icon: Plane, color: COLORS.flight, bg: COLORS.flightBg, name: "Flight" },
+    hotel: { icon: Hotel, color: COLORS.hotel, bg: COLORS.hotelBg, name: "Hotel" },
+    transport: { icon: Car, color: COLORS.transport, bg: COLORS.transportBg, name: "Transport" },
+    activity: { icon: MapPin, color: "#EC4899", bg: "#FCE7F3", name: "Activity" }
+  };
+  const { icon: Icon, color, bg, name } = config[type];
+  
+  return (
+    <div 
+      onClick={onClick}
+      style={{ 
+        display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
+        cursor: hasItem ? "pointer" : "default",
+        opacity: hasItem ? 1 : 0.3
+      }}
+    >
+      <div style={{ 
+        width: 44, height: 44, borderRadius: 12,
+        backgroundColor: hasItem ? bg : COLORS.borderLight,
+        border: isExpanded ? `2px solid ${color}` : `1px solid ${hasItem ? color : COLORS.border}`,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        position: "relative"
+      }}>
+        <Icon size={20} color={hasItem ? color : COLORS.textMuted} />
+        {hasItem && (
+          <div style={{ 
+            position: "absolute", top: -4, right: -4,
+            width: 16, height: 16, borderRadius: "50%",
+            backgroundColor: isBooked ? COLORS.booked : COLORS.pending,
+            display: "flex", alignItems: "center", justifyContent: "center"
+          }}>
+            {isBooked ? <Check size={10} color="white" /> : <Circle size={8} color="white" />}
+          </div>
+        )}
+      </div>
+      <span style={{ fontSize: 10, color: hasItem ? COLORS.textMain : COLORS.textMuted, fontWeight: 500 }}>
+        {label || name}
+      </span>
+    </div>
+  );
+};
+
+// Day-by-Day View Component - Horizontal icon guide layout
 const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, expandedLegs, toggleLegExpand, departureDate, returnDate }: { 
   legs: TripLeg[]; 
   onUpdateLeg: (id: string, u: Partial<TripLeg>) => void; 
@@ -458,16 +476,7 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, expandedLegs, toggleLegE
   departureDate?: string;
   returnDate?: string;
 }) => {
-  const [collapsedDays, setCollapsedDays] = useState<Set<string>>(new Set());
-  
-  const toggleDayCollapse = (date: string) => {
-    setCollapsedDays(prev => {
-      const next = new Set(prev);
-      if (next.has(date)) next.delete(date);
-      else next.add(date);
-      return next;
-    });
-  };
+  const [expandedCategory, setExpandedCategory] = useState<Record<string, string | null>>({});
 
   // Generate all days between departure and return
   const allDays = useMemo(() => {
@@ -484,145 +493,169 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, expandedLegs, toggleLegE
     return days;
   }, [departureDate, returnDate]);
 
-  // Group legs by date - hotels appear on ALL days of their stay
+  // Group legs by date and category
   const legsByDate = useMemo(() => {
-    const groups: Record<string, { leg: TripLeg; isHotelContinuation?: boolean }[]> = {};
+    const groups: Record<string, { 
+      flights: TripLeg[]; 
+      hotels: { leg: TripLeg; isContinuation: boolean }[]; 
+      transport: TripLeg[]; 
+      activities: TripLeg[] 
+    }> = {};
     const noDateLegs: TripLeg[] = [];
     
-    allDays.forEach(day => { groups[day] = []; });
+    allDays.forEach(day => { 
+      groups[day] = { flights: [], hotels: [], transport: [], activities: [] }; 
+    });
     
     legs.forEach(leg => {
       if (leg.type === "hotel" && leg.date) {
-        // Hotel spans from check-in to check-out
         const checkIn = new Date(leg.date + "T00:00:00");
         const checkOut = leg.endDate ? new Date(leg.endDate + "T00:00:00") : checkIn;
         const current = new Date(checkIn);
         let isFirst = true;
         while (current < checkOut) {
           const dateStr = current.toISOString().split("T")[0];
-          if (!groups[dateStr]) groups[dateStr] = [];
-          groups[dateStr].push({ leg, isHotelContinuation: !isFirst });
+          if (groups[dateStr]) {
+            groups[dateStr].hotels.push({ leg, isContinuation: !isFirst });
+          }
           current.setDate(current.getDate() + 1);
           isFirst = false;
         }
-      } else if (leg.date) {
-        if (!groups[leg.date]) groups[leg.date] = [];
-        groups[leg.date].push({ leg });
-      } else {
+      } else if (leg.date && groups[leg.date]) {
+        if (leg.type === "flight") groups[leg.date].flights.push(leg);
+        else if (["car", "train", "bus", "ferry"].includes(leg.type)) groups[leg.date].transport.push(leg);
+        else groups[leg.date].activities.push(leg);
+      } else if (!leg.date) {
         noDateLegs.push(leg);
       }
     });
     
-    const sortedDates = allDays.length > 0 ? allDays : Object.keys(groups).sort();
-    return { groups, sortedDates, noDateLegs };
+    return { groups, sortedDates: allDays, noDateLegs };
   }, [legs, allDays]);
 
-  const formatDayHeader = (dateStr: string, dayNum: number): { day: string, date: string } => {
+  const formatDayHeader = (dateStr: string, dayNum: number): string => {
     try {
       const date = new Date(dateStr + "T00:00:00");
-      return {
-        day: `Day ${dayNum}`,
-        date: date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })
-      };
-    } catch { return { day: `Day ${dayNum}`, date: "" }; }
+      return `Day ${dayNum} · ${date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}`;
+    } catch { return `Day ${dayNum}`; }
+  };
+
+  const toggleCategory = (date: string, category: string) => {
+    setExpandedCategory(prev => ({
+      ...prev,
+      [date]: prev[date] === category ? null : category
+    }));
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+    <div>
       {legsByDate.sortedDates.map((date, idx) => {
-        const dayItems = legsByDate.groups[date] || [];
-        const isCollapsed = collapsedDays.has(date);
-        const hasItems = dayItems.length > 0;
-        const headerInfo = formatDayHeader(date, idx + 1);
+        const dayData = legsByDate.groups[date];
+        const expanded = expandedCategory[date];
+        
+        const flightBooked = dayData.flights.some(f => f.status === "booked");
+        const hotelBooked = dayData.hotels.some(h => h.leg.status === "booked");
+        const transportBooked = dayData.transport.some(t => t.status === "booked");
+        const activityBooked = dayData.activities.some(a => a.status === "booked");
+        
+        const hasAny = dayData.flights.length > 0 || dayData.hotels.length > 0 || 
+                       dayData.transport.length > 0 || dayData.activities.length > 0;
+        const allBooked = hasAny && 
+          (dayData.flights.length === 0 || flightBooked) &&
+          (dayData.hotels.length === 0 || hotelBooked) &&
+          (dayData.transport.length === 0 || transportBooked) &&
+          (dayData.activities.length === 0 || activityBooked);
         
         return (
-          <div key={date} style={{ position: "relative" }}>
-            {/* Minimalist Day Header */}
-            <div 
-              onClick={() => toggleDayCollapse(date)}
-              style={{ 
-                display: "flex", 
-                alignItems: "center", 
-                justifyContent: "space-between",
-                padding: "16px 4px 12px",
-                marginBottom: 12,
-                cursor: "pointer",
-                position: "sticky",
-                top: 0,
-                backgroundColor: COLORS.bg,
-                zIndex: 10,
-                borderBottom: isCollapsed ? "none" : `1px solid ${COLORS.borderLight}`
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
-                <span style={{ fontSize: 13, fontWeight: 700, color: COLORS.textSecondary, textTransform: "uppercase", letterSpacing: "1px" }}>
-                  {headerInfo.day}
-                </span>
-                <span style={{ fontSize: 16, fontWeight: 700, color: COLORS.textMain }}>
-                  {headerInfo.date}
-                </span>
+          <div key={date} style={{ 
+            marginBottom: 12, 
+            backgroundColor: COLORS.card, 
+            borderRadius: 12, 
+            border: `1px solid ${allBooked ? COLORS.booked : COLORS.border}`,
+            overflow: "hidden"
+          }}>
+            {/* Day Header */}
+            <div style={{ 
+              display: "flex", alignItems: "center", gap: 10, 
+              padding: "10px 14px",
+              backgroundColor: allBooked ? COLORS.bookedBg : COLORS.borderLight,
+              borderBottom: `1px solid ${COLORS.border}`
+            }}>
+              <div style={{ 
+                width: 28, height: 28, borderRadius: "50%", 
+                backgroundColor: allBooked ? COLORS.booked : hasAny ? COLORS.pending : COLORS.textMuted, 
+                color: "white",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontWeight: 700, fontSize: 12
+              }}>
+                {idx + 1}
               </div>
-              
-              {hasItems && (
-                <div style={{ color: COLORS.textMuted }}>
-                  {isCollapsed ? <ChevronDown size={18} /> : <ChevronUp size={18} />}
-                </div>
-              )}
+              <span style={{ fontWeight: 600, fontSize: 14, color: COLORS.textMain }}>
+                {formatDayHeader(date, idx + 1)}
+              </span>
+              {allBooked && <CheckCircle2 size={18} color={COLORS.booked} style={{ marginLeft: "auto" }} />}
             </div>
             
-            {/* Day's Items */}
-            {!isCollapsed && (
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {hasItems ? dayItems.map(({ leg, isHotelContinuation }) => (
-                  isHotelContinuation ? (
-                    // Minimalist hotel continuation
-                    <div key={`${leg.id}-${date}`} style={{ 
-                      display: "flex", alignItems: "center", gap: 12, 
-                      padding: "12px 16px",
-                      backgroundColor: "rgba(255, 255, 255, 0.6)", 
-                      borderRadius: 16,
-                      border: "1px dashed #E5E5EA",
-                      color: COLORS.textSecondary,
-                      fontSize: 13
-                    }}>
-                      <Hotel size={16} color={COLORS.hotel} />
-                      <span style={{ fontWeight: 500 }}>Continuing stay at {leg.hotelName || leg.location || "Hotel"}</span>
+            {/* Horizontal Icon Guide */}
+            <div style={{ 
+              display: "flex", justifyContent: "space-around", 
+              padding: "12px 8px",
+              borderBottom: expanded ? `1px solid ${COLORS.border}` : "none"
+            }}>
+              <CategoryIcon 
+                type="flight" 
+                hasItem={dayData.flights.length > 0}
+                isBooked={flightBooked}
+                isExpanded={expanded === "flight"}
+                onClick={() => dayData.flights.length > 0 && toggleCategory(date, "flight")}
+              />
+              <CategoryIcon 
+                type="hotel" 
+                hasItem={dayData.hotels.length > 0}
+                isBooked={hotelBooked}
+                isExpanded={expanded === "hotel"}
+                onClick={() => dayData.hotels.length > 0 && toggleCategory(date, "hotel")}
+                label={dayData.hotels.some(h => h.isContinuation) ? "Staying" : "Hotel"}
+              />
+              <CategoryIcon 
+                type="transport" 
+                hasItem={dayData.transport.length > 0}
+                isBooked={transportBooked}
+                isExpanded={expanded === "transport"}
+                onClick={() => dayData.transport.length > 0 && toggleCategory(date, "transport")}
+              />
+              <CategoryIcon 
+                type="activity" 
+                hasItem={dayData.activities.length > 0}
+                isBooked={activityBooked}
+                isExpanded={expanded === "activity"}
+                onClick={() => dayData.activities.length > 0 && toggleCategory(date, "activity")}
+              />
+            </div>
+            
+            {/* Expanded Details */}
+            {expanded && (
+              <div style={{ padding: "8px 12px" }}>
+                {expanded === "flight" && dayData.flights.map(leg => (
+                  <TripLegCard key={leg.id} leg={leg} onUpdate={u => onUpdateLeg(leg.id, u)} onDelete={() => onDeleteLeg(leg.id)} isExpanded={expandedLegs.has(leg.id)} onToggleExpand={() => toggleLegExpand(leg.id)} />
+                ))}
+                {expanded === "hotel" && dayData.hotels.map(({ leg, isContinuation }) => (
+                  isContinuation ? (
+                    <div key={`${leg.id}-${date}`} style={{ padding: "10px 14px", backgroundColor: COLORS.hotelBg, borderRadius: 10, display: "flex", alignItems: "center", gap: 10 }}>
+                      <Hotel size={18} color={COLORS.hotel} />
+                      <span style={{ fontSize: 13, color: COLORS.hotel, fontWeight: 500 }}>Staying at {leg.hotelName || leg.location || "hotel"}</span>
+                      {leg.status === "booked" && <CheckCircle2 size={14} color={COLORS.booked} style={{ marginLeft: "auto" }} />}
                     </div>
                   ) : (
-                    <TripLegCard 
-                      key={leg.id} 
-                      leg={leg} 
-                      onUpdate={u => onUpdateLeg(leg.id, u)} 
-                      onDelete={() => onDeleteLeg(leg.id)} 
-                      isExpanded={expandedLegs.has(leg.id)} 
-                      onToggleExpand={() => toggleLegExpand(leg.id)} 
-                    />
+                    <TripLegCard key={leg.id} leg={leg} onUpdate={u => onUpdateLeg(leg.id, u)} onDelete={() => onDeleteLeg(leg.id)} isExpanded={expandedLegs.has(leg.id)} onToggleExpand={() => toggleLegExpand(leg.id)} />
                   )
-                )) : (
-                  <div style={{ 
-                    padding: "24px", 
-                    borderRadius: 16, 
-                    border: "2px dashed #E5E5EA",
-                    display: "flex", 
-                    flexDirection: "column",
-                    alignItems: "center", 
-                    gap: 8,
-                    color: COLORS.textMuted
-                  }}>
-                    <span style={{ fontSize: 14, fontWeight: 500 }}>Nothing planned yet</span>
-                    <button style={{ 
-                      color: COLORS.primary, 
-                      background: "none", 
-                      border: "none", 
-                      fontSize: 13, 
-                      fontWeight: 600, 
-                      cursor: "pointer",
-                      padding: "4px 8px"
-                    }}>
-                      + Add activity
-                    </button>
-                  </div>
-                )}
+                ))}
+                {expanded === "transport" && dayData.transport.map(leg => (
+                  <TripLegCard key={leg.id} leg={leg} onUpdate={u => onUpdateLeg(leg.id, u)} onDelete={() => onDeleteLeg(leg.id)} isExpanded={expandedLegs.has(leg.id)} onToggleExpand={() => toggleLegExpand(leg.id)} />
+                ))}
+                {expanded === "activity" && dayData.activities.map(leg => (
+                  <TripLegCard key={leg.id} leg={leg} onUpdate={u => onUpdateLeg(leg.id, u)} onDelete={() => onDeleteLeg(leg.id)} isExpanded={expandedLegs.has(leg.id)} onToggleExpand={() => toggleLegExpand(leg.id)} />
+                ))}
               </div>
             )}
           </div>
@@ -631,18 +664,14 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, expandedLegs, toggleLegE
       
       {/* Legs without dates */}
       {legsByDate.noDateLegs.length > 0 && (
-        <div style={{ marginTop: 24 }}>
-          <h3 style={{ fontSize: 16, fontWeight: 700, color: COLORS.textMain, marginBottom: 16 }}>Unscheduled Items</h3>
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <div style={{ marginBottom: 12, backgroundColor: COLORS.card, borderRadius: 12, border: `1px solid ${COLORS.border}`, overflow: "hidden" }}>
+          <div style={{ padding: "10px 14px", backgroundColor: COLORS.borderLight, borderBottom: `1px solid ${COLORS.border}`, display: "flex", alignItems: "center", gap: 10 }}>
+            <Calendar size={18} color={COLORS.textMuted} />
+            <span style={{ fontWeight: 600, fontSize: 14, color: COLORS.textSecondary }}>No Date Set</span>
+          </div>
+          <div style={{ padding: "8px 12px" }}>
             {legsByDate.noDateLegs.map(leg => (
-              <TripLegCard 
-                key={leg.id} 
-                leg={leg} 
-                onUpdate={u => onUpdateLeg(leg.id, u)} 
-                onDelete={() => onDeleteLeg(leg.id)} 
-                isExpanded={expandedLegs.has(leg.id)} 
-                onToggleExpand={() => toggleLegExpand(leg.id)} 
-              />
+              <TripLegCard key={leg.id} leg={leg} onUpdate={u => onUpdateLeg(leg.id, u)} onDelete={() => onDeleteLeg(leg.id)} isExpanded={expandedLegs.has(leg.id)} onToggleExpand={() => toggleLegExpand(leg.id)} />
             ))}
           </div>
         </div>
@@ -1083,16 +1112,15 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
             {(() => {
               const datesComplete = trip.departureDate && (trip.tripType === "one_way" || trip.returnDate);
               return datesComplete ? (
-                // Collapsed view - pill-shaped modern summary
+                // Collapsed view - just show summary
                 <div 
                   onClick={() => setTrip(t => ({ ...t, departureDate: undefined, returnDate: undefined, updatedAt: Date.now() }))}
                   style={{ 
-                    backgroundColor: "#FFFFFF", 
-                    borderRadius: 24, 
-                    padding: "16px 20px", 
-                    marginBottom: 20,
-                    boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
-                    border: "1px solid rgba(0,0,0,0.02)",
+                    backgroundColor: COLORS.card, 
+                    borderRadius: 12, 
+                    padding: "12px 16px", 
+                    marginBottom: 16,
+                    border: `1px solid ${COLORS.border}`,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
@@ -1100,48 +1128,44 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
                   }}
                 >
                   <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <div style={{ width: 32, height: 32, borderRadius: "50%", backgroundColor: COLORS.primary, display: "flex", alignItems: "center", justifyContent: "center", color: "white" }}>
-                        <Calendar size={16} />
-                      </div>
-                      <span style={{ fontSize: 15, fontWeight: 700, color: COLORS.textMain }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                      <Calendar size={16} color={COLORS.primary} />
+                      <span style={{ fontSize: 13, fontWeight: 600, color: COLORS.textMain }}>
                         {formatDate(trip.departureDate!)}
                       </span>
                     </div>
                     {trip.tripType !== "one_way" && trip.returnDate && (
                       <>
-                        <ArrowRight size={16} color={COLORS.textMuted} />
-                        <span style={{ fontSize: 15, fontWeight: 700, color: COLORS.textMain }}>
+                        <ArrowRight size={14} color={COLORS.textMuted} />
+                        <span style={{ fontSize: 13, fontWeight: 600, color: COLORS.textMain }}>
                           {formatDate(trip.returnDate)}
                         </span>
                       </>
                     )}
                     <span style={{ 
-                      fontSize: 12, 
-                      padding: "4px 10px", 
-                      borderRadius: 12, 
+                      fontSize: 11, 
+                      padding: "2px 8px", 
+                      borderRadius: 4, 
                       backgroundColor: COLORS.accentLight, 
                       color: COLORS.primaryDark,
-                      fontWeight: 700
+                      fontWeight: 600
                     }}>
                       {trip.tripType === "one_way" ? "One Way" : trip.tripType === "round_trip" ? "Round Trip" : "Multi-City"}
                     </span>
                   </div>
-                  <div style={{ width: 32, height: 32, borderRadius: "50%", backgroundColor: COLORS.bg, display: "flex", alignItems: "center", justifyContent: "center", color: COLORS.textSecondary }}>
-                    <Edit3 size={16} />
-                  </div>
+                  <Edit3 size={16} color={COLORS.textSecondary} />
                 </div>
               ) : (
-                // Expanded view - modern form with pill inputs
+                // Expanded view - full form
                 <div style={{ 
-                  backgroundColor: "#FFFFFF", 
-                  borderRadius: 24, 
-                  padding: 24, 
-                  marginBottom: 20,
-                  boxShadow: "0 4px 20px rgba(0,0,0,0.06)"
+                  backgroundColor: COLORS.card, 
+                  borderRadius: 16, 
+                  padding: 16, 
+                  marginBottom: 16,
+                  border: `1px solid ${COLORS.border}`
                 }}>
                   {/* Trip Type Toggle */}
-                  <div style={{ display: "flex", gap: 8, marginBottom: 20, backgroundColor: COLORS.bg, padding: 4, borderRadius: 16 }}>
+                  <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
                     {[
                       { value: "one_way", label: "One Way" },
                       { value: "round_trip", label: "Round Trip" },
@@ -1153,15 +1177,13 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
                         style={{
                           flex: 1,
                           padding: "10px 12px",
-                          borderRadius: 12,
-                          border: "none",
-                          backgroundColor: trip.tripType === opt.value ? "#FFFFFF" : "transparent",
-                          color: trip.tripType === opt.value ? COLORS.textMain : COLORS.textSecondary,
-                          fontWeight: 700,
-                          fontSize: 14,
-                          cursor: "pointer",
-                          boxShadow: trip.tripType === opt.value ? "0 2px 8px rgba(0,0,0,0.08)" : "none",
-                          transition: "all 0.2s"
+                          borderRadius: 10,
+                          border: trip.tripType === opt.value ? `2px solid ${COLORS.primary}` : `1px solid ${COLORS.border}`,
+                          backgroundColor: trip.tripType === opt.value ? COLORS.accentLight : "white",
+                          color: trip.tripType === opt.value ? COLORS.primaryDark : COLORS.textSecondary,
+                          fontWeight: 600,
+                          fontSize: 13,
+                          cursor: "pointer"
                         }}
                       >
                         {opt.label}
@@ -1170,18 +1192,17 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
                   </div>
                   
                   {/* Date Pickers */}
-                  <div style={{ display: "grid", gridTemplateColumns: trip.tripType === "one_way" ? "1fr" : "1fr 1fr", gap: 16 }}>
+                  <div style={{ display: "grid", gridTemplateColumns: trip.tripType === "one_way" ? "1fr" : "1fr 1fr", gap: 12 }}>
                     <div>
-                      <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: COLORS.textSecondary, marginBottom: 8, marginLeft: 4 }}>
+                      <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: COLORS.textSecondary, marginBottom: 6 }}>
                         Departure Date
                       </label>
-                      <div style={{ position: "relative" }}>
-                        <input
-                          type="date"
-                          value={trip.departureDate || ""}
-                          onChange={e => {
-                            const newDate = e.target.value;
-                            // Update trip departure date and sync to outbound flight
+                      <input
+                        type="date"
+                        value={trip.departureDate || ""}
+                        onChange={e => {
+                          const newDate = e.target.value;
+                          // Update trip departure date and sync to outbound flight
                       setTrip(t => {
                         const updatedLegs = t.legs.map((leg, idx) => {
                           if (leg.type === "flight" && idx === 0) {
@@ -1209,7 +1230,6 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
                     }}
                   />
                 </div>
-              </div>
                 
                 {trip.tripType !== "one_way" && (
                   <div>
