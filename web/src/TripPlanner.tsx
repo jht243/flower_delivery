@@ -607,7 +607,7 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
   };
 
   return (
-    <div>
+    <div style={{ width: "100%", overflow: "hidden" }}>
       {legsByDate.sortedDates.map((date, idx) => {
         const dayData = legsByDate.groups[date];
         const expanded = expandedCategory[date];
@@ -1540,7 +1540,7 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
         </div>
       </div>
 
-      <div style={{ maxWidth: 600, margin: "0 auto", padding: 20 }}>
+      <div style={{ maxWidth: 600, margin: "0 auto", padding: 20, overflow: "hidden", boxSizing: "border-box" }}>
         {trip.legs.length === 0 ? (
           <div style={{ backgroundColor: COLORS.card, borderRadius: 20, padding: 24, marginBottom: 20, border: `1px solid ${COLORS.border}` }}>
             <h2 style={{ margin: "0 0 8px", fontSize: 18, fontWeight: 700 }}>Describe Your Trip</h2>

@@ -25175,7 +25175,7 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, to
       [date]: prev[date] === category ? null : category
     }));
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: legsByDate.sortedDates.map((date, idx) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: "100%", overflow: "hidden" }, children: legsByDate.sortedDates.map((date, idx) => {
     const dayData = legsByDate.groups[date];
     const expanded = expandedCategory[date];
     const flightBooked = dayData.flights.some((f) => f.status === "booked");
@@ -26115,7 +26115,7 @@ function TripPlanner({ initialData: initialData2 }) {
         " Reset"
       ] })
     ] }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { maxWidth: 600, margin: "0 auto", padding: 20 }, children: trip.legs.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: COLORS.card, borderRadius: 20, padding: 24, marginBottom: 20, border: `1px solid ${COLORS.border}` }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { maxWidth: 600, margin: "0 auto", padding: 20, overflow: "hidden", boxSizing: "border-box" }, children: trip.legs.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: COLORS.card, borderRadius: 20, padding: 24, marginBottom: 20, border: `1px solid ${COLORS.border}` }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { style: { margin: "0 0 8px", fontSize: 18, fontWeight: 700 }, children: "Describe Your Trip" }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { margin: "0 0 16px", fontSize: 14, color: COLORS.textSecondary }, children: "Tell us about your travel plans in plain English." }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 8, marginBottom: 16 }, children: [
