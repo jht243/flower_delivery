@@ -1192,7 +1192,22 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
             confirmationNumber: l.confirmationNumber
           };
         });
-        setTrip(t => ({ ...t, legs: [...t.legs, ...newLegs], updatedAt: Date.now() }));
+        // Extract departure and return dates from flights
+        const flights = newLegs.filter(l => l.type === "flight");
+        const departureDate = flights[0]?.date || "";
+        const returnDate = flights.length > 1 ? flights[flights.length - 1]?.date : "";
+        
+        // Extract hotel end date if available
+        const hotel = newLegs.find(l => l.type === "hotel");
+        const hotelEndDate = hotel?.endDate || returnDate;
+        
+        setTrip(t => ({ 
+          ...t, 
+          legs: [...t.legs, ...newLegs], 
+          departureDate: departureDate || t.departureDate,
+          returnDate: returnDate || hotelEndDate || t.returnDate,
+          updatedAt: Date.now() 
+        }));
         setTripDescription("");
       }
     } catch (error) {

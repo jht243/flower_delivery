@@ -25670,7 +25670,18 @@ function TripPlanner({ initialData: initialData2 }) {
             confirmationNumber: l.confirmationNumber
           };
         });
-        setTrip((t) => ({ ...t, legs: [...t.legs, ...newLegs], updatedAt: Date.now() }));
+        const flights = newLegs.filter((l) => l.type === "flight");
+        const departureDate = flights[0]?.date || "";
+        const returnDate = flights.length > 1 ? flights[flights.length - 1]?.date : "";
+        const hotel = newLegs.find((l) => l.type === "hotel");
+        const hotelEndDate = hotel?.endDate || returnDate;
+        setTrip((t) => ({
+          ...t,
+          legs: [...t.legs, ...newLegs],
+          departureDate: departureDate || t.departureDate,
+          returnDate: returnDate || hotelEndDate || t.returnDate,
+          updatedAt: Date.now()
+        }));
         setTripDescription("");
       }
     } catch (error) {
