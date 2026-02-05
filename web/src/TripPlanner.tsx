@@ -1090,9 +1090,9 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
       }
     });
     
-    // 6. Hotel name (only if hotel exists but no name)
+    // 6. Hotel name (only if hotel exists but no name - check both hotelName and title)
     hotels.forEach(h => {
-      if (!h.hotelName) {
+      if (!h.hotelName && !h.title) {
         items.push({ 
           id: `hotel-${h.id}`, 
           type: "hotel_name", 

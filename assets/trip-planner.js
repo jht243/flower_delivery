@@ -25584,7 +25584,7 @@ function TripPlanner({ initialData: initialData2 }) {
       }
     });
     hotels.forEach((h) => {
-      if (!h.hotelName) {
+      if (!h.hotelName && !h.title) {
         items.push({
           id: `hotel-${h.id}`,
           type: "hotel_name",
