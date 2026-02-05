@@ -24801,6 +24801,13 @@ var spinnerStyle = `
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 `;
 if (typeof document !== "undefined") {
   const styleEl = document.createElement("style");
@@ -25692,6 +25699,30 @@ var MissingInfoBar = ({
   setEditValue,
   onSaveEdit
 }) => {
+  const scrollRef = import_react3.default.useRef(null);
+  const [canScrollLeft, setCanScrollLeft] = import_react3.default.useState(false);
+  const [canScrollRight, setCanScrollRight] = import_react3.default.useState(false);
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 5);
+    }
+  };
+  import_react3.default.useEffect(() => {
+    checkScroll();
+    const el = scrollRef.current;
+    if (el) el.addEventListener("scroll", checkScroll);
+    return () => {
+      if (el) el.removeEventListener("scroll", checkScroll);
+    };
+  }, [missingItems]);
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      const amount = direction === "left" ? -200 : 200;
+      scrollRef.current.scrollBy({ left: amount, behavior: "smooth" });
+    }
+  };
   if (missingItems.length === 0) return null;
   return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 16 }, children: [
     /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
@@ -25704,101 +25735,106 @@ var MissingInfoBar = ({
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { size: 16 }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, fontWeight: 600 }, children: "Complete your itinerary:" })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
-      display: "flex",
-      gap: 8,
-      overflowX: "auto",
-      paddingBottom: 8,
-      WebkitOverflowScrolling: "touch"
-    }, children: missingItems.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { flexShrink: 0 }, children: editingItem === item.id ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 6,
-      padding: "8px 12px",
-      backgroundColor: COLORS.card,
-      borderRadius: 10,
-      border: `2px solid ${COLORS.primary}`,
-      minWidth: 180
-    }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-        "input",
-        {
-          type: item.type.includes("date") ? "date" : item.type === "travelers" ? "number" : "text",
-          value: editValue,
-          onChange: (e) => setEditValue(e.target.value),
-          placeholder: item.label,
-          autoFocus: true,
-          min: item.type === "travelers" ? "1" : void 0,
-          style: {
-            flex: 1,
-            border: "none",
-            outline: "none",
-            fontSize: 13,
-            padding: 0,
-            width: item.type.includes("date") ? 130 : 80,
-            backgroundColor: "transparent"
-          },
-          onKeyDown: (e) => {
-            if (e.key === "Enter") onSaveEdit();
-            if (e.key === "Escape") setEditingItem(null);
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 8 }, children: [
+      canScrollLeft && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => scroll("left"), style: { padding: 6, borderRadius: 8, border: "none", backgroundColor: COLORS.card, color: COLORS.textSecondary, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronUp, { size: 18, style: { transform: "rotate(-90deg)" } }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { ref: scrollRef, style: {
+        display: "flex",
+        gap: 8,
+        overflowX: "auto",
+        flex: 1,
+        scrollbarWidth: "none",
+        msOverflowStyle: "none"
+      }, className: "hide-scrollbar", children: missingItems.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { flexShrink: 0 }, children: editingItem === item.id ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 6,
+        padding: "8px 12px",
+        backgroundColor: COLORS.card,
+        borderRadius: 10,
+        border: `2px solid ${COLORS.primary}`,
+        minWidth: 180
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+          "input",
+          {
+            type: item.type.includes("date") ? "date" : item.type === "travelers" ? "number" : "text",
+            value: editValue,
+            onChange: (e) => setEditValue(e.target.value),
+            placeholder: item.label,
+            autoFocus: true,
+            min: item.type === "travelers" ? "1" : void 0,
+            style: {
+              flex: 1,
+              border: "none",
+              outline: "none",
+              fontSize: 13,
+              padding: 0,
+              width: item.type.includes("date") ? 130 : 80,
+              backgroundColor: "transparent"
+            },
+            onKeyDown: (e) => {
+              if (e.key === "Enter") onSaveEdit();
+              if (e.key === "Escape") setEditingItem(null);
+            }
           }
-        }
-      ),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+          "button",
+          {
+            onClick: onSaveEdit,
+            style: {
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: COLORS.primary,
+              padding: 2
+            },
+            children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { size: 16 })
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+          "button",
+          {
+            onClick: () => setEditingItem(null),
+            style: {
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: COLORS.textMuted,
+              padding: 2
+            },
+            children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { size: 16 })
+          }
+        )
+      ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
         "button",
         {
-          onClick: onSaveEdit,
-          style: {
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            color: COLORS.primary,
-            padding: 2
+          onClick: () => {
+            setEditingItem(item.id);
+            setEditValue("");
           },
-          children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { size: 16 })
-        }
-      ),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-        "button",
-        {
-          onClick: () => setEditingItem(null),
           style: {
-            background: "none",
-            border: "none",
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            padding: "8px 14px",
+            backgroundColor: COLORS.pendingBg,
+            border: `1px solid ${COLORS.pending}`,
+            borderRadius: 10,
+            color: COLORS.pending,
+            fontSize: 13,
+            fontWeight: 600,
             cursor: "pointer",
-            color: COLORS.textMuted,
-            padding: 2
+            whiteSpace: "nowrap"
           },
-          children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { size: 16 })
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { size: 14 }),
+            item.label
+          ]
         }
-      )
-    ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-      "button",
-      {
-        onClick: () => {
-          setEditingItem(item.id);
-          setEditValue("");
-        },
-        style: {
-          display: "flex",
-          alignItems: "center",
-          gap: 6,
-          padding: "8px 14px",
-          backgroundColor: COLORS.pendingBg,
-          border: `1px solid ${COLORS.pending}`,
-          borderRadius: 10,
-          color: COLORS.pending,
-          fontSize: 13,
-          fontWeight: 600,
-          cursor: "pointer",
-          whiteSpace: "nowrap"
-        },
-        children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { size: 14 }),
-          item.label
-        ]
-      }
-    ) }, item.id)) })
+      ) }, item.id)) }),
+      canScrollRight && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => scroll("right"), style: { padding: 6, borderRadius: 8, border: "none", backgroundColor: COLORS.card, color: COLORS.textSecondary, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronUp, { size: 18, style: { transform: "rotate(90deg)" } }) })
+    ] })
   ] });
 };
 function TripPlanner({ initialData: initialData2 }) {

@@ -5,11 +5,18 @@ import {
   Edit2, Edit3, Trash2, Save, RotateCcw, Sparkles, ArrowRight, Loader2, Check, FileText, Users
 } from "lucide-react";
 
-// Add spinner animation
+// Add spinner animation and hide scrollbar
 const spinnerStyle = `
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 `;
 
@@ -1097,6 +1104,32 @@ const MissingInfoBar = ({
   setEditValue: (v: string) => void;
   onSaveEdit: () => void;
 }) => {
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = React.useState(false);
+  const [canScrollRight, setCanScrollRight] = React.useState(false);
+
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 5);
+    }
+  };
+
+  React.useEffect(() => {
+    checkScroll();
+    const el = scrollRef.current;
+    if (el) el.addEventListener("scroll", checkScroll);
+    return () => { if (el) el.removeEventListener("scroll", checkScroll); };
+  }, [missingItems]);
+
+  const scroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const amount = direction === "left" ? -200 : 200;
+      scrollRef.current.scrollBy({ left: amount, behavior: "smooth" });
+    }
+  };
+
   if (missingItems.length === 0) return null;
   
   return (
@@ -1111,13 +1144,20 @@ const MissingInfoBar = ({
         <AlertCircle size={16} />
         <span style={{ fontSize: 13, fontWeight: 600 }}>Complete your itinerary:</span>
       </div>
-      <div style={{ 
-        display: "flex", 
-        gap: 8, 
-        overflowX: "auto", 
-        paddingBottom: 8,
-        WebkitOverflowScrolling: "touch"
-      }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        {canScrollLeft && (
+          <button onClick={() => scroll("left")} style={{ padding: 6, borderRadius: 8, border: "none", backgroundColor: COLORS.card, color: COLORS.textSecondary, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }}>
+            <ChevronUp size={18} style={{ transform: "rotate(-90deg)" }} />
+          </button>
+        )}
+        <div ref={scrollRef} style={{ 
+          display: "flex", 
+          gap: 8, 
+          overflowX: "auto", 
+          flex: 1,
+          scrollbarWidth: "none",
+          msOverflowStyle: "none"
+        }} className="hide-scrollbar">
         {missingItems.map(item => (
           <div key={item.id} style={{ flexShrink: 0 }}>
             {editingItem === item.id ? (
@@ -1198,6 +1238,12 @@ const MissingInfoBar = ({
             )}
           </div>
         ))}
+        </div>
+        {canScrollRight && (
+          <button onClick={() => scroll("right")} style={{ padding: 6, borderRadius: 8, border: "none", backgroundColor: COLORS.card, color: COLORS.textSecondary, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }}>
+            <ChevronUp size={18} style={{ transform: "rotate(90deg)" }} />
+          </button>
+        )}
       </div>
     </div>
   );
