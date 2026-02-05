@@ -24755,6 +24755,17 @@ var X = createLucideIcon("x", __iconNode22);
 
 // src/TripPlanner.tsx
 var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
+var spinnerStyle = `
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+`;
+if (typeof document !== "undefined") {
+  const styleEl = document.createElement("style");
+  styleEl.textContent = spinnerStyle;
+  document.head.appendChild(styleEl);
+}
 var COLORS = {
   primary: "#56C596",
   primaryDark: "#3aa87b",
@@ -24828,145 +24839,6 @@ var getStatusColor = (status) => {
     case "urgent":
       return { main: COLORS.urgent, bg: COLORS.urgentBg };
   }
-};
-var parseTripDescription = (text) => {
-  const legs = [];
-  const months = {
-    january: "01",
-    february: "02",
-    march: "03",
-    april: "04",
-    may: "05",
-    june: "06",
-    july: "07",
-    august: "08",
-    september: "09",
-    october: "10",
-    november: "11",
-    december: "12",
-    jan: "01",
-    feb: "02",
-    mar: "03",
-    apr: "04",
-    jun: "06",
-    jul: "07",
-    aug: "08",
-    sep: "09",
-    oct: "10",
-    nov: "11",
-    dec: "12"
-  };
-  const extractDate = (t) => {
-    const match = t.match(/(\w+)\s+(\d{1,2})(?:st|nd|rd|th)?,?\s*(\d{4})?/i);
-    if (match) {
-      const month = months[match[1].toLowerCase()];
-      if (month) {
-        const day = match[2].padStart(2, "0");
-        const year = match[3] || (/* @__PURE__ */ new Date()).getFullYear().toString();
-        return `${year}-${month}-${day}`;
-      }
-    }
-    return void 0;
-  };
-  const allDates = [];
-  const dateRegex = /(\w+)\s+(\d{1,2})(?:st|nd|rd|th)?,?\s*(\d{4})?/gi;
-  let dateMatch;
-  while ((dateMatch = dateRegex.exec(text)) !== null) {
-    const month = months[dateMatch[1].toLowerCase()];
-    if (month) {
-      const day = dateMatch[2].padStart(2, "0");
-      const year = dateMatch[3] || (/* @__PURE__ */ new Date()).getFullYear().toString();
-      allDates.push(`${year}-${month}-${day}`);
-    }
-  }
-  let fromCity = "";
-  let toCity = "";
-  let outboundDate = allDates[0] || "";
-  let returnDate = allDates[1] || "";
-  const pattern1 = text.match(/(?:fly(?:ing)?|flight)\s+from\s+([A-Za-z][A-Za-z\s]*?)\s+to\s+([A-Za-z][A-Za-z\s]*?)(?=\s+(?:on|and|then|,|\.|$)|\s*$)/i);
-  const pattern2 = text.match(/(?:fly(?:ing)?|flight)\s+to\s+([A-Za-z][A-Za-z\s]*?)\s+from\s+([A-Za-z][A-Za-z\s]*?)(?=\s+(?:on|and|then|,|\.|$)|\s*$)/i);
-  const pattern3 = text.match(/(?:going|traveling|travel)\s+(?:from\s+)?([A-Za-z][A-Za-z\s]*?)\s+to\s+([A-Za-z][A-Za-z\s]*?)(?=\s+(?:on|and|then|,|\.|$)|\s*$)/i);
-  const pattern4 = text.match(/from\s+([A-Za-z][A-Za-z\s]*?)\s+to\s+([A-Za-z][A-Za-z\s]*?)(?=\s+(?:on|and|then|,|\.|$)|\s*$)/i);
-  if (pattern1) {
-    fromCity = pattern1[1].trim();
-    toCity = pattern1[2].trim();
-  } else if (pattern2) {
-    toCity = pattern2[1].trim();
-    fromCity = pattern2[2].trim();
-  } else if (pattern3) {
-    fromCity = pattern3[1].trim();
-    toCity = pattern3[2].trim();
-  } else if (pattern4) {
-    fromCity = pattern4[1].trim();
-    toCity = pattern4[2].trim();
-  }
-  if (fromCity && toCity) {
-    legs.push({
-      type: "flight",
-      status: "pending",
-      title: `Flight: ${fromCity} \u2192 ${toCity}`,
-      from: fromCity,
-      to: toCity,
-      date: outboundDate
-    });
-  }
-  const returnMatch = text.match(/return(?:ing)?\s+(?:to\s+)?([A-Za-z][A-Za-z\s]*?)(?=\s+(?:on|and|then|,|\.|$)|\s*$)/i);
-  if (returnMatch && fromCity) {
-    const returnTo = returnMatch[1].trim();
-    legs.push({
-      type: "flight",
-      status: "pending",
-      title: `Flight: ${toCity} \u2192 ${returnTo}`,
-      from: toCity,
-      to: returnTo,
-      date: returnDate
-    });
-  }
-  if (toCity) {
-    legs.push({
-      type: "hotel",
-      status: "pending",
-      title: `Hotel in ${toCity}`,
-      location: toCity,
-      date: outboundDate,
-      endDate: returnDate || outboundDate
-    });
-  }
-  if (fromCity) {
-    legs.push({
-      type: "car",
-      status: "pending",
-      title: `Transport to ${fromCity} Airport`,
-      to: `${fromCity} Airport`,
-      date: outboundDate
-    });
-  }
-  if (toCity) {
-    legs.push({
-      type: "car",
-      status: "pending",
-      title: `Transport from ${toCity} Airport`,
-      from: `${toCity} Airport`,
-      date: outboundDate
-    });
-  }
-  if (returnMatch && toCity && fromCity) {
-    legs.push({
-      type: "car",
-      status: "pending",
-      title: `Transport to ${toCity} Airport`,
-      to: `${toCity} Airport`,
-      date: returnDate
-    });
-    legs.push({
-      type: "car",
-      status: "pending",
-      title: `Transport from ${fromCity} Airport`,
-      from: `${fromCity} Airport`,
-      date: returnDate
-    });
-  }
-  return legs;
 };
 var StatusBadge = ({ status, onClick }) => {
   const colors = getStatusColor(status);
@@ -25308,19 +25180,52 @@ function TripPlanner({ initialData: initialData2 }) {
   const [showAddModal, setShowAddModal] = (0, import_react3.useState)(false);
   const [expandedLegs, setExpandedLegs] = (0, import_react3.useState)(/* @__PURE__ */ new Set());
   const [inputMode, setInputMode] = (0, import_react3.useState)("freeform");
+  const [isAnalyzing, setIsAnalyzing] = (0, import_react3.useState)(false);
   (0, import_react3.useEffect)(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ trip, timestamp: Date.now() }));
     } catch {
     }
   }, [trip]);
-  const handleParseDescription = () => {
-    if (!tripDescription.trim()) return;
-    const parsed = parseTripDescription(tripDescription);
-    if (parsed.length > 0) {
-      const newLegs = parsed.map((l) => ({ id: generateId(), type: l.type || "other", status: l.status || "pending", title: l.title || "", date: l.date || "", time: l.time, from: l.from, to: l.to, location: l.location }));
-      setTrip((t) => ({ ...t, legs: [...t.legs, ...newLegs], updatedAt: Date.now() }));
-      setTripDescription("");
+  const handleParseDescription = async () => {
+    if (!tripDescription.trim() || isAnalyzing) return;
+    setIsAnalyzing(true);
+    try {
+      const response = await fetch("/api/parse-trip", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: tripDescription })
+      });
+      if (!response.ok) {
+        throw new Error("Failed to analyze trip");
+      }
+      const data = await response.json();
+      const parsed = data.legs || [];
+      if (parsed.length > 0) {
+        const newLegs = parsed.map((l) => ({
+          id: generateId(),
+          type: l.type || "other",
+          status: l.status || "pending",
+          title: l.title || "",
+          date: l.date || "",
+          time: l.time,
+          endDate: l.endDate,
+          from: l.from,
+          to: l.to,
+          location: l.location,
+          flightNumber: l.flightNumber,
+          airline: l.airline,
+          hotelName: l.hotelName,
+          confirmationNumber: l.confirmationNumber
+        }));
+        setTrip((t) => ({ ...t, legs: [...t.legs, ...newLegs], updatedAt: Date.now() }));
+        setTripDescription("");
+      }
+    } catch (error) {
+      console.error("Failed to parse trip:", error);
+      alert("Failed to analyze trip. Please try again.");
+    } finally {
+      setIsAnalyzing(false);
     }
   };
   const handleAddLeg = (legData) => {
@@ -25383,10 +25288,13 @@ function TripPlanner({ initialData: initialData2 }) {
       ] }),
       inputMode === "freeform" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", { value: tripDescription, onChange: (e) => setTripDescription(e.target.value), placeholder: "e.g. I am flying from Medellin to Boston on June 11th, 2026 and I will return to Medellin on June 15th.", rows: 4, style: { width: "100%", padding: 16, borderRadius: 12, border: `1px solid ${COLORS.border}`, fontSize: 15, resize: "vertical", fontFamily: "inherit", boxSizing: "border-box", marginBottom: 16 } }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { onClick: handleParseDescription, disabled: !tripDescription.trim(), style: { width: "100%", padding: 16, borderRadius: 12, border: "none", backgroundColor: tripDescription.trim() ? COLORS.primary : COLORS.border, color: tripDescription.trim() ? "white" : COLORS.textMuted, fontSize: 16, fontWeight: 700, cursor: tripDescription.trim() ? "pointer" : "not-allowed", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: handleParseDescription, disabled: !tripDescription.trim() || isAnalyzing, style: { width: "100%", padding: 16, borderRadius: 12, border: "none", backgroundColor: tripDescription.trim() && !isAnalyzing ? COLORS.primary : COLORS.border, color: tripDescription.trim() && !isAnalyzing ? "white" : COLORS.textMuted, fontSize: 16, fontWeight: 700, cursor: tripDescription.trim() && !isAnalyzing ? "pointer" : "not-allowed", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }, children: isAnalyzing ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { display: "inline-block", width: 20, height: 20, border: "2px solid white", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 1s linear infinite" } }),
+          " Analyzing..."
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { size: 20 }),
           " Analyze & Create Trip"
-        ] })
+        ] }) })
       ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { onClick: () => setShowAddModal(true), style: { width: "100%", padding: 16, borderRadius: 12, border: `2px dashed ${COLORS.border}`, backgroundColor: "transparent", color: COLORS.textSecondary, fontSize: 15, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { size: 20 }),
         " Add First Trip Leg"

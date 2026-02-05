@@ -1571,6 +1571,181 @@ async function handleSubscribe(req: IncomingMessage, res: ServerResponse) {
   }
 }
 
+// AI-powered trip parsing using OpenAI
+async function handleParseTripAI(req: IncomingMessage, res: ServerResponse) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "content-type");
+  
+  if (req.method !== "POST") {
+    res.writeHead(405).end("Method not allowed");
+    return;
+  }
+
+  try {
+    const body = await new Promise<string>((resolve, reject) => {
+      let data = "";
+      req.on("data", chunk => data += chunk);
+      req.on("end", () => resolve(data));
+      req.on("error", reject);
+    });
+
+    const { text } = JSON.parse(body);
+    
+    if (!text || typeof text !== "string") {
+      res.writeHead(400).end(JSON.stringify({ error: "Missing 'text' field" }));
+      return;
+    }
+
+    const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+    
+    if (!OPENAI_API_KEY) {
+      // Fallback to basic parsing if no API key
+      console.log("[Parse Trip] No OPENAI_API_KEY, using fallback parsing");
+      const legs = fallbackParseTripText(text);
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ legs, source: "fallback" }));
+      return;
+    }
+
+    const systemPrompt = `You are a travel assistant that extracts trip information from natural language descriptions.
+
+Extract all trip components (flights, hotels, transportation) from the user's text and return them as a JSON array.
+
+Each item should have:
+- type: "flight" | "hotel" | "car" | "train" | "bus" | "ferry"
+- status: always "pending"
+- title: descriptive title (e.g., "Flight: Boston → Medellin")
+- date: ISO date string (YYYY-MM-DD) if mentioned, otherwise empty string
+- endDate: for hotels, the checkout date if mentioned
+- from: departure city/location (for transport)
+- to: arrival city/location (for transport)
+- location: for hotels, the city
+- time: departure time if mentioned (HH:MM format)
+
+Rules:
+1. Always infer a hotel is needed at the destination if there's a flight
+2. Always infer airport transportation is needed (to airport at origin, from airport at destination)
+3. If return flight is mentioned, add return transportation too
+4. Parse dates like "June 11th, 2026" to "2026-06-11"
+5. If no year mentioned, assume current year or next year if month has passed
+
+Return ONLY valid JSON array, no explanation.`;
+
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: text }
+        ],
+        temperature: 0.3,
+        max_tokens: 2000
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("[Parse Trip] OpenAI API error:", response.status, errorText);
+      // Fallback on API error
+      const legs = fallbackParseTripText(text);
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ legs, source: "fallback" }));
+      return;
+    }
+
+    const data = await response.json() as any;
+    const content = data.choices?.[0]?.message?.content || "[]";
+    
+    // Parse the JSON response
+    let legs;
+    try {
+      // Handle potential markdown code blocks
+      const jsonStr = content.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+      legs = JSON.parse(jsonStr);
+    } catch (parseError) {
+      console.error("[Parse Trip] Failed to parse AI response:", content);
+      legs = fallbackParseTripText(text);
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ legs, source: "fallback" }));
+      return;
+    }
+
+    console.log("[Parse Trip] AI parsed legs:", legs.length);
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ legs, source: "ai" }));
+
+  } catch (error: any) {
+    console.error("[Parse Trip] Error:", error);
+    res.writeHead(500).end(JSON.stringify({ error: error.message || "Failed to parse trip" }));
+  }
+}
+
+// Fallback parsing when OpenAI is not available
+function fallbackParseTripText(text: string): any[] {
+  const legs: any[] = [];
+  const lower = text.toLowerCase();
+  
+  // Simple pattern matching
+  const fromToMatch = lower.match(/from\s+([a-z\s]+?)\s+to\s+([a-z\s]+?)(?:\s|$|,|\.)/i);
+  const toFromMatch = lower.match(/to\s+([a-z\s]+?)\s+from\s+([a-z\s]+?)(?:\s|$|,|\.)/i);
+  
+  let fromCity = "";
+  let toCity = "";
+  
+  if (fromToMatch) {
+    fromCity = fromToMatch[1].trim();
+    toCity = fromToMatch[2].trim();
+  } else if (toFromMatch) {
+    toCity = toFromMatch[1].trim();
+    fromCity = toFromMatch[2].trim();
+  }
+  
+  if (fromCity && toCity) {
+    // Add flight
+    legs.push({
+      type: "flight",
+      status: "pending",
+      title: `Flight: ${fromCity} → ${toCity}`,
+      from: fromCity,
+      to: toCity,
+      date: ""
+    });
+    
+    // Add hotel
+    legs.push({
+      type: "hotel",
+      status: "pending",
+      title: `Hotel in ${toCity}`,
+      location: toCity,
+      date: ""
+    });
+    
+    // Add transport
+    legs.push({
+      type: "car",
+      status: "pending",
+      title: `Transport to ${fromCity} Airport`,
+      to: `${fromCity} Airport`,
+      date: ""
+    });
+    
+    legs.push({
+      type: "car",
+      status: "pending",
+      title: `Transport from ${toCity} Airport`,
+      from: `${toCity} Airport`,
+      date: ""
+    });
+  }
+  
+  return legs;
+}
+
 async function handleSseRequest(res: ServerResponse) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   const server = createTripPlannerServer();
@@ -1689,6 +1864,22 @@ const httpServer = createServer(
 
     if (url.pathname === trackEventPath) {
       await handleTrackEvent(req, res);
+      return;
+    }
+
+    // AI-powered trip parsing endpoint
+    if (req.method === "POST" && url.pathname === "/api/parse-trip") {
+      await handleParseTripAI(req, res);
+      return;
+    }
+
+    if (req.method === "OPTIONS" && url.pathname === "/api/parse-trip") {
+      res.writeHead(204, {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "content-type",
+      });
+      res.end();
       return;
     }
 

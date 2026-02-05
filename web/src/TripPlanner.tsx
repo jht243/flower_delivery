@@ -2,8 +2,23 @@ import React, { useState, useEffect, useMemo } from "react";
 import {
   Plane, Hotel, Car, Train, Bus, Ship, MapPin, Calendar, Clock, 
   CheckCircle2, Circle, AlertCircle, Plus, X, ChevronDown, ChevronUp,
-  Edit3, Trash2, Save, RotateCcw, Sparkles, ArrowRight
+  Edit3, Trash2, Save, RotateCcw, Sparkles, ArrowRight, Loader2
 } from "lucide-react";
+
+// Add spinner animation
+const spinnerStyle = `
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+`;
+
+// Inject styles
+if (typeof document !== 'undefined') {
+  const styleEl = document.createElement('style');
+  styleEl.textContent = spinnerStyle;
+  document.head.appendChild(styleEl);
+}
 
 const COLORS = {
   primary: "#56C596",
@@ -542,16 +557,55 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
   const [showAddModal, setShowAddModal] = useState(false);
   const [expandedLegs, setExpandedLegs] = useState<Set<string>>(new Set());
   const [inputMode, setInputMode] = useState<"freeform" | "manual">("freeform");
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   useEffect(() => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ trip, timestamp: Date.now() })); } catch {} }, [trip]);
 
-  const handleParseDescription = () => {
-    if (!tripDescription.trim()) return;
-    const parsed = parseTripDescription(tripDescription);
-    if (parsed.length > 0) {
-      const newLegs: TripLeg[] = parsed.map(l => ({ id: generateId(), type: l.type || "other", status: l.status || "pending", title: l.title || "", date: l.date || "", time: l.time, from: l.from, to: l.to, location: l.location }));
-      setTrip(t => ({ ...t, legs: [...t.legs, ...newLegs], updatedAt: Date.now() }));
-      setTripDescription("");
+  const handleParseDescription = async () => {
+    if (!tripDescription.trim() || isAnalyzing) return;
+    
+    setIsAnalyzing(true);
+    
+    try {
+      // Call AI-powered parsing endpoint
+      const response = await fetch("/api/parse-trip", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: tripDescription })
+      });
+      
+      if (!response.ok) {
+        throw new Error("Failed to analyze trip");
+      }
+      
+      const data = await response.json();
+      const parsed = data.legs || [];
+      
+      if (parsed.length > 0) {
+        const newLegs: TripLeg[] = parsed.map((l: any) => ({ 
+          id: generateId(), 
+          type: l.type || "other", 
+          status: l.status || "pending", 
+          title: l.title || "", 
+          date: l.date || "", 
+          time: l.time,
+          endDate: l.endDate,
+          from: l.from, 
+          to: l.to, 
+          location: l.location,
+          flightNumber: l.flightNumber,
+          airline: l.airline,
+          hotelName: l.hotelName,
+          confirmationNumber: l.confirmationNumber
+        }));
+        setTrip(t => ({ ...t, legs: [...t.legs, ...newLegs], updatedAt: Date.now() }));
+        setTripDescription("");
+      }
+    } catch (error) {
+      console.error("Failed to parse trip:", error);
+      alert("Failed to analyze trip. Please try again.");
+    } finally {
+      setIsAnalyzing(false);
     }
   };
 
@@ -588,7 +642,7 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
             {inputMode === "freeform" ? (
               <>
                 <textarea value={tripDescription} onChange={e => setTripDescription(e.target.value)} placeholder="e.g. I am flying from Medellin to Boston on June 11th, 2026 and I will return to Medellin on June 15th." rows={4} style={{ width: "100%", padding: 16, borderRadius: 12, border: `1px solid ${COLORS.border}`, fontSize: 15, resize: "vertical", fontFamily: "inherit", boxSizing: "border-box", marginBottom: 16 }} />
-                <button onClick={handleParseDescription} disabled={!tripDescription.trim()} style={{ width: "100%", padding: 16, borderRadius: 12, border: "none", backgroundColor: tripDescription.trim() ? COLORS.primary : COLORS.border, color: tripDescription.trim() ? "white" : COLORS.textMuted, fontSize: 16, fontWeight: 700, cursor: tripDescription.trim() ? "pointer" : "not-allowed", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}><Sparkles size={20} /> Analyze & Create Trip</button>
+                <button onClick={handleParseDescription} disabled={!tripDescription.trim() || isAnalyzing} style={{ width: "100%", padding: 16, borderRadius: 12, border: "none", backgroundColor: (tripDescription.trim() && !isAnalyzing) ? COLORS.primary : COLORS.border, color: (tripDescription.trim() && !isAnalyzing) ? "white" : COLORS.textMuted, fontSize: 16, fontWeight: 700, cursor: (tripDescription.trim() && !isAnalyzing) ? "pointer" : "not-allowed", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>{isAnalyzing ? <><span style={{ display: "inline-block", width: 20, height: 20, border: "2px solid white", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 1s linear infinite" }} /> Analyzing...</> : <><Sparkles size={20} /> Analyze & Create Trip</>}</button>
               </>
             ) : (
               <button onClick={() => setShowAddModal(true)} style={{ width: "100%", padding: 16, borderRadius: 12, border: `2px dashed ${COLORS.border}`, backgroundColor: "transparent", color: COLORS.textSecondary, fontSize: 15, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}><Plus size={20} /> Add First Trip Leg</button>
