@@ -1623,7 +1623,7 @@ Each item should have:
 - time: departure time if mentioned (HH:MM format)
 
 Rules:
-1. Always infer a hotel is needed at the destination if there's a flight
+1. Only extract what the user explicitly mentions - do NOT infer or auto-add hotels
 2. Think like a traveler - for each flight:
    - You need transport TO the departure airport before the flight
    - You need transport FROM the arrival airport after landing (to get to hotel or home)
@@ -1718,15 +1718,6 @@ function fallbackParseTripText(text: string): any[] {
       title: `Flight: ${fromCity} → ${toCity}`,
       from: fromCity,
       to: toCity,
-      date: ""
-    });
-    
-    // Add hotel
-    legs.push({
-      type: "hotel",
-      status: "pending",
-      title: `Hotel in ${toCity}`,
-      location: toCity,
       date: ""
     });
     
