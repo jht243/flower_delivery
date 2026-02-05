@@ -1624,10 +1624,10 @@ Each item should have:
 
 Rules:
 1. Always infer a hotel is needed at the destination if there's a flight
-2. For EACH flight, create EXACTLY 2 transport legs:
-   - Transport TO the departure airport (on the flight date)
-   - Transport FROM the arrival airport (on the flight date)
-3. For a round trip with 2 flights, you should have EXACTLY 4 transport legs total
+2. Think like a traveler - for each flight:
+   - You need transport TO the departure airport before the flight
+   - You need transport FROM the arrival airport after landing (to get to hotel or home)
+3. Do NOT duplicate transports - each leg of the journey needs exactly one transport to the airport and one from the airport
 4. Parse dates like "June 11th, 2026" to "2026-06-11"
 5. If no year mentioned, assume current year or next year if month has passed
 
