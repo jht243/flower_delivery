@@ -784,20 +784,6 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
         );
       })}
       
-      {/* Legs without dates */}
-      {legsByDate.noDateLegs.length > 0 && (
-        <div style={{ marginBottom: 12, backgroundColor: COLORS.card, borderRadius: 12, border: `1px solid ${COLORS.border}`, overflow: "hidden" }}>
-          <div style={{ padding: "10px 14px", backgroundColor: COLORS.borderLight, borderBottom: `1px solid ${COLORS.border}`, display: "flex", alignItems: "center", gap: 10 }}>
-            <Calendar size={18} color={COLORS.textMuted} />
-            <span style={{ fontWeight: 600, fontSize: 14, color: COLORS.textSecondary }}>No Date Set</span>
-          </div>
-          <div style={{ padding: "8px 12px" }}>
-            {legsByDate.noDateLegs.map(leg => (
-              <TripLegCard key={leg.id} leg={leg} onUpdate={u => onUpdateLeg(leg.id, u)} onDelete={() => onDeleteLeg(leg.id)} isExpanded={expandedLegs.has(leg.id)} onToggleExpand={() => toggleLegExpand(leg.id)} tripDepartureDate={departureDate} tripReturnDate={returnDate} />
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
