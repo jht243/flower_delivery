@@ -24833,7 +24833,22 @@ var COLORS = {
   transportBg: "#FFEDD5"
 };
 var STORAGE_KEY = "TRIP_PLANNER_DATA";
+var TRIPS_LIST_KEY = "TRIP_PLANNER_TRIPS_LIST";
 var generateId = () => Math.random().toString(36).substr(2, 9);
+var loadSavedTrips = () => {
+  try {
+    const data = localStorage.getItem(TRIPS_LIST_KEY);
+    if (data) return JSON.parse(data);
+  } catch {
+  }
+  return [];
+};
+var saveTripsToStorage = (trips) => {
+  try {
+    localStorage.setItem(TRIPS_LIST_KEY, JSON.stringify(trips));
+  } catch {
+  }
+};
 var formatDate = (dateStr) => {
   if (!dateStr) return "";
   try {
@@ -25787,6 +25802,18 @@ var MissingInfoBar = ({
   ] });
 };
 function TripPlanner({ initialData: initialData2 }) {
+  const [savedTrips, setSavedTrips] = (0, import_react3.useState)(() => loadSavedTrips());
+  const [currentView, setCurrentView] = (0, import_react3.useState)(() => {
+    try {
+      const s = localStorage.getItem(STORAGE_KEY);
+      if (s) {
+        const d = JSON.parse(s);
+        if (d.trip && d.trip.legs.length > 0) return "trip";
+      }
+    } catch {
+    }
+    return savedTrips.length > 0 ? "home" : "trip";
+  });
   const [trip, setTrip] = (0, import_react3.useState)(() => {
     try {
       const s = localStorage.getItem(STORAGE_KEY);
@@ -25802,6 +25829,8 @@ function TripPlanner({ initialData: initialData2 }) {
   const [showAddModal, setShowAddModal] = (0, import_react3.useState)(false);
   const [expandedLegs, setExpandedLegs] = (0, import_react3.useState)(/* @__PURE__ */ new Set());
   const [inputMode, setInputMode] = (0, import_react3.useState)("freeform");
+  const [renamingTripId, setRenamingTripId] = (0, import_react3.useState)(null);
+  const [renameValue, setRenameValue] = (0, import_react3.useState)("");
   const [isAnalyzing, setIsAnalyzing] = (0, import_react3.useState)(false);
   const [editingItem, setEditingItem] = (0, import_react3.useState)(null);
   const [editValue, setEditValue] = (0, import_react3.useState)("");
@@ -25869,6 +25898,37 @@ function TripPlanner({ initialData: initialData2 }) {
     const hotels = trip.legs.filter((l) => l.type === "hotel");
     const outboundFlight = flights[0];
     const returnFlight = flights.length > 1 ? flights[flights.length - 1] : null;
+    if (trip.travelers === 1) {
+      items.push({
+        id: "travelers",
+        type: "travelers",
+        label: "Confirm # travelers",
+        icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, { size: 14 }),
+        priority: 1
+      });
+    }
+    if (hotels.length === 0) {
+      items.push({
+        id: "add-hotel",
+        type: "hotel_name",
+        label: "Add hotel",
+        icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Hotel, { size: 14 }),
+        priority: 2
+      });
+    }
+    flights.forEach((f) => {
+      if (!f.flightNumber) {
+        const routeLabel = f.from && f.to ? `${f.from} \u2192 ${f.to}` : "flight";
+        items.push({
+          id: `flight-${f.id}`,
+          type: "flight_number",
+          label: `Add flight # (${routeLabel})`,
+          icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plane, { size: 14 }),
+          legId: f.id,
+          priority: 3
+        });
+      }
+    });
     if (outboundFlight && !outboundFlight.date) {
       items.push({
         id: `date-${outboundFlight.id}`,
@@ -25876,7 +25936,7 @@ function TripPlanner({ initialData: initialData2 }) {
         label: "Add departure date",
         icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { size: 14 }),
         legId: outboundFlight.id,
-        priority: 1
+        priority: 4
       });
     }
     if (returnFlight && !returnFlight.date) {
@@ -25886,36 +25946,6 @@ function TripPlanner({ initialData: initialData2 }) {
         label: "Add return date",
         icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { size: 14 }),
         legId: returnFlight.id,
-        priority: 2
-      });
-    }
-    if (!trip.travelers || trip.travelers < 1) {
-      items.push({
-        id: "travelers",
-        type: "travelers",
-        label: "Add travelers",
-        icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, { size: 14 }),
-        priority: 3
-      });
-    }
-    flights.forEach((f) => {
-      if (!f.flightNumber && f.status === "booked") {
-        items.push({
-          id: `flight-${f.id}`,
-          type: "flight_number",
-          label: `Add flight # for ${f.from || ""} \u2192 ${f.to || ""}`.trim(),
-          icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plane, { size: 14 }),
-          legId: f.id,
-          priority: 4
-        });
-      }
-    });
-    if (hotels.length === 0 && flights.length > 0) {
-      items.push({
-        id: "add-hotel",
-        type: "hotel_name",
-        label: "Add hotel",
-        icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Hotel, { size: 14 }),
         priority: 5
       });
     }
@@ -25939,7 +25969,7 @@ function TripPlanner({ initialData: initialData2 }) {
           label: `Add confirmation #`,
           icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FileText, { size: 14 }),
           legId: leg.id,
-          priority: 6
+          priority: 7
         });
       }
     });
@@ -26054,14 +26084,24 @@ function TripPlanner({ initialData: initialData2 }) {
         const returnDate = flights.length > 1 ? flights[flights.length - 1]?.date : "";
         const hotel = newLegs.find((l) => l.type === "hotel");
         const hotelEndDate = hotel?.endDate || returnDate;
-        setTrip((t) => ({
-          ...t,
-          legs: [...t.legs, ...newLegs],
-          departureDate: departureDate || t.departureDate,
-          returnDate: returnDate || hotelEndDate || t.returnDate,
+        const updatedTrip = {
+          ...trip,
+          legs: [...trip.legs, ...newLegs],
+          departureDate: departureDate || trip.departureDate,
+          returnDate: returnDate || hotelEndDate || trip.returnDate,
           updatedAt: Date.now()
-        }));
+        };
+        setTrip(updatedTrip);
         setTripDescription("");
+        const existingIndex = savedTrips.findIndex((t) => t.id === updatedTrip.id);
+        let newTrips;
+        if (existingIndex >= 0) {
+          newTrips = savedTrips.map((t, i) => i === existingIndex ? updatedTrip : t);
+        } else {
+          newTrips = [...savedTrips, updatedTrip];
+        }
+        setSavedTrips(newTrips);
+        saveTripsToStorage(newTrips);
       }
     } catch (error) {
       console.error("Failed to parse trip:", error);
@@ -26095,20 +26135,136 @@ function TripPlanner({ initialData: initialData2 }) {
       setExpandedLegs(/* @__PURE__ */ new Set());
     }
   };
+  const saveCurrentTrip = () => {
+    const updatedTrip = { ...trip, updatedAt: Date.now() };
+    const existingIndex = savedTrips.findIndex((t) => t.id === trip.id);
+    let newTrips;
+    if (existingIndex >= 0) {
+      newTrips = savedTrips.map((t, i) => i === existingIndex ? updatedTrip : t);
+    } else {
+      newTrips = [...savedTrips, updatedTrip];
+    }
+    setSavedTrips(newTrips);
+    saveTripsToStorage(newTrips);
+  };
+  const handleOpenTrip = (tripToOpen) => {
+    setTrip(tripToOpen);
+    setCurrentView("trip");
+    setExpandedLegs(/* @__PURE__ */ new Set());
+  };
+  const handleDeleteTrip = (tripId) => {
+    if (!confirm("Delete this trip?")) return;
+    const newTrips = savedTrips.filter((t) => t.id !== tripId);
+    setSavedTrips(newTrips);
+    saveTripsToStorage(newTrips);
+  };
+  const handleDuplicateTrip = (tripToDupe) => {
+    const newTrip = {
+      ...tripToDupe,
+      id: generateId(),
+      name: `${tripToDupe.name} (Copy)`,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+    const newTrips = [...savedTrips, newTrip];
+    setSavedTrips(newTrips);
+    saveTripsToStorage(newTrips);
+  };
+  const handleRenameTrip = (tripId, newName) => {
+    const newTrips = savedTrips.map((t) => t.id === tripId ? { ...t, name: newName, updatedAt: Date.now() } : t);
+    setSavedTrips(newTrips);
+    saveTripsToStorage(newTrips);
+    setRenamingTripId(null);
+  };
+  const handleNewTrip = () => {
+    const newTrip = { id: generateId(), name: "My Trip", tripType: "round_trip", legs: [], travelers: 1, createdAt: Date.now(), updatedAt: Date.now() };
+    setTrip(newTrip);
+    setCurrentView("trip");
+    setTripDescription("");
+    setExpandedLegs(/* @__PURE__ */ new Set());
+  };
+  const handleBackToHome = () => {
+    if (trip.legs.length > 0) {
+      saveCurrentTrip();
+    }
+    setCurrentView("home");
+  };
   const sortedLegs = (0, import_react3.useMemo)(() => [...trip.legs].sort((a, b) => {
     if (!a.date && !b.date) return 0;
     if (!a.date) return 1;
     if (!b.date) return -1;
     return a.date.localeCompare(b.date);
   }), [trip.legs]);
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { minHeight: "100vh", backgroundColor: COLORS.bg, fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", width: "100%", maxWidth: "100%", overflow: "hidden", boxSizing: "border-box" }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { backgroundColor: COLORS.primary, padding: "24px 20px", color: "white" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { maxWidth: 600, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+  if (currentView === "home") {
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { minHeight: "100vh", backgroundColor: COLORS.bg, fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", width: "100%", maxWidth: "100%", overflow: "hidden", boxSizing: "border-box" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { backgroundColor: COLORS.primary, padding: "24px 20px", color: "white" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { maxWidth: 600, margin: "0 auto" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", { style: { margin: 0, fontSize: 24, fontWeight: 700, display: "flex", alignItems: "center", gap: 10 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plane, { size: 28 }),
           "Trip Planner"
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { margin: "4px 0 0", fontSize: 14, opacity: 0.9 }, children: "Organize your travel reservations" })
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { margin: "4px 0 0", fontSize: 14, opacity: 0.9 }, children: "Your saved trips" })
+      ] }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { maxWidth: 600, margin: "0 auto", padding: 20 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { onClick: handleNewTrip, style: { width: "100%", padding: 16, borderRadius: 12, border: `2px dashed ${COLORS.primary}`, backgroundColor: COLORS.accentLight, color: COLORS.primaryDark, fontSize: 15, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 20 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { size: 20 }),
+          " Create New Trip"
+        ] }),
+        savedTrips.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { textAlign: "center", padding: 40, color: COLORS.textSecondary }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plane, { size: 48, style: { opacity: 0.3, marginBottom: 16 } }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { margin: 0 }, children: "No saved trips yet" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { margin: "8px 0 0", fontSize: 14 }, children: "Create your first trip to get started!" })
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 12 }, children: savedTrips.sort((a, b) => b.updatedAt - a.updatedAt).map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: COLORS.card, borderRadius: 12, border: `1px solid ${COLORS.border}`, overflow: "hidden" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { onClick: () => handleOpenTrip(t), style: { padding: 16, cursor: "pointer" }, children: renamingTripId === t.id ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 8 }, onClick: (e) => e.stopPropagation(), children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: renameValue, onChange: (e) => setRenameValue(e.target.value), autoFocus: true, style: { flex: 1, padding: 8, borderRadius: 6, border: `1px solid ${COLORS.border}`, fontSize: 14 }, onKeyDown: (e) => {
+              if (e.key === "Enter") handleRenameTrip(t.id, renameValue);
+              if (e.key === "Escape") setRenamingTripId(null);
+            } }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => handleRenameTrip(t.id, renameValue), style: { padding: "6px 12px", borderRadius: 6, border: "none", backgroundColor: COLORS.primary, color: "white", fontSize: 12, fontWeight: 600, cursor: "pointer" }, children: "Save" })
+          ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontWeight: 700, fontSize: 16, color: COLORS.textMain, marginBottom: 4 }, children: t.name }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 13, color: COLORS.textSecondary, display: "flex", alignItems: "center", gap: 12 }, children: [
+              t.departureDate && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: formatDate(t.departureDate) }),
+              t.departureDate && t.returnDate && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "\u2192" }),
+              t.returnDate && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: formatDate(t.returnDate) }),
+              !t.departureDate && !t.returnDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+                t.legs.length,
+                " leg",
+                t.legs.length !== 1 ? "s" : ""
+              ] })
+            ] })
+          ] }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "8px 16px", borderTop: `1px solid ${COLORS.borderLight}`, display: "flex", gap: 8 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { onClick: () => {
+              setRenamingTripId(t.id);
+              setRenameValue(t.name);
+            }, style: { padding: "6px 10px", borderRadius: 6, border: `1px solid ${COLORS.border}`, backgroundColor: "white", color: COLORS.textSecondary, fontSize: 11, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Pen, { size: 12 }),
+              " Rename"
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { onClick: () => handleDuplicateTrip(t), style: { padding: "6px 10px", borderRadius: 6, border: `1px solid ${COLORS.border}`, backgroundColor: "white", color: COLORS.textSecondary, fontSize: 11, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { size: 12 }),
+              " Duplicate"
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { onClick: () => handleDeleteTrip(t.id), style: { padding: "6px 10px", borderRadius: 6, border: `1px solid #FEE2E2`, backgroundColor: "#FEF2F2", color: "#EF4444", fontSize: 11, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { size: 12 }),
+              " Delete"
+            ] })
+          ] })
+        ] }, t.id)) })
+      ] })
+    ] });
+  }
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { minHeight: "100vh", backgroundColor: COLORS.bg, fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", width: "100%", maxWidth: "100%", overflow: "hidden", boxSizing: "border-box" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { backgroundColor: COLORS.primary, padding: "24px 20px", color: "white" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { maxWidth: 600, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 12 }, children: [
+        savedTrips.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: handleBackToHome, style: { padding: 8, borderRadius: 8, border: "none", backgroundColor: "rgba(255,255,255,0.2)", color: "white", cursor: "pointer", display: "flex", alignItems: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronUp, { size: 20, style: { transform: "rotate(-90deg)" } }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", { style: { margin: 0, fontSize: 24, fontWeight: 700, display: "flex", alignItems: "center", gap: 10 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plane, { size: 28 }),
+            "Trip Planner"
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { margin: "4px 0 0", fontSize: 14, opacity: 0.9 }, children: "Organize your travel reservations" })
+        ] })
       ] }),
       trip.legs.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { onClick: handleReset, style: { padding: "8px 12px", borderRadius: 8, border: "none", backgroundColor: "rgba(255,255,255,0.2)", color: "white", fontSize: 13, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RotateCcw, { size: 16 }),

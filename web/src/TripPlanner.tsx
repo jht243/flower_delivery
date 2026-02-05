@@ -92,7 +92,24 @@ interface MissingInfo {
 }
 
 const STORAGE_KEY = "TRIP_PLANNER_DATA";
+const TRIPS_LIST_KEY = "TRIP_PLANNER_TRIPS_LIST";
 const generateId = () => Math.random().toString(36).substr(2, 9);
+
+// Helper to load all saved trips
+const loadSavedTrips = (): Trip[] => {
+  try {
+    const data = localStorage.getItem(TRIPS_LIST_KEY);
+    if (data) return JSON.parse(data);
+  } catch {}
+  return [];
+};
+
+// Helper to save trips list
+const saveTripsToStorage = (trips: Trip[]) => {
+  try {
+    localStorage.setItem(TRIPS_LIST_KEY, JSON.stringify(trips));
+  } catch {}
+};
 
 const formatDate = (dateStr: string): string => {
   if (!dateStr) return "";
@@ -1187,6 +1204,15 @@ const MissingInfoBar = ({
 };
 
 export default function TripPlanner({ initialData }: { initialData?: any }) {
+  const [savedTrips, setSavedTrips] = useState<Trip[]>(() => loadSavedTrips());
+  const [currentView, setCurrentView] = useState<"home" | "trip">(() => {
+    // If there's a current trip in progress, show it; otherwise show home
+    try { 
+      const s = localStorage.getItem(STORAGE_KEY); 
+      if (s) { const d = JSON.parse(s); if (d.trip && d.trip.legs.length > 0) return "trip"; } 
+    } catch {}
+    return savedTrips.length > 0 ? "home" : "trip";
+  });
   const [trip, setTrip] = useState<Trip>(() => {
     try { const s = localStorage.getItem(STORAGE_KEY); if (s) { const d = JSON.parse(s); if (d.trip) return d.trip; } } catch {}
     return { id: generateId(), name: "My Trip", tripType: "round_trip", legs: [], travelers: 1, createdAt: Date.now(), updatedAt: Date.now() };
@@ -1195,6 +1221,8 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
   const [showAddModal, setShowAddModal] = useState(false);
   const [expandedLegs, setExpandedLegs] = useState<Set<string>>(new Set());
   const [inputMode, setInputMode] = useState<"freeform" | "manual">("freeform");
+  const [renamingTripId, setRenamingTripId] = useState<string | null>(null);
+  const [renameValue, setRenameValue] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [editingItem, setEditingItem] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
@@ -1274,10 +1302,44 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
     const outboundFlight = flights[0];
     const returnFlight = flights.length > 1 ? flights[flights.length - 1] : null;
     
-    // 1. Trip type (most important for understanding the trip)
-    // We infer this from flights, but could ask if unclear
+    // 1. Confirm travelers (show if default value of 1 - user should confirm)
+    if (trip.travelers === 1) {
+      items.push({ 
+        id: "travelers", 
+        type: "travelers", 
+        label: "Confirm # travelers", 
+        icon: <Users size={14} />, 
+        priority: 1 
+      });
+    }
     
-    // 2. Departure date (if outbound flight has no date)
+    // 2. Hotel - prompt to add if no hotels exist
+    if (hotels.length === 0) {
+      items.push({ 
+        id: "add-hotel", 
+        type: "hotel_name", 
+        label: "Add hotel", 
+        icon: <Hotel size={14} />, 
+        priority: 2 
+      });
+    }
+    
+    // 3. Flight info - prompt for flights without flight numbers
+    flights.forEach(f => {
+      if (!f.flightNumber) {
+        const routeLabel = (f.from && f.to) ? `${f.from} → ${f.to}` : "flight";
+        items.push({ 
+          id: `flight-${f.id}`, 
+          type: "flight_number", 
+          label: `Add flight # (${routeLabel})`, 
+          icon: <Plane size={14} />, 
+          legId: f.id, 
+          priority: 3 
+        });
+      }
+    });
+    
+    // 4. Departure date (if outbound flight has no date)
     if (outboundFlight && !outboundFlight.date) {
       items.push({ 
         id: `date-${outboundFlight.id}`, 
@@ -1285,11 +1347,11 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
         label: "Add departure date", 
         icon: <Calendar size={14} />, 
         legId: outboundFlight.id, 
-        priority: 1 
+        priority: 4 
       });
     }
     
-    // 3. Return date (if round trip and return flight has no date)
+    // 5. Return date (if round trip and return flight has no date)
     if (returnFlight && !returnFlight.date) {
       items.push({ 
         id: `date-${returnFlight.id}`, 
@@ -1297,47 +1359,11 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
         label: "Add return date", 
         icon: <Calendar size={14} />, 
         legId: returnFlight.id, 
-        priority: 2 
-      });
-    }
-    
-    // 4. Number of travelers
-    if (!trip.travelers || trip.travelers < 1) {
-      items.push({ 
-        id: "travelers", 
-        type: "travelers", 
-        label: "Add travelers", 
-        icon: <Users size={14} />, 
-        priority: 3 
-      });
-    }
-    
-    // 5. Flight numbers (for booked flights)
-    flights.forEach(f => {
-      if (!f.flightNumber && f.status === "booked") {
-        items.push({ 
-          id: `flight-${f.id}`, 
-          type: "flight_number", 
-          label: `Add flight # for ${f.from || ""} → ${f.to || ""}`.trim(), 
-          icon: <Plane size={14} />, 
-          legId: f.id, 
-          priority: 4 
-        });
-      }
-    });
-    
-    // 6. Hotel - prompt to add if no hotels exist
-    if (hotels.length === 0 && flights.length > 0) {
-      items.push({ 
-        id: "add-hotel", 
-        type: "hotel_name", 
-        label: "Add hotel", 
-        icon: <Hotel size={14} />, 
         priority: 5 
       });
     }
     
-    // 7. Hotel name (only if hotel exists but no name - check both hotelName and title)
+    // 6. Hotel name (only if hotel exists but no name)
     hotels.forEach(h => {
       if (!h.hotelName && !h.title) {
         items.push({ 
@@ -1360,7 +1386,7 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
           label: `Add confirmation #`, 
           icon: <FileText size={14} />, 
           legId: leg.id, 
-          priority: 6 
+          priority: 7 
         });
       }
     });
@@ -1502,14 +1528,26 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
         const hotel = newLegs.find(l => l.type === "hotel");
         const hotelEndDate = hotel?.endDate || returnDate;
         
-        setTrip(t => ({ 
-          ...t, 
-          legs: [...t.legs, ...newLegs], 
-          departureDate: departureDate || t.departureDate,
-          returnDate: returnDate || hotelEndDate || t.returnDate,
+        const updatedTrip = { 
+          ...trip, 
+          legs: [...trip.legs, ...newLegs], 
+          departureDate: departureDate || trip.departureDate,
+          returnDate: returnDate || hotelEndDate || trip.returnDate,
           updatedAt: Date.now() 
-        }));
+        };
+        setTrip(updatedTrip);
         setTripDescription("");
+        
+        // Auto-save the trip after creation
+        const existingIndex = savedTrips.findIndex(t => t.id === updatedTrip.id);
+        let newTrips: Trip[];
+        if (existingIndex >= 0) {
+          newTrips = savedTrips.map((t, i) => i === existingIndex ? updatedTrip : t);
+        } else {
+          newTrips = [...savedTrips, updatedTrip];
+        }
+        setSavedTrips(newTrips);
+        saveTripsToStorage(newTrips);
       }
     } catch (error) {
       console.error("Failed to parse trip:", error);
@@ -1529,13 +1567,135 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
   const toggleLegExpand = (legId: string) => setExpandedLegs(p => { const n = new Set(p); n.has(legId) ? n.delete(legId) : n.add(legId); return n; });
   const handleReset = () => { if (confirm("Clear all trip data?")) { setTrip({ id: generateId(), name: "My Trip", tripType: "round_trip", legs: [], travelers: 1, createdAt: Date.now(), updatedAt: Date.now() }); setTripDescription(""); setExpandedLegs(new Set()); } };
 
+  // Trip management functions
+  const saveCurrentTrip = () => {
+    const updatedTrip = { ...trip, updatedAt: Date.now() };
+    const existingIndex = savedTrips.findIndex(t => t.id === trip.id);
+    let newTrips: Trip[];
+    if (existingIndex >= 0) {
+      newTrips = savedTrips.map((t, i) => i === existingIndex ? updatedTrip : t);
+    } else {
+      newTrips = [...savedTrips, updatedTrip];
+    }
+    setSavedTrips(newTrips);
+    saveTripsToStorage(newTrips);
+  };
+
+  const handleOpenTrip = (tripToOpen: Trip) => {
+    setTrip(tripToOpen);
+    setCurrentView("trip");
+    setExpandedLegs(new Set());
+  };
+
+  const handleDeleteTrip = (tripId: string) => {
+    if (!confirm("Delete this trip?")) return;
+    const newTrips = savedTrips.filter(t => t.id !== tripId);
+    setSavedTrips(newTrips);
+    saveTripsToStorage(newTrips);
+  };
+
+  const handleDuplicateTrip = (tripToDupe: Trip) => {
+    const newTrip: Trip = {
+      ...tripToDupe,
+      id: generateId(),
+      name: `${tripToDupe.name} (Copy)`,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+    const newTrips = [...savedTrips, newTrip];
+    setSavedTrips(newTrips);
+    saveTripsToStorage(newTrips);
+  };
+
+  const handleRenameTrip = (tripId: string, newName: string) => {
+    const newTrips = savedTrips.map(t => t.id === tripId ? { ...t, name: newName, updatedAt: Date.now() } : t);
+    setSavedTrips(newTrips);
+    saveTripsToStorage(newTrips);
+    setRenamingTripId(null);
+  };
+
+  const handleNewTrip = () => {
+    const newTrip: Trip = { id: generateId(), name: "My Trip", tripType: "round_trip", legs: [], travelers: 1, createdAt: Date.now(), updatedAt: Date.now() };
+    setTrip(newTrip);
+    setCurrentView("trip");
+    setTripDescription("");
+    setExpandedLegs(new Set());
+  };
+
+  const handleBackToHome = () => {
+    // Auto-save current trip if it has content
+    if (trip.legs.length > 0) {
+      saveCurrentTrip();
+    }
+    setCurrentView("home");
+  };
+
   const sortedLegs = useMemo(() => [...trip.legs].sort((a, b) => { if (!a.date && !b.date) return 0; if (!a.date) return 1; if (!b.date) return -1; return a.date.localeCompare(b.date); }), [trip.legs]);
+
+  // Homepage view - list of saved trips
+  if (currentView === "home") {
+    return (
+      <div style={{ minHeight: "100vh", backgroundColor: COLORS.bg, fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", width: "100%", maxWidth: "100%", overflow: "hidden", boxSizing: "border-box" }}>
+        <div style={{ backgroundColor: COLORS.primary, padding: "24px 20px", color: "white" }}>
+          <div style={{ maxWidth: 600, margin: "0 auto" }}>
+            <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, display: "flex", alignItems: "center", gap: 10 }}><Plane size={28} />Trip Planner</h1>
+            <p style={{ margin: "4px 0 0", fontSize: 14, opacity: 0.9 }}>Your saved trips</p>
+          </div>
+        </div>
+        <div style={{ maxWidth: 600, margin: "0 auto", padding: 20 }}>
+          <button onClick={handleNewTrip} style={{ width: "100%", padding: 16, borderRadius: 12, border: `2px dashed ${COLORS.primary}`, backgroundColor: COLORS.accentLight, color: COLORS.primaryDark, fontSize: 15, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 20 }}>
+            <Plus size={20} /> Create New Trip
+          </button>
+          {savedTrips.length === 0 ? (
+            <div style={{ textAlign: "center", padding: 40, color: COLORS.textSecondary }}>
+              <Plane size={48} style={{ opacity: 0.3, marginBottom: 16 }} />
+              <p style={{ margin: 0 }}>No saved trips yet</p>
+              <p style={{ margin: "8px 0 0", fontSize: 14 }}>Create your first trip to get started!</p>
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {savedTrips.sort((a, b) => b.updatedAt - a.updatedAt).map(t => (
+                <div key={t.id} style={{ backgroundColor: COLORS.card, borderRadius: 12, border: `1px solid ${COLORS.border}`, overflow: "hidden" }}>
+                  <div onClick={() => handleOpenTrip(t)} style={{ padding: 16, cursor: "pointer" }}>
+                    {renamingTripId === t.id ? (
+                      <div style={{ display: "flex", gap: 8 }} onClick={e => e.stopPropagation()}>
+                        <input value={renameValue} onChange={e => setRenameValue(e.target.value)} autoFocus style={{ flex: 1, padding: 8, borderRadius: 6, border: `1px solid ${COLORS.border}`, fontSize: 14 }} onKeyDown={e => { if (e.key === "Enter") handleRenameTrip(t.id, renameValue); if (e.key === "Escape") setRenamingTripId(null); }} />
+                        <button onClick={() => handleRenameTrip(t.id, renameValue)} style={{ padding: "6px 12px", borderRadius: 6, border: "none", backgroundColor: COLORS.primary, color: "white", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>Save</button>
+                      </div>
+                    ) : (
+                      <>
+                        <div style={{ fontWeight: 700, fontSize: 16, color: COLORS.textMain, marginBottom: 4 }}>{t.name}</div>
+                        <div style={{ fontSize: 13, color: COLORS.textSecondary, display: "flex", alignItems: "center", gap: 12 }}>
+                          {t.departureDate && <span>{formatDate(t.departureDate)}</span>}
+                          {t.departureDate && t.returnDate && <span>→</span>}
+                          {t.returnDate && <span>{formatDate(t.returnDate)}</span>}
+                          {!t.departureDate && !t.returnDate && <span>{t.legs.length} leg{t.legs.length !== 1 ? "s" : ""}</span>}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  <div style={{ padding: "8px 16px", borderTop: `1px solid ${COLORS.borderLight}`, display: "flex", gap: 8 }}>
+                    <button onClick={() => { setRenamingTripId(t.id); setRenameValue(t.name); }} style={{ padding: "6px 10px", borderRadius: 6, border: `1px solid ${COLORS.border}`, backgroundColor: "white", color: COLORS.textSecondary, fontSize: 11, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}><Edit2 size={12} /> Rename</button>
+                    <button onClick={() => handleDuplicateTrip(t)} style={{ padding: "6px 10px", borderRadius: 6, border: `1px solid ${COLORS.border}`, backgroundColor: "white", color: COLORS.textSecondary, fontSize: 11, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}><Plus size={12} /> Duplicate</button>
+                    <button onClick={() => handleDeleteTrip(t.id)} style={{ padding: "6px 10px", borderRadius: 6, border: `1px solid #FEE2E2`, backgroundColor: "#FEF2F2", color: "#EF4444", fontSize: 11, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}><Trash2 size={12} /> Delete</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: COLORS.bg, fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", width: "100%", maxWidth: "100%", overflow: "hidden", boxSizing: "border-box" }}>
       <div style={{ backgroundColor: COLORS.primary, padding: "24px 20px", color: "white" }}>
         <div style={{ maxWidth: 600, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div><h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, display: "flex", alignItems: "center", gap: 10 }}><Plane size={28} />Trip Planner</h1><p style={{ margin: "4px 0 0", fontSize: 14, opacity: 0.9 }}>Organize your travel reservations</p></div>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            {savedTrips.length > 0 && <button onClick={handleBackToHome} style={{ padding: 8, borderRadius: 8, border: "none", backgroundColor: "rgba(255,255,255,0.2)", color: "white", cursor: "pointer", display: "flex", alignItems: "center" }}><ChevronUp size={20} style={{ transform: "rotate(-90deg)" }} /></button>}
+            <div><h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, display: "flex", alignItems: "center", gap: 10 }}><Plane size={28} />Trip Planner</h1><p style={{ margin: "4px 0 0", fontSize: 14, opacity: 0.9 }}>Organize your travel reservations</p></div>
+          </div>
           {trip.legs.length > 0 && <button onClick={handleReset} style={{ padding: "8px 12px", borderRadius: 8, border: "none", backgroundColor: "rgba(255,255,255,0.2)", color: "white", fontSize: 13, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}><RotateCcw size={16} /> Reset</button>}
         </div>
       </div>
