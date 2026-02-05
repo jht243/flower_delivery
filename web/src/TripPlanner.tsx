@@ -133,18 +133,40 @@ const parseTripDescription = (text: string): Partial<TripLeg>[] => {
     }
   }
 
-  // Better regex: match "from X to Y" where X and Y are city names (words only, stop at common keywords)
-  const flightMatch = text.match(/(?:fly(?:ing)?|flight)\s+(?:from\s+)?([A-Za-z][A-Za-z\s]*?)\s+to\s+([A-Za-z][A-Za-z\s]*?)(?=\s+(?:on|and|then|,|\.|$)|\s*$)/i);
-  
+  // Try multiple patterns for flight detection
   let fromCity = "";
   let toCity = "";
   let outboundDate = allDates[0] || "";
   let returnDate = allDates[1] || "";
   
-  if (flightMatch) {
-    fromCity = flightMatch[1].trim();
-    toCity = flightMatch[2].trim();
-    
+  // Pattern 1: "flying from X to Y" or "fly from X to Y"
+  const pattern1 = text.match(/(?:fly(?:ing)?|flight)\s+from\s+([A-Za-z][A-Za-z\s]*?)\s+to\s+([A-Za-z][A-Za-z\s]*?)(?=\s+(?:on|and|then|,|\.|$)|\s*$)/i);
+  
+  // Pattern 2: "flying to Y from X" or "fly to Y from X"
+  const pattern2 = text.match(/(?:fly(?:ing)?|flight)\s+to\s+([A-Za-z][A-Za-z\s]*?)\s+from\s+([A-Za-z][A-Za-z\s]*?)(?=\s+(?:on|and|then|,|\.|$)|\s*$)/i);
+  
+  // Pattern 3: "going from X to Y" or "traveling from X to Y"
+  const pattern3 = text.match(/(?:going|traveling|travel)\s+(?:from\s+)?([A-Za-z][A-Za-z\s]*?)\s+to\s+([A-Za-z][A-Za-z\s]*?)(?=\s+(?:on|and|then|,|\.|$)|\s*$)/i);
+  
+  // Pattern 4: Simple "from X to Y"
+  const pattern4 = text.match(/from\s+([A-Za-z][A-Za-z\s]*?)\s+to\s+([A-Za-z][A-Za-z\s]*?)(?=\s+(?:on|and|then|,|\.|$)|\s*$)/i);
+  
+  if (pattern1) {
+    fromCity = pattern1[1].trim();
+    toCity = pattern1[2].trim();
+  } else if (pattern2) {
+    // Note: pattern2 captures "to Y from X" so we swap
+    toCity = pattern2[1].trim();
+    fromCity = pattern2[2].trim();
+  } else if (pattern3) {
+    fromCity = pattern3[1].trim();
+    toCity = pattern3[2].trim();
+  } else if (pattern4) {
+    fromCity = pattern4[1].trim();
+    toCity = pattern4[2].trim();
+  }
+  
+  if (fromCity && toCity) {
     // Create outbound flight
     legs.push({ 
       type: "flight", 

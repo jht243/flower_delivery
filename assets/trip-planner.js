@@ -24879,14 +24879,28 @@ var parseTripDescription = (text) => {
       allDates.push(`${year}-${month}-${day}`);
     }
   }
-  const flightMatch = text.match(/(?:fly(?:ing)?|flight)\s+(?:from\s+)?([A-Za-z][A-Za-z\s]*?)\s+to\s+([A-Za-z][A-Za-z\s]*?)(?=\s+(?:on|and|then|,|\.|$)|\s*$)/i);
   let fromCity = "";
   let toCity = "";
   let outboundDate = allDates[0] || "";
   let returnDate = allDates[1] || "";
-  if (flightMatch) {
-    fromCity = flightMatch[1].trim();
-    toCity = flightMatch[2].trim();
+  const pattern1 = text.match(/(?:fly(?:ing)?|flight)\s+from\s+([A-Za-z][A-Za-z\s]*?)\s+to\s+([A-Za-z][A-Za-z\s]*?)(?=\s+(?:on|and|then|,|\.|$)|\s*$)/i);
+  const pattern2 = text.match(/(?:fly(?:ing)?|flight)\s+to\s+([A-Za-z][A-Za-z\s]*?)\s+from\s+([A-Za-z][A-Za-z\s]*?)(?=\s+(?:on|and|then|,|\.|$)|\s*$)/i);
+  const pattern3 = text.match(/(?:going|traveling|travel)\s+(?:from\s+)?([A-Za-z][A-Za-z\s]*?)\s+to\s+([A-Za-z][A-Za-z\s]*?)(?=\s+(?:on|and|then|,|\.|$)|\s*$)/i);
+  const pattern4 = text.match(/from\s+([A-Za-z][A-Za-z\s]*?)\s+to\s+([A-Za-z][A-Za-z\s]*?)(?=\s+(?:on|and|then|,|\.|$)|\s*$)/i);
+  if (pattern1) {
+    fromCity = pattern1[1].trim();
+    toCity = pattern1[2].trim();
+  } else if (pattern2) {
+    toCity = pattern2[1].trim();
+    fromCity = pattern2[2].trim();
+  } else if (pattern3) {
+    fromCity = pattern3[1].trim();
+    toCity = pattern3[2].trim();
+  } else if (pattern4) {
+    fromCity = pattern4[1].trim();
+    toCity = pattern4[2].trim();
+  }
+  if (fromCity && toCity) {
     legs.push({
       type: "flight",
       status: "pending",
