@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 
-import TravelChecklist from "./TravelChecklist";
+import TripPlanner from "./TripPlanner";
 
 class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
@@ -107,18 +107,18 @@ const getHydrationData = (): any => {
   return {};
 };
 
-console.log("[Main] Travel Checklist main.tsx loading...");
+console.log("[Main] Trip Planner main.tsx loading...");
 
 // App wrapper - Travel Checklist
 function App({ initialData }: { initialData: any }) {
-  return <TravelChecklist initialData={initialData} />;
+  return <TripPlanner initialData={initialData} />;
 }
 
 // Get initial data
-const container = document.getElementById("travel-checklist-root");
+const container = document.getElementById("trip-planner-root");
 
 if (!container) {
-  throw new Error("travel-checklist-root element not found");
+  throw new Error("trip-planner-root element not found");
 }
 
 const root = createRoot(container);

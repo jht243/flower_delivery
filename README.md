@@ -1,20 +1,20 @@
-# Smart Travel Checklist - ChatGPT MCP Connector
+# Smart Trip Planner - ChatGPT MCP Connector
 
-A Model Context Protocol (MCP) server that provides an interactive travel checklist widget for ChatGPT. Helps users generate personalized, customizable packing lists based on their trip profile.
+A Model Context Protocol (MCP) server that provides an interactive trip planner widget for ChatGPT. Organizes all legs of your trip to ensure you don't miss any flights, hotels, or travel reservations.
 
 **[Privacy Policy](PRIVACY.md)** | **[OpenAI Apps SDK](https://developers.openai.com/apps-sdk)**
 
 ## Features
 
-- ✈️ Generate personalized packing checklists based on trip details
+- ✈️ Organize all legs of your trip in one place
 - 📋 Smart rules engine for documents, clothing, toiletries, health, tech, and more
 - 🌍 International vs domestic trip support with appropriate items
 - 👨‍👩‍👧‍👦 Family-specific items for children, infants, seniors, and pets
 - 🎿 Activity-specific gear recommendations (hiking, beach, camping, etc.)
-- ✅ Interactive checklist with progress tracking
+- ✅ Interactive planner with progress tracking
 - 🖨️ Print-friendly output
 
-## Checklist Categories
+## Planner Categories
 
 1. **Mandatory Documents** - ID, passport, visa, insurance, itinerary
 2. **Clothing & Accessories** - Climate-appropriate items with quantities
@@ -71,8 +71,8 @@ Server runs on `http://localhost:8000`. **Note:** HTTP endpoints are for local d
 - "I'm going to Paris for 7 days"
 - "Help me pack for a beach vacation in Hawaii"
 - "Business trip packing list for London"
-- "Family vacation checklist with 2 kids"
-- "What documents do I need for international travel?"
+- "Family vacation planner with 2 kids"
+- "Organize my international travel itinerary"
 
 ## Tech Stack
 

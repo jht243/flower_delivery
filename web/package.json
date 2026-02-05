@@ -1,9 +1,9 @@
 {
-  "name": "travel-checklist-web",
+  "name": "trip-planner-web",
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "build": "esbuild src/main.tsx --bundle --format=esm --outfile=../assets/travel-checklist.js"
+    "build": "esbuild src/main.tsx --bundle --format=esm --outfile=../assets/trip-planner.js"
   },
   "dependencies": {
     "lucide-react": "^0.554.0",

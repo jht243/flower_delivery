@@ -1,4 +1,4 @@
-# OpenAI App SDK Checklist
+# OpenAI App SDK Planner
 
 ## Deployment
 - [ ] **README/Docs**: Only update product name and project description. **DO NOT** change build/run instructions.

@@ -30,7 +30,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 
-type TravelChecklistWidget = {
+type TripPlannerWidget = {
   id: string;
   title: string;
   templateUri: string;
@@ -124,7 +124,7 @@ function classifyDevice(userAgent?: string | null): string {
 }
 
 function computeSummary(args: any) {
-  // Compute travel checklist summary
+  // Compute trip planner summary
   const destination = args.destination || "Not specified";
   const tripDuration = Number(args.trip_duration) || 5;
   const isInternational = Boolean(args.is_international);
@@ -132,7 +132,7 @@ function computeSummary(args: any) {
   const purpose = args.purpose || "leisure";
   const travelers = Number(args.travelers) || 1;
   
-  // Estimate checklist items based on trip profile
+  // Estimate planner items based on trip profile
   let estimatedItems = 25; // Base items
   if (isInternational) estimatedItems += 5; // Extra documents
   if (tripDuration > 7) estimatedItems += 5; // More clothing
@@ -201,23 +201,23 @@ function readWidgetHtml(componentName: string): string {
 // Added timestamp suffix to force cache invalidation for width fix
 const VERSION = (process.env.RENDER_GIT_COMMIT?.slice(0, 7) || Date.now().toString()) + '-' + Date.now();
 
-function widgetMeta(widget: TravelChecklistWidget, bustCache: boolean = false) {
+function widgetMeta(widget: TripPlannerWidget, bustCache: boolean = false) {
   const templateUri = bustCache
-    ? `ui://widget/travel-checklist.html?v=${VERSION}`
+    ? `ui://widget/trip-planner.html?v=${VERSION}`
     : widget.templateUri;
 
   return {
     "openai/outputTemplate": templateUri,
     "openai/widgetDescription":
-      "A smart travel checklist generator that creates personalized, customizable packing lists based on your trip profile. Generates checklists for documents, clothing, toiletries, health, tech, activities, and pre-departure tasks. Call this tool immediately with NO arguments to let the user enter their trip details manually. Only provide arguments if the user has explicitly stated them.",
+      "A smart trip planner that organizes all legs of your trip to ensure you don't miss any flights, hotels, or travel reservations. Call this tool immediately with NO arguments to let the user enter their trip details manually. Only provide arguments if the user has explicitly stated them.",
     "openai/componentDescriptions": {
       "trip-form": "Input form for trip details including destination, duration, travelers, climate, and purpose.",
-      "checklist-display": "Display showing categorized packing checklist items with checkboxes.",
+      "planner-display": "Display showing organized trip legs with flights, hotels, and reservations.",
       "progress-tracker": "Progress bar showing how many items have been packed.",
     },
     "openai/widgetKeywords": [
       "travel",
-      "checklist",
+      "planner",
       "packing",
       "vacation",
       "trip",
@@ -231,15 +231,15 @@ function widgetMeta(widget: TravelChecklistWidget, bustCache: boolean = false) {
       "domestic"
     ],
     "openai/sampleConversations": [
-      { "user": "What should I pack for my trip?", "assistant": "Here is the Smart Travel Checklist. Enter your trip details to generate a personalized packing list." },
-      { "user": "I'm going to Paris for 7 days", "assistant": "I'll create a customized packing checklist for your 7-day trip to Paris with all the essentials." },
-      { "user": "Help me pack for a beach vacation", "assistant": "I've loaded the travel checklist for a beach trip. It includes swimwear, sunscreen, and other beach essentials." },
+      { "user": "Help me organize my trip", "assistant": "Here is the Smart Trip Planner. Enter your trip details to organize all your flights, hotels, and reservations." },
+      { "user": "I'm going to Paris for 7 days", "assistant": "I'll help you organize your 7-day trip to Paris with all your flights and accommodations." },
+      { "user": "Help me plan a beach vacation", "assistant": "I've loaded the trip planner for your beach vacation. Let's organize your travel reservations." },
     ],
     "openai/starterPrompts": [
       "What should I pack for my trip?",
       "Create a packing list for my vacation",
       "Help me pack for an international trip",
-      "Beach vacation packing checklist",
+      "Beach vacation trip planner",
       "Business trip essentials",
       "What clothing do I need to travel to New York?",
       "Family vacation packing list",
@@ -247,13 +247,13 @@ function widgetMeta(widget: TravelChecklistWidget, bustCache: boolean = false) {
     "openai/widgetPrefersBorder": true,
     "openai/widgetCSP": {
       connect_domains: [
-        "https://travel-checklist-q79n.onrender.com",
+        "https://trip-planner-q79n.onrender.com",
         "https://nominatim.openstreetmap.org",
         "https://api.open-meteo.com",
         "https://geocoding-api.open-meteo.com"
       ],
       resource_domains: [
-        "https://travel-checklist-q79n.onrender.com"
+        "https://trip-planner-q79n.onrender.com"
       ],
     },
     "openai/widgetDomain": "https://web-sandbox.oaiusercontent.com",
@@ -264,21 +264,21 @@ function widgetMeta(widget: TravelChecklistWidget, bustCache: boolean = false) {
   } as const;
 }
 
-const widgets: TravelChecklistWidget[] = [
+const widgets: TripPlannerWidget[] = [
   {
-    id: "travel-checklist",
-    title: "Smart Travel Checklist — Generate personalized packing lists for any trip",
-    templateUri: `ui://widget/travel-checklist.html?v=${VERSION}`,
+    id: "trip-planner",
+    title: "Smart Trip Planner — Organize all legs of your trip",
+    templateUri: `ui://widget/trip-planner.html?v=${VERSION}`,
     invoking:
-      "Opening the Smart Travel Checklist...",
+      "Opening the Smart Trip Planner...",
     invoked:
-      "Here is the Smart Travel Checklist. Enter your trip details to generate a personalized packing list with documents, clothing, toiletries, and more.",
-    html: readWidgetHtml("travel-checklist"),
+      "Here is the Smart Trip Planner. Enter your trip details to organize all your flights, hotels, and travel reservations.",
+    html: readWidgetHtml("trip-planner"),
   },
 ];
 
-const widgetsById = new Map<string, TravelChecklistWidget>();
-const widgetsByUri = new Map<string, TravelChecklistWidget>();
+const widgetsById = new Map<string, TripPlannerWidget>();
+const widgetsByUri = new Map<string, TripPlannerWidget>();
 
 widgets.forEach((widget) => {
   widgetsById.set(widget.id, widget);
@@ -344,7 +344,7 @@ const toolInputParser = z.object({
 const tools: Tool[] = widgets.map((widget) => ({
   name: widget.id,
   description:
-    "Use this tool to generate a personalized travel packing checklist based on location, number of travelers, travel preferences, and other details. Helps users create customized packing lists based on their trip details. Call this tool immediately with NO arguments to let the user enter their trip details manually. Only provide arguments if the user has explicitly stated them.",
+    "Use this tool to organize all legs of a trip including flights, hotels, and travel reservations. Helps users keep all their travel data organized. Call this tool immediately with NO arguments to let the user enter their trip details manually. Only provide arguments if the user has explicitly stated them.",
   inputSchema: toolInputSchema,
   outputSchema: {
     type: "object",
@@ -396,7 +396,7 @@ const resources: Resource[] = widgets.map((widget) => ({
   uri: widget.templateUri,
   name: widget.title,
   description:
-    "HTML template for the Travel Checklist widget that generates personalized packing lists based on trip details.",
+    "HTML template for the Trip Planner widget that organizes all legs of your trip.",
   mimeType: "text/html+skybridge",
   _meta: widgetMeta(widget),
 }));
@@ -405,18 +405,18 @@ const resourceTemplates: ResourceTemplate[] = widgets.map((widget) => ({
   uriTemplate: widget.templateUri,
   name: widget.title,
   description:
-    "Template descriptor for the Travel Checklist widget.",
+    "Template descriptor for the Trip Planner widget.",
   mimeType: "text/html+skybridge",
   _meta: widgetMeta(widget),
 }));
 
-function createTravelChecklistServer(): Server {
+function createTripPlannerServer(): Server {
   const server = new Server(
     {
-      name: "travel-checklist",
+      name: "trip-planner",
       version: "0.1.0",
       description:
-        "Smart Travel Checklist helps users generate personalized packing lists based on their trip profile including destination, duration, climate, and activities.",
+        "Smart Trip Planner helps users organize all legs of their trip to ensure they don't miss any flights, hotels, or travel reservations.",
     },
     {
       capabilities: {
@@ -631,7 +631,7 @@ function createTravelChecklistServer(): Server {
         logAnalytics("tool_call_success", {
           toolName: request.params.name,
           params: args,
-          inferredQuery: inferredQuery.length > 0 ? inferredQuery.join(", ") : "Travel Checklist",
+          inferredQuery: inferredQuery.length > 0 ? inferredQuery.join(", ") : "Trip Planner",
           responseTime,
 
           device: deviceCategory,
@@ -652,7 +652,7 @@ function createTravelChecklistServer(): Server {
         console.log(`[MCP] Tool called: ${request.params.name}, returning templateUri: ${(widgetMetadata as any)["openai/outputTemplate"]}`);
 
         // Build structured content once so we can log it and return it.
-        // For the travel checklist, expose fields relevant to trip details
+        // For the trip planner, expose fields relevant to trip details
         const structured = {
           ready: true,
           timestamp: new Date().toISOString(),
@@ -976,22 +976,22 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
     }
   });
 
-  // Checklist Actions
+  // Planner Actions
   const actionCounts: Record<string, number> = {
-    "Generate Checklist": 0,
+    "Generate Plan": 0,
     "Subscribe": 0,
     "Check Item": 0, 
     "Add Custom Item": 0,
-    "Save Checklist": 0,
+    "Save Plan": 0,
     "Print/Share": 0
   };
 
   widgetEvents.forEach(log => {
-      if (log.event === "widget_generate_checklist") actionCounts["Generate Checklist"]++;
+      if (log.event === "widget_generate_plan") actionCounts["Generate Plan"]++;
       if (log.event === "widget_notify_me_subscribe") actionCounts["Subscribe"]++;
       if (log.event === "widget_check_item") actionCounts["Check Item"]++;
       if (log.event === "widget_add_custom_item") actionCounts["Add Custom Item"]++;
-      if (log.event === "widget_save_checklist") actionCounts["Save Checklist"]++;
+      if (log.event === "widget_save_plan") actionCounts["Save Plan"]++;
       if (log.event === "widget_print_share") actionCounts["Print/Share"]++;
   });
 
@@ -1000,7 +1000,7 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Travel Checklist Analytics</title>
+  <title>Trip Planner Analytics</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; padding: 20px; }
@@ -1027,7 +1027,7 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
 </head>
 <body>
   <div class="container">
-    <h1>📊 Travel Checklist Analytics</h1>
+    <h1>📊 Trip Planner Analytics</h1>
     <p class="subtitle">Last 7 days • Auto-refresh every 60s</p>
     
     <div class="grid">
@@ -1353,7 +1353,7 @@ async function subscribeToButtondown(email: string, topicId: string, topicName: 
 
   const metadata: Record<string, any> = {
     topicName,
-    source: "travel-checklist",
+    source: "trip-planner",
     subscribedAt: new Date().toISOString(),
   };
 
@@ -1443,7 +1443,7 @@ async function updateButtondownSubscriber(email: string, topicId: string, topicN
   const updatedMetadata = {
     ...existingMetadata,
     [topicKey]: topicData,
-    source: "travel-checklist",
+    source: "trip-planner",
   };
 
   const updateRequestBody = {
@@ -1498,8 +1498,8 @@ async function handleSubscribe(req: IncomingMessage, res: ServerResponse) {
     // Support both old (settlementId/settlementName) and new (topicId/topicName) field names
     const parsed = JSON.parse(body);
     const email = parsed.email;
-    const topicId = parsed.topicId || parsed.settlementId || "travel-checklist";
-    const topicName = parsed.topicName || parsed.settlementName || "Travel Checklist Updates";
+    const topicId = parsed.topicId || parsed.settlementId || "trip-planner";
+    const topicName = parsed.topicName || parsed.settlementName || "Trip Planner Updates";
     if (!email || !email.includes("@")) {
       res.writeHead(400).end(JSON.stringify({ error: "Invalid email address" }));
       return;
@@ -1573,7 +1573,7 @@ async function handleSubscribe(req: IncomingMessage, res: ServerResponse) {
 
 async function handleSseRequest(res: ServerResponse) {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  const server = createTravelChecklistServer();
+  const server = createTripPlannerServer();
   const transport = new SSEServerTransport(postPath, res);
   const sessionId = transport.sessionId;
 
@@ -1693,8 +1693,8 @@ const httpServer = createServer(
     }
 
     // Serve alias for legacy loader path -> our main widget HTML
-    if (req.method === "GET" && url.pathname === "/assets/travel-checklist.html") {
-      const mainAssetPath = path.join(ASSETS_DIR, "travel-checklist.html");
+    if (req.method === "GET" && url.pathname === "/assets/trip-planner.html") {
+      const mainAssetPath = path.join(ASSETS_DIR, "trip-planner.html");
       console.log(`[Debug Legacy] Request: ${url.pathname}, Main Path: ${mainAssetPath}, Exists: ${fs.existsSync(mainAssetPath)}`);
       if (fs.existsSync(mainAssetPath) && fs.statSync(mainAssetPath).isFile()) {
         res.writeHead(200, {
@@ -1766,7 +1766,7 @@ function startMonitoring() {
 
 httpServer.listen(port, () => {
   startMonitoring();
-  console.log(`Travel Checklist MCP server listening on http://localhost:${port}`);
+  console.log(`Trip Planner MCP server listening on http://localhost:${port}`);
   console.log(`  SSE stream: GET http://localhost:${port}${ssePath}`);
   console.log(
     `  Message post endpoint: POST http://localhost:${port}${postPath}?sessionId=...`

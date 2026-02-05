@@ -1,11 +1,11 @@
 {
-  "name": "travel-checklist-mcp-node",
+  "name": "trip-planner-mcp-node",
   "version": "0.1.0",
   "type": "module",
   "private": true,
-  "description": "Smart Travel Checklist — generate personalized, customizable packing lists based on your trip profile.",
+  "description": "Smart Trip Planner — organizes all legs of your trip to ensure you don't miss any flights, hotels, or travel reservations.",
   "keywords": [
-    "travel checklist",
+    "trip planner",
     "packing list",
     "travel planner",
     "vacation"
