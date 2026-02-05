@@ -25002,6 +25002,15 @@ var TripLegCard = ({ leg, onUpdate, onDelete, isExpanded, onToggleExpand }) => {
   ] });
 };
 var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, expandedLegs, toggleLegExpand, departureDate, returnDate }) => {
+  const [collapsedDays, setCollapsedDays] = (0, import_react3.useState)(/* @__PURE__ */ new Set());
+  const toggleDayCollapse = (date) => {
+    setCollapsedDays((prev) => {
+      const next = new Set(prev);
+      if (next.has(date)) next.delete(date);
+      else next.add(date);
+      return next;
+    });
+  };
   const allDays = (0, import_react3.useMemo)(() => {
     const days = [];
     if (departureDate) {
@@ -25009,8 +25018,7 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, expandedLegs, toggleLegExp
       const end = returnDate ? /* @__PURE__ */ new Date(returnDate + "T00:00:00") : start;
       const current = new Date(start);
       while (current <= end) {
-        const dateStr = current.toISOString().split("T")[0];
-        days.push(dateStr);
+        days.push(current.toISOString().split("T")[0]);
         current.setDate(current.getDate() + 1);
       }
     }
@@ -25023,9 +25031,21 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, expandedLegs, toggleLegExp
       groups[day] = [];
     });
     legs.forEach((leg) => {
-      if (leg.date) {
+      if (leg.type === "hotel" && leg.date) {
+        const checkIn = /* @__PURE__ */ new Date(leg.date + "T00:00:00");
+        const checkOut = leg.endDate ? /* @__PURE__ */ new Date(leg.endDate + "T00:00:00") : checkIn;
+        const current = new Date(checkIn);
+        let isFirst = true;
+        while (current < checkOut) {
+          const dateStr = current.toISOString().split("T")[0];
+          if (!groups[dateStr]) groups[dateStr] = [];
+          groups[dateStr].push({ leg, isHotelContinuation: !isFirst });
+          current.setDate(current.getDate() + 1);
+          isFirst = false;
+        }
+      } else if (leg.date) {
         if (!groups[leg.date]) groups[leg.date] = [];
-        groups[leg.date].push(leg);
+        groups[leg.date].push({ leg });
       } else {
         noDateLegs.push(leg);
       }
@@ -25036,62 +25056,80 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, expandedLegs, toggleLegExp
   const formatDayHeader = (dateStr, dayNum) => {
     try {
       const date = /* @__PURE__ */ new Date(dateStr + "T00:00:00");
-      const weekday = date.toLocaleDateString("en-US", { weekday: "long" });
-      const monthDay = date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-      return `Day ${dayNum} \u2014 ${weekday}, ${monthDay}`;
+      return `Day ${dayNum} \xB7 ${date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}`;
     } catch {
       return `Day ${dayNum}`;
     }
   };
-  const getDayStatus = (dayLegs) => {
-    if (dayLegs.length === 0) return { allBooked: false, hasUrgent: false, isEmpty: true };
-    const allBooked = dayLegs.every((l) => l.status === "booked");
-    const hasUrgent = dayLegs.some((l) => l.status === "urgent");
-    return { allBooked, hasUrgent, isEmpty: false };
-  };
   return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
     legsByDate.sortedDates.map((date, idx) => {
-      const dayLegs = legsByDate.groups[date] || [];
-      const { allBooked, hasUrgent, isEmpty } = getDayStatus(dayLegs);
-      const statusColor = isEmpty ? COLORS.textMuted : allBooked ? COLORS.booked : hasUrgent ? COLORS.urgent : COLORS.pending;
-      return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 24 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
-          display: "flex",
-          alignItems: "center",
-          gap: 12,
-          marginBottom: 12,
-          padding: "12px 16px",
-          backgroundColor: isEmpty ? COLORS.borderLight : allBooked ? COLORS.bookedBg : hasUrgent ? COLORS.urgentBg : COLORS.pendingBg,
-          borderRadius: 12,
-          borderLeft: `4px solid ${statusColor}`
-        }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
-            width: 36,
-            height: 36,
-            borderRadius: "50%",
-            backgroundColor: statusColor,
-            color: "white",
+      const dayItems = legsByDate.groups[date] || [];
+      const isCollapsed = collapsedDays.has(date);
+      const hasItems = dayItems.length > 0;
+      const allBooked = hasItems && dayItems.every((i) => i.leg.status === "booked");
+      const hasHotel = dayItems.some((i) => i.leg.type === "hotel");
+      const hasFlight = dayItems.some((i) => i.leg.type === "flight");
+      const hasTransport = dayItems.some((i) => !["flight", "hotel"].includes(i.leg.type));
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 8 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+          "div",
+          {
+            onClick: () => toggleDayCollapse(date),
+            style: {
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              padding: "10px 14px",
+              backgroundColor: allBooked ? COLORS.bookedBg : hasItems ? COLORS.card : COLORS.borderLight,
+              borderRadius: 10,
+              border: `1px solid ${allBooked ? COLORS.booked : hasItems ? COLORS.border : COLORS.borderLight}`,
+              cursor: "pointer"
+            },
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
+                width: 28,
+                height: 28,
+                borderRadius: "50%",
+                backgroundColor: allBooked ? COLORS.booked : hasItems ? COLORS.pending : COLORS.textMuted,
+                color: "white",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 700,
+                fontSize: 12
+              }, children: idx + 1 }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { flex: 1 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontWeight: 600, fontSize: 14, color: COLORS.textMain }, children: formatDayHeader(date, idx + 1) }) }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 6 }, children: [
+                hasFlight && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plane, { size: 16, color: COLORS.flight }),
+                hasHotel && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Hotel, { size: 16, color: COLORS.hotel }),
+                hasTransport && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Car, { size: 16, color: COLORS.transport }),
+                !hasItems && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 11, color: COLORS.textMuted }, children: "Free day" })
+              ] }),
+              hasItems && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: COLORS.textMuted }, children: isCollapsed ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronDown, { size: 18 }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronUp, { size: 18 }) })
+            ]
+          }
+        ),
+        !isCollapsed && hasItems && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { paddingLeft: 38, paddingTop: 6 }, children: dayItems.map(({ leg, isHotelContinuation }) => isHotelContinuation ? (
+          // Compact hotel continuation indicator
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-            fontWeight: 700,
-            fontSize: 14
-          }, children: idx + 1 }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1 }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontWeight: 700, fontSize: 15, color: COLORS.textMain }, children: formatDayHeader(date, idx + 1) }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { fontSize: 12, color: COLORS.textSecondary }, children: [
-              dayLegs.length,
-              " item",
-              dayLegs.length !== 1 ? "s" : "",
-              " \u2022 ",
-              dayLegs.filter((l) => l.status === "booked").length,
-              " booked"
-            ] })
-          ] }),
-          allBooked && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { size: 24, color: COLORS.booked }),
-          hasUrgent && !allBooked && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { size: 24, color: COLORS.urgent })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { paddingLeft: 20 }, children: dayLegs.map((leg) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+            gap: 8,
+            padding: "6px 12px",
+            marginBottom: 4,
+            backgroundColor: COLORS.hotelBg,
+            borderRadius: 8,
+            fontSize: 12,
+            color: COLORS.hotel
+          }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Hotel, { size: 14 }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+              "Staying at ",
+              leg.hotelName || leg.location || "hotel"
+            ] }),
+            leg.status === "booked" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { size: 12 })
+          ] }, `${leg.id}-${date}`)
+        ) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
           TripLegCard,
           {
             leg,

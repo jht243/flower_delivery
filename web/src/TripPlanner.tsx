@@ -412,7 +412,7 @@ const ProgressSummary = ({ legs }: { legs: TripLeg[] }) => {
   );
 };
 
-// Day-by-Day View Component
+// Day-by-Day View Component - Compact with collapsible days
 const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, expandedLegs, toggleLegExpand, departureDate, returnDate }: { 
   legs: TripLeg[]; 
   onUpdateLeg: (id: string, u: Partial<TripLeg>) => void; 
@@ -422,121 +422,162 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, expandedLegs, toggleLegE
   departureDate?: string;
   returnDate?: string;
 }) => {
+  const [collapsedDays, setCollapsedDays] = useState<Set<string>>(new Set());
+  
+  const toggleDayCollapse = (date: string) => {
+    setCollapsedDays(prev => {
+      const next = new Set(prev);
+      if (next.has(date)) next.delete(date);
+      else next.add(date);
+      return next;
+    });
+  };
+
   // Generate all days between departure and return
   const allDays = useMemo(() => {
     const days: string[] = [];
-    
     if (departureDate) {
       const start = new Date(departureDate + "T00:00:00");
       const end = returnDate ? new Date(returnDate + "T00:00:00") : start;
-      
       const current = new Date(start);
       while (current <= end) {
-        const dateStr = current.toISOString().split("T")[0];
-        days.push(dateStr);
+        days.push(current.toISOString().split("T")[0]);
         current.setDate(current.getDate() + 1);
       }
     }
-    
     return days;
   }, [departureDate, returnDate]);
 
-  // Group legs by date
+  // Group legs by date - hotels appear on ALL days of their stay
   const legsByDate = useMemo(() => {
-    const groups: Record<string, TripLeg[]> = {};
+    const groups: Record<string, { leg: TripLeg; isHotelContinuation?: boolean }[]> = {};
     const noDateLegs: TripLeg[] = [];
     
-    // Initialize all days with empty arrays
-    allDays.forEach(day => {
-      groups[day] = [];
-    });
+    allDays.forEach(day => { groups[day] = []; });
     
     legs.forEach(leg => {
-      if (leg.date) {
+      if (leg.type === "hotel" && leg.date) {
+        // Hotel spans from check-in to check-out
+        const checkIn = new Date(leg.date + "T00:00:00");
+        const checkOut = leg.endDate ? new Date(leg.endDate + "T00:00:00") : checkIn;
+        const current = new Date(checkIn);
+        let isFirst = true;
+        while (current < checkOut) {
+          const dateStr = current.toISOString().split("T")[0];
+          if (!groups[dateStr]) groups[dateStr] = [];
+          groups[dateStr].push({ leg, isHotelContinuation: !isFirst });
+          current.setDate(current.getDate() + 1);
+          isFirst = false;
+        }
+      } else if (leg.date) {
         if (!groups[leg.date]) groups[leg.date] = [];
-        groups[leg.date].push(leg);
+        groups[leg.date].push({ leg });
       } else {
         noDateLegs.push(leg);
       }
     });
     
-    // Use allDays if we have them, otherwise fall back to dates from legs
     const sortedDates = allDays.length > 0 ? allDays : Object.keys(groups).sort();
-    
     return { groups, sortedDates, noDateLegs };
   }, [legs, allDays]);
 
   const formatDayHeader = (dateStr: string, dayNum: number): string => {
     try {
       const date = new Date(dateStr + "T00:00:00");
-      const weekday = date.toLocaleDateString("en-US", { weekday: "long" });
-      const monthDay = date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-      return `Day ${dayNum} — ${weekday}, ${monthDay}`;
-    } catch {
-      return `Day ${dayNum}`;
-    }
-  };
-
-  const getDayStatus = (dayLegs: TripLeg[]): { allBooked: boolean; hasUrgent: boolean; isEmpty: boolean } => {
-    if (dayLegs.length === 0) return { allBooked: false, hasUrgent: false, isEmpty: true };
-    const allBooked = dayLegs.every(l => l.status === "booked");
-    const hasUrgent = dayLegs.some(l => l.status === "urgent");
-    return { allBooked, hasUrgent, isEmpty: false };
+      return `Day ${dayNum} · ${date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}`;
+    } catch { return `Day ${dayNum}`; }
   };
 
   return (
     <div>
       {legsByDate.sortedDates.map((date, idx) => {
-        const dayLegs = legsByDate.groups[date] || [];
-        const { allBooked, hasUrgent, isEmpty } = getDayStatus(dayLegs);
-        const statusColor = isEmpty ? COLORS.textMuted : allBooked ? COLORS.booked : hasUrgent ? COLORS.urgent : COLORS.pending;
+        const dayItems = legsByDate.groups[date] || [];
+        const isCollapsed = collapsedDays.has(date);
+        const hasItems = dayItems.length > 0;
+        const allBooked = hasItems && dayItems.every(i => i.leg.status === "booked");
+        const hasHotel = dayItems.some(i => i.leg.type === "hotel");
+        const hasFlight = dayItems.some(i => i.leg.type === "flight");
+        const hasTransport = dayItems.some(i => !["flight", "hotel"].includes(i.leg.type));
         
         return (
-          <div key={date} style={{ marginBottom: 24 }}>
-            {/* Day Header */}
-            <div style={{ 
-              display: "flex", 
-              alignItems: "center", 
-              gap: 12, 
-              marginBottom: 12,
-              padding: "12px 16px",
-              backgroundColor: isEmpty ? COLORS.borderLight : allBooked ? COLORS.bookedBg : hasUrgent ? COLORS.urgentBg : COLORS.pendingBg,
-              borderRadius: 12,
-              borderLeft: `4px solid ${statusColor}`
-            }}>
+          <div key={date} style={{ marginBottom: 8 }}>
+            {/* Compact Day Header - Clickable to expand/collapse */}
+            <div 
+              onClick={() => toggleDayCollapse(date)}
+              style={{ 
+                display: "flex", 
+                alignItems: "center", 
+                gap: 10, 
+                padding: "10px 14px",
+                backgroundColor: allBooked ? COLORS.bookedBg : hasItems ? COLORS.card : COLORS.borderLight,
+                borderRadius: 10,
+                border: `1px solid ${allBooked ? COLORS.booked : hasItems ? COLORS.border : COLORS.borderLight}`,
+                cursor: "pointer"
+              }}
+            >
+              {/* Day number badge */}
               <div style={{ 
-                width: 36, height: 36, borderRadius: "50%", 
-                backgroundColor: statusColor, color: "white",
+                width: 28, height: 28, borderRadius: "50%", 
+                backgroundColor: allBooked ? COLORS.booked : hasItems ? COLORS.pending : COLORS.textMuted, 
+                color: "white",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontWeight: 700, fontSize: 14
+                fontWeight: 700, fontSize: 12
               }}>
                 {idx + 1}
               </div>
+              
+              {/* Day info */}
               <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 700, fontSize: 15, color: COLORS.textMain }}>
+                <span style={{ fontWeight: 600, fontSize: 14, color: COLORS.textMain }}>
                   {formatDayHeader(date, idx + 1)}
-                </div>
-                <div style={{ fontSize: 12, color: COLORS.textSecondary }}>
-                  {dayLegs.length} item{dayLegs.length !== 1 ? "s" : ""} • {dayLegs.filter(l => l.status === "booked").length} booked
-                </div>
+                </span>
               </div>
-              {allBooked && <CheckCircle2 size={24} color={COLORS.booked} />}
-              {hasUrgent && !allBooked && <AlertCircle size={24} color={COLORS.urgent} />}
+              
+              {/* Quick icons showing what's on this day */}
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                {hasFlight && <Plane size={16} color={COLORS.flight} />}
+                {hasHotel && <Hotel size={16} color={COLORS.hotel} />}
+                {hasTransport && <Car size={16} color={COLORS.transport} />}
+                {!hasItems && <span style={{ fontSize: 11, color: COLORS.textMuted }}>Free day</span>}
+              </div>
+              
+              {/* Expand/collapse indicator */}
+              {hasItems && (
+                <div style={{ color: COLORS.textMuted }}>
+                  {isCollapsed ? <ChevronDown size={18} /> : <ChevronUp size={18} />}
+                </div>
+              )}
             </div>
             
-            {/* Day's Legs */}
-            <div style={{ paddingLeft: 20 }}>
-              {dayLegs.map(leg => (
-                <TripLegCard 
-                  key={leg.id} 
-                  leg={leg} 
-                  onUpdate={u => onUpdateLeg(leg.id, u)} 
-                  onDelete={() => onDeleteLeg(leg.id)} 
-                  isExpanded={expandedLegs.has(leg.id)} 
-                  onToggleExpand={() => toggleLegExpand(leg.id)} 
-                />
-              ))}
-            </div>
+            {/* Day's Items - Collapsible */}
+            {!isCollapsed && hasItems && (
+              <div style={{ paddingLeft: 38, paddingTop: 6 }}>
+                {dayItems.map(({ leg, isHotelContinuation }) => (
+                  isHotelContinuation ? (
+                    // Compact hotel continuation indicator
+                    <div key={`${leg.id}-${date}`} style={{ 
+                      display: "flex", alignItems: "center", gap: 8, 
+                      padding: "6px 12px", marginBottom: 4,
+                      backgroundColor: COLORS.hotelBg, borderRadius: 8,
+                      fontSize: 12, color: COLORS.hotel
+                    }}>
+                      <Hotel size={14} />
+                      <span>Staying at {leg.hotelName || leg.location || "hotel"}</span>
+                      {leg.status === "booked" && <CheckCircle2 size={12} />}
+                    </div>
+                  ) : (
+                    <TripLegCard 
+                      key={leg.id} 
+                      leg={leg} 
+                      onUpdate={u => onUpdateLeg(leg.id, u)} 
+                      onDelete={() => onDeleteLeg(leg.id)} 
+                      isExpanded={expandedLegs.has(leg.id)} 
+                      onToggleExpand={() => toggleLegExpand(leg.id)} 
+                    />
+                  )
+                ))}
+              </div>
+            )}
           </div>
         );
       })}
