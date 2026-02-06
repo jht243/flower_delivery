@@ -26894,11 +26894,12 @@ function TripPlanner({ initialData: initialData2 }) {
           return COLORS.booked;
         };
         return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
-          backgroundColor: COLORS.bg,
+          backgroundColor: COLORS.card,
           borderRadius: 16,
           padding: "20px",
           marginBottom: 16,
-          border: `1px solid ${COLORS.borderLight}`
+          border: `1px solid ${COLORS.border}`,
+          boxShadow: "0 2px 8px rgba(0,0,0,0.06)"
         }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 24, marginBottom: 16, flexWrap: "wrap" }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 6 }, children: [

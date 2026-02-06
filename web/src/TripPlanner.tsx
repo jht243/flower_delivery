@@ -2407,11 +2407,12 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
               
               return (
                 <div style={{ 
-                  backgroundColor: COLORS.bg, 
+                  backgroundColor: COLORS.card, 
                   borderRadius: 16, 
                   padding: "20px", 
                   marginBottom: 16,
-                  border: `1px solid ${COLORS.borderLight}`
+                  border: `1px solid ${COLORS.border}`,
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.06)"
                 }}>
                   {/* Static Info Row */}
                   <div style={{ display: "flex", alignItems: "center", gap: 24, marginBottom: 16, flexWrap: "wrap" }}>
