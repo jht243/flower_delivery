@@ -26901,10 +26901,10 @@ function TripPlanner({ initialData: initialData2 }) {
           border: `1px solid ${COLORS.border}`,
           boxShadow: "0 2px 8px rgba(0,0,0,0.06)"
         }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 24, marginBottom: 16, flexWrap: "wrap" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 6 }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, { size: 16, color: COLORS.textSecondary }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 14, color: COLORS.textMain, fontWeight: 600 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 16, flexWrap: "wrap" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 6, padding: "6px 14px", backgroundColor: COLORS.accentLight, borderRadius: 20, border: `1px solid ${COLORS.primary}30` }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, { size: 15, color: COLORS.primary }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 13, color: COLORS.primaryDark, fontWeight: 600 }, children: [
                 trip.travelers,
                 " traveler",
                 trip.travelers !== 1 ? "s" : ""
@@ -26918,22 +26918,22 @@ function TripPlanner({ initialData: initialData2 }) {
                       setTrip((t) => ({ ...t, travelers: parseInt(newCount), updatedAt: Date.now() }));
                     }
                   },
-                  style: { background: "none", border: "none", cursor: "pointer", padding: 2 },
-                  children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Pen, { size: 12, color: COLORS.textMuted })
+                  style: { background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center" },
+                  children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Pen, { size: 11, color: COLORS.primary })
                 }
               )
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 6 }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { size: 16, color: COLORS.textSecondary }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 14, color: COLORS.textMain, fontWeight: 600 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 6, padding: "6px 14px", backgroundColor: COLORS.accentLight, borderRadius: 20, border: `1px solid ${COLORS.primary}30` }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { size: 15, color: COLORS.primary }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 13, color: COLORS.primaryDark, fontWeight: 600 }, children: [
                 cities.size,
                 " cit",
                 cities.size !== 1 ? "ies" : "y"
               ] })
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 6 }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { size: 16, color: COLORS.textSecondary }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 14, color: COLORS.textMain, fontWeight: 600 }, children: tripDays > 0 ? `${tripDays} day${tripDays !== 1 ? "s" : ""}` : "Set dates" })
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 6, padding: "6px 14px", backgroundColor: COLORS.accentLight, borderRadius: 20, border: `1px solid ${COLORS.primary}30` }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { size: 15, color: COLORS.primary }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, color: COLORS.primaryDark, fontWeight: 600 }, children: tripDays > 0 ? `${tripDays} day${tripDays !== 1 ? "s" : ""}` : "Set dates" })
             ] })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 16px" }, children: [

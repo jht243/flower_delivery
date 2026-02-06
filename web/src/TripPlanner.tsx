@@ -2415,10 +2415,10 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
                   boxShadow: "0 2px 8px rgba(0,0,0,0.06)"
                 }}>
                   {/* Static Info Row */}
-                  <div style={{ display: "flex", alignItems: "center", gap: 24, marginBottom: 16, flexWrap: "wrap" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                      <Users size={16} color={COLORS.textSecondary} />
-                      <span style={{ fontSize: 14, color: COLORS.textMain, fontWeight: 600 }}>{trip.travelers} traveler{trip.travelers !== 1 ? "s" : ""}</span>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 14px", backgroundColor: COLORS.accentLight, borderRadius: 20, border: `1px solid ${COLORS.primary}30` }}>
+                      <Users size={15} color={COLORS.primary} />
+                      <span style={{ fontSize: 13, color: COLORS.primaryDark, fontWeight: 600 }}>{trip.travelers} traveler{trip.travelers !== 1 ? "s" : ""}</span>
                       <button 
                         onClick={() => {
                           const newCount = prompt("Number of travelers:", String(trip.travelers));
@@ -2426,18 +2426,18 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
                             setTrip(t => ({ ...t, travelers: parseInt(newCount), updatedAt: Date.now() }));
                           }
                         }}
-                        style={{ background: "none", border: "none", cursor: "pointer", padding: 2 }}
+                        style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center" }}
                       >
-                        <Edit2 size={12} color={COLORS.textMuted} />
+                        <Edit2 size={11} color={COLORS.primary} />
                       </button>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                      <MapPin size={16} color={COLORS.textSecondary} />
-                      <span style={{ fontSize: 14, color: COLORS.textMain, fontWeight: 600 }}>{cities.size} cit{cities.size !== 1 ? "ies" : "y"}</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 14px", backgroundColor: COLORS.accentLight, borderRadius: 20, border: `1px solid ${COLORS.primary}30` }}>
+                      <MapPin size={15} color={COLORS.primary} />
+                      <span style={{ fontSize: 13, color: COLORS.primaryDark, fontWeight: 600 }}>{cities.size} cit{cities.size !== 1 ? "ies" : "y"}</span>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                      <Calendar size={16} color={COLORS.textSecondary} />
-                      <span style={{ fontSize: 14, color: COLORS.textMain, fontWeight: 600 }}>{tripDays > 0 ? `${tripDays} day${tripDays !== 1 ? "s" : ""}` : "Set dates"}</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 14px", backgroundColor: COLORS.accentLight, borderRadius: 20, border: `1px solid ${COLORS.primary}30` }}>
+                      <Calendar size={15} color={COLORS.primary} />
+                      <span style={{ fontSize: 13, color: COLORS.primaryDark, fontWeight: 600 }}>{tripDays > 0 ? `${tripDays} day${tripDays !== 1 ? "s" : ""}` : "Set dates"}</span>
                     </div>
                   </div>
                   
