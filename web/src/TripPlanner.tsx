@@ -139,6 +139,57 @@ const formatDate = (dateStr: string): string => {
   } catch { return dateStr; }
 };
 
+// Helper functions for transport mode labels
+const getModeLabel = (mode: TransportMode): string => {
+  switch (mode) {
+    case "plane": return "Flight";
+    case "car": return "Drive";
+    case "rail": return "Train";
+    case "bus": return "Bus";
+    case "other": return "Cruise";
+  }
+};
+
+const getModeLabelPlural = (mode: TransportMode): string => {
+  switch (mode) {
+    case "plane": return "Flights";
+    case "car": return "Drives";
+    case "rail": return "Trains";
+    case "bus": return "Buses";
+    case "other": return "Cruises";
+  }
+};
+
+const getModeTerminal = (mode: TransportMode): string => {
+  switch (mode) {
+    case "plane": return "Airport";
+    case "car": return "Pickup";
+    case "rail": return "Station";
+    case "bus": return "Terminal";
+    case "other": return "Port";
+  }
+};
+
+const getModeConfirmationLabel = (mode: TransportMode): string => {
+  switch (mode) {
+    case "plane": return "flight #";
+    case "car": return "rental confirmation";
+    case "rail": return "train confirmation";
+    case "bus": return "bus confirmation";
+    case "other": return "cruise confirmation";
+  }
+};
+
+const getModeIcon = (mode: TransportMode, size: number = 20) => {
+  switch (mode) {
+    case "plane": return <Plane size={size} />;
+    case "car": return <Car size={size} />;
+    case "rail": return <Train size={size} />;
+    case "bus": return <Bus size={size} />;
+    case "other": return <Ship size={size} />;
+  }
+};
+
 const getLegIcon = (type: LegType, size: number = 20) => {
   switch (type) {
     case "flight": return <Plane size={size} />;
@@ -523,7 +574,7 @@ const ProgressSummary = ({ legs }: { legs: TripLeg[] }) => {
 
 // Category icon component for day guide
 const CategoryIcon = ({ 
-  type, hasItem, isBooked, isExpanded, onClick, label, partialComplete 
+  type, hasItem, isBooked, isExpanded, onClick, label, partialComplete, transportMode 
 }: { 
   type: "flight" | "hotel" | "transport" | "activity"; 
   hasItem: boolean; 
@@ -532,10 +583,24 @@ const CategoryIcon = ({
   onClick: () => void;
   label?: string;
   partialComplete?: boolean;
+  transportMode?: TransportMode;
 }) => {
+  // Dynamic config based on transport mode for flight category
+  const getModeConfig = (mode: TransportMode) => {
+    switch (mode) {
+      case "plane": return { icon: Plane, name: "Flight" };
+      case "car": return { icon: Car, name: "Drive" };
+      case "rail": return { icon: Train, name: "Train" };
+      case "bus": return { icon: Bus, name: "Bus" };
+      case "other": return { icon: Ship, name: "Cruise" };
+    }
+  };
+  
+  const flightConfig = transportMode ? getModeConfig(transportMode) : { icon: Plane, name: "Flight" };
+  
   const config = {
-    flight: { icon: Plane, color: COLORS.flight, bg: COLORS.flightBg, name: "Flight", priority: true },
-    hotel: { icon: Hotel, color: COLORS.hotel, bg: COLORS.hotelBg, name: "Hotel", priority: true },
+    flight: { icon: flightConfig.icon, color: COLORS.flight, bg: COLORS.flightBg, name: flightConfig.name, priority: true },
+    hotel: { icon: Hotel, color: COLORS.hotel, bg: COLORS.hotelBg, name: "Lodging", priority: true },
     transport: { icon: Car, color: COLORS.transport, bg: COLORS.transportBg, name: "Transport", priority: false },
     activity: { icon: MapPin, color: "#EC4899", bg: "#FCE7F3", name: "Activity", priority: false }
   };
@@ -587,10 +652,11 @@ const CategoryIcon = ({
 };
 
 // Day-by-Day View Component - Horizontal icon guide layout
-const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, toggleLegExpand, departureDate, returnDate }: { 
+const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, toggleLegExpand, departureDate, returnDate, primaryTransportMode }: { 
   legs: TripLeg[]; 
   onUpdateLeg: (id: string, u: Partial<TripLeg>) => void; 
   onDeleteLeg: (id: string) => void;
+  primaryTransportMode?: TransportMode;
   onAddLeg: (leg: Partial<TripLeg>) => void;
   expandedLegs: Set<string>;
   toggleLegExpand: (id: string) => void;
@@ -829,6 +895,7 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
                         isBooked={flightBooked}
                         isExpanded={expanded === "flight"}
                         onClick={() => toggleCategory(date, "flight")}
+                        transportMode={primaryTransportMode}
                       />
                     )}
                   </div>
@@ -1427,15 +1494,17 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
       });
     }
     
-    // 3. Flight info - prompt for flights without flight numbers
+    // 3. Flight info - prompt for flights without flight numbers (use mode-specific label)
+    const primaryMode: TransportMode = trip.departureMode || "plane";
+    const confirmLabel = getModeConfirmationLabel(primaryMode);
     flights.forEach(f => {
       if (!f.flightNumber) {
-        const routeLabel = (f.from && f.to) ? `${f.from} → ${f.to}` : "flight";
+        const routeLabel = (f.from && f.to) ? `${f.from} → ${f.to}` : getModeLabel(primaryMode).toLowerCase();
         items.push({ 
           id: `flight-${f.id}`, 
           type: "flight_number", 
-          label: `Add flight # (${routeLabel})`, 
-          icon: <Plane size={14} />, 
+          label: `Add ${confirmLabel} (${routeLabel})`, 
+          icon: getModeIcon(primaryMode, 14), 
           legId: f.id, 
           priority: 3 
         });
@@ -2112,6 +2181,11 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
               const hotels = trip.legs.filter(l => l.type === "hotel");
               const transport = trip.legs.filter(l => !["flight", "hotel"].includes(l.type));
               
+              // Get primary transport mode for the trip
+              const primaryMode: TransportMode = trip.departureMode || "plane";
+              const primaryModeLabel = getModeLabelPlural(primaryMode);
+              const primaryModeIcon = getModeIcon(primaryMode, 16);
+              
               // Calculate trip length
               const tripDays = trip.departureDate && trip.returnDate 
                 ? Math.ceil((new Date(trip.returnDate).getTime() - new Date(trip.departureDate).getTime()) / (1000 * 60 * 60 * 24)) + 1
@@ -2180,8 +2254,8 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
                       }}>
                         {flights.length > 0 ? `${flightsBookedCount}/${flights.length}` : "—"}
                       </span>
-                      <Plane size={16} color={getStatusColor(flightsBookedCount, flights.length)} />
-                      <span style={{ fontSize: 13, color: COLORS.textMain }}>Flights booked</span>
+                      {primaryModeIcon}
+                      <span style={{ fontSize: 13, color: COLORS.textMain }}>{primaryModeLabel} booked</span>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <span style={{ 
@@ -2221,7 +2295,8 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
               expandedLegs={expandedLegs} 
               toggleLegExpand={toggleLegExpand}
               departureDate={trip.departureDate}
-              returnDate={trip.returnDate} 
+              returnDate={trip.returnDate}
+              primaryTransportMode={trip.departureMode || "plane"}
             />
           </>
         )}

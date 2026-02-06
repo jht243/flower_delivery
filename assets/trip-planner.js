@@ -24878,6 +24878,62 @@ var formatDate = (dateStr) => {
     return dateStr;
   }
 };
+var getModeLabel = (mode) => {
+  switch (mode) {
+    case "plane":
+      return "Flight";
+    case "car":
+      return "Drive";
+    case "rail":
+      return "Train";
+    case "bus":
+      return "Bus";
+    case "other":
+      return "Cruise";
+  }
+};
+var getModeLabelPlural = (mode) => {
+  switch (mode) {
+    case "plane":
+      return "Flights";
+    case "car":
+      return "Drives";
+    case "rail":
+      return "Trains";
+    case "bus":
+      return "Buses";
+    case "other":
+      return "Cruises";
+  }
+};
+var getModeConfirmationLabel = (mode) => {
+  switch (mode) {
+    case "plane":
+      return "flight #";
+    case "car":
+      return "rental confirmation";
+    case "rail":
+      return "train confirmation";
+    case "bus":
+      return "bus confirmation";
+    case "other":
+      return "cruise confirmation";
+  }
+};
+var getModeIcon = (mode, size = 20) => {
+  switch (mode) {
+    case "plane":
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plane, { size });
+    case "car":
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Car, { size });
+    case "rail":
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TramFront, { size });
+    case "bus":
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bus, { size });
+    case "other":
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ship, { size });
+  }
+};
 var getLegIcon = (type, size = 20) => {
   switch (type) {
     case "flight":
@@ -25109,11 +25165,27 @@ var CategoryIcon = ({
   isExpanded,
   onClick,
   label,
-  partialComplete
+  partialComplete,
+  transportMode
 }) => {
+  const getModeConfig = (mode) => {
+    switch (mode) {
+      case "plane":
+        return { icon: Plane, name: "Flight" };
+      case "car":
+        return { icon: Car, name: "Drive" };
+      case "rail":
+        return { icon: TramFront, name: "Train" };
+      case "bus":
+        return { icon: Bus, name: "Bus" };
+      case "other":
+        return { icon: Ship, name: "Cruise" };
+    }
+  };
+  const flightConfig = transportMode ? getModeConfig(transportMode) : { icon: Plane, name: "Flight" };
   const config = {
-    flight: { icon: Plane, color: COLORS.flight, bg: COLORS.flightBg, name: "Flight", priority: true },
-    hotel: { icon: Hotel, color: COLORS.hotel, bg: COLORS.hotelBg, name: "Hotel", priority: true },
+    flight: { icon: flightConfig.icon, color: COLORS.flight, bg: COLORS.flightBg, name: flightConfig.name, priority: true },
+    hotel: { icon: Hotel, color: COLORS.hotel, bg: COLORS.hotelBg, name: "Lodging", priority: true },
     transport: { icon: Car, color: COLORS.transport, bg: COLORS.transportBg, name: "Transport", priority: false },
     activity: { icon: MapPin, color: "#EC4899", bg: "#FCE7F3", name: "Activity", priority: false }
   };
@@ -25169,7 +25241,7 @@ var CategoryIcon = ({
     }
   );
 };
-var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, toggleLegExpand, departureDate, returnDate }) => {
+var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, toggleLegExpand, departureDate, returnDate, primaryTransportMode }) => {
   const [expandedCategory, setExpandedCategory] = (0, import_react3.useState)({});
   const [editingTransport, setEditingTransport] = (0, import_react3.useState)(null);
   const [transportForm, setTransportForm] = (0, import_react3.useState)({ type: "uber", notes: "", rentalCompany: "", startDate: "", endDate: "" });
@@ -25368,7 +25440,8 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, to
               hasItem: flightComplete,
               isBooked: flightBooked,
               isExpanded: expanded === "flight",
-              onClick: () => toggleCategory(date, "flight")
+              onClick: () => toggleCategory(date, "flight"),
+              transportMode: primaryTransportMode
             }
           ) })
         ] });
@@ -25999,14 +26072,16 @@ function TripPlanner({ initialData: initialData2 }) {
         priority: 2
       });
     }
+    const primaryMode = trip.departureMode || "plane";
+    const confirmLabel = getModeConfirmationLabel(primaryMode);
     flights.forEach((f) => {
       if (!f.flightNumber) {
-        const routeLabel = f.from && f.to ? `${f.from} \u2192 ${f.to}` : "flight";
+        const routeLabel = f.from && f.to ? `${f.from} \u2192 ${f.to}` : getModeLabel(primaryMode).toLowerCase();
         items.push({
           id: `flight-${f.id}`,
           type: "flight_number",
-          label: `Add flight # (${routeLabel})`,
-          icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plane, { size: 14 }),
+          label: `Add ${confirmLabel} (${routeLabel})`,
+          icon: getModeIcon(primaryMode, 14),
           legId: f.id,
           priority: 3
         });
@@ -26672,6 +26747,9 @@ function TripPlanner({ initialData: initialData2 }) {
         const flights = trip.legs.filter((l) => l.type === "flight");
         const hotels = trip.legs.filter((l) => l.type === "hotel");
         const transport = trip.legs.filter((l) => !["flight", "hotel"].includes(l.type));
+        const primaryMode = trip.departureMode || "plane";
+        const primaryModeLabel = getModeLabelPlural(primaryMode);
+        const primaryModeIcon = getModeIcon(primaryMode, 16);
         const tripDays = trip.departureDate && trip.returnDate ? Math.ceil((new Date(trip.returnDate).getTime() - new Date(trip.departureDate).getTime()) / (1e3 * 60 * 60 * 24)) + 1 : 0;
         const cities = /* @__PURE__ */ new Set();
         flights.forEach((f) => {
@@ -26740,8 +26818,11 @@ function TripPlanner({ initialData: initialData2 }) {
                 padding: "2px 6px",
                 borderRadius: 4
               }, children: flights.length > 0 ? `${flightsBookedCount}/${flights.length}` : "\u2014" }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plane, { size: 16, color: getStatusColor2(flightsBookedCount, flights.length) }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, color: COLORS.textMain }, children: "Flights booked" })
+              primaryModeIcon,
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 13, color: COLORS.textMain }, children: [
+                primaryModeLabel,
+                " booked"
+              ] })
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 10 }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: {
@@ -26782,7 +26863,8 @@ function TripPlanner({ initialData: initialData2 }) {
           expandedLegs,
           toggleLegExpand,
           departureDate: trip.departureDate,
-          returnDate: trip.returnDate
+          returnDate: trip.returnDate,
+          primaryTransportMode: trip.departureMode || "plane"
         }
       )
     ] }) }),
