@@ -124,31 +124,38 @@ function classifyDevice(userAgent?: string | null): string {
 }
 
 function computeSummary(args: any) {
-  // Compute trip planner summary
-  const destination = args.destination || "Not specified";
-  const tripDuration = Number(args.trip_duration) || 5;
-  const isInternational = Boolean(args.is_international);
-  const climate = args.climate || "summer";
-  const purpose = args.purpose || "leisure";
+  const destination = args.destination || null;
+  const departureCity = args.departure_city || null;
+  const tripType = args.trip_type || "round_trip";
   const travelers = Number(args.travelers) || 1;
+  const departureDate = args.departure_date || null;
+  const returnDate = args.return_date || null;
+  const departureMode = args.departure_mode || "plane";
+  const multiCityLegs = args.multi_city_legs || [];
   
-  // Estimate planner items based on trip profile
-  let estimatedItems = 25; // Base items
-  if (isInternational) estimatedItems += 5; // Extra documents
-  if (tripDuration > 7) estimatedItems += 5; // More clothing
-  if (purpose === "business") estimatedItems += 3;
-  if (purpose === "adventure") estimatedItems += 8;
-  if (travelers > 1) estimatedItems += 5;
+  // Calculate trip duration from dates if available
+  let tripDays: number | null = null;
+  if (departureDate && returnDate) {
+    const diff = new Date(returnDate).getTime() - new Date(departureDate).getTime();
+    tripDays = Math.ceil(diff / (1000 * 60 * 60 * 24)) + 1;
+  }
+  
+  // Count expected legs
+  const expectedFlights = tripType === "one_way" ? 1 : tripType === "round_trip" ? 2 : multiCityLegs.length;
+  const expectedHotels = tripType === "multi_city" ? multiCityLegs.length : (tripType === "one_way" ? 1 : 1);
   
   return {
     destination,
-    trip_duration: tripDuration,
-    is_international: isInternational,
-    climate,
-    purpose,
+    departure_city: departureCity,
+    trip_type: tripType,
     travelers,
-    estimated_items: estimatedItems,
-    trip_type: isInternational ? "International" : "Domestic"
+    departure_date: departureDate,
+    return_date: returnDate,
+    trip_days: tripDays,
+    departure_mode: departureMode,
+    expected_flights: expectedFlights,
+    expected_hotels: expectedHotels,
+    multi_city_legs: multiCityLegs.length > 0 ? multiCityLegs : null,
   };
 }
 
@@ -187,11 +194,7 @@ function readWidgetHtml(componentName: string): string {
     );
   }
 
-  // Log what was loaded and check for "5%" in the badge
-  const has5Percent = htmlContents.includes('<span class="rate-num">5%</span>');
-  const isBlank = htmlContents.includes('<span class="rate-num"></span>');
   console.log(`[Widget Load] File: ${loadedFrom}`);
-  console.log(`[Widget Load] Has "5%": ${has5Percent}, Is Blank: ${isBlank}`);
   console.log(`[Widget Load] HTML length: ${htmlContents.length} bytes`);
 
   return htmlContents;
@@ -209,40 +212,39 @@ function widgetMeta(widget: TripPlannerWidget, bustCache: boolean = false) {
   return {
     "openai/outputTemplate": templateUri,
     "openai/widgetDescription":
-      "A smart trip planner that organizes all legs of your trip to ensure you don't miss any flights, hotels, or travel reservations. Call this tool immediately with NO arguments to let the user enter their trip details manually. Only provide arguments if the user has explicitly stated them.",
+      "A trip planner and organizer that helps users keep track of all their travel reservations — flights, hotels, trains, rental cars, and ground transport — in one place. Supports round-trip, one-way, and multi-city itineraries. Call this tool immediately with NO arguments to let the user enter their trip details manually. Only provide arguments if the user has explicitly stated them.",
     "openai/componentDescriptions": {
-      "trip-form": "Input form for trip details including destination, duration, travelers, climate, and purpose.",
-      "planner-display": "Display showing organized trip legs with flights, hotels, and reservations.",
-      "progress-tracker": "Progress bar showing how many items have been packed.",
+      "trip-form": "Input form for describing a trip in plain language or manually adding legs (flights, hotels, transport).",
+      "itinerary-display": "Day-by-day itinerary view showing all trip legs with booking status indicators.",
+      "booking-checklist": "Summary checklist showing booking progress for flights, lodging, and ground transport.",
     },
     "openai/widgetKeywords": [
-      "travel",
-      "planner",
-      "packing",
-      "vacation",
-      "trip",
-      "luggage",
-      "travel planning",
-      "packing list",
-      "documents",
-      "toiletries",
-      "clothes",
-      "international",
-      "domestic"
+      "trip planner",
+      "travel organizer",
+      "itinerary",
+      "flight tracker",
+      "hotel booking",
+      "multi-city trip",
+      "round trip",
+      "one way",
+      "travel reservations",
+      "booking checklist",
+      "vacation planner",
+      "trip legs"
     ],
     "openai/sampleConversations": [
-      { "user": "Help me organize my trip", "assistant": "Here is the Smart Trip Planner. Enter your trip details to organize all your flights, hotels, and reservations." },
-      { "user": "I'm going to Paris for 7 days", "assistant": "I'll help you organize your 7-day trip to Paris with all your flights and accommodations." },
-      { "user": "Help me plan a beach vacation", "assistant": "I've loaded the trip planner for your beach vacation. Let's organize your travel reservations." },
+      { "user": "Help me organize my trip", "assistant": "Here is the Trip Planner. Describe your trip or add flights, hotels, and transport manually." },
+      { "user": "I'm flying from Boston to Paris on June 11, then Paris to Geneva, then back to Boston on June 24", "assistant": "I've set up a multi-city trip with 3 legs. You can now add hotels and ground transport for each city." },
+      { "user": "Plan a round trip from NYC to London for 2 weeks", "assistant": "I've created a round-trip itinerary from NYC to London. Add your flight details, hotel, and airport transport." },
     ],
     "openai/starterPrompts": [
-      "What should I pack for my trip?",
-      "Create a packing list for my vacation",
-      "Help me pack for an international trip",
-      "Beach vacation trip planner",
-      "Business trip essentials",
-      "What clothing do I need to travel to New York?",
-      "Family vacation packing list",
+      "Help me organize my upcoming trip",
+      "Plan a round trip from Boston to Paris",
+      "I need to track my multi-city Europe trip",
+      "Organize my flights and hotels for vacation",
+      "Create an itinerary for my business trip to Tokyo",
+      "Help me plan a trip from NYC to London for 2 weeks",
+      "Track my travel reservations",
     ],
     "openai/widgetPrefersBorder": true,
     "openai/widgetCSP": {
@@ -267,12 +269,12 @@ function widgetMeta(widget: TripPlannerWidget, bustCache: boolean = false) {
 const widgets: TripPlannerWidget[] = [
   {
     id: "trip-planner",
-    title: "Smart Trip Planner — Organize all legs of your trip",
+    title: "Trip Planner & Organizer — Keep all your travel reservations in one place",
     templateUri: `ui://widget/trip-planner.html?v=${VERSION}`,
     invoking:
-      "Opening the Smart Trip Planner...",
+      "Opening the Trip Planner & Organizer...",
     invoked:
-      "Here is the Smart Trip Planner. Enter your trip details to organize all your flights, hotels, and travel reservations.",
+      "Here is the Trip Planner & Organizer. Describe your trip or manually add flights, hotels, and transport to build your itinerary.",
     html: readWidgetHtml("trip-planner"),
   },
 ];
@@ -288,28 +290,15 @@ widgets.forEach((widget) => {
 const toolInputSchema = {
   type: "object",
   properties: {
-    destination: { type: "string", description: "Travel destination (city, country, or region)." },
-    start_date: { type: "string", description: "Trip start date in YYYY-MM-DD format (use this only if user gives exact date)." },
-    end_date: { type: "string", description: "Trip end date in YYYY-MM-DD format (use this only if user gives exact date)." },
-    trip_month: { type: "string", description: "Month of travel if user says 'in December', 'in January', etc. Use lowercase month name." },
-    departure_timing: { type: "string", enum: ["this_week", "next_week", "in_two_weeks", "in_three_weeks", "this_weekend", "next_weekend", "next_month", "in_two_months"], description: "Relative departure timing like 'going in two weeks', 'leaving next week', 'this weekend'." },
-    trip_duration: { type: "number", description: "Trip duration in days." },
-    trip_weeks: { type: "number", description: "Trip duration in weeks if user says 'for one week', 'for two weeks', etc." },
-    is_international: { type: "boolean", description: "Whether this is an international trip." },
-    climate: { type: "string", enum: ["summer", "winter", "spring", "tropical", "variable"], description: "Expected weather/climate at destination." },
-    purpose: { type: "string", enum: ["leisure", "business", "adventure", "beach", "city"], description: "Primary purpose of the trip." },
-    adult_males: { type: "number", description: "Number of adult male travelers." },
-    adult_females: { type: "number", description: "Number of adult female travelers." },
-    male_children: { type: "number", description: "Number of male children." },
-    female_children: { type: "number", description: "Number of female children." },
-    infants: { type: "number", description: "Number of infants." },
-    travelers: { type: "number", description: "Total number of travelers (if breakdown not specified, assume adult males)." },
-    packing_constraint: { type: "string", enum: ["carry_on_only", "checked_bags", "minimal"], description: "Luggage type constraint." },
-    has_children: { type: "boolean", description: "Whether traveling with children." },
-    has_infants: { type: "boolean", description: "Whether traveling with infants." },
-    has_pets: { type: "boolean", description: "Whether traveling with pets." },
-    activities: { type: "array", items: { type: "string" }, description: "Planned activities (hiking, beach, camping, etc.)." },
-    presets: { type: "array", items: { type: "string", enum: ["lightSleeper", "gymRat", "yoga", "swimmer", "remoteWorker", "contentCreator", "gamer", "photographer"] }, description: "Traveler presets - lightSleeper (mentions sleep issues, light sleeper), gymRat (gym, workout, fitness), yoga, swimmer (swimming, pool), remoteWorker (remote work, digital nomad), contentCreator (influencer, content creator, vlogger), gamer (gaming), photographer (photography)." },
+    destination: { type: "string", description: "Primary destination city or country." },
+    departure_city: { type: "string", description: "City the traveler is departing from." },
+    trip_type: { type: "string", enum: ["round_trip", "one_way", "multi_city"], description: "Type of trip." },
+    departure_date: { type: "string", description: "Departure date in YYYY-MM-DD format." },
+    return_date: { type: "string", description: "Return date in YYYY-MM-DD format (for round trips)." },
+    travelers: { type: "number", description: "Number of travelers." },
+    departure_mode: { type: "string", enum: ["plane", "rail", "bus", "ferry"], description: "Primary transport mode for the trip." },
+    multi_city_legs: { type: "array", items: { type: "object", properties: { from: { type: "string" }, to: { type: "string" }, date: { type: "string" }, mode: { type: "string" } } }, description: "Array of multi-city leg objects with from, to, date, and mode fields." },
+    trip_description: { type: "string", description: "Freeform text describing the trip for AI-powered parsing." },
   },
   required: [],
   additionalProperties: false,
@@ -318,57 +307,48 @@ const toolInputSchema = {
 
 const toolInputParser = z.object({
   destination: z.string().optional(),
-  start_date: z.string().optional(),
-  end_date: z.string().optional(),
-  trip_month: z.string().optional(),
-  departure_timing: z.enum(["this_week", "next_week", "in_two_weeks", "in_three_weeks", "this_weekend", "next_weekend", "next_month", "in_two_months"]).optional(),
-  trip_duration: z.number().optional(),
-  trip_weeks: z.number().optional(),
-  is_international: z.boolean().optional(),
-  climate: z.enum(["summer", "winter", "spring", "tropical", "variable"]).optional(),
-  purpose: z.enum(["leisure", "business", "adventure", "beach", "city"]).optional(),
-  adult_males: z.number().optional(),
-  adult_females: z.number().optional(),
-  male_children: z.number().optional(),
-  female_children: z.number().optional(),
-  infants: z.number().optional(),
+  departure_city: z.string().optional(),
+  trip_type: z.enum(["round_trip", "one_way", "multi_city"]).optional(),
+  departure_date: z.string().optional(),
+  return_date: z.string().optional(),
   travelers: z.number().optional(),
-  packing_constraint: z.enum(["carry_on_only", "checked_bags", "minimal"]).optional(),
-  has_children: z.boolean().optional(),
-  has_infants: z.boolean().optional(),
-  has_pets: z.boolean().optional(),
-  activities: z.array(z.string()).optional(),
-  presets: z.array(z.enum(["lightSleeper", "gymRat", "yoga", "swimmer", "remoteWorker", "contentCreator", "gamer", "photographer"])).optional(),
+  departure_mode: z.enum(["plane", "rail", "bus", "ferry"]).optional(),
+  multi_city_legs: z.array(z.object({ from: z.string().optional(), to: z.string().optional(), date: z.string().optional(), mode: z.string().optional() })).optional(),
+  trip_description: z.string().optional(),
 });
 
 const tools: Tool[] = widgets.map((widget) => ({
   name: widget.id,
   description:
-    "Use this tool to organize all legs of a trip including flights, hotels, and travel reservations. Helps users keep all their travel data organized. Call this tool immediately with NO arguments to let the user enter their trip details manually. Only provide arguments if the user has explicitly stated them.",
+    "Use this tool to plan and organize a trip including flights, hotels, trains, and ground transport. Supports round-trip, one-way, and multi-city itineraries. Call this tool immediately with NO arguments to let the user enter their trip details manually. Only provide arguments if the user has explicitly stated them.",
   inputSchema: toolInputSchema,
   outputSchema: {
     type: "object",
     properties: {
       ready: { type: "boolean" },
       timestamp: { type: "string" },
-      destination: { type: "string" },
-      trip_duration: { type: "number" },
-      is_international: { type: "boolean" },
-      climate: { type: "string" },
-      purpose: { type: "string" },
-      travelers: { type: "number" },
+      destination: { type: ["string", "null"] },
+      departure_city: { type: ["string", "null"] },
+      trip_type: { type: ["string", "null"] },
+      departure_date: { type: ["string", "null"] },
+      return_date: { type: ["string", "null"] },
+      travelers: { type: ["number", "null"] },
+      departure_mode: { type: ["string", "null"] },
       input_source: { type: "string", enum: ["user", "default"] },
       summary: {
         type: "object",
         properties: {
           destination: { type: ["string", "null"] },
-          trip_duration: { type: ["number", "null"] },
-          is_international: { type: ["boolean", "null"] },
-          climate: { type: ["string", "null"] },
-          purpose: { type: ["string", "null"] },
-          travelers: { type: ["number", "null"] },
-          estimated_items: { type: ["number", "null"] },
+          departure_city: { type: ["string", "null"] },
           trip_type: { type: ["string", "null"] },
+          travelers: { type: ["number", "null"] },
+          departure_date: { type: ["string", "null"] },
+          return_date: { type: ["string", "null"] },
+          trip_days: { type: ["number", "null"] },
+          departure_mode: { type: ["string", "null"] },
+          expected_flights: { type: ["number", "null"] },
+          expected_hotels: { type: ["number", "null"] },
+          multi_city_legs: { type: ["array", "null"] },
         },
       },
       suggested_followups: {
@@ -396,7 +376,7 @@ const resources: Resource[] = widgets.map((widget) => ({
   uri: widget.templateUri,
   name: widget.title,
   description:
-    "HTML template for the Trip Planner widget that organizes all legs of your trip.",
+    "HTML template for the Trip Planner & Organizer widget.",
   mimeType: "text/html+skybridge",
   _meta: widgetMeta(widget),
 }));
@@ -405,7 +385,7 @@ const resourceTemplates: ResourceTemplate[] = widgets.map((widget) => ({
   uriTemplate: widget.templateUri,
   name: widget.title,
   description:
-    "Template descriptor for the Trip Planner widget.",
+    "Template descriptor for the Trip Planner & Organizer widget.",
   mimeType: "text/html+skybridge",
   _meta: widgetMeta(widget),
 }));
@@ -446,8 +426,6 @@ function createTripPlannerServer(): Server {
         throw new Error(`Unknown resource: ${request.params.uri}`);
       }
 
-      // Inject current FRED rate into HTML before sending to ChatGPT
-      // (Logic removed for yield optimizer)
       const htmlToSend = widget.html;
 
       return {
@@ -518,7 +496,7 @@ function createTripPlannerServer(): Server {
         // Debug log
         console.log("Captured meta:", { userLocation, userLocale, userAgent });
 
-        // If ChatGPT didn't pass structured arguments, try to infer travel details from freeform text in meta
+        // If ChatGPT didn't pass structured arguments, try to infer trip details from freeform text in meta
         try {
           const candidates: any[] = [
             meta["openai/subject"],
@@ -530,85 +508,63 @@ function createTripPlannerServer(): Server {
           ];
           const userText = candidates.find((t) => typeof t === "string" && t.trim().length > 0) || "";
 
-          // Try to infer destination from user text (e.g., "trip to Paris", "vacation in Hawaii")
+          // Infer destination (e.g., "trip to Paris", "vacation in Hawaii", "flying to London")
           if (args.destination === undefined) {
-            const destMatch = userText.match(/(?:trip|travel|going|vacation|visit|flying)\s+(?:to|in)\s+([A-Za-z\s,]+?)(?:\.|,|for|\s+\d|\s*$)/i);
+            const destMatch = userText.match(/(?:trip|travel|going|vacation|visit|flying|headed)\s+(?:to|in)\s+([A-Za-z\s,]+?)(?:\.|,|for|on|\s+\d|\s*$)/i);
             if (destMatch) {
               args.destination = destMatch[1].trim();
             }
           }
-          
-          // Try to infer trip duration (e.g., "7 days", "2 weeks", "a week")
-          if (args.trip_duration === undefined) {
-            const durationMatch = userText.match(/(\d+)\s*(?:day|night)s?/i);
-            if (durationMatch) {
-              args.trip_duration = parseInt(durationMatch[1]);
-            } else if (/a\s+week|one\s+week/i.test(userText)) {
-              args.trip_duration = 7;
-            } else if (/two\s+weeks?|2\s+weeks?/i.test(userText)) {
-              args.trip_duration = 14;
+
+          // Infer departure city (e.g., "from Boston", "leaving from NYC")
+          if (args.departure_city === undefined) {
+            const fromMatch = userText.match(/(?:from|leaving|departing)\s+([A-Za-z\s]+?)(?:\s+to\s|\.|,|on|\s*$)/i);
+            if (fromMatch) {
+              args.departure_city = fromMatch[1].trim();
             }
           }
-          
-          // Infer international vs domestic
-          if (args.is_international === undefined) {
-            if (/international|abroad|overseas|passport/i.test(userText)) {
-              args.is_international = true;
-            } else if (/domestic|within|local/i.test(userText)) {
-              args.is_international = false;
+
+          // Infer trip type
+          if (args.trip_type === undefined) {
+            if (/multi[\s-]?city|multiple\s+cities|several\s+cities|then\s+to/i.test(userText)) {
+              args.trip_type = "multi_city";
+            } else if (/one[\s-]?way|not\s+coming\s+back|moving/i.test(userText)) {
+              args.trip_type = "one_way";
+            } else if (/round[\s-]?trip|return|coming\s+back|back\s+to/i.test(userText)) {
+              args.trip_type = "round_trip";
             }
           }
-          
-          // Infer climate from keywords
-          if (args.climate === undefined) {
-            if (/beach|tropical|caribbean|hawaii|mexico|thailand|bali/i.test(userText)) args.climate = "tropical";
-            else if (/winter|cold|snow|ski|skiing|christmas|december|january|february/i.test(userText)) args.climate = "winter";
-            else if (/summer|hot|warm|july|august|june/i.test(userText)) args.climate = "summer";
-            else if (/spring|fall|autumn|mild/i.test(userText)) args.climate = "spring";
-          }
-          
-          // Infer purpose from keywords
-          if (args.purpose === undefined) {
-            if (/business|work|conference|meeting/i.test(userText)) args.purpose = "business";
-            else if (/beach|swim|ocean|resort/i.test(userText)) args.purpose = "beach";
-            else if (/hike|hiking|adventure|camping|outdoor/i.test(userText)) args.purpose = "adventure";
-            else if (/city|urban|sightseeing|museum/i.test(userText)) args.purpose = "city";
-          }
-          
-          // Infer presets from keywords
-          if (!args.presets || args.presets.length === 0) {
-            const inferredPresets: ("lightSleeper" | "gymRat" | "yoga" | "swimmer" | "remoteWorker" | "contentCreator" | "gamer" | "photographer")[] = [];
-            if (/light\s*sleeper|trouble\s*sleep|insomnia|sleep\s*issues|noise\s*sensitive/i.test(userText)) inferredPresets.push("lightSleeper");
-            if (/gym|workout|fitness|exercise|weight\s*train|lift\s*weight/i.test(userText)) inferredPresets.push("gymRat");
-            if (/yoga|meditat|stretch/i.test(userText)) inferredPresets.push("yoga");
-            if (/swim|pool|lap\s*swim/i.test(userText)) inferredPresets.push("swimmer");
-            if (/remote\s*work|digital\s*nomad|work\s*remote|laptop|home\s*office/i.test(userText)) inferredPresets.push("remoteWorker");
-            if (/content\s*creat|influencer|vlog|youtube|tiktok|social\s*media/i.test(userText)) inferredPresets.push("contentCreator");
-            if (/gamer|gaming|video\s*game|nintendo|switch|playstation|xbox/i.test(userText)) inferredPresets.push("gamer");
-            if (/photograph|camera|dslr|mirrorless|shoot\s*photo/i.test(userText)) inferredPresets.push("photographer");
-            if (inferredPresets.length > 0) args.presets = inferredPresets;
-          }
-          
-          // Infer travelers from relationship mentions
-          // "with my girlfriend/wife/partner" = 1 adult male (me) + 1 adult female
-          // "with my boyfriend/husband" = 1 adult female (me) + 1 adult male
-          if (!args.adult_males && !args.adult_females && !args.travelers) {
-            if (/\b(girlfriend|wife|gf)\b/i.test(userText)) {
-              // User is likely male, traveling with female partner
-              args.adult_males = 1;
-              args.adult_females = 1;
-            } else if (/\b(boyfriend|husband|bf)\b/i.test(userText)) {
-              // User is likely female, traveling with male partner
-              args.adult_females = 1;
-              args.adult_males = 1;
-            } else if (/\b(partner|spouse)\b/i.test(userText)) {
-              // Gender-neutral, assume 1 male + 1 female
-              args.adult_males = 1;
-              args.adult_females = 1;
-            } else if (/\bfor\s+(?:me|myself)\b/i.test(userText) && !(/\bwith\b/i.test(userText))) {
-              // Solo traveler - "for me", "for myself" without "with"
-              args.adult_males = 1;
+
+          // Infer dates (e.g., "June 11", "on 2026-06-11")
+          if (args.departure_date === undefined) {
+            const dateMatch = userText.match(/(\d{4}-\d{2}-\d{2})/i);
+            if (dateMatch) {
+              args.departure_date = dateMatch[1];
             }
+          }
+
+          // Infer travelers count
+          if (args.travelers === undefined) {
+            const travelerMatch = userText.match(/(\d+)\s*(?:traveler|people|person|of us)/i);
+            if (travelerMatch) {
+              args.travelers = parseInt(travelerMatch[1]);
+            } else if (/\b(girlfriend|wife|boyfriend|husband|partner|spouse)\b/i.test(userText)) {
+              args.travelers = 2;
+            } else if (/\bsolo\b|\balone\b|\bjust\s+me\b/i.test(userText)) {
+              args.travelers = 1;
+            }
+          }
+
+          // Infer transport mode
+          if (args.departure_mode === undefined) {
+            if (/\btrain\b|\brail\b|\bamtrak\b|\beurostar\b/i.test(userText)) args.departure_mode = "rail";
+            else if (/\bbus\b|\bgreyhound\b|\bcoach\b/i.test(userText)) args.departure_mode = "bus";
+            else if (/\bferry\b|\bboat\b|\bcruise\b/i.test(userText)) args.departure_mode = "ferry";
+          }
+
+          // Store freeform text as trip_description for AI parsing on the client
+          if (!args.trip_description && userText.length > 10) {
+            args.trip_description = userText;
           }
 
         } catch (e) {
@@ -623,10 +579,13 @@ function createTripPlannerServer(): Server {
 
         // Infer likely user query from parameters
         const inferredQuery = [] as string[];
-        if (args.destination) inferredQuery.push(`Destination: ${args.destination}`);
-        if (args.trip_duration) inferredQuery.push(`Duration: ${args.trip_duration} days`);
-        if (args.purpose) inferredQuery.push(`Purpose: ${args.purpose}`);
-        if (args.climate) inferredQuery.push(`Climate: ${args.climate}`);
+        if (args.departure_city) inferredQuery.push(`From: ${args.departure_city}`);
+        if (args.destination) inferredQuery.push(`To: ${args.destination}`);
+        if (args.trip_type) inferredQuery.push(`Type: ${args.trip_type}`);
+        if (args.departure_date) inferredQuery.push(`Departs: ${args.departure_date}`);
+        if (args.return_date) inferredQuery.push(`Returns: ${args.return_date}`);
+        if (args.travelers) inferredQuery.push(`Travelers: ${args.travelers}`);
+        if (args.departure_mode) inferredQuery.push(`Mode: ${args.departure_mode}`);
 
         logAnalytics("tool_call_success", {
           toolName: request.params.name,
@@ -661,10 +620,10 @@ function createTripPlannerServer(): Server {
           // Summary + follow-ups for natural language UX
           summary: computeSummary(args),
           suggested_followups: [
-            "What documents do I need?",
-            "What clothes should I pack?",
-            "Do I need any vaccines?",
-            "What about toiletries for carry-on?"
+            "Add hotels for each city",
+            "What ground transport do I need?",
+            "Show me my booking checklist",
+            "Help me add flight details"
           ],
         } as const;
 
@@ -688,7 +647,7 @@ function createTripPlannerServer(): Server {
         // Log success analytics
         try {
           // Check for "empty" result - when no main travel inputs are provided
-          const hasMainInputs = args.destination || args.trip_duration || args.purpose;
+          const hasMainInputs = args.destination || args.departure_city || args.trip_type || args.departure_date;
           
           if (!hasMainInputs) {
              logAnalytics("tool_call_empty", {
@@ -915,8 +874,8 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
       : "N/A";
 
   const paramUsage: Record<string, number> = {};
-  const tripPurposeDist: Record<string, number> = {};
-  const climateDist: Record<string, number> = {};
+  const tripTypeDist: Record<string, number> = {};
+  const transportModeDist: Record<string, number> = {};
   
   successLogs.forEach((log) => {
     if (log.params) {
@@ -925,15 +884,15 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
           paramUsage[key] = (paramUsage[key] || 0) + 1;
         }
       });
-      // Track trip purpose distribution
-      if (log.params.purpose) {
-        const purpose = log.params.purpose;
-        tripPurposeDist[purpose] = (tripPurposeDist[purpose] || 0) + 1;
+      // Track trip type distribution
+      if (log.params.trip_type) {
+        const tt = log.params.trip_type;
+        tripTypeDist[tt] = (tripTypeDist[tt] || 0) + 1;
       }
-      // Track climate distribution
-      if (log.params.climate) {
-        const climate = log.params.climate;
-        climateDist[climate] = (climateDist[climate] || 0) + 1;
+      // Track transport mode distribution
+      if (log.params.departure_mode) {
+        const mode = log.params.departure_mode;
+        transportModeDist[mode] = (transportModeDist[mode] || 0) + 1;
       }
     }
   });
@@ -944,28 +903,8 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
     widgetInteractions[humanName] = (widgetInteractions[humanName] || 0) + 1;
   });
   
-  // Trip duration distribution
-  const tripDurationDist: Record<string, number> = {};
-  successLogs.forEach((log) => {
-    if (log.params?.trip_duration) {
-      const days = log.params.trip_duration;
-      let bucket = "Unknown";
-      if (days <= 3) bucket = "1-3 days";
-      else if (days <= 7) bucket = "4-7 days";
-      else if (days <= 14) bucket = "8-14 days";
-      else bucket = "15+ days";
-      tripDurationDist[bucket] = (tripDurationDist[bucket] || 0) + 1;
-    }
-  });
-
-  // International vs Domestic distribution
-  const tripTypeDist: Record<string, number> = {};
-  successLogs.forEach((log) => {
-    if (log.params?.is_international !== undefined) {
-      const tripType = log.params.is_international ? "International" : "Domestic";
-      tripTypeDist[tripType] = (tripTypeDist[tripType] || 0) + 1;
-    }
-  });
+  // Transport mode distribution
+  // (tripTypeDist already computed above)
 
   // Destinations (top 10)
   const destinationDist: Record<string, number> = {};
@@ -976,23 +915,34 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
     }
   });
 
-  // Planner Actions
+  // Departure cities (top 10)
+  const departureCityDist: Record<string, number> = {};
+  successLogs.forEach((log) => {
+    if (log.params?.departure_city) {
+      const city = log.params.departure_city;
+      departureCityDist[city] = (departureCityDist[city] || 0) + 1;
+    }
+  });
+
+  // Trip Organizer Actions
   const actionCounts: Record<string, number> = {
-    "Generate Plan": 0,
+    "Parse Trip": 0,
+    "Add Leg": 0,
+    "Save Trip": 0,
+    "New Trip": 0,
     "Subscribe": 0,
-    "Check Item": 0, 
-    "Add Custom Item": 0,
-    "Save Plan": 0,
-    "Print/Share": 0
+    "Print": 0,
+    "Feedback": 0
   };
 
   widgetEvents.forEach(log => {
-      if (log.event === "widget_generate_plan") actionCounts["Generate Plan"]++;
+      if (log.event === "widget_parse_trip") actionCounts["Parse Trip"]++;
+      if (log.event === "widget_add_leg") actionCounts["Add Leg"]++;
+      if (log.event === "widget_save_trip") actionCounts["Save Trip"]++;
+      if (log.event === "widget_new_trip") actionCounts["New Trip"]++;
       if (log.event === "widget_notify_me_subscribe") actionCounts["Subscribe"]++;
-      if (log.event === "widget_check_item") actionCounts["Check Item"]++;
-      if (log.event === "widget_add_custom_item") actionCounts["Add Custom Item"]++;
-      if (log.event === "widget_save_plan") actionCounts["Save Plan"]++;
-      if (log.event === "widget_print_share") actionCounts["Print/Share"]++;
+      if (log.event === "widget_print") actionCounts["Print"]++;
+      if (log.event === "widget_user_feedback") actionCounts["Feedback"]++;
   });
 
   return `<!DOCTYPE html>
@@ -1085,16 +1035,16 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
 
     <div class="grid" style="margin-bottom: 20px;">
       <div class="card">
-        <h2>Trip Purpose</h2>
+        <h2>Trip Type</h2>
         <table>
-          <thead><tr><th>Purpose</th><th>Count</th></tr></thead>
+          <thead><tr><th>Type</th><th>Count</th></tr></thead>
           <tbody>
-            ${Object.entries(tripPurposeDist).length > 0 ? Object.entries(tripPurposeDist)
+            ${Object.entries(tripTypeDist).length > 0 ? Object.entries(tripTypeDist)
               .sort((a, b) => (b[1] as number) - (a[1] as number))
               .map(
-                ([purpose, count]) => `
+                ([tt, count]) => `
               <tr>
-                <td>${purpose}</td>
+                <td>${tt}</td>
                 <td>${count}</td>
               </tr>
             `
@@ -1148,36 +1098,16 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
 
     <div class="grid" style="margin-bottom: 20px;">
       <div class="card">
-        <h2>Trip Duration</h2>
+        <h2>Transport Mode</h2>
         <table>
-          <thead><tr><th>Duration</th><th>Users</th></tr></thead>
+          <thead><tr><th>Mode</th><th>Users</th></tr></thead>
           <tbody>
-            ${Object.entries(tripDurationDist).length > 0 ? Object.entries(tripDurationDist)
+            ${Object.entries(transportModeDist).length > 0 ? Object.entries(transportModeDist)
               .sort((a, b) => (b[1] as number) - (a[1] as number))
               .map(
-                ([duration, count]) => `
+                ([mode, count]) => `
               <tr>
-                <td>${duration}</td>
-                <td>${count}</td>
-              </tr>
-            `
-              )
-              .join("") : '<tr><td colspan="2" style="text-align: center; color: #9ca3af;">No data yet</td></tr>'}
-          </tbody>
-        </table>
-      </div>
-      
-      <div class="card">
-        <h2>Trip Type</h2>
-        <table>
-          <thead><tr><th>Type</th><th>Users</th></tr></thead>
-          <tbody>
-            ${Object.entries(tripTypeDist).length > 0 ? Object.entries(tripTypeDist)
-              .sort((a, b) => (b[1] as number) - (a[1] as number))
-              .map(
-                ([tripType, count]) => `
-              <tr>
-                <td>${tripType}</td>
+                <td>${mode}</td>
                 <td>${count}</td>
               </tr>
             `
@@ -1199,6 +1129,27 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
                 ([dest, count]) => `
               <tr>
                 <td>${dest}</td>
+                <td>${count}</td>
+              </tr>
+            `
+              )
+              .join("") : '<tr><td colspan="2" style="text-align: center; color: #9ca3af;">No data yet</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="card">
+        <h2>Top Departure Cities</h2>
+        <table>
+          <thead><tr><th>City</th><th>Users</th></tr></thead>
+          <tbody>
+            ${Object.entries(departureCityDist).length > 0 ? Object.entries(departureCityDist)
+              .sort((a, b) => (b[1] as number) - (a[1] as number))
+              .slice(0, 10)
+              .map(
+                ([city, count]) => `
+              <tr>
+                <td>${city}</td>
                 <td>${count}</td>
               </tr>
             `
@@ -1495,11 +1446,10 @@ async function handleSubscribe(req: IncomingMessage, res: ServerResponse) {
       body += chunk;
     }
 
-    // Support both old (settlementId/settlementName) and new (topicId/topicName) field names
     const parsed = JSON.parse(body);
     const email = parsed.email;
-    const topicId = parsed.topicId || parsed.settlementId || "trip-planner";
-    const topicName = parsed.topicName || parsed.settlementName || "Trip Planner Updates";
+    const topicId = parsed.topicId || "trip-planner";
+    const topicName = parsed.topicName || "Trip Planner Updates";
     if (!email || !email.includes("@")) {
       res.writeHead(400).end(JSON.stringify({ error: "Invalid email address" }));
       return;
@@ -1515,7 +1465,7 @@ async function handleSubscribe(req: IncomingMessage, res: ServerResponse) {
       await subscribeToButtondown(email, topicId, topicName);
       res.writeHead(200).end(JSON.stringify({ 
         success: true, 
-        message: "Successfully subscribed! You'll receive travel tips and packing list updates." 
+        message: "Successfully subscribed! You'll receive trip planning tips and updates." 
       }));
     } catch (subscribeError: any) {
       const rawMessage = String(subscribeError?.message ?? "").trim();
