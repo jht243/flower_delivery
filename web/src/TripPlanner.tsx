@@ -1391,7 +1391,7 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
   const [expandedLegs, setExpandedLegs] = useState<Set<string>>(new Set());
   const [inputMode, setInputMode] = useState<"freeform" | "manual">("freeform");
   const [renamingTripId, setRenamingTripId] = useState<string | null>(null);
-  const [renameValue, setRenameValue] = useState("");
+  const [renameValue, setRenameValue] = sseState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isEditingDates, setIsEditingDates] = useState(false);
   const [editingItem, setEditingItem] = useState<string | null>(null);
@@ -1990,7 +1990,12 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
                       <div style={{ fontSize: 12, fontWeight: 600, color: COLORS.textSecondary, marginBottom: 8 }}>
                         Flight Legs
                       </div>
-                      {(trip.multiCityLegs || []).map((leg, idx) => (
+                      {(trip.multiCityLegs || []).map((leg, idx) => {
+                        // Get the previous leg's date for min constraint
+                        const prevLeg = idx > 0 ? (trip.multiCityLegs || [])[idx - 1] : null;
+                        const minDate = prevLeg?.date || "";
+                        
+                        return (
                         <div key={leg.id} style={{ marginBottom: 12, padding: 12, backgroundColor: COLORS.bg, borderRadius: 10, border: `1px solid ${COLORS.borderLight}` }}>
                           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr auto", gap: 8, alignItems: "center" }}>
                           <input
@@ -2024,6 +2029,7 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
                           <input
                             type="date"
                             value={leg.date}
+                            min={minDate}
                             onChange={e => {
                               const newDate = e.target.value;
                               setTrip(t => ({
@@ -2056,7 +2062,8 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
                             }))} 
                           />
                         </div>
-                      ))}
+                      );
+                      })}
                       <button
                         onClick={() => setTrip(t => ({
                           ...t,

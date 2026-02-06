@@ -25985,7 +25985,7 @@ function TripPlanner({ initialData: initialData2 }) {
   const [expandedLegs, setExpandedLegs] = (0, import_react3.useState)(/* @__PURE__ */ new Set());
   const [inputMode, setInputMode] = (0, import_react3.useState)("freeform");
   const [renamingTripId, setRenamingTripId] = (0, import_react3.useState)(null);
-  const [renameValue, setRenameValue] = (0, import_react3.useState)("");
+  const [renameValue, setRenameValue] = sseState("");
   const [isAnalyzing, setIsAnalyzing] = (0, import_react3.useState)(false);
   const [isEditingDates, setIsEditingDates] = (0, import_react3.useState)(false);
   const [editingItem, setEditingItem] = (0, import_react3.useState)(null);
@@ -26541,83 +26541,88 @@ function TripPlanner({ initialData: initialData2 }) {
             )) }),
             trip.tripType === "multi_city" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 12, fontWeight: 600, color: COLORS.textSecondary, marginBottom: 8 }, children: "Flight Legs" }),
-              (trip.multiCityLegs || []).map((leg, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 12, padding: 12, backgroundColor: COLORS.bg, borderRadius: 10, border: `1px solid ${COLORS.borderLight}` }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr auto", gap: 8, alignItems: "center" }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-                    "input",
-                    {
-                      type: "text",
-                      placeholder: "From",
-                      value: leg.from,
-                      onChange: (e) => {
-                        const newFrom = e.target.value;
-                        setTrip((t) => ({
+              (trip.multiCityLegs || []).map((leg, idx) => {
+                const prevLeg = idx > 0 ? (trip.multiCityLegs || [])[idx - 1] : null;
+                const minDate = prevLeg?.date || "";
+                return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 12, padding: 12, backgroundColor: COLORS.bg, borderRadius: 10, border: `1px solid ${COLORS.borderLight}` }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr auto", gap: 8, alignItems: "center" }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                      "input",
+                      {
+                        type: "text",
+                        placeholder: "From",
+                        value: leg.from,
+                        onChange: (e) => {
+                          const newFrom = e.target.value;
+                          setTrip((t) => ({
+                            ...t,
+                            multiCityLegs: (t.multiCityLegs || []).map((l) => l.id === leg.id ? { ...l, from: newFrom } : l),
+                            updatedAt: Date.now()
+                          }));
+                        },
+                        style: { padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, fontSize: 13 }
+                      }
+                    ),
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                      "input",
+                      {
+                        type: "text",
+                        placeholder: "To",
+                        value: leg.to,
+                        onChange: (e) => {
+                          const newTo = e.target.value;
+                          setTrip((t) => ({
+                            ...t,
+                            multiCityLegs: (t.multiCityLegs || []).map((l) => l.id === leg.id ? { ...l, to: newTo } : l),
+                            updatedAt: Date.now()
+                          }));
+                        },
+                        style: { padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, fontSize: 13 }
+                      }
+                    ),
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                      "input",
+                      {
+                        type: "date",
+                        value: leg.date,
+                        min: minDate,
+                        onChange: (e) => {
+                          const newDate = e.target.value;
+                          setTrip((t) => ({
+                            ...t,
+                            multiCityLegs: (t.multiCityLegs || []).map((l) => l.id === leg.id ? { ...l, date: newDate } : l),
+                            updatedAt: Date.now()
+                          }));
+                        },
+                        style: { padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, fontSize: 13 }
+                      }
+                    ),
+                    (trip.multiCityLegs || []).length > 2 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                      "button",
+                      {
+                        onClick: () => setTrip((t) => ({
                           ...t,
-                          multiCityLegs: (t.multiCityLegs || []).map((l) => l.id === leg.id ? { ...l, from: newFrom } : l),
+                          multiCityLegs: (t.multiCityLegs || []).filter((l) => l.id !== leg.id),
                           updatedAt: Date.now()
-                        }));
-                      },
-                      style: { padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, fontSize: 13 }
-                    }
-                  ),
+                        })),
+                        style: { padding: 6, borderRadius: 6, border: "none", backgroundColor: "#FEE2E2", color: "#EF4444", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" },
+                        children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { size: 14 })
+                      }
+                    )
+                  ] }),
                   /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-                    "input",
+                    TransportModeSelector,
                     {
-                      type: "text",
-                      placeholder: "To",
-                      value: leg.to,
-                      onChange: (e) => {
-                        const newTo = e.target.value;
-                        setTrip((t) => ({
-                          ...t,
-                          multiCityLegs: (t.multiCityLegs || []).map((l) => l.id === leg.id ? { ...l, to: newTo } : l),
-                          updatedAt: Date.now()
-                        }));
-                      },
-                      style: { padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, fontSize: 13 }
-                    }
-                  ),
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-                    "input",
-                    {
-                      type: "date",
-                      value: leg.date,
-                      onChange: (e) => {
-                        const newDate = e.target.value;
-                        setTrip((t) => ({
-                          ...t,
-                          multiCityLegs: (t.multiCityLegs || []).map((l) => l.id === leg.id ? { ...l, date: newDate } : l),
-                          updatedAt: Date.now()
-                        }));
-                      },
-                      style: { padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, fontSize: 13 }
-                    }
-                  ),
-                  (trip.multiCityLegs || []).length > 2 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-                    "button",
-                    {
-                      onClick: () => setTrip((t) => ({
+                      value: leg.mode || "plane",
+                      onChange: (mode) => setTrip((t) => ({
                         ...t,
-                        multiCityLegs: (t.multiCityLegs || []).filter((l) => l.id !== leg.id),
+                        multiCityLegs: (t.multiCityLegs || []).map((l) => l.id === leg.id ? { ...l, mode } : l),
                         updatedAt: Date.now()
-                      })),
-                      style: { padding: 6, borderRadius: 6, border: "none", backgroundColor: "#FEE2E2", color: "#EF4444", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" },
-                      children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { size: 14 })
+                      }))
                     }
                   )
-                ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-                  TransportModeSelector,
-                  {
-                    value: leg.mode || "plane",
-                    onChange: (mode) => setTrip((t) => ({
-                      ...t,
-                      multiCityLegs: (t.multiCityLegs || []).map((l) => l.id === leg.id ? { ...l, mode } : l),
-                      updatedAt: Date.now()
-                    }))
-                  }
-                )
-              ] }, leg.id)),
+                ] }, leg.id);
+              }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
                 "button",
                 {
