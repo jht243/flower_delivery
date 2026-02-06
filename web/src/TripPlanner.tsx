@@ -2076,9 +2076,9 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
             <p style={{ margin: "4px 0 0", fontSize: 14, opacity: 0.9 }}>Organize your travel reservations</p>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <button onClick={handleBackToHome} style={{ padding: 8, borderRadius: 8, border: "none", backgroundColor: "rgba(255,255,255,0.2)", color: "white", cursor: "pointer", display: "flex", alignItems: "center" }}><Home size={18} /></button>
-            {trip.legs.length > 0 && <button onClick={saveCurrentTrip} style={{ padding: 8, borderRadius: 8, border: "none", backgroundColor: "rgba(255,255,255,0.2)", color: "white", cursor: "pointer", display: "flex", alignItems: "center" }}><Save size={18} /></button>}
-            <button onClick={handleNewTrip} style={{ padding: "8px 14px", borderRadius: 8, border: "none", backgroundColor: "white", color: COLORS.primary, fontSize: 13, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}><Plus size={16} /> New Trip</button>
+            <button className="btn-press" onClick={handleBackToHome} style={{ padding: 8, borderRadius: 8, border: "none", backgroundColor: "rgba(255,255,255,0.2)", color: "white", cursor: "pointer", display: "flex", alignItems: "center" }}><Home size={18} /></button>
+            {trip.legs.length > 0 && <button className="btn-press" onClick={saveCurrentTrip} style={{ padding: 8, borderRadius: 8, border: "none", backgroundColor: "rgba(255,255,255,0.2)", color: "white", cursor: "pointer", display: "flex", alignItems: "center" }}><Save size={18} /></button>}
+            <button className="btn-press" onClick={handleNewTrip} style={{ padding: "8px 14px", borderRadius: 8, border: "none", backgroundColor: "white", color: COLORS.primary, fontSize: 13, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}><Plus size={16} /> New Trip</button>
           </div>
         </div>
       </div>
