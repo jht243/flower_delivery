@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "type": "module",
   "private": true,
-  "description": "Smart Trip Planner — organizes all legs of your trip to ensure you don't miss any flights, hotels, or travel reservations.",
+  "description": "Trip Planner & Organizer — keep all your travel reservations (flights, hotels, trains, transport) in one place.",
   "keywords": [
     "trip planner",
-    "packing list",
-    "travel planner",
+    "travel organizer",
+    "itinerary",
+    "flight tracker",
+    "hotel booking",
     "vacation"
   ],
   "scripts": {

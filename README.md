@@ -1,29 +1,24 @@
-# Smart Trip Planner - ChatGPT MCP Connector
+# Trip Planner & Organizer - ChatGPT MCP Connector
 
-A Model Context Protocol (MCP) server that provides an interactive trip planner widget for ChatGPT. Organizes all legs of your trip to ensure you don't miss any flights, hotels, or travel reservations.
+A Model Context Protocol (MCP) server that provides an interactive trip planner widget for ChatGPT. Keep all your travel reservations — flights, hotels, trains, and ground transport — organized in one place.
 
 **[Privacy Policy](PRIVACY.md)** | **[OpenAI Apps SDK](https://developers.openai.com/apps-sdk)**
 
 ## Features
 
-- ✈️ Organize all legs of your trip in one place
-- 📋 Smart rules engine for documents, clothing, toiletries, health, tech, and more
-- 🌍 International vs domestic trip support with appropriate items
-- 👨‍👩‍👧‍👦 Family-specific items for children, infants, seniors, and pets
-- 🎿 Activity-specific gear recommendations (hiking, beach, camping, etc.)
-- ✅ Interactive planner with progress tracking
+- ✈️ Organize flights, hotels, trains, and ground transport in one itinerary
+- �️ Support for round-trip, one-way, and multi-city itineraries
+- 📊 Booking status checklist with progress tracking per category
+- 🤖 AI-powered trip description parsing (describe your trip in plain English)
+- 📅 Day-by-day itinerary view
+- 💾 Save and manage multiple trips
 - 🖨️ Print-friendly output
 
-## Planner Categories
+## Trip Types
 
-1. **Mandatory Documents** - ID, passport, visa, insurance, itinerary
-2. **Clothing & Accessories** - Climate-appropriate items with quantities
-3. **Toiletries** - TSA-compliant options for carry-on travelers
-4. **Health & Safety** - First aid, medications, sanitizer
-5. **Tech & Gadgets** - Phone, chargers, adapters
-6. **Activity-Specific Gear** - Based on planned activities
-7. **Family-Specific Items** - For children, infants, seniors, pets
-8. **Pre-Departure Tasks** - Confirmations, bank notifications, home prep
+- **Round Trip** — Outbound + return flight with hotel and transport
+- **One Way** — Single-direction travel with accommodation
+- **Multi-City** — Multiple legs with different cities, transport modes, and hotels per stop
 
 ## Quick Start
 
@@ -63,16 +58,16 @@ Server runs on `http://localhost:8000`. **Note:** HTTP endpoints are for local d
 
 1. Open ChatGPT in **Developer Mode**
 2. Add MCP Connector with your deployed URL
-3. Say: **"What should I pack for my trip?"** or **"Create a packing list for Paris"**
+3. Say: **"Help me organize my trip"** or **"Plan a round trip from Boston to Paris"**
 4. The interactive widget appears!
 
 ### Example Prompts
 
-- "I'm going to Paris for 7 days"
-- "Help me pack for a beach vacation in Hawaii"
-- "Business trip packing list for London"
-- "Family vacation planner with 2 kids"
-- "Organize my international travel itinerary"
+- "Help me organize my upcoming trip"
+- "Plan a round trip from NYC to London for 2 weeks"
+- "I'm flying from Boston to Paris on June 11, then to Geneva, then back"
+- "Create an itinerary for my business trip to Tokyo"
+- "Track my multi-city Europe trip"
 
 ## Tech Stack
 
@@ -87,8 +82,9 @@ Server runs on `http://localhost:8000`. **Note:** HTTP endpoints are for local d
 Copy `.env.example` to `.env` and configure:
 
 ```bash
-BUTTONDOWN_API_KEY=your_api_key
-ANALYTICS_PASSWORD=your_password
+OPENAI_API_KEY=your_openai_key    # For AI-powered trip parsing
+BUTTONDOWN_API_KEY=your_api_key   # For email subscriptions
+ANALYTICS_PASSWORD=your_password  # For /analytics dashboard
 ```
 
 ## Privacy & Data Use
@@ -96,7 +92,7 @@ ANALYTICS_PASSWORD=your_password
 - **What we collect:** When the widget runs inside ChatGPT we receive the location (city/region/country), locale, device/browser fingerprint, and trip query details via `_meta`.
 - **How we use it:** These fields feed the `/analytics` dashboard only; we do not sell or share this data.
 - **Retention:** Logs are stored for **30 days** in the `/logs` folder and then automatically rotated.
-- **User input storage:** The widget caches your checklist progress in `localStorage`; entries expire after **30 days**. Clear anytime with the "Reset" button.
+- **User input storage:** The widget caches your trip data in `localStorage`; clear anytime with the "Reset" button.
 
 ## Monitoring & Alerts
 

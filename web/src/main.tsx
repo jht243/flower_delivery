@@ -109,7 +109,7 @@ const getHydrationData = (): any => {
 
 console.log("[Main] Trip Planner main.tsx loading...");
 
-// App wrapper - Travel Checklist
+// App wrapper - Trip Planner & Organizer
 function App({ initialData }: { initialData: any }) {
   return <TripPlanner initialData={initialData} />;
 }
