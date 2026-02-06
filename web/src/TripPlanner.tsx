@@ -652,7 +652,7 @@ const CategoryIcon = ({
 };
 
 // Day-by-Day View Component - Horizontal icon guide layout
-const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, toggleLegExpand, departureDate, returnDate, primaryTransportMode }: { 
+const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, toggleLegExpand, departureDate, returnDate, primaryTransportMode, multiCityLegs }: { 
   legs: TripLeg[]; 
   onUpdateLeg: (id: string, u: Partial<TripLeg>) => void; 
   onDeleteLeg: (id: string) => void;
@@ -662,6 +662,7 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
   toggleLegExpand: (id: string) => void;
   departureDate?: string;
   returnDate?: string;
+  multiCityLegs?: MultiCityLeg[];
 }) => {
   const [expandedCategory, setExpandedCategory] = useState<Record<string, string | null>>({});
   const [editingTransport, setEditingTransport] = useState<string | null>(null); // "to-{date}" or "from-{date}" or "rental"
@@ -751,6 +752,32 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
     // Could be enhanced to check leg mode, for now use plane
     return <Plane size={14} color="white" />;
   };
+  
+  // Get which city the user is in on a given date (for multi-city trips)
+  const getCityForDate = (dateStr: string): string | null => {
+    if (!multiCityLegs || multiCityLegs.length === 0) return null;
+    
+    // Sort legs by date
+    const sortedLegs = [...multiCityLegs].filter(l => l.date).sort((a, b) => a.date.localeCompare(b.date));
+    if (sortedLegs.length === 0) return null;
+    
+    // Find the most recent leg that departed on or before this date
+    let currentCity: string | null = null;
+    for (const leg of sortedLegs) {
+      if (leg.date <= dateStr) {
+        currentCity = leg.to; // After this leg, user is in the destination city
+      } else {
+        break;
+      }
+    }
+    
+    // If no leg has departed yet, user is in the first leg's origin
+    if (!currentCity && sortedLegs.length > 0 && dateStr < sortedLegs[0].date) {
+      currentCity = sortedLegs[0].from;
+    }
+    
+    return currentCity;
+  };
 
   const toggleCategory = (date: string, category: string) => {
     setExpandedCategory(prev => ({
@@ -807,7 +834,7 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
               backgroundColor: dayStatusBg,
               borderBottom: `1px solid ${COLORS.border}`
             }}>
-              {/* Travel day indicator - show plane/transport icon, otherwise just show day number in title */}
+              {/* Travel day indicator - show plane/transport icon on travel days */}
               {isTravelDay && (
                 <div style={{ 
                   width: 28, height: 28, borderRadius: "50%", 
@@ -818,9 +845,32 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
                   {getTravelDayIcon(dayData.flights)}
                 </div>
               )}
-              <span style={{ fontWeight: 600, fontSize: 14, color: COLORS.textMain, flex: 1 }}>
-                {formatDayHeader(date, idx + 1)}
-              </span>
+              <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ fontSize: 14, color: COLORS.textMain }}>
+                  <strong>Day {idx + 1}</strong> · {(() => {
+                    try {
+                      const d = new Date(date + "T00:00:00");
+                      return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+                    } catch { return ""; }
+                  })()}
+                </span>
+                {/* City label for multi-city trips */}
+                {(() => {
+                  const city = getCityForDate(date);
+                  return city ? (
+                    <span style={{ 
+                      fontSize: 11, 
+                      padding: "2px 8px", 
+                      borderRadius: 4, 
+                      backgroundColor: COLORS.accentLight, 
+                      color: COLORS.primaryDark,
+                      fontWeight: 600
+                    }}>
+                      {city}
+                    </span>
+                  ) : null;
+                })()}
+              </div>
               {/* Completion counter */}
               <span style={{ 
                 fontSize: 12, fontWeight: 600,
@@ -2394,6 +2444,7 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
                   departureDate={viewDepartureDate}
                   returnDate={viewReturnDate}
                   primaryTransportMode={trip.departureMode || "plane"}
+                  multiCityLegs={trip.tripType === "multi_city" ? trip.multiCityLegs : undefined}
                 />
               );
             })()}

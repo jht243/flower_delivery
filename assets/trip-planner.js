@@ -25241,7 +25241,7 @@ var CategoryIcon = ({
     }
   );
 };
-var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, toggleLegExpand, departureDate, returnDate, primaryTransportMode }) => {
+var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, toggleLegExpand, departureDate, returnDate, primaryTransportMode, multiCityLegs }) => {
   const [expandedCategory, setExpandedCategory] = (0, import_react3.useState)({});
   const [editingTransport, setEditingTransport] = (0, import_react3.useState)(null);
   const [transportForm, setTransportForm] = (0, import_react3.useState)({ type: "uber", notes: "", rentalCompany: "", startDate: "", endDate: "" });
@@ -25313,6 +25313,23 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, to
     if (flights.length === 0) return null;
     return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plane, { size: 14, color: "white" });
   };
+  const getCityForDate = (dateStr) => {
+    if (!multiCityLegs || multiCityLegs.length === 0) return null;
+    const sortedLegs = [...multiCityLegs].filter((l) => l.date).sort((a, b) => a.date.localeCompare(b.date));
+    if (sortedLegs.length === 0) return null;
+    let currentCity = null;
+    for (const leg of sortedLegs) {
+      if (leg.date <= dateStr) {
+        currentCity = leg.to;
+      } else {
+        break;
+      }
+    }
+    if (!currentCity && sortedLegs.length > 0 && dateStr < sortedLegs[0].date) {
+      currentCity = sortedLegs[0].from;
+    }
+    return currentCity;
+  };
   const toggleCategory = (date, category) => {
     setExpandedCategory((prev) => ({
       ...prev,
@@ -25368,7 +25385,34 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, to
           alignItems: "center",
           justifyContent: "center"
         }, children: getTravelDayIcon(dayData.flights) }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontWeight: 600, fontSize: 14, color: COLORS.textMain, flex: 1 }, children: formatDayHeader(date, idx + 1) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { flex: 1, display: "flex", alignItems: "center", gap: 8 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: { fontSize: 14, color: COLORS.textMain }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("strong", { children: [
+              "Day ",
+              idx + 1
+            ] }),
+            " \xB7 ",
+            (() => {
+              try {
+                const d = /* @__PURE__ */ new Date(date + "T00:00:00");
+                return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+              } catch {
+                return "";
+              }
+            })()
+          ] }),
+          (() => {
+            const city = getCityForDate(date);
+            return city ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: {
+              fontSize: 11,
+              padding: "2px 8px",
+              borderRadius: 4,
+              backgroundColor: COLORS.accentLight,
+              color: COLORS.primaryDark,
+              fontWeight: 600
+            }, children: city }) : null;
+          })()
+        ] }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { style: {
           fontSize: 12,
           fontWeight: 600,
@@ -26930,7 +26974,8 @@ function TripPlanner({ initialData: initialData2 }) {
             toggleLegExpand,
             departureDate: viewDepartureDate,
             returnDate: viewReturnDate,
-            primaryTransportMode: trip.departureMode || "plane"
+            primaryTransportMode: trip.departureMode || "plane",
+            multiCityLegs: trip.tripType === "multi_city" ? trip.multiCityLegs : void 0
           }
         );
       })()
