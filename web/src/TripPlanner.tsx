@@ -707,31 +707,27 @@ const CategoryChip = ({
   };
   const flightConfig = transportMode ? getModeConfig(transportMode) : { icon: Plane, name: "Flight" };
   const config = {
-    flight: { icon: flightConfig.icon, color: COLORS.flight, bg: COLORS.flightBg, name: flightConfig.name },
-    hotel: { icon: Hotel, color: COLORS.hotel, bg: COLORS.hotelBg, name: "Stay" },
-    transport: { icon: Car, color: COLORS.transport, bg: COLORS.transportBg, name: "Ride" },
-    activity: { icon: MapPin, color: "#6B705C", bg: "#ECEAE2", name: "Activity" }
+    flight: { icon: flightConfig.icon, color: COLORS.flight, bg: COLORS.flightBg, name: flightConfig.name, priority: true },
+    hotel: { icon: Hotel, color: COLORS.hotel, bg: COLORS.hotelBg, name: "Stay", priority: true },
+    transport: { icon: Car, color: COLORS.transport, bg: COLORS.transportBg, name: "Ride", priority: false },
+    activity: { icon: MapPin, color: "#6B705C", bg: "#ECEAE2", name: "Activity", priority: false }
   };
-  const { icon: Icon, color, bg, name } = config[type];
+  const { icon: Icon, color, bg, name, priority } = config[type];
 
-  // Determine chip state: complete (green), partial (yellow), incomplete (red), inactive (gray)
-  const isComplete = hasItem && isBooked;
-  const isPartial = partialComplete;
-  const isIncomplete = hasItem && !isBooked && !isPartial;
-  // inactive = no items at all for this category
+  // ORIGINAL color logic restored exactly from pre-redesign
+  const getStatusColor = () => {
+    if (hasItem && !partialComplete) return COLORS.booked; // Green - fully complete
+    if (partialComplete) return COLORS.pending; // Yellow/Orange - partially complete
+    if (priority) return "#C0392B"; // Red for important (flight/hotel) - empty
+    return "#C0392B"; // Red for empty transport/activity on travel days
+  };
+  const statusColor = getStatusColor();
 
-  let chipBg: string, chipBorder: string, iconClr: string, textClr: string;
-  if (isComplete) {
-    chipBg = COLORS.bookedBg; chipBorder = COLORS.booked; iconClr = COLORS.booked; textClr = COLORS.booked;
-  } else if (isPartial) {
-    chipBg = COLORS.pendingBg; chipBorder = COLORS.pending; iconClr = COLORS.pending; textClr = COLORS.pending;
-  } else if (isIncomplete) {
-    chipBg = COLORS.urgentBg; chipBorder = COLORS.urgent; iconClr = COLORS.urgent; textClr = COLORS.urgent;
-  } else {
-    chipBg = "#F8F6F2"; chipBorder = "#E0DCD4"; iconClr = "#9C9588"; textClr = "#78736A";
-  }
-  // Expanded state: always use category color border
-  if (isExpanded) { chipBorder = color; if (!isComplete && !isPartial && !isIncomplete) { chipBg = bg; iconClr = color; textClr = color; } }
+  // Apply status color to chip styling (new visual, same logic)
+  const chipBg = hasItem ? bg : (priority ? "#F5DEDA" : "#F5EDD8");
+  const chipBorder = isExpanded ? color : (hasItem ? color : statusColor);
+  const iconClr = hasItem ? color : statusColor;
+  const textClr = hasItem ? color : statusColor;
 
   return (
     <button
@@ -750,7 +746,7 @@ const CategoryChip = ({
     >
       <Icon size={14} color={iconClr} />
       <span>{label || name}</span>
-      {isComplete && <Check size={12} color={COLORS.booked} />}
+      {hasItem && isBooked && <Check size={12} color={color} />}
     </button>
   );
 };
@@ -999,22 +995,23 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
               const isTravelDay = dayData.flights.length > 0;
               // Helper: check if leg has user-added info (not just auto-generated)
               const hasUserInfo = (leg: TripLeg) => leg.status === "booked" || leg.confirmationNumber || leg.notes;
-              // hasItem = any items exist (even pending). isBooked = all items booked. partial = some booked.
-              const hotelHasItems = dayData.hotels.length > 0;
-              const hotelAllBooked = hotelHasItems && dayData.hotels.every(h => h.leg.status === "booked");
-              const hotelSomeBooked = hotelHasItems && !hotelAllBooked && dayData.hotels.some(h => h.leg.status === "booked");
-
-              const activityHasItems = dayData.activities.length > 0;
-              const activityAllBooked = activityHasItems && dayData.activities.every(a => a.status === "booked");
-              const activitySomeBooked = activityHasItems && !activityAllBooked && dayData.activities.some(a => a.status === "booked");
-
-              const transportHasItems = isTravelDay || dayData.transport.length > 0;
-              const transportAllBooked = transportHasItems && dayData.transport.length > 0 && dayData.transport.every(t => t.status === "booked");
-              const transportSomeBooked = transportHasItems && !transportAllBooked && dayData.transport.some(t => t.status === "booked");
-
-              const flightHasItems = dayData.flights.length > 0;
-              const flightAllBooked = flightHasItems && dayData.flights.every(f => f.status === "booked");
-              const flightSomeBooked = flightHasItems && !flightAllBooked && dayData.flights.some(f => f.status === "booked");
+              // ORIGINAL logic restored exactly from pre-redesign (commit 960007c)
+              const hotelComplete = dayData.hotels.length > 0 && dayData.hotels.some(h => h.leg.hotelName || h.leg.title);
+              const activityComplete = dayData.activities.length > 0;
+              // Transport: on travel days, need both "to airport" and "from airport"
+              const toAirportLeg = dayData.transport.find(t => t.title?.toLowerCase().includes("to airport") || t.to?.toLowerCase().includes("airport"));
+              const fromAirportLeg = dayData.transport.find(t => t.title?.toLowerCase().includes("from airport") || t.from?.toLowerCase().includes("airport"));
+              const toAirportBooked = toAirportLeg && hasUserInfo(toAirportLeg);
+              const fromAirportBooked = fromAirportLeg && hasUserInfo(fromAirportLeg);
+              // For travel days: need both transports. Count how many are booked.
+              const transportNeeded = isTravelDay ? 2 : (dayData.transport.length > 0 ? dayData.transport.length : 0);
+              const transportBookedCount = isTravelDay 
+                ? (toAirportBooked ? 1 : 0) + (fromAirportBooked ? 1 : 0)
+                : dayData.transport.filter(t => hasUserInfo(t)).length;
+              const transportAllComplete = transportNeeded > 0 && transportBookedCount >= transportNeeded;
+              const transportPartial = transportBookedCount > 0 && transportBookedCount < transportNeeded;
+              const transportHasAny = transportBookedCount > 0;
+              const flightComplete = dayData.flights.some(f => hasUserInfo(f) || f.flightNumber);
 
               return (
                 <div style={{ 
@@ -1024,29 +1021,27 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
                 }}>
                   <CategoryChip 
                     type="hotel" 
-                    hasItem={hotelHasItems}
-                    isBooked={hotelAllBooked}
+                    hasItem={hotelComplete}
+                    isBooked={hotelBooked}
                     isExpanded={expanded === "hotel"}
                     onClick={() => toggleCategory(date, "hotel")}
                     label="Stay"
-                    partialComplete={hotelSomeBooked}
                   />
                   <CategoryChip 
                     type="activity" 
-                    hasItem={activityHasItems}
-                    isBooked={activityAllBooked}
+                    hasItem={activityComplete}
+                    isBooked={activityBooked}
                     isExpanded={expanded === "activity"}
                     onClick={() => toggleCategory(date, "activity")}
-                    partialComplete={activitySomeBooked}
                   />
                   {(isTravelDay || dayData.transport.length > 0) && (
                     <CategoryChip 
                       type="transport" 
-                      hasItem={transportHasItems}
-                      isBooked={transportAllBooked}
+                      hasItem={transportHasAny}
+                      isBooked={transportBooked}
                       isExpanded={expanded === "transport"}
                       onClick={() => toggleCategory(date, "transport")}
-                      partialComplete={transportSomeBooked}
+                      partialComplete={transportPartial}
                     />
                   )}
                   {isTravelDay && (() => {
@@ -1060,12 +1055,11 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
                     return (
                       <CategoryChip 
                         type="flight" 
-                        hasItem={flightHasItems}
-                        isBooked={flightAllBooked}
+                        hasItem={flightComplete}
+                        isBooked={flightBooked}
                         isExpanded={expanded === "flight"}
                         onClick={() => toggleCategory(date, "flight")}
                         transportMode={dayMode}
-                        partialComplete={flightSomeBooked}
                       />
                     );
                   })()}

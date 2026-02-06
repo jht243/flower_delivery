@@ -25332,45 +25332,23 @@ var CategoryChip = ({
   };
   const flightConfig = transportMode ? getModeConfig(transportMode) : { icon: Plane, name: "Flight" };
   const config = {
-    flight: { icon: flightConfig.icon, color: COLORS.flight, bg: COLORS.flightBg, name: flightConfig.name },
-    hotel: { icon: Hotel, color: COLORS.hotel, bg: COLORS.hotelBg, name: "Stay" },
-    transport: { icon: Car, color: COLORS.transport, bg: COLORS.transportBg, name: "Ride" },
-    activity: { icon: MapPin, color: "#6B705C", bg: "#ECEAE2", name: "Activity" }
+    flight: { icon: flightConfig.icon, color: COLORS.flight, bg: COLORS.flightBg, name: flightConfig.name, priority: true },
+    hotel: { icon: Hotel, color: COLORS.hotel, bg: COLORS.hotelBg, name: "Stay", priority: true },
+    transport: { icon: Car, color: COLORS.transport, bg: COLORS.transportBg, name: "Ride", priority: false },
+    activity: { icon: MapPin, color: "#6B705C", bg: "#ECEAE2", name: "Activity", priority: false }
   };
-  const { icon: Icon2, color, bg, name } = config[type];
-  const isComplete = hasItem && isBooked;
-  const isPartial = partialComplete;
-  const isIncomplete = hasItem && !isBooked && !isPartial;
-  let chipBg, chipBorder, iconClr, textClr;
-  if (isComplete) {
-    chipBg = COLORS.bookedBg;
-    chipBorder = COLORS.booked;
-    iconClr = COLORS.booked;
-    textClr = COLORS.booked;
-  } else if (isPartial) {
-    chipBg = COLORS.pendingBg;
-    chipBorder = COLORS.pending;
-    iconClr = COLORS.pending;
-    textClr = COLORS.pending;
-  } else if (isIncomplete) {
-    chipBg = COLORS.urgentBg;
-    chipBorder = COLORS.urgent;
-    iconClr = COLORS.urgent;
-    textClr = COLORS.urgent;
-  } else {
-    chipBg = "#F8F6F2";
-    chipBorder = "#E0DCD4";
-    iconClr = "#9C9588";
-    textClr = "#78736A";
-  }
-  if (isExpanded) {
-    chipBorder = color;
-    if (!isComplete && !isPartial && !isIncomplete) {
-      chipBg = bg;
-      iconClr = color;
-      textClr = color;
-    }
-  }
+  const { icon: Icon2, color, bg, name, priority } = config[type];
+  const getStatusColor2 = () => {
+    if (hasItem && !partialComplete) return COLORS.booked;
+    if (partialComplete) return COLORS.pending;
+    if (priority) return "#C0392B";
+    return "#C0392B";
+  };
+  const statusColor = getStatusColor2();
+  const chipBg = hasItem ? bg : priority ? "#F5DEDA" : "#F5EDD8";
+  const chipBorder = isExpanded ? color : hasItem ? color : statusColor;
+  const iconClr = hasItem ? color : statusColor;
+  const textClr = hasItem ? color : statusColor;
   return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
     "button",
     {
@@ -25395,7 +25373,7 @@ var CategoryChip = ({
       children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon2, { size: 14, color: iconClr }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: label || name }),
-        isComplete && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { size: 12, color: COLORS.booked })
+        hasItem && isBooked && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { size: 12, color })
       ]
     }
   );
@@ -25601,18 +25579,18 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, to
       (() => {
         const isTravelDay2 = dayData.flights.length > 0;
         const hasUserInfo2 = (leg) => leg.status === "booked" || leg.confirmationNumber || leg.notes;
-        const hotelHasItems = dayData.hotels.length > 0;
-        const hotelAllBooked = hotelHasItems && dayData.hotels.every((h) => h.leg.status === "booked");
-        const hotelSomeBooked = hotelHasItems && !hotelAllBooked && dayData.hotels.some((h) => h.leg.status === "booked");
-        const activityHasItems = dayData.activities.length > 0;
-        const activityAllBooked = activityHasItems && dayData.activities.every((a) => a.status === "booked");
-        const activitySomeBooked = activityHasItems && !activityAllBooked && dayData.activities.some((a) => a.status === "booked");
-        const transportHasItems = isTravelDay2 || dayData.transport.length > 0;
-        const transportAllBooked = transportHasItems && dayData.transport.length > 0 && dayData.transport.every((t) => t.status === "booked");
-        const transportSomeBooked = transportHasItems && !transportAllBooked && dayData.transport.some((t) => t.status === "booked");
-        const flightHasItems = dayData.flights.length > 0;
-        const flightAllBooked = flightHasItems && dayData.flights.every((f) => f.status === "booked");
-        const flightSomeBooked = flightHasItems && !flightAllBooked && dayData.flights.some((f) => f.status === "booked");
+        const hotelComplete = dayData.hotels.length > 0 && dayData.hotels.some((h) => h.leg.hotelName || h.leg.title);
+        const activityComplete = dayData.activities.length > 0;
+        const toAirportLeg = dayData.transport.find((t) => t.title?.toLowerCase().includes("to airport") || t.to?.toLowerCase().includes("airport"));
+        const fromAirportLeg = dayData.transport.find((t) => t.title?.toLowerCase().includes("from airport") || t.from?.toLowerCase().includes("airport"));
+        const toAirportBooked = toAirportLeg && hasUserInfo2(toAirportLeg);
+        const fromAirportBooked = fromAirportLeg && hasUserInfo2(fromAirportLeg);
+        const transportNeeded = isTravelDay2 ? 2 : dayData.transport.length > 0 ? dayData.transport.length : 0;
+        const transportBookedCount = isTravelDay2 ? (toAirportBooked ? 1 : 0) + (fromAirportBooked ? 1 : 0) : dayData.transport.filter((t) => hasUserInfo2(t)).length;
+        const transportAllComplete = transportNeeded > 0 && transportBookedCount >= transportNeeded;
+        const transportPartial = transportBookedCount > 0 && transportBookedCount < transportNeeded;
+        const transportHasAny = transportBookedCount > 0;
+        const flightComplete = dayData.flights.some((f) => hasUserInfo2(f) || f.flightNumber);
         return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
           display: "flex",
           flexWrap: "wrap",
@@ -25624,34 +25602,32 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, to
             CategoryChip,
             {
               type: "hotel",
-              hasItem: hotelHasItems,
-              isBooked: hotelAllBooked,
+              hasItem: hotelComplete,
+              isBooked: hotelBooked,
               isExpanded: expanded === "hotel",
               onClick: () => toggleCategory(date, "hotel"),
-              label: "Stay",
-              partialComplete: hotelSomeBooked
+              label: "Stay"
             }
           ),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
             CategoryChip,
             {
               type: "activity",
-              hasItem: activityHasItems,
-              isBooked: activityAllBooked,
+              hasItem: activityComplete,
+              isBooked: activityBooked,
               isExpanded: expanded === "activity",
-              onClick: () => toggleCategory(date, "activity"),
-              partialComplete: activitySomeBooked
+              onClick: () => toggleCategory(date, "activity")
             }
           ),
           (isTravelDay2 || dayData.transport.length > 0) && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
             CategoryChip,
             {
               type: "transport",
-              hasItem: transportHasItems,
-              isBooked: transportAllBooked,
+              hasItem: transportHasAny,
+              isBooked: transportBooked,
               isExpanded: expanded === "transport",
               onClick: () => toggleCategory(date, "transport"),
-              partialComplete: transportSomeBooked
+              partialComplete: transportPartial
             }
           ),
           isTravelDay2 && (() => {
@@ -25661,12 +25637,11 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, to
               CategoryChip,
               {
                 type: "flight",
-                hasItem: flightHasItems,
-                isBooked: flightAllBooked,
+                hasItem: flightComplete,
+                isBooked: flightBooked,
                 isExpanded: expanded === "flight",
                 onClick: () => toggleCategory(date, "flight"),
-                transportMode: dayMode,
-                partialComplete: flightSomeBooked
+                transportMode: dayMode
               }
             );
           })()
