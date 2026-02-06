@@ -28,29 +28,29 @@ if (typeof document !== 'undefined') {
 }
 
 const COLORS = {
-  primary: "#56C596",
-  primaryDark: "#3aa87b",
-  bg: "#FAFAFA",
+  primary: "#2D6A4F",
+  primaryDark: "#1B4332",
+  bg: "#F5F0E8",
   card: "#FFFFFF",
   textMain: "#1A1A1A",
   textSecondary: "#6B7280",
   textMuted: "#9CA3AF",
-  border: "#E5E7EB",
-  borderLight: "#F3F4F6",
-  inputBg: "#F9FAFB",
-  accentLight: "#E6F7F0",
-  booked: "#10B981",
-  bookedBg: "#D1FAE5",
-  pending: "#F59E0B",
-  pendingBg: "#FEF3C7",
-  urgent: "#EF4444",
-  urgentBg: "#FEE2E2",
-  flight: "#3B82F6",
-  flightBg: "#DBEAFE",
-  hotel: "#8B5CF6",
-  hotelBg: "#EDE9FE",
-  transport: "#F97316",
-  transportBg: "#FFEDD5",
+  border: "#DDD8D0",
+  borderLight: "#EBE6DE",
+  inputBg: "#F5F0E8",
+  accentLight: "#E2EDE6",
+  booked: "#2D6A4F",
+  bookedBg: "#D8E8DF",
+  pending: "#C4953A",
+  pendingBg: "#F5EDD8",
+  urgent: "#C0392B",
+  urgentBg: "#F5DEDA",
+  flight: "#2D6A4F",
+  flightBg: "#E2EDE6",
+  hotel: "#6B705C",
+  hotelBg: "#ECEAE2",
+  transport: "#A68A64",
+  transportBg: "#F0E8D8",
 };
 
 type BookingStatus = "booked" | "pending" | "urgent";
@@ -605,7 +605,7 @@ const CategoryIcon = ({
     flight: { icon: flightConfig.icon, color: COLORS.flight, bg: COLORS.flightBg, name: flightConfig.name, priority: true },
     hotel: { icon: Hotel, color: COLORS.hotel, bg: COLORS.hotelBg, name: "Lodging", priority: true },
     transport: { icon: Car, color: COLORS.transport, bg: COLORS.transportBg, name: "Transport", priority: false },
-    activity: { icon: MapPin, color: "#EC4899", bg: "#FCE7F3", name: "Activity", priority: false }
+    activity: { icon: MapPin, color: "#6B705C", bg: "#ECEAE2", name: "Activity", priority: false }
   };
   const { icon: Icon, color, bg, name, priority } = config[type];
   
@@ -613,8 +613,8 @@ const CategoryIcon = ({
   const getStatusColor = () => {
     if (hasItem && !partialComplete) return COLORS.booked; // Green - fully complete
     if (partialComplete) return COLORS.pending; // Yellow/Orange - partially complete
-    if (priority) return "#EF4444"; // Red for important (flight/hotel) - empty
-    return "#EF4444"; // Red for empty transport/activity on travel days
+    if (priority) return "#C0392B"; // Red for important (flight/hotel) - empty
+    return "#C0392B"; // Red for empty transport/activity on travel days
   };
   const statusColor = getStatusColor();
   
@@ -628,7 +628,7 @@ const CategoryIcon = ({
     >
       <div style={{ 
         width: 48, height: 48, borderRadius: 12,
-        backgroundColor: hasItem ? bg : (priority ? "#FEE2E2" : "#FEF3C7"),
+        backgroundColor: hasItem ? bg : (priority ? "#F5DEDA" : "#F5EDD8"),
         border: isExpanded ? `2px solid ${color}` : `1px solid ${hasItem ? color : statusColor}`,
         display: "flex", alignItems: "center", justifyContent: "center",
         position: "relative"
@@ -819,8 +819,8 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
         const total = displayedCategories.length;
         
         // Determine day status color: red (0), yellow (partial), green (all)
-        const dayStatusColor = completed === 0 ? "#EF4444" : completed === total ? COLORS.booked : COLORS.pending;
-        const dayStatusBg = completed === 0 ? "#FEE2E2" : completed === total ? COLORS.bookedBg : COLORS.pendingBg;
+        const dayStatusColor = completed === 0 ? "#C0392B" : completed === total ? COLORS.booked : COLORS.pending;
+        const dayStatusBg = completed === 0 ? "#F5DEDA" : completed === total ? COLORS.bookedBg : COLORS.pendingBg;
         
         return (
           <div key={date} style={{ 
@@ -1037,7 +1037,7 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
                                 </button>
                                 <button 
                                   onClick={() => { if (confirm("Delete this transport?")) onDeleteLeg(toAirportLeg.id); }}
-                                  style={{ padding: "4px 8px", borderRadius: 6, border: "none", backgroundColor: "transparent", color: "#EF4444", fontSize: 11, cursor: "pointer" }}
+                                  style={{ padding: "4px 8px", borderRadius: 6, border: "none", backgroundColor: "transparent", color: "#C0392B", fontSize: 11, cursor: "pointer" }}
                                 >
                                   <Trash2 size={12} />
                                 </button>
@@ -1147,7 +1147,7 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
                                 </button>
                                 <button 
                                   onClick={() => { if (confirm("Delete this transport?")) onDeleteLeg(fromAirportLeg.id); }}
-                                  style={{ padding: "4px 8px", borderRadius: 6, border: "none", backgroundColor: "transparent", color: "#EF4444", fontSize: 11, cursor: "pointer" }}
+                                  style={{ padding: "4px 8px", borderRadius: 6, border: "none", backgroundColor: "transparent", color: "#C0392B", fontSize: 11, cursor: "pointer" }}
                                 >
                                   <Trash2 size={12} />
                                 </button>
@@ -1216,7 +1216,7 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
                     {dayData.activities.map(leg => (
                       <TripLegCard key={leg.id} leg={leg} onUpdate={u => onUpdateLeg(leg.id, u)} onDelete={() => onDeleteLeg(leg.id)} isExpanded={expandedLegs.has(leg.id)} onToggleExpand={() => toggleLegExpand(leg.id)} tripDepartureDate={departureDate} tripReturnDate={returnDate} />
                     ))}
-                    <button onClick={() => onAddLeg({ type: "other", date, status: "pending", title: "" })} style={{ width: "100%", padding: 12, borderRadius: 10, border: `2px dashed #EC4899`, backgroundColor: "#FCE7F3", color: "#EC4899", fontSize: 13, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: dayData.activities.length > 0 ? 8 : 0 }}>
+                    <button onClick={() => onAddLeg({ type: "other", date, status: "pending", title: "" })} style={{ width: "100%", padding: 12, borderRadius: 10, border: `2px dashed #6B705C`, backgroundColor: "#ECEAE2", color: "#6B705C", fontSize: 13, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: dayData.activities.length > 0 ? 8 : 0 }}>
                       <Plus size={16} /> Add Activity
                     </button>
                   </>
@@ -1981,7 +1981,7 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
                   <div style={{ padding: "8px 16px", borderTop: `1px solid ${COLORS.borderLight}`, display: "flex", gap: 8 }}>
                     <button onClick={() => { setRenamingTripId(t.id); setRenameValue(t.name); }} style={{ padding: "6px 10px", borderRadius: 6, border: `1px solid ${COLORS.border}`, backgroundColor: "white", color: COLORS.textSecondary, fontSize: 11, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}><Edit2 size={12} /> Rename</button>
                     <button onClick={() => handleDuplicateTrip(t)} style={{ padding: "6px 10px", borderRadius: 6, border: `1px solid ${COLORS.border}`, backgroundColor: "white", color: COLORS.textSecondary, fontSize: 11, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}><Plus size={12} /> Duplicate</button>
-                    <button onClick={() => handleDeleteTrip(t.id)} style={{ padding: "6px 10px", borderRadius: 6, border: `1px solid #FEE2E2`, backgroundColor: "#FEF2F2", color: "#EF4444", fontSize: 11, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}><Trash2 size={12} /> Delete</button>
+                    <button onClick={() => handleDeleteTrip(t.id)} style={{ padding: "6px 10px", borderRadius: 6, border: `1px solid #F5DEDA`, backgroundColor: "#FAF0EE", color: "#C0392B", fontSize: 11, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}><Trash2 size={12} /> Delete</button>
                   </div>
                 </div>
               ))}
@@ -2193,7 +2193,7 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
                                 multiCityLegs: (t.multiCityLegs || []).filter(l => l.id !== leg.id),
                                 updatedAt: Date.now()
                               }))}
-                              style={{ padding: 6, borderRadius: 6, border: "none", backgroundColor: "#FEE2E2", color: "#EF4444", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+                              style={{ padding: 6, borderRadius: 6, border: "none", backgroundColor: "#F5DEDA", color: "#C0392B", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
                             >
                               <X size={14} />
                             </button>
@@ -2400,7 +2400,7 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
               // Color helper: red=0, orange=partial, green=all
               const getStatusColor = (booked: number, total: number) => {
                 if (total === 0) return COLORS.textMuted;
-                if (booked === 0) return "#EF4444"; // red
+                if (booked === 0) return "#C0392B"; // red
                 if (booked < total) return COLORS.pending; // orange
                 return COLORS.booked; // green
               };
@@ -2490,13 +2490,13 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <span style={{ 
                         fontSize: 12, fontWeight: 600, minWidth: 32,
-                        color: hotels.length > 0 ? COLORS.booked : "#EF4444",
-                        backgroundColor: hotels.length > 0 ? `${COLORS.booked}15` : "#EF444415",
+                        color: hotels.length > 0 ? COLORS.booked : "#C0392B",
+                        backgroundColor: hotels.length > 0 ? `${COLORS.booked}15` : "#C0392B15",
                         padding: "2px 6px", borderRadius: 4
                       }}>
                         {hotels.length > 0 ? "Yes" : "No"}
                       </span>
-                      <Hotel size={16} color={hotels.length > 0 ? COLORS.booked : "#EF4444"} />
+                      <Hotel size={16} color={hotels.length > 0 ? COLORS.booked : "#C0392B"} />
                       <span style={{ fontSize: 13, color: COLORS.textMain }}>Lodging booked</span>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
