@@ -2702,7 +2702,7 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
               let lodgingStatus: "yes" | "no" | "partial" = hotels.length > 0 ? "yes" : "no";
               if (trip.tripType === "multi_city" && cities.size > 0) {
                 const hotelCities = new Set<string>();
-                hotels.forEach(h => { if (h.to) hotelCities.add(h.to); });
+                hotels.forEach(h => { if (h.location) hotelCities.add(h.location); else if (h.to) hotelCities.add(h.to); });
                 const citiesWithHotel = [...cities].filter(c => hotelCities.has(c)).length;
                 if (citiesWithHotel === 0) lodgingStatus = "no";
                 else if (citiesWithHotel < cities.size) lodgingStatus = "partial";
