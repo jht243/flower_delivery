@@ -25985,7 +25985,7 @@ function TripPlanner({ initialData: initialData2 }) {
   const [expandedLegs, setExpandedLegs] = (0, import_react3.useState)(/* @__PURE__ */ new Set());
   const [inputMode, setInputMode] = (0, import_react3.useState)("freeform");
   const [renamingTripId, setRenamingTripId] = (0, import_react3.useState)(null);
-  const [renameValue, setRenameValue] = sseState("");
+  const [renameValue, setRenameValue] = (0, import_react3.useState)("");
   const [isAnalyzing, setIsAnalyzing] = (0, import_react3.useState)(false);
   const [isEditingDates, setIsEditingDates] = (0, import_react3.useState)(false);
   const [editingItem, setEditingItem] = (0, import_react3.useState)(null);
@@ -26477,14 +26477,20 @@ function TripPlanner({ initialData: initialData2 }) {
               },
               children: [
                 /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 16 }, children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 6 }, children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { size: 16, color: COLORS.primary }),
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, fontWeight: 600, color: COLORS.textMain }, children: formatDate(trip.departureDate) })
-                  ] }),
-                  trip.tripType !== "one_way" && trip.returnDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { size: 14, color: COLORS.textMuted }),
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, fontWeight: 600, color: COLORS.textMain }, children: formatDate(trip.returnDate) })
-                  ] }),
+                  (() => {
+                    const displayStartDate = trip.tripType === "multi_city" && trip.multiCityLegs?.length ? trip.multiCityLegs[0].date : trip.departureDate;
+                    const displayEndDate = trip.tripType === "multi_city" && trip.multiCityLegs?.length ? trip.multiCityLegs[trip.multiCityLegs.length - 1].date : trip.returnDate;
+                    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 6 }, children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { size: 16, color: COLORS.primary }),
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, fontWeight: 600, color: COLORS.textMain }, children: displayStartDate ? formatDate(displayStartDate) : "Set dates" })
+                      ] }),
+                      trip.tripType !== "one_way" && displayEndDate && displayEndDate !== displayStartDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { size: 14, color: COLORS.textMuted }),
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, fontWeight: 600, color: COLORS.textMain }, children: formatDate(displayEndDate) })
+                      ] })
+                    ] });
+                  })(),
                   /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: {
                     fontSize: 11,
                     padding: "2px 8px",

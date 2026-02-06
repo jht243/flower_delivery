@@ -1391,7 +1391,7 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
   const [expandedLegs, setExpandedLegs] = useState<Set<string>>(new Set());
   const [inputMode, setInputMode] = useState<"freeform" | "manual">("freeform");
   const [renamingTripId, setRenamingTripId] = useState<string | null>(null);
-  const [renameValue, setRenameValue] = sseState("");
+  const [renameValue, setRenameValue] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isEditingDates, setIsEditingDates] = useState(false);
   const [editingItem, setEditingItem] = useState<string | null>(null);
@@ -1912,20 +1912,34 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
                   }}
                 >
                   <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                      <Calendar size={16} color={COLORS.primary} />
-                      <span style={{ fontSize: 13, fontWeight: 600, color: COLORS.textMain }}>
-                        {formatDate(trip.departureDate!)}
-                      </span>
-                    </div>
-                    {trip.tripType !== "one_way" && trip.returnDate && (
-                      <>
-                        <ArrowRight size={14} color={COLORS.textMuted} />
-                        <span style={{ fontSize: 13, fontWeight: 600, color: COLORS.textMain }}>
-                          {formatDate(trip.returnDate)}
-                        </span>
-                      </>
-                    )}
+                    {(() => {
+                      // For multi-city, use first and last leg dates
+                      const displayStartDate = trip.tripType === "multi_city" && trip.multiCityLegs?.length 
+                        ? trip.multiCityLegs[0].date 
+                        : trip.departureDate;
+                      const displayEndDate = trip.tripType === "multi_city" && trip.multiCityLegs?.length 
+                        ? trip.multiCityLegs[trip.multiCityLegs.length - 1].date 
+                        : trip.returnDate;
+                      
+                      return (
+                        <>
+                          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                            <Calendar size={16} color={COLORS.primary} />
+                            <span style={{ fontSize: 13, fontWeight: 600, color: COLORS.textMain }}>
+                              {displayStartDate ? formatDate(displayStartDate) : "Set dates"}
+                            </span>
+                          </div>
+                          {trip.tripType !== "one_way" && displayEndDate && displayEndDate !== displayStartDate && (
+                            <>
+                              <ArrowRight size={14} color={COLORS.textMuted} />
+                              <span style={{ fontSize: 13, fontWeight: 600, color: COLORS.textMain }}>
+                                {formatDate(displayEndDate)}
+                              </span>
+                            </>
+                          )}
+                        </>
+                      );
+                    })()}
                     <span style={{ 
                       fontSize: 11, 
                       padding: "2px 8px", 
