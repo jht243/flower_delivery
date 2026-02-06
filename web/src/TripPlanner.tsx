@@ -470,7 +470,6 @@ const AddDetailsButton = ({ onClick }: { onClick: () => void }) => {
 };
 
 const TripLegCard = ({ leg, onUpdate, onDelete, isExpanded, onToggleExpand, tripDepartureDate, tripReturnDate, travelers = 1 }: { leg: TripLeg; onUpdate: (u: Partial<TripLeg>) => void; onDelete: () => void; isExpanded: boolean; onToggleExpand: () => void; tripDepartureDate?: string; tripReturnDate?: string; travelers?: number }) => {
-  const [isEditing, setIsEditing] = useState(false);
   // For hotels, prefill dates with trip dates if not already set
   const initialEditData = leg.type === "hotel" ? {
     ...leg,
@@ -485,69 +484,6 @@ const TripLegCard = ({ leg, onUpdate, onDelete, isExpanded, onToggleExpand, trip
     const next = order[(order.indexOf(leg.status) + 1) % order.length];
     onUpdate({ status: next });
   };
-
-  if (isEditing) {
-    const isHotel = leg.type === "hotel";
-    const isPrimaryTransport = ["car", "train", "bus", "ferry"].includes(leg.type) && leg.from && leg.to;
-    const isManualTransport = ["car", "train", "bus", "ferry"].includes(leg.type) && !leg.from && !leg.to;
-    const editTitle = leg.type === "ferry" ? "Cruise" : leg.type === "car" ? "Drive" : leg.type.charAt(0).toUpperCase() + leg.type.slice(1);
-    return (
-      <div style={{ backgroundColor: COLORS.card, borderRadius: 16, border: `2px solid ${legColors.main}`, padding: 20, marginBottom: 12 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
-          <span style={{ fontWeight: 700, fontSize: 16 }}>Edit {editTitle}</span>
-          <div style={{ display: "flex", gap: 8 }}>
-            <button onClick={() => { onUpdate(editData); setIsEditing(false); }} style={{ padding: "8px 16px", borderRadius: 8, border: "none", backgroundColor: COLORS.primary, color: "white", fontWeight: 600, cursor: "pointer" }}><Save size={16} /> Save</button>
-            <button onClick={() => setIsEditing(false)} style={{ padding: "8px 16px", borderRadius: 8, border: `1px solid ${COLORS.border}`, backgroundColor: "white", cursor: "pointer" }}>Cancel</button>
-          </div>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-          {isHotel ? (
-            <>
-              <input value={editData.title} onChange={e => setEditData({ ...editData, title: e.target.value })} placeholder="Hotel Name" style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, gridColumn: "1 / -1" }} />
-              <div>
-                <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: COLORS.textMuted, marginBottom: 4 }}>Check-in Date</label>
-                <input type="date" value={editData.date} onChange={e => setEditData({ ...editData, date: e.target.value })} style={{ width: "100%", padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, boxSizing: "border-box" }} />
-              </div>
-              <div>
-                <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: COLORS.textMuted, marginBottom: 4 }}>Check-out Date</label>
-                <input type="date" value={editData.endDate || ""} onChange={e => setEditData({ ...editData, endDate: e.target.value })} style={{ width: "100%", padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, boxSizing: "border-box" }} />
-              </div>
-              <input value={editData.location || ""} onChange={e => setEditData({ ...editData, location: e.target.value })} placeholder="Address" style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, gridColumn: "1 / -1" }} />
-            </>
-          ) : isPrimaryTransport ? (
-            <>
-              {/* Primary transport legs (from multi-city): From/To already known, just show time + confirmation */}
-              <div style={{ gridColumn: "1 / -1", padding: "8px 12px", borderRadius: 8, backgroundColor: COLORS.inputBg, fontSize: 13, color: COLORS.textSecondary }}>
-                {editData.from} → {editData.to}
-              </div>
-              <div>
-                <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: COLORS.textMuted, marginBottom: 4 }}>Departure Time</label>
-                <input type="time" value={editData.time || ""} onChange={e => setEditData({ ...editData, time: e.target.value })} style={{ width: "100%", padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, boxSizing: "border-box" }} />
-              </div>
-              <div>
-                <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: COLORS.textMuted, marginBottom: 4 }}>Confirmation #</label>
-                <input value={editData.confirmationNumber || ""} onChange={e => setEditData({ ...editData, confirmationNumber: e.target.value })} placeholder="Confirmation #" style={{ width: "100%", padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, boxSizing: "border-box" }} />
-              </div>
-              <input value={editData.notes || ""} onChange={e => setEditData({ ...editData, notes: e.target.value })} placeholder="Notes (e.g. platform, terminal, seat)" style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, gridColumn: "1 / -1" }} />
-            </>
-          ) : (
-            <>
-              <input value={editData.title} onChange={e => setEditData({ ...editData, title: e.target.value })} placeholder="Title" style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, gridColumn: "1 / -1" }} />
-              <input type="date" value={editData.date} onChange={e => setEditData({ ...editData, date: e.target.value })} style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}` }} />
-              <input type="time" value={editData.time || ""} onChange={e => setEditData({ ...editData, time: e.target.value })} style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}` }} />
-              {isManualTransport && (
-                <>
-                  <input value={editData.from || ""} onChange={e => setEditData({ ...editData, from: e.target.value })} placeholder="From" style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}` }} />
-                  <input value={editData.to || ""} onChange={e => setEditData({ ...editData, to: e.target.value })} placeholder="To" style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}` }} />
-                </>
-              )}
-            </>
-          )}
-          {!isPrimaryTransport && <input value={editData.confirmationNumber || ""} onChange={e => setEditData({ ...editData, confirmationNumber: e.target.value })} placeholder="Confirmation #" style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, gridColumn: "1 / -1" }} />}
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div style={{ backgroundColor: COLORS.card, borderRadius: 16, border: `1px solid ${leg.status === "booked" ? COLORS.booked : COLORS.border}`, borderLeft: `4px solid ${legColors.main}`, marginBottom: 12, overflow: "hidden", maxWidth: "100%", boxSizing: "border-box" }}>
@@ -565,57 +501,198 @@ const TripLegCard = ({ leg, onUpdate, onDelete, isExpanded, onToggleExpand, trip
         <div style={{ color: COLORS.textSecondary }}>{isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}</div>
       </div>
       {isExpanded && (() => {
-        const isHotel = leg.type === "hotel";
-        const isPrimaryTransport = ["car", "train", "bus", "ferry"].includes(leg.type) && leg.from && leg.to;
-        const isManualTransport = ["car", "train", "bus", "ferry"].includes(leg.type) && !leg.from && !leg.to;
+        const hasPrimaryRoute = leg.from && leg.to;
+        const showPerPassenger = travelers > 1 && ["flight", "train", "bus", "ferry"].includes(leg.type);
+        const lblStyle = { display: "block" as const, fontSize: 11, fontWeight: 600, color: COLORS.textMuted, marginBottom: 4 };
+        const inpStyle = { width: "100%", padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, boxSizing: "border-box" as const };
+        const fullStyle = { ...inpStyle, gridColumn: "1 / -1" };
+        const stop = (e: React.MouseEvent) => e.stopPropagation();
         return (
           <div style={{ padding: "0 20px 16px", borderTop: `1px solid ${COLORS.borderLight}`, paddingTop: 16 }}>
-            {/* Inline edit fields */}
+            {/* Inline edit fields — type-specific */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-              {isHotel ? (
+
+              {/* ── Hotel ── */}
+              {leg.type === "hotel" && (
                 <>
-                  <input value={editData.title} onClick={e => e.stopPropagation()} onChange={e => setEditData({ ...editData, title: e.target.value })} placeholder="Hotel Name" style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, gridColumn: "1 / -1" }} />
+                  <input value={editData.title} onClick={stop} onChange={e => setEditData({ ...editData, title: e.target.value })} placeholder="Hotel Name" style={fullStyle} />
                   <div>
-                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: COLORS.textMuted, marginBottom: 4 }}>Check-in Date</label>
-                    <input type="date" value={editData.date} onClick={e => e.stopPropagation()} onChange={e => setEditData({ ...editData, date: e.target.value })} style={{ width: "100%", padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, boxSizing: "border-box" }} />
-                  </div>
-                  <div>
-                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: COLORS.textMuted, marginBottom: 4 }}>Check-out Date</label>
-                    <input type="date" value={editData.endDate || ""} onClick={e => e.stopPropagation()} onChange={e => setEditData({ ...editData, endDate: e.target.value })} style={{ width: "100%", padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, boxSizing: "border-box" }} />
-                  </div>
-                  <input value={editData.location || ""} onClick={e => e.stopPropagation()} onChange={e => setEditData({ ...editData, location: e.target.value })} placeholder="Address" style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, gridColumn: "1 / -1" }} />
-                </>
-              ) : isPrimaryTransport ? (
-                <>
-                  <div style={{ gridColumn: "1 / -1", padding: "8px 12px", borderRadius: 8, backgroundColor: COLORS.inputBg, fontSize: 13, color: COLORS.textSecondary }}>
-                    {leg.from} → {leg.to}
+                    <label style={lblStyle}>Check-in Date</label>
+                    <input type="date" value={editData.date} onClick={stop} onChange={e => setEditData({ ...editData, date: e.target.value })} style={inpStyle} />
                   </div>
                   <div>
-                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: COLORS.textMuted, marginBottom: 4 }}>Departure Time</label>
-                    <input type="time" value={editData.time || ""} onClick={e => e.stopPropagation()} onChange={e => setEditData({ ...editData, time: e.target.value })} style={{ width: "100%", padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, boxSizing: "border-box" }} />
+                    <label style={lblStyle}>Check-out Date</label>
+                    <input type="date" value={editData.endDate || ""} onClick={stop} onChange={e => setEditData({ ...editData, endDate: e.target.value })} style={inpStyle} />
                   </div>
-                  {travelers <= 1 && (
-                    <div>
-                      <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: COLORS.textMuted, marginBottom: 4 }}>Confirmation #</label>
-                      <input value={editData.confirmationNumber || ""} onClick={e => e.stopPropagation()} onChange={e => setEditData({ ...editData, confirmationNumber: e.target.value })} placeholder="Confirmation #" style={{ width: "100%", padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, boxSizing: "border-box" }} />
-                    </div>
-                  )}
-                  <input value={editData.notes || ""} onClick={e => e.stopPropagation()} onChange={e => setEditData({ ...editData, notes: e.target.value })} placeholder="Notes (e.g. platform, terminal, seat)" style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, gridColumn: "1 / -1" }} />
-                </>
-              ) : (
-                <>
-                  <input value={editData.title} onClick={e => e.stopPropagation()} onChange={e => setEditData({ ...editData, title: e.target.value })} placeholder="Title" style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, gridColumn: "1 / -1" }} />
-                  <input type="date" value={editData.date} onClick={e => e.stopPropagation()} onChange={e => setEditData({ ...editData, date: e.target.value })} style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}` }} />
-                  <input type="time" value={editData.time || ""} onClick={e => e.stopPropagation()} onChange={e => setEditData({ ...editData, time: e.target.value })} style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}` }} />
-                  {isManualTransport && (
-                    <>
-                      <input value={editData.from || ""} onClick={e => e.stopPropagation()} onChange={e => setEditData({ ...editData, from: e.target.value })} placeholder="From" style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}` }} />
-                      <input value={editData.to || ""} onClick={e => e.stopPropagation()} onChange={e => setEditData({ ...editData, to: e.target.value })} placeholder="To" style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}` }} />
-                    </>
-                  )}
+                  <input value={editData.location || ""} onClick={stop} onChange={e => setEditData({ ...editData, location: e.target.value })} placeholder="Address" style={fullStyle} />
+                  <input value={editData.confirmationNumber || ""} onClick={stop} onChange={e => setEditData({ ...editData, confirmationNumber: e.target.value })} placeholder="Confirmation #" style={fullStyle} />
+                  <input value={editData.notes || ""} onClick={stop} onChange={e => setEditData({ ...editData, notes: e.target.value })} placeholder="Notes" style={fullStyle} />
                 </>
               )}
-              {!isPrimaryTransport && <input value={editData.confirmationNumber || ""} onClick={e => e.stopPropagation()} onChange={e => setEditData({ ...editData, confirmationNumber: e.target.value })} placeholder="Confirmation #" style={{ padding: 10, borderRadius: 8, border: `1px solid ${COLORS.border}`, gridColumn: "1 / -1" }} />}
+
+              {/* ── Flight ── */}
+              {leg.type === "flight" && (
+                <>
+                  {hasPrimaryRoute ? (
+                    <div style={{ gridColumn: "1 / -1", padding: "8px 12px", borderRadius: 8, backgroundColor: COLORS.inputBg, fontSize: 13, color: COLORS.textSecondary }}>
+                      ✈ {leg.from} → {leg.to}
+                    </div>
+                  ) : (
+                    <>
+                      <input value={editData.from || ""} onClick={stop} onChange={e => setEditData({ ...editData, from: e.target.value })} placeholder="Departure Airport" style={inpStyle} />
+                      <input value={editData.to || ""} onClick={stop} onChange={e => setEditData({ ...editData, to: e.target.value })} placeholder="Arrival Airport" style={inpStyle} />
+                    </>
+                  )}
+                  <div>
+                    <label style={lblStyle}>Airline</label>
+                    <input value={editData.airline || ""} onClick={stop} onChange={e => setEditData({ ...editData, airline: e.target.value })} placeholder="e.g. Delta, United" style={inpStyle} />
+                  </div>
+                  <div>
+                    <label style={lblStyle}>Flight #</label>
+                    <input value={editData.flightNumber || ""} onClick={stop} onChange={e => setEditData({ ...editData, flightNumber: e.target.value })} placeholder="e.g. DL 1234" style={inpStyle} />
+                  </div>
+                  <div>
+                    <label style={lblStyle}>Departure Time</label>
+                    <input type="time" value={editData.time || ""} onClick={stop} onChange={e => setEditData({ ...editData, time: e.target.value })} style={inpStyle} />
+                  </div>
+                  {!showPerPassenger && (
+                    <div>
+                      <label style={lblStyle}>Confirmation #</label>
+                      <input value={editData.confirmationNumber || ""} onClick={stop} onChange={e => setEditData({ ...editData, confirmationNumber: e.target.value })} placeholder="Confirmation #" style={inpStyle} />
+                    </div>
+                  )}
+                  <input value={editData.notes || ""} onClick={stop} onChange={e => setEditData({ ...editData, notes: e.target.value })} placeholder="Notes (e.g. terminal, gate, seat)" style={fullStyle} />
+                </>
+              )}
+
+              {/* ── Rental Car ── */}
+              {leg.type === "car" && (
+                <>
+                  {hasPrimaryRoute ? (
+                    <div style={{ gridColumn: "1 / -1", padding: "8px 12px", borderRadius: 8, backgroundColor: COLORS.inputBg, fontSize: 13, color: COLORS.textSecondary }}>
+                      🚗 {leg.from} → {leg.to}
+                    </div>
+                  ) : (
+                    <input value={editData.location || ""} onClick={stop} onChange={e => setEditData({ ...editData, location: e.target.value })} placeholder="Pickup Location" style={fullStyle} />
+                  )}
+                  <div>
+                    <label style={lblStyle}>Rental Company</label>
+                    <input value={editData.rentalCompany || ""} onClick={stop} onChange={e => setEditData({ ...editData, rentalCompany: e.target.value })} placeholder="e.g. Hertz, Enterprise" style={inpStyle} />
+                  </div>
+                  <div>
+                    <label style={lblStyle}>Confirmation #</label>
+                    <input value={editData.confirmationNumber || ""} onClick={stop} onChange={e => setEditData({ ...editData, confirmationNumber: e.target.value })} placeholder="Confirmation #" style={inpStyle} />
+                  </div>
+                  <div>
+                    <label style={lblStyle}>Pickup Date</label>
+                    <input type="date" value={editData.date} onClick={stop} onChange={e => setEditData({ ...editData, date: e.target.value })} style={inpStyle} />
+                  </div>
+                  <div>
+                    <label style={lblStyle}>Return Date</label>
+                    <input type="date" value={editData.endDate || ""} onClick={stop} onChange={e => setEditData({ ...editData, endDate: e.target.value })} style={inpStyle} />
+                  </div>
+                  <input value={editData.notes || ""} onClick={stop} onChange={e => setEditData({ ...editData, notes: e.target.value })} placeholder="Notes (e.g. car type, insurance, extras)" style={fullStyle} />
+                </>
+              )}
+
+              {/* ── Train ── */}
+              {leg.type === "train" && (
+                <>
+                  {hasPrimaryRoute ? (
+                    <div style={{ gridColumn: "1 / -1", padding: "8px 12px", borderRadius: 8, backgroundColor: COLORS.inputBg, fontSize: 13, color: COLORS.textSecondary }}>
+                      🚆 {leg.from} → {leg.to}
+                    </div>
+                  ) : (
+                    <>
+                      <input value={editData.from || ""} onClick={stop} onChange={e => setEditData({ ...editData, from: e.target.value })} placeholder="Departure Station" style={inpStyle} />
+                      <input value={editData.to || ""} onClick={stop} onChange={e => setEditData({ ...editData, to: e.target.value })} placeholder="Arrival Station" style={inpStyle} />
+                    </>
+                  )}
+                  <div>
+                    <label style={lblStyle}>Departure Time</label>
+                    <input type="time" value={editData.time || ""} onClick={stop} onChange={e => setEditData({ ...editData, time: e.target.value })} style={inpStyle} />
+                  </div>
+                  {!showPerPassenger && (
+                    <div>
+                      <label style={lblStyle}>Confirmation #</label>
+                      <input value={editData.confirmationNumber || ""} onClick={stop} onChange={e => setEditData({ ...editData, confirmationNumber: e.target.value })} placeholder="Confirmation #" style={inpStyle} />
+                    </div>
+                  )}
+                  <input value={editData.notes || ""} onClick={stop} onChange={e => setEditData({ ...editData, notes: e.target.value })} placeholder="Notes (e.g. platform, car #, seat)" style={fullStyle} />
+                </>
+              )}
+
+              {/* ── Bus ── */}
+              {leg.type === "bus" && (
+                <>
+                  {hasPrimaryRoute ? (
+                    <div style={{ gridColumn: "1 / -1", padding: "8px 12px", borderRadius: 8, backgroundColor: COLORS.inputBg, fontSize: 13, color: COLORS.textSecondary }}>
+                      🚌 {leg.from} → {leg.to}
+                    </div>
+                  ) : (
+                    <>
+                      <input value={editData.from || ""} onClick={stop} onChange={e => setEditData({ ...editData, from: e.target.value })} placeholder="Departure Stop" style={inpStyle} />
+                      <input value={editData.to || ""} onClick={stop} onChange={e => setEditData({ ...editData, to: e.target.value })} placeholder="Arrival Stop" style={inpStyle} />
+                    </>
+                  )}
+                  <div>
+                    <label style={lblStyle}>Departure Time</label>
+                    <input type="time" value={editData.time || ""} onClick={stop} onChange={e => setEditData({ ...editData, time: e.target.value })} style={inpStyle} />
+                  </div>
+                  {!showPerPassenger && (
+                    <div>
+                      <label style={lblStyle}>Confirmation #</label>
+                      <input value={editData.confirmationNumber || ""} onClick={stop} onChange={e => setEditData({ ...editData, confirmationNumber: e.target.value })} placeholder="Confirmation #" style={inpStyle} />
+                    </div>
+                  )}
+                  <input value={editData.notes || ""} onClick={stop} onChange={e => setEditData({ ...editData, notes: e.target.value })} placeholder="Notes (e.g. bus line, platform, seat)" style={fullStyle} />
+                </>
+              )}
+
+              {/* ── Cruise / Ferry ── */}
+              {leg.type === "ferry" && (
+                <>
+                  {hasPrimaryRoute ? (
+                    <div style={{ gridColumn: "1 / -1", padding: "8px 12px", borderRadius: 8, backgroundColor: COLORS.inputBg, fontSize: 13, color: COLORS.textSecondary }}>
+                      🚢 {leg.from} → {leg.to}
+                    </div>
+                  ) : (
+                    <>
+                      <input value={editData.from || ""} onClick={stop} onChange={e => setEditData({ ...editData, from: e.target.value })} placeholder="Departure Port" style={inpStyle} />
+                      <input value={editData.to || ""} onClick={stop} onChange={e => setEditData({ ...editData, to: e.target.value })} placeholder="Arrival Port" style={inpStyle} />
+                    </>
+                  )}
+                  <div>
+                    <label style={lblStyle}>Departure Time</label>
+                    <input type="time" value={editData.time || ""} onClick={stop} onChange={e => setEditData({ ...editData, time: e.target.value })} style={inpStyle} />
+                  </div>
+                  {!showPerPassenger && (
+                    <div>
+                      <label style={lblStyle}>Confirmation #</label>
+                      <input value={editData.confirmationNumber || ""} onClick={stop} onChange={e => setEditData({ ...editData, confirmationNumber: e.target.value })} placeholder="Confirmation #" style={inpStyle} />
+                    </div>
+                  )}
+                  <input value={editData.notes || ""} onClick={stop} onChange={e => setEditData({ ...editData, notes: e.target.value })} placeholder="Notes (e.g. cabin #, deck, meal plan)" style={fullStyle} />
+                </>
+              )}
+
+              {/* ── Activity (fallback) ── */}
+              {!["hotel", "flight", "car", "train", "bus", "ferry"].includes(leg.type) && (
+                <>
+                  <input value={editData.title} onClick={stop} onChange={e => setEditData({ ...editData, title: e.target.value })} placeholder="Activity Name" style={fullStyle} />
+                  <div>
+                    <label style={lblStyle}>Date</label>
+                    <input type="date" value={editData.date} onClick={stop} onChange={e => setEditData({ ...editData, date: e.target.value })} style={inpStyle} />
+                  </div>
+                  <div>
+                    <label style={lblStyle}>Time</label>
+                    <input type="time" value={editData.time || ""} onClick={stop} onChange={e => setEditData({ ...editData, time: e.target.value })} style={inpStyle} />
+                  </div>
+                  <input value={editData.location || ""} onClick={stop} onChange={e => setEditData({ ...editData, location: e.target.value })} placeholder="Location" style={fullStyle} />
+                  <input value={editData.confirmationNumber || ""} onClick={stop} onChange={e => setEditData({ ...editData, confirmationNumber: e.target.value })} placeholder="Confirmation / Booking #" style={fullStyle} />
+                  <input value={editData.notes || ""} onClick={stop} onChange={e => setEditData({ ...editData, notes: e.target.value })} placeholder="Notes" style={fullStyle} />
+                </>
+              )}
             </div>
             {/* Per-passenger tickets for flights/trains/buses when travelers > 1 */}
             {travelers > 1 && ["flight", "train", "bus", "ferry"].includes(leg.type) && (
