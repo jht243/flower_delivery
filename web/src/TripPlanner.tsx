@@ -2588,11 +2588,12 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
 
   const saveCurrentTrip = () => {
     const isFirstSave = !savedTrips.some(t => t.id === trip.id);
-    if (isFirstSave && trip.name === "My Trip") {
-      // Suggest a name based on destination
+    if (isFirstSave) {
+      // First save — always prompt to name the trip
       const flights = trip.legs.filter(l => l.type === "flight");
       const dest = flights[0]?.to || "";
-      setNameTripValue(dest ? `Trip to ${dest}` : "");
+      const suggested = trip.name !== "My Trip" ? trip.name : (dest ? `Trip to ${dest}` : "");
+      setNameTripValue(suggested);
       setShowNameTripModal(true);
     } else {
       doSaveTrip(trip);

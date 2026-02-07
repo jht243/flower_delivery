@@ -27128,10 +27128,11 @@ function TripPlanner({ initialData: initialData2 }) {
   };
   const saveCurrentTrip = () => {
     const isFirstSave = !savedTrips.some((t) => t.id === trip.id);
-    if (isFirstSave && trip.name === "My Trip") {
+    if (isFirstSave) {
       const flights = trip.legs.filter((l) => l.type === "flight");
       const dest = flights[0]?.to || "";
-      setNameTripValue(dest ? `Trip to ${dest}` : "");
+      const suggested = trip.name !== "My Trip" ? trip.name : dest ? `Trip to ${dest}` : "";
+      setNameTripValue(suggested);
       setShowNameTripModal(true);
     } else {
       doSaveTrip(trip);
