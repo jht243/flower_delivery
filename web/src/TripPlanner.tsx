@@ -2007,6 +2007,28 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
   const [confirmDialog, setConfirmDialog] = useState<{ message: string; onConfirm: () => void } | null>(null);
   const [showNameTripModal, setShowNameTripModal] = useState(false);
   const [nameTripValue, setNameTripValue] = useState("");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [pillRight, setPillRight] = useState(16);
+
+  // Track container bounds so the fixed pill stays within the 600px widget
+  useEffect(() => {
+    const update = () => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        setPillRight(Math.max(16, window.innerWidth - rect.right + 16));
+      }
+    };
+    update();
+    window.addEventListener('resize', update);
+    window.addEventListener('scroll', update);
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null;
+    if (ro && containerRef.current) ro.observe(containerRef.current);
+    return () => {
+      window.removeEventListener('resize', update);
+      window.removeEventListener('scroll', update);
+      ro?.disconnect();
+    };
+  }, []);
 
   useEffect(() => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ trip, timestamp: Date.now() })); } catch {} }, [trip]);
 
@@ -2748,7 +2770,7 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
   }
 
   return (
-    <div style={{ backgroundColor: COLORS.bg, fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", maxWidth: 600, margin: "0 auto", boxSizing: "border-box" }}>
+    <div ref={containerRef} style={{ position: 'relative', backgroundColor: COLORS.bg, fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", maxWidth: 600, margin: "0 auto", boxSizing: "border-box" }}>
       <div style={{ backgroundColor: COLORS.primary, padding: "24px 20px", color: "white", borderRadius: "0 0 0 0" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div>
@@ -3498,19 +3520,17 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
         </button>
       </div>
 
-      {/* Sticky App Enjoyment Pill - right after footer, before modals */}
+      {/* Floating feedback pill — position:fixed, right offset calculated from container ref */}
       {!enjoyVote && (
         <div className="no-print" style={{
-          position: 'sticky',
-          bottom: 12,
-          display: 'flex',
-          justifyContent: 'flex-end',
-          padding: '0 12px 12px 0',
+          position: 'fixed',
+          bottom: 16,
+          right: pillRight,
+          zIndex: 99999,
           pointerEvents: 'none',
-          zIndex: 900,
         }}>
           <div style={{
-            backgroundColor: 'white',
+            backgroundColor: '#ffffff',
             border: `1px solid ${COLORS.border}`,
             borderRadius: 999,
             boxShadow: '0 8px 24px rgba(17, 24, 39, 0.12)',
@@ -3526,7 +3546,6 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
             <div style={{ display: 'flex', gap: 6 }}>
               <button
                 onClick={() => handleEnjoyVote('up')}
-                disabled={!!enjoyVote}
                 title="Thumbs up"
                 style={{
                   width: 30, height: 28, borderRadius: 8,
@@ -3541,7 +3560,6 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
               </button>
               <button
                 onClick={() => handleEnjoyVote('down')}
-                disabled={!!enjoyVote}
                 title="Thumbs down"
                 style={{
                   width: 30, height: 28, borderRadius: 8,
@@ -3677,6 +3695,7 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
           </div>
         </div>
       )}
+
     </div>
   );
 }

@@ -26641,6 +26641,26 @@ function TripPlanner({ initialData: initialData2 }) {
   const [confirmDialog, setConfirmDialog] = (0, import_react3.useState)(null);
   const [showNameTripModal, setShowNameTripModal] = (0, import_react3.useState)(false);
   const [nameTripValue, setNameTripValue] = (0, import_react3.useState)("");
+  const containerRef = (0, import_react3.useRef)(null);
+  const [pillRight, setPillRight] = (0, import_react3.useState)(16);
+  (0, import_react3.useEffect)(() => {
+    const update = () => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        setPillRight(Math.max(16, window.innerWidth - rect.right + 16));
+      }
+    };
+    update();
+    window.addEventListener("resize", update);
+    window.addEventListener("scroll", update);
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(update) : null;
+    if (ro && containerRef.current) ro.observe(containerRef.current);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update);
+      ro?.disconnect();
+    };
+  }, []);
   (0, import_react3.useEffect)(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ trip, timestamp: Date.now() }));
@@ -27316,7 +27336,7 @@ function TripPlanner({ initialData: initialData2 }) {
       ] })
     ] });
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: COLORS.bg, fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", maxWidth: 600, margin: "0 auto", boxSizing: "border-box" }, children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { ref: containerRef, style: { position: "relative", backgroundColor: COLORS.bg, fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", maxWidth: 600, margin: "0 auto", boxSizing: "border-box" }, children: [
     /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { backgroundColor: COLORS.primary, padding: "24px 20px", color: "white", borderRadius: "0 0 0 0" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", { style: { margin: 0, fontSize: 24, fontWeight: 700, display: "flex", alignItems: "center", gap: 10 }, children: [
@@ -28078,15 +28098,13 @@ function TripPlanner({ initialData: initialData2 }) {
       ] })
     ] }),
     !enjoyVote && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "no-print", style: {
-      position: "sticky",
-      bottom: 12,
-      display: "flex",
-      justifyContent: "flex-end",
-      padding: "0 12px 12px 0",
-      pointerEvents: "none",
-      zIndex: 900
+      position: "fixed",
+      bottom: 16,
+      right: pillRight,
+      zIndex: 99999,
+      pointerEvents: "none"
     }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
-      backgroundColor: "white",
+      backgroundColor: "#ffffff",
       border: `1px solid ${COLORS.border}`,
       borderRadius: 999,
       boxShadow: "0 8px 24px rgba(17, 24, 39, 0.12)",
@@ -28102,7 +28120,6 @@ function TripPlanner({ initialData: initialData2 }) {
           "button",
           {
             onClick: () => handleEnjoyVote("up"),
-            disabled: !!enjoyVote,
             title: "Thumbs up",
             style: {
               width: 30,
@@ -28124,7 +28141,6 @@ function TripPlanner({ initialData: initialData2 }) {
           "button",
           {
             onClick: () => handleEnjoyVote("down"),
-            disabled: !!enjoyVote,
             title: "Thumbs down",
             style: {
               width: 30,
