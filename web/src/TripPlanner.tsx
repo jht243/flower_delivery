@@ -4,7 +4,7 @@ import {
   Plane, Hotel, Car, Train, Bus, Ship, MapPin, Calendar, Clock, 
   CheckCircle2, Circle, AlertCircle, Plus, X, ChevronDown, ChevronUp,
   Edit2, Edit3, Trash2, Save, RotateCcw, Sparkles, ArrowRight, Loader2, Check, FileText, Users, Home,
-  Printer, Heart, Mail, MessageSquare
+  Printer, Heart, Mail, MessageSquare, Shield, ClipboardList
 } from "lucide-react";
 
 // Add spinner animation and hide scrollbar
@@ -3206,6 +3206,32 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
         )}
       </div>
       {showAddModal && <AddLegModal onAdd={handleAddLeg} onClose={() => setShowAddModal(false)} />}
+
+      {/* Related Apps */}
+      <div style={{ padding: "16px 20px", borderTop: `1px solid ${COLORS.borderLight}` }} className="no-print">
+        <div style={{ fontSize: 12, fontWeight: 700, color: COLORS.textMuted, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 10 }}>Related Apps</div>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          {[
+            { icon: <Shield size={16} />, label: "Travel Safety Ratings", desc: "Check safety scores for destinations worldwide" },
+            { icon: <ClipboardList size={16} />, label: "Travel Checklist Generator", desc: "Generate packing & prep checklists for your trip" },
+          ].map((app, i) => (
+            <button key={i} className="btn-press" style={{
+              flex: "1 1 0", minWidth: 200, display: "flex", alignItems: "center", gap: 10,
+              padding: "12px 14px", borderRadius: 12,
+              border: `1px solid ${COLORS.border}`, backgroundColor: COLORS.card,
+              cursor: "pointer", textAlign: "left",
+            }}>
+              <div style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: `${COLORS.primary}15`, display: "flex", alignItems: "center", justifyContent: "center", color: COLORS.primary, flexShrink: 0 }}>
+                {app.icon}
+              </div>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: COLORS.textMain }}>{app.label}</div>
+                <div style={{ fontSize: 11, color: COLORS.textSecondary, marginTop: 2 }}>{app.desc}</div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* Footer Buttons */}
       <div style={{ 
