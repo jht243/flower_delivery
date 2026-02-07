@@ -3119,8 +3119,15 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
                   else otherLegsCount++;
                 });
               } else {
-                // For one-way/round-trip, use expectedLegsCount as flights
-                flightLegsCount = trip.tripType === "one_way" ? 1 : 2;
+                // For one-way/round-trip, count based on actual departure/return modes
+                const depMode = trip.departureMode || "plane";
+                const retMode = trip.returnMode || depMode;
+                [depMode, ...(trip.tripType !== "one_way" ? [retMode] : [])].forEach(m => {
+                  if (m === "plane") flightLegsCount++;
+                  else if (m === "rail") trainLegsCount++;
+                  else if (m === "bus") busLegsCount++;
+                  else otherLegsCount++;
+                });
               }
               
               // Get primary transport mode for the trip
@@ -3309,6 +3316,21 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
                         </span>
                         {getModeIcon("bus", 16)}
                         <span style={{ fontSize: 13, color: COLORS.textMain, fontWeight: 500 }}>Buses</span>
+                      </div>
+                    )}
+                    {/* Show car/other legs if any */}
+                    {otherLegsCount > 0 && (
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", backgroundColor: COLORS.card, borderRadius: 10, border: `1px solid ${COLORS.borderLight}` }}>
+                        <span style={{ 
+                          fontSize: 12, fontWeight: 700, minWidth: 36, textAlign: "center",
+                          color: getStatusColor(0, otherLegsCount),
+                          backgroundColor: `${getStatusColor(0, otherLegsCount)}15`,
+                          padding: "3px 6px", borderRadius: 6
+                        }}>
+                          {`0/${otherLegsCount}`}
+                        </span>
+                        {getModeIcon("car", 16)}
+                        <span style={{ fontSize: 13, color: COLORS.textMain, fontWeight: 500 }}>Drives</span>
                       </div>
                     )}
                     <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", backgroundColor: COLORS.card, borderRadius: 10, border: `1px solid ${COLORS.borderLight}` }}>

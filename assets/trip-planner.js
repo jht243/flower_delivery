@@ -27675,7 +27675,14 @@ function TripPlanner({ initialData: initialData2 }) {
               else otherLegsCount++;
             });
           } else {
-            flightLegsCount = trip.tripType === "one_way" ? 1 : 2;
+            const depMode = trip.departureMode || "plane";
+            const retMode = trip.returnMode || depMode;
+            [depMode, ...trip.tripType !== "one_way" ? [retMode] : []].forEach((m) => {
+              if (m === "plane") flightLegsCount++;
+              else if (m === "rail") trainLegsCount++;
+              else if (m === "bus") busLegsCount++;
+              else otherLegsCount++;
+            });
           }
           const primaryMode = trip.departureMode || "plane";
           const expectedLegsCount = trip.tripType === "one_way" ? 1 : trip.tripType === "round_trip" ? 2 : (trip.multiCityLegs || []).length;
@@ -27845,6 +27852,20 @@ function TripPlanner({ initialData: initialData2 }) {
                 }, children: `0/${busLegsCount}` }),
                 getModeIcon("bus", 16),
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, color: COLORS.textMain, fontWeight: 500 }, children: "Buses" })
+              ] }),
+              otherLegsCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", backgroundColor: COLORS.card, borderRadius: 10, border: `1px solid ${COLORS.borderLight}` }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: {
+                  fontSize: 12,
+                  fontWeight: 700,
+                  minWidth: 36,
+                  textAlign: "center",
+                  color: getStatusColor2(0, otherLegsCount),
+                  backgroundColor: `${getStatusColor2(0, otherLegsCount)}15`,
+                  padding: "3px 6px",
+                  borderRadius: 6
+                }, children: `0/${otherLegsCount}` }),
+                getModeIcon("car", 16),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, color: COLORS.textMain, fontWeight: 500 }, children: "Drives" })
               ] }),
               /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", backgroundColor: COLORS.card, borderRadius: 10, border: `1px solid ${COLORS.borderLight}` }, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: {
