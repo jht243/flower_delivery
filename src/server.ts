@@ -205,13 +205,27 @@ function readWidgetHtml(componentName: string): string {
 // Added timestamp suffix to force cache invalidation for width fix
 const VERSION = (process.env.RENDER_GIT_COMMIT?.slice(0, 7) || Date.now().toString()) + '-' + Date.now();
 
-function widgetMeta(widget: TripPlannerWidget, bustCache: boolean = false) {
-  const templateUri = bustCache
-    ? `ui://widget/trip-planner.html?v=${VERSION}`
-    : widget.templateUri;
+const RESOURCE_MIME_TYPE = "text/html;profile=mcp-app";
 
+function widgetMeta(widget: TripPlannerWidget) {
   return {
-    "openai/outputTemplate": templateUri,
+    ui: {
+      resourceUri: widget.templateUri,
+      prefersBorder: true,
+      domain: "https://trip-planner-da2g.onrender.com",
+      csp: {
+        connectDomains: [
+          "https://trip-planner-da2g.onrender.com",
+          "https://nominatim.openstreetmap.org",
+          "https://api.open-meteo.com",
+          "https://geocoding-api.open-meteo.com"
+        ],
+        resourceDomains: [
+          "https://trip-planner-da2g.onrender.com"
+        ],
+      },
+    },
+    // ChatGPT extensions (optional)
     "openai/widgetDescription":
       "My Travel Organizer — your complete pre-departure checklist for flights, hotels, transport & confirmations. Helps users keep track of all their travel reservations in one place so nothing gets missed. Supports round-trip, one-way, and multi-city itineraries. Call this tool immediately with NO arguments to let the user enter their trip details manually. Only provide arguments if the user has explicitly stated them.",
     "openai/componentDescriptions": {
@@ -247,19 +261,6 @@ function widgetMeta(widget: TripPlannerWidget, bustCache: boolean = false) {
       "Help me plan a trip from NYC to London for 2 weeks",
       "Track my travel reservations",
     ],
-    "openai/widgetPrefersBorder": true,
-    "openai/widgetCSP": {
-      connect_domains: [
-        "https://trip-planner-da2g.onrender.com",
-        "https://nominatim.openstreetmap.org",
-        "https://api.open-meteo.com",
-        "https://geocoding-api.open-meteo.com"
-      ],
-      resource_domains: [
-        "https://trip-planner-da2g.onrender.com"
-      ],
-    },
-    "openai/widgetDomain": "https://web-sandbox.oaiusercontent.com",
     "openai/toolInvocation/invoking": widget.invoking,
     "openai/toolInvocation/invoked": widget.invoked,
     "openai/widgetAccessible": true,
@@ -289,7 +290,7 @@ widgets.forEach((widget) => {
 });
 
 const toolInputSchema = {
-  type: "object",
+  type: "object" as const,
   properties: {
     destination: { type: "string", description: "Primary destination city or country." },
     departure_city: { type: "string", description: "City the traveler is departing from." },
@@ -301,10 +302,9 @@ const toolInputSchema = {
     multi_city_legs: { type: "array", items: { type: "object", properties: { from: { type: "string" }, to: { type: "string" }, date: { type: "string" }, mode: { type: "string" } } }, description: "Array of multi-city leg objects with from, to, date, and mode fields." },
     trip_description: { type: "string", description: "Freeform text describing the trip for AI-powered parsing." },
   },
-  required: [],
+  required: [] as string[],
   additionalProperties: false,
-  $schema: "http://json-schema.org/draft-07/schema#",
-} as const;
+};
 
 const toolInputParser = z.object({
   destination: z.string().optional(),
@@ -362,8 +362,6 @@ const tools: Tool[] = widgets.map((widget) => ({
   securitySchemes: [{ type: "noauth" }],
   _meta: {
     ...widgetMeta(widget),
-    "openai/visibility": "public",
-    securitySchemes: [{ type: "noauth" }],
   },
   annotations: {
     readOnlyHint: true,
@@ -378,7 +376,7 @@ const resources: Resource[] = widgets.map((widget) => ({
   name: widget.title,
   description:
     "HTML template for My Travel Organizer widget.",
-  mimeType: "text/html+skybridge",
+  mimeType: RESOURCE_MIME_TYPE,
   _meta: widgetMeta(widget),
 }));
 
@@ -387,7 +385,7 @@ const resourceTemplates: ResourceTemplate[] = widgets.map((widget) => ({
   name: widget.title,
   description:
     "Template descriptor for My Travel Organizer widget.",
-  mimeType: "text/html+skybridge",
+  mimeType: RESOURCE_MIME_TYPE,
   _meta: widgetMeta(widget),
 }));
 
@@ -433,7 +431,7 @@ function createTripPlannerServer(): Server {
         contents: [
           {
             uri: widget.templateUri,
-            mimeType: "text/html+skybridge",
+            mimeType: RESOURCE_MIME_TYPE,
             text: htmlToSend,
             _meta: widgetMeta(widget),
           },
@@ -675,8 +673,8 @@ function createTripPlannerServer(): Server {
         });
 
         // Use a stable template URI so toolOutput reliably hydrates the component
-        const widgetMetadata = widgetMeta(widget, false);
-        console.log(`[MCP] Tool called: ${request.params.name}, returning templateUri: ${(widgetMetadata as any)["openai/outputTemplate"]}`);
+        const widgetMetadata = widgetMeta(widget);
+        console.log(`[MCP] Tool called: ${request.params.name}, returning resourceUri: ${(widgetMetadata as any).ui?.resourceUri}`);
 
         // Build structured content once so we can log it and return it.
         // For the trip planner, expose fields relevant to trip details
@@ -695,21 +693,12 @@ function createTripPlannerServer(): Server {
           ],
         } as const;
 
-        // Embed the widget resource in _meta to mirror official examples and improve hydration reliability
+        // Return metadata following Apps SDK spec
         const metaForReturn = {
           ...widgetMetadata,
-          "openai.com/widget": {
-            type: "resource",
-            resource: {
-              uri: widget.templateUri,
-              mimeType: "text/html+skybridge",
-              text: widget.html,
-              title: widget.title,
-            },
-          },
         } as const;
 
-        console.log("[MCP] Returning outputTemplate:", (metaForReturn as any)["openai/outputTemplate"]);
+        console.log("[MCP] Returning resourceUri:", (metaForReturn as any).ui?.resourceUri);
         console.log("[MCP] Returning structuredContent:", structured);
 
         // Log success analytics
@@ -741,7 +730,7 @@ function createTripPlannerServer(): Server {
         return {
           content: [],  // Empty array = no text after widget
           structuredContent: structured,
-          _meta: metaForReturn,  // Contains openai/resultCanProduceWidget: true
+          _meta: metaForReturn,
         };
       } catch (error: any) {
         logAnalytics("tool_call_error", {

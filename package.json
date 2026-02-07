@@ -19,6 +19,7 @@
     "build:inline": "node scripts/inline-bundle-encoded.js"
   },
   "dependencies": {
+    "@modelcontextprotocol/ext-apps": "^1.0.1",
     "@modelcontextprotocol/sdk": "^1.26.0",
     "dotenv": "^17.2.3",
     "tsx": "^4.19.2",
