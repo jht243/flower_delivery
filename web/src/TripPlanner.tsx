@@ -1006,13 +1006,7 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
   const [transportForm, setTransportForm] = useState({ type: "uber", notes: "", rentalCompany: "", startDate: "", endDate: "" });
   const [addDropdownDate, setAddDropdownDate] = useState<string | null>(null);
 
-  // Close add dropdown when clicking outside
-  useEffect(() => {
-    if (!addDropdownDate) return;
-    const handler = () => setAddDropdownDate(null);
-    document.addEventListener("click", handler);
-    return () => document.removeEventListener("click", handler);
-  }, [addDropdownDate]);
+  // addDropdownDate is closed via the overlay rendered in the portal
 
   // Generate all days between departure and return
   const allDays = useMemo(() => {
@@ -1346,8 +1340,10 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
                         {addDropdownDate === date && addBtnRef.current && (() => {
                           const rect = addBtnRef.current.getBoundingClientRect();
                           return ReactDOM.createPortal(
+                            <>
+                            {/* Invisible overlay to catch outside clicks */}
+                            <div onClick={() => setAddDropdownDate(null)} style={{ position: "fixed", inset: 0, zIndex: 9999 }} />
                             <div
-                              onClick={e => e.stopPropagation()}
                               style={{
                                 position: "fixed", top: rect.bottom + 4, left: rect.left,
                                 backgroundColor: "white", borderRadius: 12, padding: 6,
@@ -1388,7 +1384,8 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
                                   {item.label}
                                 </button>
                               ))}
-                            </div>,
+                            </div>
+                            </>,
                             document.body
                           );
                         })()}

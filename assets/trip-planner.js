@@ -25575,12 +25575,6 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, to
   const [editingTransport, setEditingTransport] = (0, import_react3.useState)(null);
   const [transportForm, setTransportForm] = (0, import_react3.useState)({ type: "uber", notes: "", rentalCompany: "", startDate: "", endDate: "" });
   const [addDropdownDate, setAddDropdownDate] = (0, import_react3.useState)(null);
-  (0, import_react3.useEffect)(() => {
-    if (!addDropdownDate) return;
-    const handler = () => setAddDropdownDate(null);
-    document.addEventListener("click", handler);
-    return () => document.removeEventListener("click", handler);
-  }, [addDropdownDate]);
   const allDays = (0, import_react3.useMemo)(() => {
     const days = [];
     if (departureDate) {
@@ -25897,66 +25891,68 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, to
                   addDropdownDate === date && addBtnRef.current && (() => {
                     const rect = addBtnRef.current.getBoundingClientRect();
                     return import_react_dom.default.createPortal(
-                      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-                        "div",
-                        {
-                          onClick: (e) => e.stopPropagation(),
-                          style: {
-                            position: "fixed",
-                            top: rect.bottom + 4,
-                            left: rect.left,
-                            backgroundColor: "white",
-                            borderRadius: 12,
-                            padding: 6,
-                            border: `1px solid ${COLORS.border}`,
-                            boxShadow: "0 4px 16px rgba(0,0,0,0.12)",
-                            zIndex: 1e4,
-                            minWidth: 200
-                          },
-                          children: [
-                            { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plane, { size: 14 }), label: "Flight", type: "flight", title: "" },
-                            { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TramFront, { size: 14 }), label: "Train", type: "train", title: "" },
-                            { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bus, { size: 14 }), label: "Bus", type: "bus", title: "" },
-                            { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ship, { size: 14 }), label: "Ferry / Cruise", type: "ferry", title: "" },
-                            { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Hotel, { size: 14 }), label: "Lodging", type: "hotel", title: "" },
-                            { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Car, { size: 14 }), label: "Rental Car", type: "car", title: "" },
-                            { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Car, { size: 14 }), label: "Ride (Uber/Taxi)", type: "car", title: "Ride" },
-                            { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { size: 14 }), label: "Activity", type: "other", title: "" },
-                            { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Heart, { size: 14 }), label: "Restaurant / Dining", type: "other", title: "Dining" },
-                            { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FileText, { size: 14 }), label: "Insurance / Document", type: "other", title: "Insurance" }
-                          ].map((item, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
-                            "button",
-                            {
-                              onClick: () => {
-                                onAddLeg({ type: item.type, date, status: "pending", title: item.title });
-                                setAddDropdownDate(null);
-                              },
-                              style: {
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 10,
-                                width: "100%",
-                                padding: "8px 10px",
-                                borderRadius: 8,
-                                border: "none",
-                                backgroundColor: "transparent",
-                                cursor: "pointer",
-                                fontSize: 13,
-                                color: COLORS.textMain,
-                                fontWeight: 500,
-                                textAlign: "left"
-                              },
-                              onMouseEnter: (e) => e.currentTarget.style.backgroundColor = COLORS.inputBg,
-                              onMouseLeave: (e) => e.currentTarget.style.backgroundColor = "transparent",
-                              children: [
-                                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: COLORS.textSecondary, display: "flex", alignItems: "center" }, children: item.icon }),
-                                item.label
-                              ]
+                      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { onClick: () => setAddDropdownDate(null), style: { position: "fixed", inset: 0, zIndex: 9999 } }),
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                          "div",
+                          {
+                            style: {
+                              position: "fixed",
+                              top: rect.bottom + 4,
+                              left: rect.left,
+                              backgroundColor: "white",
+                              borderRadius: 12,
+                              padding: 6,
+                              border: `1px solid ${COLORS.border}`,
+                              boxShadow: "0 4px 16px rgba(0,0,0,0.12)",
+                              zIndex: 1e4,
+                              minWidth: 200
                             },
-                            i
-                          ))
-                        }
-                      ),
+                            children: [
+                              { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plane, { size: 14 }), label: "Flight", type: "flight", title: "" },
+                              { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TramFront, { size: 14 }), label: "Train", type: "train", title: "" },
+                              { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bus, { size: 14 }), label: "Bus", type: "bus", title: "" },
+                              { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ship, { size: 14 }), label: "Ferry / Cruise", type: "ferry", title: "" },
+                              { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Hotel, { size: 14 }), label: "Lodging", type: "hotel", title: "" },
+                              { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Car, { size: 14 }), label: "Rental Car", type: "car", title: "" },
+                              { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Car, { size: 14 }), label: "Ride (Uber/Taxi)", type: "car", title: "Ride" },
+                              { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MapPin, { size: 14 }), label: "Activity", type: "other", title: "" },
+                              { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Heart, { size: 14 }), label: "Restaurant / Dining", type: "other", title: "Dining" },
+                              { icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FileText, { size: 14 }), label: "Insurance / Document", type: "other", title: "Insurance" }
+                            ].map((item, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+                              "button",
+                              {
+                                onClick: () => {
+                                  onAddLeg({ type: item.type, date, status: "pending", title: item.title });
+                                  setAddDropdownDate(null);
+                                },
+                                style: {
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 10,
+                                  width: "100%",
+                                  padding: "8px 10px",
+                                  borderRadius: 8,
+                                  border: "none",
+                                  backgroundColor: "transparent",
+                                  cursor: "pointer",
+                                  fontSize: 13,
+                                  color: COLORS.textMain,
+                                  fontWeight: 500,
+                                  textAlign: "left"
+                                },
+                                onMouseEnter: (e) => e.currentTarget.style.backgroundColor = COLORS.inputBg,
+                                onMouseLeave: (e) => e.currentTarget.style.backgroundColor = "transparent",
+                                children: [
+                                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { color: COLORS.textSecondary, display: "flex", alignItems: "center" }, children: item.icon }),
+                                  item.label
+                                ]
+                              },
+                              i
+                            ))
+                          }
+                        )
+                      ] }),
                       document.body
                     );
                   })()
