@@ -25594,9 +25594,13 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, to
     const noDateLegs = [];
     const primaryLegIds = new Set(multiCityLegs?.map((l) => l.id) || []);
     allDays.forEach((day) => {
-      groups[day] = { flights: [], hotels: [], transport: [], activities: [] };
+      groups[day] = { flights: [], hotels: [], transport: [], activities: [], standalone: [] };
     });
     legs.forEach((leg) => {
+      if (leg.standalone && leg.date && groups[leg.date]) {
+        groups[leg.date].standalone.push(leg);
+        return;
+      }
       if (leg.type === "hotel" && leg.date) {
         const checkIn = /* @__PURE__ */ new Date(leg.date + "T00:00:00");
         const lastDay = allDays.length > 0 ? allDays[allDays.length - 1] : leg.date;
@@ -26227,7 +26231,8 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, to
               " Add Activity"
             ] })
           ] })
-        ] })
+        ] }),
+        dayData.standalone.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "8px 12px" }, children: dayData.standalone.map((leg) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TripLegCard, { leg, onUpdate: (u) => onUpdateLeg(leg.id, u), onDelete: () => onDeleteLeg(leg.id), isExpanded: expandedLegs.has(leg.id), onToggleExpand: () => toggleLegExpand(leg.id), tripDepartureDate: departureDate, tripReturnDate: returnDate, travelers }, leg.id)) })
       ] }, date);
     }),
     addDropdownDate && import_react_dom.default.createPortal(
@@ -26259,7 +26264,7 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, to
           "button",
           {
             onClick: () => {
-              onAddLeg({ type: item.type, date: addDropdownDate, status: "pending", title: item.title });
+              onAddLeg({ type: item.type, date: addDropdownDate, status: "pending", title: item.title, standalone: true });
               setAddDropdownDate(null);
             },
             style: {

@@ -95,6 +95,7 @@ interface TripLeg {
   rentalCompany?: string;
   passengerTickets?: { passenger: number; confirmationNumber?: string; seatNumber?: string; ticketNumber?: string; booked: boolean }[];
   cost?: number;
+  standalone?: boolean;
 }
 
 type TripType = "one_way" | "round_trip" | "multi_city";
@@ -1028,7 +1029,8 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
       flights: TripLeg[]; 
       hotels: { leg: TripLeg; isContinuation: boolean }[]; 
       transport: TripLeg[]; 
-      activities: TripLeg[] 
+      activities: TripLeg[];
+      standalone: TripLeg[] 
     }> = {};
     const noDateLegs: TripLeg[] = [];
     
@@ -1036,10 +1038,15 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
     const primaryLegIds = new Set(multiCityLegs?.map(l => l.id) || []);
     
     allDays.forEach(day => { 
-      groups[day] = { flights: [], hotels: [], transport: [], activities: [] }; 
+      groups[day] = { flights: [], hotels: [], transport: [], activities: [], standalone: [] }; 
     });
     
     legs.forEach(leg => {
+      // Standalone legs get their own section, not grouped into categories
+      if (leg.standalone && leg.date && groups[leg.date]) {
+        groups[leg.date].standalone.push(leg);
+        return;
+      }
       if (leg.type === "hotel" && leg.date) {
         const checkIn = new Date(leg.date + "T00:00:00");
         // Use hotel endDate, or returnDate, or last day of trip as checkout
@@ -1651,6 +1658,14 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
                 )}
               </div>
             )}
+            {/* Standalone items added from Add dropdown - always visible as their own cards */}
+            {dayData.standalone.length > 0 && (
+              <div style={{ padding: "8px 12px" }}>
+                {dayData.standalone.map(leg => (
+                  <TripLegCard key={leg.id} leg={leg} onUpdate={u => onUpdateLeg(leg.id, u)} onDelete={() => onDeleteLeg(leg.id)} isExpanded={expandedLegs.has(leg.id)} onToggleExpand={() => toggleLegExpand(leg.id)} tripDepartureDate={departureDate} tripReturnDate={returnDate} travelers={travelers} />
+                ))}
+              </div>
+            )}
           </div>
         );
       })}
@@ -1680,7 +1695,7 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
               <button
                 key={i}
                 onClick={() => {
-                  onAddLeg({ type: item.type, date: addDropdownDate, status: "pending", title: item.title });
+                  onAddLeg({ type: item.type, date: addDropdownDate, status: "pending", title: item.title, standalone: true });
                   setAddDropdownDate(null);
                 }}
                 style={{
