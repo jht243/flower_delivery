@@ -26613,6 +26613,77 @@ function TripPlanner({ initialData: initialData2 }) {
     } catch {
     }
   }, [trip]);
+  const hasHydrated = (0, import_react3.useRef)(false);
+  (0, import_react3.useEffect)(() => {
+    if (hasHydrated.current) return;
+    if (!initialData2 || typeof initialData2 !== "object" || Object.keys(initialData2).length === 0) return;
+    const {
+      destination,
+      departure_city,
+      trip_type,
+      departure_date,
+      return_date,
+      travelers,
+      departure_mode,
+      multi_city_legs,
+      trip_description
+    } = initialData2;
+    if (!destination && !departure_city && !trip_description && !multi_city_legs?.length) return;
+    hasHydrated.current = true;
+    console.log("[TripPlanner] Hydrating with data:", initialData2);
+    const tripType = trip_type || (return_date ? "round_trip" : "one_way");
+    const rawMode = departure_mode || "plane";
+    const mode = rawMode === "ferry" ? "other" : rawMode;
+    const newTrip = {
+      id: generateId(),
+      name: destination ? `Trip to ${destination}` : "My Trip",
+      tripType,
+      legs: [],
+      travelers: travelers || 1,
+      departureDate: departure_date,
+      returnDate: return_date,
+      departureMode: mode,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+    if (trip_type === "multi_city" && multi_city_legs?.length) {
+      newTrip.multiCityLegs = multi_city_legs.map((leg) => ({
+        id: generateId(),
+        from: leg.from || "",
+        to: leg.to || "",
+        date: leg.date || "",
+        mode: leg.mode || "plane"
+      }));
+    } else if (departure_city && destination) {
+      const outboundFlight = {
+        id: generateId(),
+        type: mode === "plane" ? "flight" : mode === "rail" ? "train" : mode === "bus" ? "bus" : mode === "other" ? "ferry" : "flight",
+        status: "pending",
+        title: `${getModeLabel(mode)}: ${departure_city} \u2192 ${destination}`,
+        from: departure_city,
+        to: destination,
+        date: departure_date || ""
+      };
+      newTrip.legs.push(outboundFlight);
+      if (tripType !== "one_way") {
+        const returnLeg = {
+          id: generateId(),
+          type: outboundFlight.type,
+          status: "pending",
+          title: `${getModeLabel(mode)}: ${destination} \u2192 ${departure_city}`,
+          from: destination,
+          to: departure_city,
+          date: return_date || ""
+        };
+        newTrip.legs.push(returnLeg);
+      }
+    }
+    if (trip_description && !departure_city && !destination) {
+      setTripDescription(trip_description);
+    }
+    setTrip(newTrip);
+    setCurrentView("trip");
+  }, [initialData2]);
   (0, import_react3.useEffect)(() => {
     if (trip.tripType === "multi_city" && trip.multiCityLegs && trip.multiCityLegs.length > 0) {
       const modeToLegType = (mode) => {
@@ -27938,6 +28009,23 @@ window.addEventListener("openai:set_globals", (ev) => {
     }
   }
 });
+window.addEventListener(
+  "message",
+  (event) => {
+    if (event.source !== window.parent) return;
+    const message = event.data;
+    if (!message || message.jsonrpc !== "2.0") return;
+    if (message.method !== "ui/notifications/tool-result") return;
+    console.log("[Hydration] MCP Apps bridge tool-result received:", message.params);
+    const toolResult = message.params;
+    const data = toolResult?.structuredContent ?? toolResult?.result?.structuredContent ?? {};
+    if (data && typeof data === "object" && Object.keys(data).length > 0) {
+      console.log("[Hydration] Re-rendering with MCP Apps bridge data:", data);
+      renderApp(data);
+    }
+  },
+  { passive: true }
+);
 /*! Bundled license information:
 
 react/cjs/react.development.js:

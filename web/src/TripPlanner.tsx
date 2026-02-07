@@ -1996,7 +1996,95 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
   const [feedbackStatus, setFeedbackStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
 
   useEffect(() => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ trip, timestamp: Date.now() })); } catch {} }, [trip]);
-  
+
+  // Hydrate from ChatGPT tool result (structuredContent)
+  const hasHydrated = useRef(false);
+  useEffect(() => {
+    if (hasHydrated.current) return;
+    if (!initialData || typeof initialData !== 'object' || Object.keys(initialData).length === 0) return;
+
+    const {
+      destination,
+      departure_city,
+      trip_type,
+      departure_date,
+      return_date,
+      travelers,
+      departure_mode,
+      multi_city_legs,
+      trip_description,
+    } = initialData;
+
+    // Only hydrate if there's meaningful trip data from ChatGPT
+    if (!destination && !departure_city && !trip_description && !multi_city_legs?.length) return;
+
+    hasHydrated.current = true;
+    console.log("[TripPlanner] Hydrating with data:", initialData);
+
+    const tripType: TripType = trip_type || (return_date ? "round_trip" : "one_way");
+    // Map server departure_mode to client TransportMode ("ferry" → "other")
+    const rawMode = departure_mode || "plane";
+    const mode: TransportMode = rawMode === "ferry" ? "other" : rawMode;
+
+    const newTrip: Trip = {
+      id: generateId(),
+      name: destination ? `Trip to ${destination}` : "My Trip",
+      tripType,
+      legs: [],
+      travelers: travelers || 1,
+      departureDate: departure_date,
+      returnDate: return_date,
+      departureMode: mode,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+
+    if (trip_type === "multi_city" && multi_city_legs?.length) {
+      // Multi-city: populate multiCityLegs and let the existing sync useEffect create trip.legs
+      newTrip.multiCityLegs = multi_city_legs.map((leg: any) => ({
+        id: generateId(),
+        from: leg.from || "",
+        to: leg.to || "",
+        date: leg.date || "",
+        mode: (leg.mode || "plane") as TransportMode,
+      }));
+    } else if (departure_city && destination) {
+      // Simple trip: create outbound flight
+      const outboundFlight: TripLeg = {
+        id: generateId(),
+        type: mode === "plane" ? "flight" : mode === "rail" ? "train" : mode === "bus" ? "bus" : mode === "other" ? "ferry" : "flight",
+        status: "pending",
+        title: `${getModeLabel(mode)}: ${departure_city} → ${destination}`,
+        from: departure_city,
+        to: destination,
+        date: departure_date || "",
+      };
+      newTrip.legs.push(outboundFlight);
+
+      // For round trips, add return leg
+      if (tripType !== "one_way") {
+        const returnLeg: TripLeg = {
+          id: generateId(),
+          type: outboundFlight.type,
+          status: "pending",
+          title: `${getModeLabel(mode)}: ${destination} → ${departure_city}`,
+          from: destination,
+          to: departure_city,
+          date: return_date || "",
+        };
+        newTrip.legs.push(returnLeg);
+      }
+    }
+
+    // If there's a trip description but no structured city data, populate the text field
+    if (trip_description && !departure_city && !destination) {
+      setTripDescription(trip_description);
+    }
+
+    setTrip(newTrip);
+    setCurrentView("trip");
+  }, [initialData]);
+
   // Sync multi-city legs to trip.legs when in multi-city mode
   useEffect(() => {
     if (trip.tripType === "multi_city" && trip.multiCityLegs && trip.multiCityLegs.length > 0) {

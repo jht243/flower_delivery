@@ -161,3 +161,27 @@ window.addEventListener('openai:set_globals', (ev: any) => {
     }
   }
 });
+
+// MCP Apps bridge: listen for tool-result via postMessage (official pattern)
+window.addEventListener(
+  "message",
+  (event: MessageEvent) => {
+    if (event.source !== window.parent) return;
+    const message = event.data;
+    if (!message || message.jsonrpc !== "2.0") return;
+    if (message.method !== "ui/notifications/tool-result") return;
+
+    console.log("[Hydration] MCP Apps bridge tool-result received:", message.params);
+    const toolResult = message.params;
+    const data =
+      toolResult?.structuredContent ??
+      toolResult?.result?.structuredContent ??
+      {};
+
+    if (data && typeof data === "object" && Object.keys(data).length > 0) {
+      console.log("[Hydration] Re-rendering with MCP Apps bridge data:", data);
+      renderApp(data);
+    }
+  },
+  { passive: true }
+);
