@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
+import ReactDOM from "react-dom";
 import {
   Plane, Hotel, Car, Train, Bus, Ship, MapPin, Calendar, Clock, 
   CheckCircle2, Circle, AlertCircle, Plus, X, ChevronDown, ChevronUp,
@@ -1322,68 +1323,78 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
                     );
                   })()}
                   {/* Add + pill with dropdown */}
-                  <div style={{ position: "relative" }}>
-                    <button
-                      onClick={e => { e.stopPropagation(); setAddDropdownDate(prev => prev === date ? null : date); }}
-                      className="btn-press"
-                      style={{
-                        display: "flex", alignItems: "center", gap: 4,
-                        padding: "6px 10px", borderRadius: 20,
-                        backgroundColor: "white",
-                        border: `1.5px dashed ${COLORS.textMuted}`,
-                        cursor: "pointer", fontSize: 11, fontWeight: 600,
-                        color: COLORS.textMuted, whiteSpace: "nowrap",
-                        outline: "none",
-                      }}
-                    >
-                      <Plus size={13} /> Add
-                    </button>
-                    {addDropdownDate === date && (
-                      <div
-                        onClick={e => e.stopPropagation()}
-                        style={{
-                          position: "absolute", top: "100%", left: 0, marginTop: 4,
-                          backgroundColor: "white", borderRadius: 12, padding: 6,
-                          border: `1px solid ${COLORS.border}`,
-                          boxShadow: "0 4px 16px rgba(0,0,0,0.12)",
-                          zIndex: 100, minWidth: 180,
-                        }}
-                      >
-                        {[
-                          { icon: <Plane size={14} />, label: "Flight", type: "flight" as LegType, title: "" },
-                          { icon: <Train size={14} />, label: "Train", type: "train" as LegType, title: "" },
-                          { icon: <Bus size={14} />, label: "Bus", type: "bus" as LegType, title: "" },
-                          { icon: <Ship size={14} />, label: "Ferry / Cruise", type: "ferry" as LegType, title: "" },
-                          { icon: <Hotel size={14} />, label: "Lodging", type: "hotel" as LegType, title: "" },
-                          { icon: <Car size={14} />, label: "Rental Car", type: "car" as LegType, title: "" },
-                          { icon: <Car size={14} />, label: "Ride (Uber/Taxi)", type: "car" as LegType, title: "Ride" },
-                          { icon: <MapPin size={14} />, label: "Activity", type: "other" as LegType, title: "" },
-                          { icon: <Heart size={14} />, label: "Restaurant / Dining", type: "other" as LegType, title: "Dining" },
-                          { icon: <FileText size={14} />, label: "Insurance / Document", type: "other" as LegType, title: "Insurance" },
-                        ].map((item, i) => (
-                          <button
-                            key={i}
-                            onClick={() => {
-                              onAddLeg({ type: item.type, date, status: "pending", title: item.title });
-                              setAddDropdownDate(null);
-                            }}
-                            style={{
-                              display: "flex", alignItems: "center", gap: 10, width: "100%",
-                              padding: "8px 10px", borderRadius: 8, border: "none",
-                              backgroundColor: "transparent", cursor: "pointer",
-                              fontSize: 13, color: COLORS.textMain, fontWeight: 500,
-                              textAlign: "left",
-                            }}
-                            onMouseEnter={e => (e.currentTarget.style.backgroundColor = COLORS.inputBg)}
-                            onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
-                          >
-                            <span style={{ color: COLORS.textSecondary, display: "flex", alignItems: "center" }}>{item.icon}</span>
-                            {item.label}
-                          </button>
-                        ))}
+                  {(() => {
+                    const addBtnRef = useRef<HTMLButtonElement>(null);
+                    return (
+                      <div style={{ position: "relative" }}>
+                        <button
+                          ref={addBtnRef}
+                          onClick={e => { e.stopPropagation(); setAddDropdownDate(prev => prev === date ? null : date); }}
+                          className="btn-press"
+                          style={{
+                            display: "flex", alignItems: "center", gap: 4,
+                            padding: "6px 10px", borderRadius: 20,
+                            backgroundColor: "white",
+                            border: `1.5px dashed ${COLORS.textMuted}`,
+                            cursor: "pointer", fontSize: 11, fontWeight: 600,
+                            color: COLORS.textMuted, whiteSpace: "nowrap",
+                            outline: "none",
+                          }}
+                        >
+                          <Plus size={13} /> Add
+                        </button>
+                        {addDropdownDate === date && addBtnRef.current && (() => {
+                          const rect = addBtnRef.current.getBoundingClientRect();
+                          return ReactDOM.createPortal(
+                            <div
+                              onClick={e => e.stopPropagation()}
+                              style={{
+                                position: "fixed", top: rect.bottom + 4, left: rect.left,
+                                backgroundColor: "white", borderRadius: 12, padding: 6,
+                                border: `1px solid ${COLORS.border}`,
+                                boxShadow: "0 4px 16px rgba(0,0,0,0.12)",
+                                zIndex: 10000, minWidth: 200,
+                              }}
+                            >
+                              {[
+                                { icon: <Plane size={14} />, label: "Flight", type: "flight" as LegType, title: "" },
+                                { icon: <Train size={14} />, label: "Train", type: "train" as LegType, title: "" },
+                                { icon: <Bus size={14} />, label: "Bus", type: "bus" as LegType, title: "" },
+                                { icon: <Ship size={14} />, label: "Ferry / Cruise", type: "ferry" as LegType, title: "" },
+                                { icon: <Hotel size={14} />, label: "Lodging", type: "hotel" as LegType, title: "" },
+                                { icon: <Car size={14} />, label: "Rental Car", type: "car" as LegType, title: "" },
+                                { icon: <Car size={14} />, label: "Ride (Uber/Taxi)", type: "car" as LegType, title: "Ride" },
+                                { icon: <MapPin size={14} />, label: "Activity", type: "other" as LegType, title: "" },
+                                { icon: <Heart size={14} />, label: "Restaurant / Dining", type: "other" as LegType, title: "Dining" },
+                                { icon: <FileText size={14} />, label: "Insurance / Document", type: "other" as LegType, title: "Insurance" },
+                              ].map((item, i) => (
+                                <button
+                                  key={i}
+                                  onClick={() => {
+                                    onAddLeg({ type: item.type, date, status: "pending", title: item.title });
+                                    setAddDropdownDate(null);
+                                  }}
+                                  style={{
+                                    display: "flex", alignItems: "center", gap: 10, width: "100%",
+                                    padding: "8px 10px", borderRadius: 8, border: "none",
+                                    backgroundColor: "transparent", cursor: "pointer",
+                                    fontSize: 13, color: COLORS.textMain, fontWeight: 500,
+                                    textAlign: "left",
+                                  }}
+                                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = COLORS.inputBg)}
+                                  onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
+                                >
+                                  <span style={{ color: COLORS.textSecondary, display: "flex", alignItems: "center" }}>{item.icon}</span>
+                                  {item.label}
+                                </button>
+                              ))}
+                            </div>,
+                            document.body
+                          );
+                        })()}
                       </div>
-                    )}
-                  </div>
+                    );
+                  })()}
                 </div>
               );
             })()}
