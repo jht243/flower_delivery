@@ -1326,12 +1326,10 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
                   {dayData.standalone.map(leg => {
                     const chipLabel = leg.title || leg.type.charAt(0).toUpperCase() + leg.type.slice(1);
                     const isExpanded = expanded === `standalone-${leg.id}`;
-                    // Check if leg has actual info filled in (not just empty shell)
-                    const hasInfo = !!(leg.confirmationNumber || leg.notes || leg.hotelName || leg.flightNumber || leg.airline || leg.rentalCompany || leg.location || leg.time);
-                    const isBooked = leg.status === "booked";
-                    // Red = no info, Yellow = has info but not booked, Green = booked
-                    const chipColor = isBooked ? COLORS.booked : hasInfo ? COLORS.pending : "#C0392B";
-                    const chipBg = isExpanded ? `${chipColor}15` : isBooked ? COLORS.bookedBg : hasInfo ? COLORS.pendingBg : "#F5DEDA";
+                    // Red = no info added, Green = has any info filled in
+                    const hasInfo = !!(leg.confirmationNumber || leg.notes || leg.hotelName || leg.flightNumber || leg.airline || leg.rentalCompany || leg.location || leg.time || leg.from || leg.to || leg.cost);
+                    const chipColor = hasInfo ? COLORS.booked : "#C0392B";
+                    const chipBg = isExpanded ? `${chipColor}15` : hasInfo ? COLORS.bookedBg : "#F5DEDA";
                     const Icon = leg.type === "flight" ? Plane : leg.type === "train" ? Train : leg.type === "bus" ? Bus : leg.type === "ferry" ? Ship : leg.type === "hotel" ? Hotel : leg.type === "car" ? Car : MapPin;
                     return (
                       <button

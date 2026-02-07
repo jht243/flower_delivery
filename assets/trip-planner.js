@@ -25864,10 +25864,9 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, to
                 dayData.standalone.map((leg) => {
                   const chipLabel = leg.title || leg.type.charAt(0).toUpperCase() + leg.type.slice(1);
                   const isExpanded = expanded === `standalone-${leg.id}`;
-                  const hasInfo = !!(leg.confirmationNumber || leg.notes || leg.hotelName || leg.flightNumber || leg.airline || leg.rentalCompany || leg.location || leg.time);
-                  const isBooked = leg.status === "booked";
-                  const chipColor = isBooked ? COLORS.booked : hasInfo ? COLORS.pending : "#C0392B";
-                  const chipBg = isExpanded ? `${chipColor}15` : isBooked ? COLORS.bookedBg : hasInfo ? COLORS.pendingBg : "#F5DEDA";
+                  const hasInfo = !!(leg.confirmationNumber || leg.notes || leg.hotelName || leg.flightNumber || leg.airline || leg.rentalCompany || leg.location || leg.time || leg.from || leg.to || leg.cost);
+                  const chipColor = hasInfo ? COLORS.booked : "#C0392B";
+                  const chipBg = isExpanded ? `${chipColor}15` : hasInfo ? COLORS.bookedBg : "#F5DEDA";
                   const Icon2 = leg.type === "flight" ? Plane : leg.type === "train" ? TramFront : leg.type === "bus" ? Bus : leg.type === "ferry" ? Ship : leg.type === "hotel" ? Hotel : leg.type === "car" ? Car : MapPin;
                   return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
                     "button",
