@@ -89,10 +89,13 @@ ANALYTICS_PASSWORD=your_password  # For /analytics dashboard
 
 ## Privacy & Data Use
 
-- **What we collect:** When the widget runs inside ChatGPT we receive the location (city/region/country), locale, device/browser fingerprint, and trip query details via `_meta`.
-- **How we use it:** These fields feed the `/analytics` dashboard only; we do not sell or share this data.
-- **Retention:** Logs are stored for **30 days** in the `/logs` folder and then automatically rotated.
-- **User input storage:** The widget caches your trip data in `localStorage`; clear anytime with the "Reset" button.
+See the full **[Privacy Policy](PRIVACY.md)** for complete details.
+
+- **What we collect:** When the widget runs inside ChatGPT, our server receives location (city/region/country), locale, device/browser fingerprint, inferred trip query, and log timestamps via the MCP `_meta` object.
+- **How we use it:** These fields feed the `/analytics` dashboard only. We do not sell, rent, or share this data.
+- **Server log retention:** Analytics logs are stored for **30 days** in the `/logs` directory and then automatically rotated and deleted.
+- **Local trip data:** Your trip details are cached in browser `localStorage` and persist indefinitely — data is only removed when you manually delete a saved trip or use the "Reset" button.
+- **Deletion requests:** Email **support@layer3labs.io** with the approximate UTC date/time of your session. We will delete associated server logs within 7 business days.
 
 ## Monitoring & Alerts
 
