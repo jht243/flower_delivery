@@ -2721,10 +2721,6 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
 
   const handleBackToHome = () => {
     trackEvent("back_to_home", { tripName: trip.name, legCount: trip.legs.length });
-    // Auto-save current trip if it has content
-    if (trip.legs.length > 0) {
-      saveCurrentTrip();
-    }
     setCurrentView("home");
   };
 

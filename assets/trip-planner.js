@@ -27281,9 +27281,6 @@ function TripPlanner({ initialData: initialData2 }) {
   };
   const handleBackToHome = () => {
     trackEvent("back_to_home", { tripName: trip.name, legCount: trip.legs.length });
-    if (trip.legs.length > 0) {
-      saveCurrentTrip();
-    }
     setCurrentView("home");
   };
   const sortedLegs = (0, import_react3.useMemo)(() => [...trip.legs].sort((a, b) => {
