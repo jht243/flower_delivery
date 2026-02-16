@@ -2782,6 +2782,17 @@ export default function TripPlanner({ initialData }: { initialData?: any }) {
             </div>
           )}
         </div>
+        {confirmDialog && (
+          <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1100, padding: 20 }} onClick={() => setConfirmDialog(null)}>
+            <div style={{ backgroundColor: "white", borderRadius: 16, padding: 24, maxWidth: 340, width: "100%", textAlign: "center" }} onClick={e => e.stopPropagation()}>
+              <div style={{ fontSize: 16, fontWeight: 600, color: COLORS.textMain, marginBottom: 20 }}>{confirmDialog.message}</div>
+              <div style={{ display: "flex", gap: 10 }}>
+                <button className="btn-press" onClick={() => setConfirmDialog(null)} style={{ flex: 1, padding: 12, borderRadius: 10, border: `1px solid ${COLORS.border}`, backgroundColor: "white", color: COLORS.textSecondary, fontSize: 14, fontWeight: 600, cursor: "pointer" }}>Cancel</button>
+                <button className="btn-press" onClick={() => { confirmDialog.onConfirm(); setConfirmDialog(null); }} style={{ flex: 1, padding: 12, borderRadius: 10, border: "none", backgroundColor: COLORS.urgent, color: "white", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>Delete</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
