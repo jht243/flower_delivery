@@ -26403,7 +26403,27 @@ var DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, to
         )) })
       ] }),
       document.body
-    )
+    ),
+    legsByDate.noDateLegs.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { marginBottom: 20 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", { style: { margin: "0 0 12px", fontSize: 14, fontWeight: 600, color: COLORS.textMain, display: "flex", alignItems: "center", gap: 8 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { size: 16, color: COLORS.textMuted }),
+        "Trip Items (No Dates Set)"
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: legsByDate.noDateLegs.map((leg) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+        TripLegCard,
+        {
+          leg,
+          onUpdate: (u) => onUpdateLeg(leg.id, u),
+          onDelete: () => onDeleteLeg(leg.id),
+          isExpanded: expandedLegs.has(leg.id),
+          onToggleExpand: () => toggleLegExpand(leg.id),
+          tripDepartureDate: departureDate,
+          tripReturnDate: returnDate,
+          travelers
+        },
+        leg.id
+      )) })
+    ] })
   ] });
 };
 var AddLegModal = ({ onAdd, onClose }) => {

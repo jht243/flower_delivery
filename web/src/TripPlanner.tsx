@@ -1762,6 +1762,31 @@ const DayByDayView = ({ legs, onUpdateLeg, onDeleteLeg, onAddLeg, expandedLegs, 
         </>,
         document.body
       )}
+      
+      {/* Legs without dates - show at the end */}
+      {legsByDate.noDateLegs.length > 0 && (
+        <div style={{ marginBottom: 20 }}>
+          <h3 style={{ margin: "0 0 12px", fontSize: 14, fontWeight: 600, color: COLORS.textMain, display: "flex", alignItems: "center", gap: 8 }}>
+            <Calendar size={16} color={COLORS.textMuted} />
+            Trip Items (No Dates Set)
+          </h3>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {legsByDate.noDateLegs.map(leg => (
+              <TripLegCard 
+                key={leg.id} 
+                leg={leg} 
+                onUpdate={u => onUpdateLeg(leg.id, u)} 
+                onDelete={() => onDeleteLeg(leg.id)} 
+                isExpanded={expandedLegs.has(leg.id)} 
+                onToggleExpand={() => toggleLegExpand(leg.id)} 
+                tripDepartureDate={departureDate}
+                tripReturnDate={returnDate}
+                travelers={travelers}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
