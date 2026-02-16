@@ -1753,13 +1753,16 @@ Each item should have:
 - time: departure time if mentioned (HH:MM format)
 
 Rules:
-1. Only extract what the user explicitly mentions - do NOT infer or auto-add hotels
-2. Think like a traveler - for each flight:
+1. If the user mentions a destination and duration but NO specific flights/hotels, create a basic trip structure:
+   - Add one "flight" leg with the destination as "to" (leave "from" empty if not specified)
+   - Add one "hotel" leg with the destination as "location"
+2. Only extract what the user explicitly mentions for specific flights/hotels/transport
+3. Think like a traveler - for each flight:
    - You need transport TO the departure airport before the flight
    - You need transport FROM the arrival airport after landing (to get to hotel or home)
-3. Do NOT duplicate transports - each leg of the journey needs exactly one transport to the airport and one from the airport
-4. Parse dates like "June 11th, 2026" to "2026-06-11"
-5. If no year mentioned, assume current year or next year if month has passed
+4. Do NOT duplicate transports - each leg of the journey needs exactly one transport to the airport and one from the airport
+5. Parse dates like "June 11th, 2026" to "2026-06-11"
+6. If no year mentioned, assume current year or next year if month has passed
 
 Return ONLY valid JSON array, no explanation.`;
 
