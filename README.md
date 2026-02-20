@@ -1,24 +1,24 @@
-# Trip Planner & Organizer - ChatGPT MCP Connector
+# Flower Delivery & Sourcing - ChatGPT MCP Connector
 
-A Model Context Protocol (MCP) server that provides an interactive trip planner widget for ChatGPT. Keep all your travel reservations — flights, hotels, trains, and ground transport — organized in one place.
+A Model Context Protocol (MCP) server that provides an interactive flower delivery widget for ChatGPT. Find and deliver beautiful bouquets from local florists — all organized in one place.
 
 **[Privacy Policy](PRIVACY.md)** | **[OpenAI Apps SDK](https://developers.openai.com/apps-sdk)**
 
 ## Features
 
-- ✈️ Organize flights, hotels, trains, and ground transport in one itinerary
-- �️ Support for round-trip, one-way, and multi-city itineraries
-- 📊 Booking status checklist with progress tracking per category
-- 🤖 AI-powered trip description parsing (describe your trip in plain English)
-- 📅 Day-by-day itinerary view
-- 💾 Save and manage multiple trips
+- 💐 Browse and order flowers from local florists
+- 🌸 Support for bouquets, arrangements, and custom orders
+- 📊 Order status checklist with progress tracking per category
+- 🤖 AI-powered order description parsing (describe your order in plain English)
+- 📅 Delivery scheduling and tracking
+- 💾 Save and manage multiple orders
 - 🖨️ Print-friendly output
 
-## Trip Types
+## Order Types
 
-- **Round Trip** — Outbound + return flight with hotel and transport
-- **One Way** — Single-direction travel with accommodation
-- **Multi-City** — Multiple legs with different cities, transport modes, and hotels per stop
+- **Standard Delivery** — Same-day or next-day flower delivery
+- **Custom Arrangement** — Personalized bouquet with specific flowers
+- **Subscription** — Recurring flower deliveries on a schedule
 
 ## Quick Start
 
@@ -57,17 +57,17 @@ Server runs on `http://localhost:8000`. **Note:** HTTP endpoints are for local d
 ## How to Use in ChatGPT
 
 1. Open ChatGPT in **Developer Mode**
-2. Add MCP Connector with your deployed HTTPS URL (e.g. `https://trip-planner-xxxx.onrender.com`)
-3. Say: **"Help me organize my trip"** or **"Plan a round trip from Boston to Paris"**
+2. Add MCP Connector with your deployed HTTPS URL (e.g. `https://flower-delivery-xxxx.onrender.com`)
+3. Say: **"Help me order flowers"** or **"Send a bouquet of roses to my mom"**
 4. The interactive widget appears!
 
 ### Example Prompts
 
-- "Help me organize my upcoming trip"
-- "Plan a round trip from NYC to London for 2 weeks"
-- "I'm flying from Boston to Paris on June 11, then to Geneva, then back"
-- "Create an itinerary for my business trip to Tokyo"
-- "Track my multi-city Europe trip"
+- "Help me order flowers for delivery"
+- "Send a dozen red roses for Valentine's Day"
+- "I need a sympathy arrangement delivered tomorrow"
+- "Create a custom bouquet with sunflowers and lilies"
+- "Track my flower delivery order"
 
 ## Tech Stack
 
@@ -82,7 +82,7 @@ Server runs on `http://localhost:8000`. **Note:** HTTP endpoints are for local d
 Copy `.env.example` to `.env` and configure:
 
 ```bash
-OPENAI_API_KEY=your_openai_key    # For AI-powered trip parsing
+OPENAI_API_KEY=your_openai_key    # For AI-powered order parsing
 BUTTONDOWN_API_KEY=your_api_key   # For email subscriptions
 ANALYTICS_PASSWORD=your_password  # For /analytics dashboard
 ```
@@ -91,10 +91,10 @@ ANALYTICS_PASSWORD=your_password  # For /analytics dashboard
 
 See the full **[Privacy Policy](PRIVACY.md)** for complete details.
 
-- **What we collect:** When the widget runs inside ChatGPT, our server receives location (city/region/country), locale, device/browser fingerprint, inferred trip query, and log timestamps via the MCP `_meta` object.
+- **What we collect:** When the widget runs inside ChatGPT, our server receives location (city/region/country), locale, device/browser fingerprint, inferred order query, and log timestamps via the MCP `_meta` object.
 - **How we use it:** These fields feed the `/analytics` dashboard only. We do not sell, rent, or share this data.
 - **Server log retention:** Analytics logs are stored for **30 days** in the `/logs` directory and then automatically rotated and deleted.
-- **Local trip data:** Your trip details are cached in browser `localStorage` and persist indefinitely — data is only removed when you manually delete a saved trip or use the "Reset" button.
+- **Local order data:** Your order details are cached in browser `localStorage` and persist indefinitely — data is only removed when you manually delete a saved order or use the "Reset" button.
 - **Deletion requests:** Email **support@layer3labs.io** with the approximate UTC date/time of your session. We will delete associated server logs within 7 business days.
 
 ## Monitoring & Alerts

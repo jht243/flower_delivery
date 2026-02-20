@@ -17,14 +17,14 @@ The issue was with **how the external React JavaScript bundle was being loaded**
 
 1. **Relative Script Paths**
    ```html
-   <script type="module" src="/assets/trip-planner.js"></script>
+   <script type="module" src="/assets/flower-delivery.js"></script>
    ```
    - Failed because ChatGPT inlines the HTML without a base URL context
    - Relative paths don't resolve correctly
 
 2. **Absolute Script URLs with Regular src Attribute**
    ```html
-   <script type="module" src="https://trip-planner-da2g.onrender.com/assets/trip-planner.js"></script>
+   <script type="module" src="https://flower-delivery-da2g.onrender.com/assets/flower-delivery.js"></script>
    ```
    - Failed even with proper CSP `script_src_domains` configured
    - ChatGPT's HTML inlining process may interfere with external script loading via `src` attribute
@@ -38,15 +38,15 @@ The issue was with **how the external React JavaScript bundle was being loaded**
 Use **dynamic `import()` within an inline `<script>` tag** to load the external React bundle:
 
 ```html
-<div id="trip-planner-root"></div>
+<div id="flower-delivery-root"></div>
 <!-- 
   Load script via import() to avoid HTML parser issues with inline code
 -->
 <script type="module">
-  import('https://trip-planner-da2g.onrender.com/assets/trip-planner.js')
+  import('https://flower-delivery-da2g.onrender.com/assets/flower-delivery.js')
     .catch(err => {
-      console.error('[Trip Planner] Failed to load script:', err);
-      document.getElementById('trip-planner-root').innerHTML = 
+      console.error('[Flower Delivery] Failed to load script:', err);
+      document.getElementById('flower-delivery-root').innerHTML = 
         '<div style="padding:20px;text-align:center;font-family:sans-serif;color:#DC2626"><h3>Failed to load widget</h3><p>Please refresh the page or try again later.</p></div>';
     });
 </script>
@@ -66,10 +66,10 @@ Ensure your MCP server's CSP includes:
 ```typescript
 "openai/widgetCSP": {
   connect_domains: [
-    "https://trip-planner-da2g.onrender.com"
+    "https://flower-delivery-da2g.onrender.com"
   ],
   script_src_domains: [
-    "https://trip-planner-da2g.onrender.com"
+    "https://flower-delivery-da2g.onrender.com"
   ],
   resource_domains: [],
 }

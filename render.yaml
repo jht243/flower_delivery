@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: trip-planner
+    name: flower-delivery
     env: node
     plan: free
     region: oregon
@@ -11,7 +11,7 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 20
-      # Optional: OpenAI key for AI-powered trip description parsing
+      # Optional: OpenAI key for AI-powered order description parsing
       - key: OPENAI_API_KEY
         sync: false
       # Optional: set a password to gate the /analytics dashboard

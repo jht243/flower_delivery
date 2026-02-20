@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 
-import TripPlanner from "./TripPlanner";
+import FlowerDelivery from "./FlowerDelivery";
 
 class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
@@ -107,18 +107,18 @@ const getHydrationData = (): any => {
   return {};
 };
 
-console.log("[Main] Trip Planner main.tsx loading...");
+console.log("[Main] Flower Delivery main.tsx loading...");
 
-// App wrapper - Trip Planner & Organizer
+// App wrapper - Flower Delivery
 function App({ initialData }: { initialData: any }) {
-  return <TripPlanner initialData={initialData} />;
+  return <FlowerDelivery initialData={initialData} />;
 }
 
 // Get initial data
-const container = document.getElementById("trip-planner-root");
+const container = document.getElementById("flower-delivery-root");
 
 if (!container) {
-  throw new Error("trip-planner-root element not found");
+  throw new Error("flower-delivery-root element not found");
 }
 
 const root = createRoot(container);

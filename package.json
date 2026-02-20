@@ -1,16 +1,16 @@
 {
-  "name": "trip-planner-mcp-node",
+  "name": "flower-delivery-mcp-node",
   "version": "0.1.0",
   "type": "module",
   "private": true,
-  "description": "Trip Planner & Organizer — keep all your travel reservations (flights, hotels, trains, transport) in one place.",
+  "description": "Flower Delivery — Local flower sourcing and delivery service — find and deliver beautiful bouquets from nearby florists.",
   "keywords": [
-    "trip planner",
-    "travel organizer",
-    "itinerary",
-    "flight tracker",
-    "hotel booking",
-    "vacation"
+    "flower delivery",
+    "local sourcing",
+    "bouquet",
+    "flower arrangement",
+    "delivery service",
+    "floral"
   ],
   "scripts": {
     "start": "tsx src/server.ts",
@@ -20,12 +20,17 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^0.5.0",
+    "cors": "^2.8.6",
     "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "stripe": "^20.3.1",
     "tsx": "^4.19.2",
     "zod": "^3.25.76"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
     "@types/node": "^24.10.1",
     "esbuild": "^0.27.0",
     "typescript": "^5.6.3"

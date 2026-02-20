@@ -30,7 +30,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 
-type TripPlannerWidget = {
+type FlowerDeliveryWidget = {
   id: string;
   title: string;
   templateUri: string;
@@ -73,9 +73,9 @@ const normalizeOrigin = (value?: string): string | null => {
 
 const WIDGET_API_BASE_URL = normalizeOrigin(
   process.env.WIDGET_API_BASE_URL ||
-    process.env.PUBLIC_API_BASE_URL ||
-    process.env.RENDER_EXTERNAL_URL ||
-    `http://localhost:${port}`
+  process.env.PUBLIC_API_BASE_URL ||
+  process.env.RENDER_EXTERNAL_URL ||
+  `http://localhost:${port}`
 ) || `http://localhost:${port}`;
 
 const LOCALHOST_API_ORIGIN = `http://localhost:${port}`;
@@ -86,7 +86,7 @@ const WIDGET_CONNECT_DOMAINS = Array.from(
     WIDGET_API_BASE_URL,
     LOCALHOST_API_ORIGIN,
     LOCALHOST_LOOPBACK_API_ORIGIN,
-    "https://trip-planner-da2g.onrender.com",
+    "https://flower-delivery-da2g.onrender.com",
     "https://nominatim.openstreetmap.org",
     "https://api.open-meteo.com",
     "https://geocoding-api.open-meteo.com",
@@ -95,7 +95,7 @@ const WIDGET_CONNECT_DOMAINS = Array.from(
 
 const WIDGET_RESOURCE_DOMAINS = Array.from(
   new Set([
-    "https://trip-planner-da2g.onrender.com",
+    "https://flower-delivery-da2g.onrender.com",
     ...(WIDGET_API_BASE_URL.startsWith("https://") ? [WIDGET_API_BASE_URL] : []),
   ])
 );
@@ -141,7 +141,7 @@ function getRecentLogs(days: number = 7): AnalyticsEvent[] {
       lines.forEach((line) => {
         try {
           logs.push(JSON.parse(line));
-        } catch (e) {}
+        } catch (e) { }
       });
     }
   }
@@ -162,41 +162,16 @@ function classifyDevice(userAgent?: string | null): string {
 }
 
 function computeSummary(args: any) {
-  const destination = args.destination || null;
-  const departureCity = args.departure_city || null;
-  const tripType = args.trip_type || "round_trip";
-  const travelers = Number(args.travelers) || 1;
-  const departureDate = args.departure_date || null;
-  const returnDate = args.return_date || null;
-  const departureMode = args.departure_mode || "plane";
-  const multiCityLegs = args.multi_city_legs || [];
-  
-  // Calculate trip duration from dates if available
-  let tripDays: number | null = null;
-  if (departureDate && returnDate) {
-    const diff = new Date(returnDate).getTime() - new Date(departureDate).getTime();
-    tripDays = Math.ceil(diff / (1000 * 60 * 60 * 24)) + 1;
-  }
-  
-  // Count expected legs
-  const expectedFlights = tripType === "one_way" ? 1 : tripType === "round_trip" ? 2 : multiCityLegs.length;
-  const expectedHotels = tripType === "multi_city" ? multiCityLegs.length : (tripType === "one_way" ? 1 : 1);
-  
   return {
-    destination,
-    departure_city: departureCity,
-    trip_type: tripType,
-    travelers,
-    departure_date: departureDate,
-    return_date: returnDate,
-    trip_days: tripDays,
-    departure_mode: departureMode,
-    expected_flights: expectedFlights,
-    expected_hotels: expectedHotels,
-    multi_city_legs: multiCityLegs.length > 0 ? multiCityLegs : null,
+    budget: args.budget || null,
+    occasion: args.occasion || null,
+    flower_preference: args.flower_preference || null,
+    recipient_address: args.recipient_address || null,
+    gift_note: args.gift_note || null,
+    delivery_date: args.delivery_date || null,
+    sender_contact: args.sender_contact || null,
   };
 }
-
 function readWidgetHtml(componentName: string): string {
   if (!fs.existsSync(ASSETS_DIR)) {
     throw new Error(
@@ -242,47 +217,31 @@ function readWidgetHtml(componentName: string): string {
 // Added timestamp suffix to force cache invalidation for width fix
 const VERSION = (process.env.RENDER_GIT_COMMIT?.slice(0, 7) || Date.now().toString()) + '-' + Date.now();
 
-function widgetMeta(widget: TripPlannerWidget, bustCache: boolean = false) {
+function widgetMeta(widget: FlowerDeliveryWidget, bustCache: boolean = false) {
   const templateUri = bustCache
-    ? `ui://widget/trip-planner.html?v=${VERSION}`
+    ? `ui://widget/flower-delivery.html?v=${VERSION}`
     : widget.templateUri;
 
   return {
     "openai/outputTemplate": templateUri,
-    "openai/widgetDescription":
-      "My Travel Organizer — your complete pre-departure checklist for flights, hotels, transport & confirmations. Helps users keep track of all their travel reservations in one place so nothing gets missed. Supports round-trip, one-way, and multi-city itineraries. Call this tool immediately with NO arguments to let the user enter their trip details manually. Only provide arguments if the user has explicitly stated them.",
+    "openai/widgetDescription": "The Local Floral Concierge — A sophisticated, high-end flower delivery interface. Helps users order beautiful, locally-sourced floral arrangements. Call this tool immediately with NO arguments to let the user enter their parameters manually if details are missing. Only provide arguments if the user has explicitly stated them.",
     "openai/componentDescriptions": {
-      "trip-form": "Input form for describing a trip in plain language or manually adding legs (flights, hotels, transport).",
-      "itinerary-display": "Day-by-day itinerary view showing all trip legs with booking status indicators.",
-      "booking-checklist": "Summary checklist showing booking progress for flights, lodging, and ground transport.",
+      "discovery": "Filters to select occasion, budget, and flower preference.",
+      "curator": "Horizontal scroll of local florist options.",
+      "checkout": "Final logistics form for note and delivery details.",
     },
     "openai/widgetKeywords": [
-      "trip planner",
-      "travel organizer",
-      "itinerary",
-      "flight tracker",
-      "hotel booking",
-      "multi-city trip",
-      "round trip",
-      "one way",
-      "travel reservations",
-      "booking checklist",
-      "vacation planner",
-      "trip legs"
+      "flower delivery", "flowers", "bouquet", "florist", "gift", "local florist", "anniversary", "birthday", "sympathy"
     ],
     "openai/sampleConversations": [
-      { "user": "Help me organize my trip", "assistant": "Here is My Travel Organizer. Describe your trip or add flights, hotels, and transport to build your pre-departure checklist." },
-      { "user": "I'm flying from Boston to Paris on June 11, then Paris to Geneva, then back to Boston on June 24", "assistant": "I've set up a multi-city trip with 3 legs. You can now add hotels and ground transport for each city." },
-      { "user": "Plan a round trip from NYC to London for 2 weeks", "assistant": "I've created a round-trip itinerary from NYC to London. Add your flight details, hotel, and airport transport." },
+      { "user": "Send some flowers to my wife for our anniversary tomorrow", "assistant": "I have opened the Local Floral Concierge. I pre-filled the occasion to Anniversary." },
+      { "user": "I need to order a $100 bouquet of roses", "assistant": "I've started your order for a $100 rose arrangement. You can now select a local florist." }
     ],
     "openai/starterPrompts": [
-      "Help me organize my upcoming trip",
-      "Plan a round trip from Boston to Paris",
-      "I need to track my multi-city Europe trip",
-      "Organize my flights and hotels for vacation",
-      "Create an itinerary for my business trip to Tokyo",
-      "Help me plan a trip from NYC to London for 2 weeks",
-      "Track my travel reservations",
+      "Help me order flowers",
+      "Send a bouquet for Mother's Day",
+      "Order $75 worth of flowers delivered to 123 Main St",
+      "Find a local florist",
     ],
     "openai/widgetPrefersBorder": true,
     "openai/widgetCSP": {
@@ -297,21 +256,19 @@ function widgetMeta(widget: TripPlannerWidget, bustCache: boolean = false) {
   } as const;
 }
 
-const widgets: TripPlannerWidget[] = [
+const widgets: FlowerDeliveryWidget[] = [
   {
-    id: "trip-planner",
-    title: "My Travel Organizer — Your complete pre-departure checklist for flights, hotels, transport & confirmations",
-    templateUri: `ui://widget/trip-planner.html?v=${VERSION}`,
-    invoking:
-      "Opening My Travel Organizer...",
-    invoked:
-      "Here is My Travel Organizer. Describe your trip or manually add flights, hotels, and transport to build your complete pre-departure checklist.",
-    html: readWidgetHtml("trip-planner"),
+    id: "flower-delivery",
+    title: "Local Floral Concierge — Support local, beautiful arrangements",
+    templateUri: `ui://widget/flower-delivery.html?v=${VERSION}`,
+    invoking: "Opening Local Floral Concierge...",
+    invoked: "Here is the Local Floral Concierge. Describe your flower preferences, budget, and occasion to find local options.",
+    html: readWidgetHtml("flower-delivery"),
   },
 ];
 
-const widgetsById = new Map<string, TripPlannerWidget>();
-const widgetsByUri = new Map<string, TripPlannerWidget>();
+const widgetsById = new Map<string, FlowerDeliveryWidget>();
+const widgetsByUri = new Map<string, FlowerDeliveryWidget>();
 
 widgets.forEach((widget) => {
   widgetsById.set(widget.id, widget);
@@ -321,15 +278,20 @@ widgets.forEach((widget) => {
 const toolInputSchema = {
   type: "object",
   properties: {
-    destination: { type: "string", description: "Primary destination city or country." },
-    departure_city: { type: "string", description: "City the traveler is departing from." },
-    trip_type: { type: "string", enum: ["round_trip", "one_way", "multi_city"], description: "Type of trip." },
-    departure_date: { type: "string", description: "Departure date in YYYY-MM-DD format." },
-    return_date: { type: "string", description: "Return date in YYYY-MM-DD format (for round trips)." },
-    travelers: { type: "number", description: "Number of travelers." },
-    departure_mode: { type: "string", enum: ["plane", "rail", "bus", "ferry"], description: "Primary transport mode for the trip." },
-    multi_city_legs: { type: "array", items: { type: "object", properties: { from: { type: "string" }, to: { type: "string" }, date: { type: "string" }, mode: { type: "string" } } }, description: "Array of multi-city leg objects with from, to, date, and mode fields." },
-    trip_description: { type: "string", description: "Freeform text describing the trip for AI-powered parsing." },
+    budget: { type: "number", description: "The maximum budget for the flowers." },
+    occasion: { type: "string", description: "The reason or occasion for the flowers (e.g. Anniversary)." },
+    flower_preference: { type: "string", description: "Specific flowers or vibe (e.g. Roses, Minimalist)." },
+    recipient_address: { type: "string", description: "Where the flowers should be delivered." },
+    delivery_date: { type: "string", description: "Delivery date for the flowers in YYYY-MM-DD format." },
+    gift_note: { type: "string", description: "The note to attach to the flowers." },
+    sender_contact: { type: "string", description: "Phone or email address of the person ordering." },
+    order_description: { type: "string", description: "Freeform text describing the request for AI-powered parsing." },
+  },
+    occasion: { type: "string", description: "The reason or occasion for the flowers (e.g. Anniversary)." },
+    flower_preference: { type: "string", description: "Specific flowers or vibe (e.g. Roses, Minimalist)." },
+    recipient_address: { type: "string", description: "Where the flowers should be delivered." },
+    gift_note: { type: "string", description: "The note to attach to the flowers." },
+    order_description: { type: "string", description: "Freeform text describing the request for AI-powered parsing." },
   },
   required: [],
   additionalProperties: false,
@@ -337,49 +299,39 @@ const toolInputSchema = {
 } as const;
 
 const toolInputParser = z.object({
-  destination: z.string().optional(),
-  departure_city: z.string().optional(),
-  trip_type: z.enum(["round_trip", "one_way", "multi_city"]).optional(),
-  departure_date: z.string().optional(),
-  return_date: z.string().optional(),
-  travelers: z.number().optional(),
-  departure_mode: z.enum(["plane", "rail", "bus", "ferry"]).optional(),
-  multi_city_legs: z.array(z.object({ from: z.string().optional(), to: z.string().optional(), date: z.string().optional(), mode: z.string().optional() })).optional(),
-  trip_description: z.string().optional(),
+  budget: z.number().optional(),
+  occasion: z.string().optional(),
+  flower_preference: z.string().optional(),
+  recipient_address: z.string().optional(),
+  delivery_date: z.string().optional(),
+  gift_note: z.string().optional(),
+  sender_contact: z.string().optional(),
+  order_description: z.string().optional(),
 });
 
 const tools: Tool[] = widgets.map((widget) => ({
   name: widget.id,
-  description:
-    "Use this tool to plan and organize a trip including flights, hotels, trains, and ground transport. Supports round-trip, one-way, and multi-city itineraries. Call this tool immediately with NO arguments to let the user enter their trip details manually. Only provide arguments if the user has explicitly stated them.",
+  description: "Use this tool to plan and organize a flower delivery order. Collect budget, occasion, details and display local florists. Call this tool immediately with NO arguments if details are missing.",
   inputSchema: toolInputSchema,
   outputSchema: {
     type: "object",
     properties: {
       ready: { type: "boolean" },
       timestamp: { type: "string" },
-      destination: { type: ["string", "null"] },
-      departure_city: { type: ["string", "null"] },
-      trip_type: { type: ["string", "null"] },
-      departure_date: { type: ["string", "null"] },
-      return_date: { type: ["string", "null"] },
-      travelers: { type: ["number", "null"] },
-      departure_mode: { type: ["string", "null"] },
+      budget: { type: ["number", "null"] },
+      occasion: { type: ["string", "null"] },
+      flower_preference: { type: ["string", "null"] },
       input_source: { type: "string", enum: ["user", "default"] },
       summary: {
         type: "object",
         properties: {
-          destination: { type: ["string", "null"] },
-          departure_city: { type: ["string", "null"] },
-          trip_type: { type: ["string", "null"] },
-          travelers: { type: ["number", "null"] },
-          departure_date: { type: ["string", "null"] },
-          return_date: { type: ["string", "null"] },
-          trip_days: { type: ["number", "null"] },
-          departure_mode: { type: ["string", "null"] },
-          expected_flights: { type: ["number", "null"] },
-          expected_hotels: { type: ["number", "null"] },
-          multi_city_legs: { type: ["array", "null"] },
+          budget: { type: ["number", "null"] },
+          occasion: { type: ["string", "null"] },
+          flower_preference: { type: ["string", "null"] },
+          recipient_address: { type: ["string", "null"] },
+          delivery_date: { type: ["string", "null"] },
+          gift_note: { type: ["string", "null"] },
+          sender_contact: { type: ["string", "null"] },
         },
       },
       suggested_followups: {
@@ -421,13 +373,12 @@ const resourceTemplates: ResourceTemplate[] = widgets.map((widget) => ({
   _meta: widgetMeta(widget),
 }));
 
-function createTripPlannerServer(): Server {
+function createFlowerDeliveryServer(): Server {
   const server = new Server(
     {
-      name: "trip-planner",
+      name: "flower-delivery",
       version: "0.1.0",
-      description:
-        "My Travel Organizer — your complete pre-departure checklist. Helps users organize all legs of their trip to ensure they don't miss any flights, hotels, or travel reservations.",
+      description: "Local Floral Concierge — frictionless curated storefront to order flowers from local vendors.",
     },
     {
       capabilities: {
@@ -488,10 +439,10 @@ function createTripPlannerServer(): Server {
       const startTime = Date.now();
       let userAgentString: string | null = null;
       let deviceCategory = "Unknown";
-      
+
       // Log the full request to debug _meta location
       console.log("Full request object:", JSON.stringify(request, null, 2));
-      
+
       try {
         const widget = widgetsById.get(request.params.name);
 
@@ -530,11 +481,11 @@ function createTripPlannerServer(): Server {
         const userAgent = meta["openai/userAgent"];
         userAgentString = typeof userAgent === "string" ? userAgent : null;
         deviceCategory = classifyDevice(userAgentString);
-        
+
         // Debug log
         console.log("Captured meta:", { userLocation, userLocale, userAgent });
 
-        // If ChatGPT didn't pass structured arguments, try to infer trip details from freeform text in meta
+        // If ChatGPT didn't pass structured arguments, try to infer flower details from freeform text in meta
         try {
           const candidates: any[] = [
             meta["openai/subject"],
@@ -546,129 +497,33 @@ function createTripPlannerServer(): Server {
           ];
           const userText = candidates.find((t) => typeof t === "string" && t.trim().length > 0) || "";
 
-          // Infer destination (e.g., "trip to Paris", "vacation in Hawaii", "flying to London")
-          if (args.destination === undefined) {
-            const destMatch = userText.match(/(?:trip|travel|going|vacation|visit|flying|headed)\s+(?:to|in)\s+([A-Za-z\s,]+?)(?:\.|,|for|on|\s+\d|\s*$)/i);
-            if (destMatch) {
-              args.destination = destMatch[1].trim();
-            }
+          if (args.budget === undefined) {
+            const match = userText.match(/\$(\d+)/i);
+            if (match) args.budget = parseInt(match[1]);
           }
 
-          // Infer departure city (e.g., "from Boston", "leaving from NYC")
-          if (args.departure_city === undefined) {
-            const fromMatch = userText.match(/(?:from|leaving|departing)\s+([A-Za-z\s]+?)(?:\s+to\s|\.|,|on|\s*$)/i);
-            if (fromMatch) {
-              args.departure_city = fromMatch[1].trim();
-            }
+          if (args.occasion === undefined) {
+            if (/anniversary/i.test(userText)) args.occasion = "Anniversary";
+            else if (/birthday/i.test(userText)) args.occasion = "Birthday";
+            else if (/sympathy/i.test(userText)) args.occasion = "Sympathy";
+            else if (/valentine/i.test(userText)) args.occasion = "Valentine's Day";
+            else if (/mother/i.test(userText)) args.occasion = "Mother's Day";
           }
 
-          // Infer multi-city legs from chains like "from X, to Y, to Z, to W"
-          // or "from X to Y to Z" or "X, then Y, then Z"
-          if (!args.multi_city_legs?.length) {
-            // Pattern: "from City1, to City2, to City3, ..." or "from City1 to City2 to City3"
-            const chainMatch = userText.match(/from\s+([A-Za-z][A-Za-z\s]*?)(?:,?\s+to\s+)([A-Za-z][A-Za-z\s]*?)(?:(?:,?\s+(?:to|then(?:\s+to)?)\s+)([A-Za-z][A-Za-z\s]*?))?(?:(?:,?\s+(?:to|then(?:\s+to)?)\s+)([A-Za-z][A-Za-z\s]*?))?(?:(?:,?\s+(?:to|then(?:\s+to)?)\s+)([A-Za-z][A-Za-z\s]*?))?(?:\.|,|\s+(?:i\s|and\s|for\s|on\s|in\s|$)|\s*$)/i);
-            if (chainMatch) {
-              const cities = [chainMatch[1], chainMatch[2], chainMatch[3], chainMatch[4], chainMatch[5]]
-                .filter(Boolean)
-                .map(c => c.trim().replace(/[,.\s]+$/, ""));
-              if (cities.length >= 3) {
-                // Extract per-leg transport modes from text
-                const getMode = (from: string, to: string): string => {
-                  const lcText = userText.toLowerCase();
-                  const lcFrom = from.toLowerCase();
-                  const lcTo = to.toLowerCase();
-                  // Check for specific mode mentions for this leg pair
-                  const legPattern = new RegExp(`(?:${lcFrom}\\s+to\\s+${lcTo}|${lcFrom}[^.]*?${lcTo})[^.]*?\\b(plane|fly|flight|train|rail|bus|ferry|drive|car)\\b`, "i");
-                  const revPattern = new RegExp(`\\b(plane|fly|flight|train|rail|bus|ferry|drive|car)\\b[^.]*?(?:${lcFrom}\\s+to\\s+${lcTo}|${lcFrom}[^.]*?${lcTo})`, "i");
-                  const match = lcText.match(legPattern) || lcText.match(revPattern);
-                  if (match) {
-                    const m = match[1].toLowerCase();
-                    if (["plane", "fly", "flight"].includes(m)) return "plane";
-                    if (["train", "rail"].includes(m)) return "rail";
-                    if (m === "bus") return "bus";
-                    if (["ferry"].includes(m)) return "ferry";
-                    if (["drive", "car"].includes(m)) return "car";
-                  }
-                  return "plane"; // default
-                };
-                
-                // Check for "train for the rest" / "plane for the rest" patterns
-                const restModeMatch = userText.match(/\b(plane|fly|flight|train|rail|bus|ferry|drive|car)\b[^.]*?\b(?:the\s+rest|remaining|other)/i)
-                  || userText.match(/\b(?:the\s+rest|remaining|other)[^.]*?\b(plane|fly|flight|train|rail|bus|ferry|drive|car)\b/i);
-                let restMode = "plane";
-                if (restModeMatch) {
-                  const m = restModeMatch[1].toLowerCase();
-                  if (["plane", "fly", "flight"].includes(m)) restMode = "plane";
-                  else if (["train", "rail"].includes(m)) restMode = "rail";
-                  else if (m === "bus") restMode = "bus";
-                  else if (["ferry"].includes(m)) restMode = "ferry";
-                  else if (["drive", "car"].includes(m)) restMode = "car";
-                }
-                
-                const legs: { from: string; to: string; date: string; mode: string }[] = [];
-                for (let i = 0; i < cities.length - 1; i++) {
-                  let mode = getMode(cities[i], cities[i + 1]);
-                  // If no specific match found and "rest" mode exists, use it for legs after first
-                  if (mode === "plane" && restModeMatch && i > 0) {
-                    mode = restMode;
-                  }
-                  legs.push({ from: cities[i], to: cities[i + 1], date: "", mode });
-                }
-                args.multi_city_legs = legs;
-                args.trip_type = "multi_city";
-                args.departure_city = cities[0];
-                args.destination = cities[cities.length - 1];
-              }
-            }
+          if (args.flower_preference === undefined) {
+            if (/rose/i.test(userText)) args.flower_preference = "Roses";
+            else if (/wildflower/i.test(userText)) args.flower_preference = "Wildflowers";
+            else if (/tulip/i.test(userText)) args.flower_preference = "Tulips";
+            else if (/lily/i.test(userText)) args.flower_preference = "Lilies";
           }
 
-          // Infer trip type
-          if (args.trip_type === undefined) {
-            if (/multi[\s-]?city|multiple\s+cities|several\s+cities|then\s+to/i.test(userText)) {
-              args.trip_type = "multi_city";
-            } else if (/one[\s-]?way|not\s+coming\s+back|moving/i.test(userText)) {
-              args.trip_type = "one_way";
-            } else if (/round[\s-]?trip|return|coming\s+back|back\s+to/i.test(userText)) {
-              args.trip_type = "round_trip";
-            }
-          }
-
-          // Infer dates (e.g., "June 11", "on 2026-06-11")
-          if (args.departure_date === undefined) {
-            const dateMatch = userText.match(/(\d{4}-\d{2}-\d{2})/i);
-            if (dateMatch) {
-              args.departure_date = dateMatch[1];
-            }
-          }
-
-          // Infer travelers count
-          if (args.travelers === undefined) {
-            const travelerMatch = userText.match(/(\d+)\s*(?:traveler|people|person|of us)/i);
-            if (travelerMatch) {
-              args.travelers = parseInt(travelerMatch[1]);
-            } else if (/\b(girlfriend|wife|boyfriend|husband|partner|spouse)\b/i.test(userText)) {
-              args.travelers = 2;
-            } else if (/\bsolo\b|\balone\b|\bjust\s+me\b/i.test(userText)) {
-              args.travelers = 1;
-            }
-          }
-
-          // Infer transport mode
-          if (args.departure_mode === undefined) {
-            if (/\btrain\b|\brail\b|\bamtrak\b|\beurostar\b/i.test(userText)) args.departure_mode = "rail";
-            else if (/\bbus\b|\bgreyhound\b|\bcoach\b/i.test(userText)) args.departure_mode = "bus";
-            else if (/\bferry\b|\bboat\b|\bcruise\b/i.test(userText)) args.departure_mode = "ferry";
-          }
-
-          // Store freeform text as trip_description for AI parsing on the client
-          if (!args.trip_description && userText.length > 10 && !looksLikeToken(userText)) {
-            args.trip_description = userText;
+          if (!args.order_description && userText.length > 10 && !looksLikeToken(userText)) {
+            args.order_description = userText;
           }
 
         } catch (e) {
           console.warn("Parameter inference from meta failed", e);
         }
-
 
         const responseTime = Date.now() - startTime;
 
@@ -677,28 +532,24 @@ function createTripPlannerServer(): Server {
 
         // Infer likely user query from parameters
         const inferredQuery = [] as string[];
-        if (args.departure_city) inferredQuery.push(`From: ${args.departure_city}`);
-        if (args.destination) inferredQuery.push(`To: ${args.destination}`);
-        if (args.trip_type) inferredQuery.push(`Type: ${args.trip_type}`);
-        if (args.departure_date) inferredQuery.push(`Departs: ${args.departure_date}`);
-        if (args.return_date) inferredQuery.push(`Returns: ${args.return_date}`);
-        if (args.travelers) inferredQuery.push(`Travelers: ${args.travelers}`);
-        if (args.departure_mode) inferredQuery.push(`Mode: ${args.departure_mode}`);
+        if (args.budget) inferredQuery.push(`Budget: $${args.budget}`);
+        if (args.occasion) inferredQuery.push(`Occasion: ${args.occasion}`);
+        if (args.flower_preference) inferredQuery.push(`Vibe: ${args.flower_preference}`);
 
         logAnalytics("tool_call_success", {
           toolName: request.params.name,
           params: args,
-          inferredQuery: inferredQuery.length > 0 ? inferredQuery.join(", ") : "Trip Planner",
+          inferredQuery: inferredQuery.length > 0 ? inferredQuery.join(", ") : "Flower Delivery",
           responseTime,
 
           device: deviceCategory,
           userLocation: userLocation
             ? {
-                city: userLocation.city,
-                region: userLocation.region,
-                country: userLocation.country,
-                timezone: userLocation.timezone,
-              }
+              city: userLocation.city,
+              region: userLocation.region,
+              country: userLocation.country,
+              timezone: userLocation.timezone,
+            }
             : null,
           userLocale,
           userAgent,
@@ -709,20 +560,17 @@ function createTripPlannerServer(): Server {
         console.log(`[MCP] Tool called: ${request.params.name}, returning templateUri: ${(widgetMetadata as any)["openai/outputTemplate"]}`);
 
         // Build structured content once so we can log it and return it.
-        // For the trip planner, expose fields relevant to trip details
         const structured = {
           ready: true,
           timestamp: new Date().toISOString(),
           api_base_url: WIDGET_API_BASE_URL,
           ...args,
           input_source: usedDefaults ? "default" : "user",
-          // Summary + follow-ups for natural language UX
           summary: computeSummary(args),
           suggested_followups: [
-            "Add hotels for each city",
-            "What ground transport do I need?",
-            "Show me my booking checklist",
-            "Help me add flight details"
+            "Show me local florists",
+            "What card note should I write?",
+            "Can you deliver today?",
           ],
         } as const;
 
@@ -745,26 +593,25 @@ function createTripPlannerServer(): Server {
 
         // Log success analytics
         try {
-          // Check for "empty" result - when no main travel inputs are provided
-          const hasMainInputs = args.destination || args.departure_city || args.trip_type || args.departure_date;
-          
+          const hasMainInputs = args.budget || args.occasion || args.flower_preference;
+
           if (!hasMainInputs) {
-             logAnalytics("tool_call_empty", {
-               toolName: request.params.name,
-               params: request.params.arguments || {},
-               reason: "No trip details provided"
-             });
+            logAnalytics("tool_call_empty", {
+              toolName: request.params.name,
+              params: request.params.arguments || {},
+              reason: "No trip details provided"
+            });
           } else {
-          logAnalytics("tool_call_success", {
-            responseTime,
-            params: request.params.arguments || {},
-            inferredQuery: inferredQuery.join(", "),
-            userLocation,
-            userLocale,
-            device: deviceCategory,
-          });
+            logAnalytics("tool_call_success", {
+              responseTime,
+              params: request.params.arguments || {},
+              inferredQuery: inferredQuery.join(", "),
+              userLocation,
+              userLocale,
+              device: deviceCategory,
+            });
           }
-        } catch {}
+        } catch { }
 
         // TEXT SUPPRESSION: Return empty content array to prevent ChatGPT from adding
         // any text after the widget. The widget provides all necessary UI.
@@ -831,12 +678,12 @@ function humanizeEventName(event: string): string {
     widget_parse_trip: "Analyze Trip (AI)",
     widget_add_leg: "Add Leg",
     widget_delete_leg: "Delete Leg",
-    widget_save_trip: "Save Trip",
-    widget_open_trip: "Open Trip",
-    widget_new_trip: "New Trip",
-    widget_delete_trip: "Delete Trip",
-    widget_duplicate_trip: "Duplicate Trip",
-    widget_reset: "Reset Trip",
+    widget_save_trip: "Save Order",
+    widget_open_trip: "Open Order",
+    widget_new_trip: "New Order",
+    widget_delete_trip: "Delete Order",
+    widget_duplicate_trip: "Duplicate Order",
+    widget_reset: "Reset Order",
     widget_back_to_home: "Back to Home",
     widget_input_mode: "Input Mode Toggle",
     // Footer buttons
@@ -862,17 +709,17 @@ function humanizeEventName(event: string): string {
 function formatEventDetails(log: AnalyticsEvent): string {
   const excludeKeys = ["timestamp", "event"];
   const details: Record<string, any> = {};
-  
+
   Object.keys(log).forEach((key) => {
     if (!excludeKeys.includes(key)) {
       details[key] = log[key];
     }
   });
-  
+
   if (Object.keys(details).length === 0) {
     return "—";
   }
-  
+
   return JSON.stringify(details, null, 0);
 }
 
@@ -985,14 +832,14 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
   const avgResponseTime =
     successLogs.length > 0
       ? (successLogs.reduce((sum, l) => sum + (l.responseTime || 0), 0) /
-          successLogs.length).toFixed(0)
+        successLogs.length).toFixed(0)
       : "N/A";
 
   // --- Prompt-level analytics (from tool calls) ---
   const paramUsage: Record<string, number> = {};
   const tripTypeDist: Record<string, number> = {};
   const transportModeDist: Record<string, number> = {};
-  
+
   successLogs.forEach((log) => {
     if (log.params) {
       Object.keys(log.params).forEach((key) => {
@@ -1000,8 +847,8 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
           paramUsage[key] = (paramUsage[key] || 0) + 1;
         }
       });
-      if (log.params.trip_type) {
-        const tt = log.params.trip_type;
+      if (log.params.order_type) {
+        const tt = log.params.order_type;
         tripTypeDist[tt] = (tripTypeDist[tt] || 0) + 1;
       }
       if (log.params.departure_mode) {
@@ -1034,7 +881,7 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
   const tripActions: Record<string, number> = {};
   const tripActionEvents = ["widget_parse_trip", "widget_add_leg", "widget_delete_leg", "widget_save_trip", "widget_open_trip", "widget_new_trip", "widget_delete_trip", "widget_duplicate_trip", "widget_reset", "widget_back_to_home", "widget_input_mode"];
   tripActionEvents.forEach(e => { tripActions[humanizeEventName(e)] = 0; });
-  
+
   // Footer button clicks
   const footerClicks: Record<string, number> = {};
   const footerEvents = ["widget_subscribe_click", "widget_donate_click", "widget_feedback_click", "widget_print_click"];
@@ -1127,7 +974,7 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Trip Planner Analytics</title>
+  <title>Flower Delivery Analytics</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; padding: 20px; color: #1f2937; }
@@ -1166,7 +1013,7 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
 </head>
 <body>
   <div class="container">
-    <h1>📊 Trip Planner Analytics</h1>
+    <h1>📊 Flower Delivery Analytics</h1>
     <p class="subtitle">Last 7 days · ${logs.length} total events · Auto-refresh 60s</p>
 
     <!-- ========== ALERTS ========== -->
@@ -1208,54 +1055,54 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
     <div class="card" style="margin-bottom:20px;">
       <h2>📅 Daily Volume (7 Days)</h2>
       ${renderTable(
-        ["Date", "Tool Calls", "Widget Events", "Errors"],
-        Object.entries(dailyCounts).map(([day, c]) => [
-          `<span class="timestamp">${day}</span>`,
-          String(c.toolCalls),
-          String(c.widgetEvents),
-          c.errors > 0 ? `<span style="color:#dc2626;font-weight:600;">${c.errors}</span>` : "0"
-        ]),
-        "No data"
-      )}
+    ["Date", "Tool Calls", "Widget Events", "Errors"],
+    Object.entries(dailyCounts).map(([day, c]) => [
+      `<span class="timestamp">${day}</span>`,
+      String(c.toolCalls),
+      String(c.widgetEvents),
+      c.errors > 0 ? `<span style="color:#dc2626;font-weight:600;">${c.errors}</span>` : "0"
+    ]),
+    "No data"
+  )}
     </div>
 
     <!-- ========== PROMPT ANALYTICS ========== -->
     <div class="section-title">🔍 Prompt Analytics (What's Being Called)</div>
     <div class="grid-3">
       <div class="card">
-        <h2>Trip Type Distribution</h2>
+        <h2>Order Type Distribution</h2>
         ${renderTable(
-          ["Type", "Count", "%"],
-          Object.entries(tripTypeDist).sort((a, b) => b[1] - a[1]).map(([tt, count]) => {
-            const pct = successLogs.length > 0 ? ((count / successLogs.length) * 100).toFixed(0) : "0";
-            const label = tt === "round_trip" ? "🔄 Round Trip" : tt === "one_way" ? "➡️ One Way" : tt === "multi_city" ? "🌍 Multi-City" : tt;
-            return [label, String(count), `${pct}%`];
-          }),
-          "No data yet"
-        )}
+    ["Type", "Count", "%"],
+    Object.entries(tripTypeDist).sort((a, b) => b[1] - a[1]).map(([tt, count]) => {
+      const pct = successLogs.length > 0 ? ((count / successLogs.length) * 100).toFixed(0) : "0";
+      const label = tt === "round_trip" ? "🔄 Round Trip" : tt === "one_way" ? "➡️ One Way" : tt === "multi_city" ? "🌍 Multi-City" : tt;
+      return [label, String(count), `${pct}%`];
+    }),
+    "No data yet"
+  )}
       </div>
       <div class="card">
         <h2>Transport Mode</h2>
         ${renderTable(
-          ["Mode", "Count"],
-          Object.entries(transportModeDist).sort((a, b) => b[1] - a[1]).map(([mode, count]) => {
-            const icon = mode === "plane" ? "✈️" : mode === "car" ? "🚗" : mode === "train" ? "🚂" : mode === "bus" ? "🚌" : mode === "ferry" ? "⛴️" : "🚐";
-            return [`${icon} ${mode}`, String(count)];
-          }),
-          "No data yet"
-        )}
+    ["Mode", "Count"],
+    Object.entries(transportModeDist).sort((a, b) => b[1] - a[1]).map(([mode, count]) => {
+      const icon = mode === "plane" ? "✈️" : mode === "car" ? "🚗" : mode === "train" ? "🚂" : mode === "bus" ? "🚌" : mode === "ferry" ? "⛴️" : "🚐";
+      return [`${icon} ${mode}`, String(count)];
+    }),
+    "No data yet"
+  )}
       </div>
       <div class="card">
         <h2>Parameter Usage</h2>
         ${renderTable(
-          ["Parameter", "Used", "%"],
-          Object.entries(paramUsage).sort((a, b) => b[1] - a[1]).map(([p, c]) => [
-            `<code>${p}</code>`,
-            String(c),
-            successLogs.length > 0 ? `${((c / successLogs.length) * 100).toFixed(0)}%` : "0%"
-          ]),
-          "No data yet"
-        )}
+    ["Parameter", "Used", "%"],
+    Object.entries(paramUsage).sort((a, b) => b[1] - a[1]).map(([p, c]) => [
+      `<code>${p}</code>`,
+      String(c),
+      successLogs.length > 0 ? `${((c / successLogs.length) * 100).toFixed(0)}%` : "0%"
+    ]),
+    "No data yet"
+  )}
       </div>
     </div>
 
@@ -1263,35 +1110,35 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
       <div class="card">
         <h2>🏙️ Top Destinations</h2>
         ${renderTable(
-          ["City", "Count"],
-          Object.entries(destinationDist).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([d, c]) => [d, String(c)]),
-          "No data yet"
-        )}
+    ["City", "Count"],
+    Object.entries(destinationDist).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([d, c]) => [d, String(c)]),
+    "No data yet"
+  )}
       </div>
       <div class="card">
         <h2>🛫 Top Departure Cities</h2>
         ${renderTable(
-          ["City", "Count"],
-          Object.entries(departureCityDist).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([d, c]) => [d, String(c)]),
-          "No data yet"
-        )}
+    ["City", "Count"],
+    Object.entries(departureCityDist).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([d, c]) => [d, String(c)]),
+    "No data yet"
+  )}
       </div>
       <div class="card">
         <h2>🗺️ Popular Routes</h2>
         ${(() => {
-          const routes: Record<string, number> = {};
-          successLogs.forEach(l => {
-            if (l.params?.departure_city && l.params?.destination) {
-              const route = l.params.departure_city + " → " + l.params.destination;
-              routes[route] = (routes[route] || 0) + 1;
-            }
-          });
-          return renderTable(
-            ["Route", "Count"],
-            Object.entries(routes).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([r, c]) => [r, String(c)]),
-            "No data yet"
-          );
-        })()}
+      const routes: Record<string, number> = {};
+      successLogs.forEach(l => {
+        if (l.params?.departure_city && l.params?.destination) {
+          const route = l.params.departure_city + " → " + l.params.destination;
+          routes[route] = (routes[route] || 0) + 1;
+        }
+      });
+      return renderTable(
+        ["Route", "Count"],
+        Object.entries(routes).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([r, c]) => [r, String(c)]),
+        "No data yet"
+      );
+    })()}
       </div>
     </div>
 
@@ -1301,26 +1148,26 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
       <div class="card">
         <h2>Trip Management</h2>
         ${renderTable(
-          ["Action", "Count"],
-          Object.entries(tripActions).filter(([, c]) => c > 0).sort((a, b) => b[1] - a[1]).map(([a, c]) => [a, String(c)]),
-          "No in-app actions yet"
-        )}
+      ["Action", "Count"],
+      Object.entries(tripActions).filter(([, c]) => c > 0).sort((a, b) => b[1] - a[1]).map(([a, c]) => [a, String(c)]),
+      "No in-app actions yet"
+    )}
       </div>
       <div class="card">
         <h2>Footer Buttons</h2>
         ${renderTable(
-          ["Button", "Clicks"],
-          Object.entries(footerClicks).sort((a, b) => b[1] - a[1]).map(([b, c]) => [b, String(c)]),
-          "No clicks yet"
-        )}
+      ["Button", "Clicks"],
+      Object.entries(footerClicks).sort((a, b) => b[1] - a[1]).map(([b, c]) => [b, String(c)]),
+      "No clicks yet"
+    )}
       </div>
       <div class="card">
         <h2>Related App Clicks</h2>
         ${renderTable(
-          ["App", "Clicks"],
-          Object.entries(relatedAppClicks).sort((a, b) => b[1] - a[1]).map(([a, c]) => [a, String(c)]),
-          "No clicks yet"
-        )}
+      ["App", "Clicks"],
+      Object.entries(relatedAppClicks).sort((a, b) => b[1] - a[1]).map(([a, c]) => [a, String(c)]),
+      "No clicks yet"
+    )}
       </div>
     </div>
 
@@ -1328,24 +1175,24 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
       <div class="card">
         <h2>Input Mode Preference</h2>
         ${renderTable(
-          ["Mode", "Count"],
-          [
-            ["✨ Freeform (AI Describe)", String(freeformCount)],
-            ["✏️ Manual (Add Manually)", String(manualCount)],
-          ],
-          "No data yet"
-        )}
+      ["Mode", "Count"],
+      [
+        ["✨ Freeform (AI Describe)", String(freeformCount)],
+        ["✏️ Manual (Add Manually)", String(manualCount)],
+      ],
+      "No data yet"
+    )}
       </div>
       <div class="card">
         <h2>Leg Types Added</h2>
         ${renderTable(
-          ["Type", "Count"],
-          Object.entries(legTypeDist).sort((a, b) => b[1] - a[1]).map(([t, c]) => {
-            const icon = t === "flight" ? "✈️" : t === "hotel" ? "🏨" : t === "car" ? "🚗" : t === "train" ? "🚂" : t === "bus" ? "🚌" : "📌";
-            return [`${icon} ${t}`, String(c)];
-          }),
-          "No legs added yet"
-        )}
+      ["Type", "Count"],
+      Object.entries(legTypeDist).sort((a, b) => b[1] - a[1]).map(([t, c]) => {
+        const icon = t === "flight" ? "✈️" : t === "hotel" ? "🏨" : t === "car" ? "🚗" : t === "train" ? "🚂" : t === "bus" ? "🚌" : "📌";
+        return [`${icon} ${t}`, String(c)];
+      }),
+      "No legs added yet"
+    )}
       </div>
     </div>
 
@@ -1380,15 +1227,15 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
       <div class="card">
         <h2>Feedback Submissions</h2>
         ${feedbackLogs.length > 0 ? renderTable(
-          ["Date", "Vote", "Feedback", "Trip"],
-          feedbackLogs.slice(0, 15).map(l => [
-            `<span class="timestamp">${new Date(l.timestamp).toLocaleString()}</span>`,
-            l.enjoymentVote === "up" ? '<span class="badge badge-green">👍</span>' : l.enjoymentVote === "down" ? '<span class="badge badge-red">👎</span>' : "—",
-            `<div style="max-width:300px;overflow:hidden;text-overflow:ellipsis;">${l.feedback || "—"}</div>`,
-            l.tripName || "—"
-          ]),
-          "No feedback yet"
-        ) : '<p style="color:#9ca3af;font-size:13px;">No feedback submitted yet</p>'}
+      ["Date", "Vote", "Feedback", "Trip"],
+      feedbackLogs.slice(0, 15).map(l => [
+        `<span class="timestamp">${new Date(l.timestamp).toLocaleString()}</span>`,
+        l.enjoymentVote === "up" ? '<span class="badge badge-green">👍</span>' : l.enjoymentVote === "down" ? '<span class="badge badge-red">👎</span>' : "—",
+        `<div style="max-width:300px;overflow:hidden;text-overflow:ellipsis;">${l.feedback || "—"}</div>`,
+        l.orderName || "—"
+      ]),
+      "No feedback yet"
+    ) : '<p style="color:#9ca3af;font-size:13px;">No feedback submitted yet</p>'}
       </div>
     </div>
 
@@ -1396,27 +1243,27 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
     <div class="section-title">📋 Recent Queries</div>
     <div class="card" style="margin-bottom:20px;">
       ${renderTable(
-        ["Date", "Query", "Trip Type", "From → To", "Location", "Locale"],
-        successLogs.slice(0, 25).map(l => [
-          `<span class="timestamp">${new Date(l.timestamp).toLocaleString()}</span>`,
-          `<div style="max-width:250px;overflow:hidden;text-overflow:ellipsis;">${l.inferredQuery || "—"}</div>`,
-          l.params?.trip_type ? `<span class="badge badge-blue">${l.params.trip_type}</span>` : "—",
-          l.params?.departure_city && l.params?.destination ? `${l.params.departure_city} → ${l.params.destination}` : (l.params?.destination || "—"),
-          l.userLocation ? `${l.userLocation.city || ""}${l.userLocation.region ? ", " + l.userLocation.region : ""}${l.userLocation.country ? ", " + l.userLocation.country : ""}`.replace(/^, /, "") : "—",
-          l.userLocale || "—"
-        ]),
-        "No queries yet"
-      )}
+      ["Date", "Query", "Order Type", "From → To", "Location", "Locale"],
+      successLogs.slice(0, 25).map(l => [
+        `<span class="timestamp">${new Date(l.timestamp).toLocaleString()}</span>`,
+        `<div style="max-width:250px;overflow:hidden;text-overflow:ellipsis;">${l.inferredQuery || "—"}</div>`,
+        l.params?.order_type ? `<span class="badge badge-blue">${l.params.order_type}</span>` : "—",
+        l.params?.departure_city && l.params?.destination ? `${l.params.departure_city} → ${l.params.destination}` : (l.params?.destination || "—"),
+        l.userLocation ? `${l.userLocation.city || ""}${l.userLocation.region ? ", " + l.userLocation.region : ""}${l.userLocation.country ? ", " + l.userLocation.country : ""}`.replace(/^, /, "") : "—",
+        l.userLocale || "—"
+      ]),
+      "No queries yet"
+    )}
     </div>
 
     <!-- ========== ALL WIDGET EVENTS ========== -->
     <div class="section-title">📊 All Widget Interactions (Aggregated)</div>
     <div class="card" style="margin-bottom:20px;">
       ${renderTable(
-        ["Event", "Count"],
-        Object.entries(allWidgetCounts).sort((a, b) => b[1] - a[1]).map(([a, c]) => [a, String(c)]),
-        "No widget events yet"
-      )}
+      ["Event", "Count"],
+      Object.entries(allWidgetCounts).sort((a, b) => b[1] - a[1]).map(([a, c]) => [a, String(c)]),
+      "No widget events yet"
+    )}
     </div>
 
     <!-- ========== RAW EVENT LOG ========== -->
@@ -1506,7 +1353,7 @@ async function handleTrackEvent(req: IncomingMessage, res: ServerResponse) {
 // Buttondown API integration
 async function subscribeToButtondown(email: string, topicId: string, topicName: string) {
   const BUTTONDOWN_API_KEY = process.env.BUTTONDOWN_API_KEY;
-  
+
   console.log("[Buttondown] subscribeToButtondown called", { email, topicId, topicName });
   console.log("[Buttondown] API key present:", !!BUTTONDOWN_API_KEY, "length:", BUTTONDOWN_API_KEY?.length ?? 0);
 
@@ -1516,7 +1363,7 @@ async function subscribeToButtondown(email: string, topicId: string, topicName: 
 
   const metadata: Record<string, any> = {
     topicName,
-    source: "trip-planner",
+    source: "flower-delivery",
     subscribedAt: new Date().toISOString(),
   };
 
@@ -1542,7 +1389,7 @@ async function subscribeToButtondown(email: string, topicId: string, topicName: 
   if (!response.ok) {
     const errorText = await response.text();
     let errorMessage = "Failed to subscribe";
-    
+
     try {
       const errorData = JSON.parse(errorText);
       if (errorData.detail) {
@@ -1553,7 +1400,7 @@ async function subscribeToButtondown(email: string, topicId: string, topicName: 
     } catch {
       errorMessage = errorText;
     }
-    
+
     throw new Error(errorMessage);
   }
 
@@ -1563,7 +1410,7 @@ async function subscribeToButtondown(email: string, topicId: string, topicName: 
 // Update existing subscriber with new topic
 async function updateButtondownSubscriber(email: string, topicId: string, topicName: string) {
   const BUTTONDOWN_API_KEY = process.env.BUTTONDOWN_API_KEY;
-  
+
   if (!BUTTONDOWN_API_KEY) {
     throw new Error("BUTTONDOWN_API_KEY not set in environment variables");
   }
@@ -1602,11 +1449,11 @@ async function updateButtondownSubscriber(email: string, topicId: string, topicN
     name: topicName,
     subscribedAt: new Date().toISOString(),
   });
-  
+
   const updatedMetadata = {
     ...existingMetadata,
     [topicKey]: topicData,
-    source: "trip-planner",
+    source: "flower-delivery",
   };
 
   const updateRequestBody = {
@@ -1660,8 +1507,8 @@ async function handleSubscribe(req: IncomingMessage, res: ServerResponse) {
 
     const parsed = JSON.parse(body);
     const email = parsed.email;
-    const topicId = parsed.topicId || "trip-planner";
-    const topicName = parsed.topicName || "Trip Planner Updates";
+    const topicId = parsed.topicId || "flower-delivery";
+    const topicName = parsed.topicName || "Flower Delivery Updates";
     if (!email || !email.includes("@")) {
       res.writeHead(400).end(JSON.stringify({ error: "Invalid email address" }));
       return;
@@ -1675,9 +1522,9 @@ async function handleSubscribe(req: IncomingMessage, res: ServerResponse) {
 
     try {
       await subscribeToButtondown(email, topicId, topicName);
-      res.writeHead(200).end(JSON.stringify({ 
-        success: true, 
-        message: "Successfully subscribed! You'll receive trip planning tips and updates." 
+      res.writeHead(200).end(JSON.stringify({
+        success: true,
+        message: "Successfully subscribed! You'll receive trip planning tips and updates."
       }));
     } catch (subscribeError: any) {
       const rawMessage = String(subscribeError?.message ?? "").trim();
@@ -1688,9 +1535,9 @@ async function handleSubscribe(req: IncomingMessage, res: ServerResponse) {
         console.log("Subscriber already on list, attempting update", { email, topicId, message: rawMessage });
         try {
           await updateButtondownSubscriber(email, topicId, topicName);
-          res.writeHead(200).end(JSON.stringify({ 
-            success: true, 
-            message: "You're now subscribed to this topic!" 
+          res.writeHead(200).end(JSON.stringify({
+            success: true,
+            message: "You're now subscribed to this topic!"
           }));
         } catch (updateError: any) {
           console.warn("Update subscriber failed, returning graceful success", {
@@ -1727,8 +1574,8 @@ async function handleSubscribe(req: IncomingMessage, res: ServerResponse) {
       email: undefined,
       error: error.message || "unknown_error",
     });
-    res.writeHead(500).end(JSON.stringify({ 
-      error: error.message || "Failed to subscribe. Please try again." 
+    res.writeHead(500).end(JSON.stringify({
+      error: error.message || "Failed to subscribe. Please try again."
     }));
   }
 }
@@ -1739,7 +1586,7 @@ async function handleParseTripAI(req: IncomingMessage, res: ServerResponse) {
   res.setHeader("Access-Control-Allow-Headers", "content-type");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Private-Network", "true");
-  
+
   if (req.method !== "POST") {
     res.writeHead(405).end("Method not allowed");
     return;
@@ -1754,17 +1601,17 @@ async function handleParseTripAI(req: IncomingMessage, res: ServerResponse) {
     });
 
     const { text } = JSON.parse(body);
-    
+
     if (!text || typeof text !== "string") {
       res.writeHead(400).end(JSON.stringify({ error: "Missing 'text' field" }));
       return;
     }
 
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-    
+
     if (!OPENAI_API_KEY) {
       // Fallback to basic parsing if no API key
-      console.log("[Parse Trip] No OPENAI_API_KEY, using fallback parsing");
+      console.log("[Parse Order] No OPENAI_API_KEY, using fallback parsing");
       const legs = fallbackParseTripText(text);
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ legs, source: "fallback" }));
@@ -1819,7 +1666,7 @@ Return ONLY valid JSON array, no explanation.`;
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("[Parse Trip] OpenAI API error:", response.status, errorText);
+      console.error("[Parse Order] OpenAI API error:", response.status, errorText);
       // Fallback on API error
       const legs = fallbackParseTripText(text);
       res.writeHead(200, { "Content-Type": "application/json" });
@@ -1829,7 +1676,7 @@ Return ONLY valid JSON array, no explanation.`;
 
     const data = await response.json() as any;
     const content = data.choices?.[0]?.message?.content || "[]";
-    
+
     // Parse the JSON response
     let legs;
     try {
@@ -1837,19 +1684,19 @@ Return ONLY valid JSON array, no explanation.`;
       const jsonStr = content.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
       legs = JSON.parse(jsonStr);
     } catch (parseError) {
-      console.error("[Parse Trip] Failed to parse AI response:", content);
+      console.error("[Parse Order] Failed to parse AI response:", content);
       legs = fallbackParseTripText(text);
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ legs, source: "fallback" }));
       return;
     }
 
-    console.log("[Parse Trip] AI parsed legs:", legs.length);
+    console.log("[Parse Order] AI parsed legs:", legs.length);
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ legs, source: "ai" }));
 
   } catch (error: any) {
-    console.error("[Parse Trip] Error:", error);
+    console.error("[Parse Order] Error:", error);
     res.writeHead(500).end(JSON.stringify({ error: error.message || "Failed to parse trip" }));
   }
 }
@@ -1858,17 +1705,17 @@ Return ONLY valid JSON array, no explanation.`;
 function fallbackParseTripText(text: string): any[] {
   const legs: any[] = [];
   const lower = text.toLowerCase();
-  
+
   // Simple pattern matching
   const fromToMatch = lower.match(/from\s+([a-z\s]+?)\s+to\s+([a-z\s]+?)(?:\s|$|,|\.)/i);
   const toFromMatch = lower.match(/to\s+([a-z\s]+?)\s+from\s+([a-z\s]+?)(?:\s|$|,|\.)/i);
-  
+
   // Check for return/round trip
   const isRoundTrip = /return|round\s*trip|coming back|fly back|back to/i.test(lower);
-  
+
   let fromCity = "";
   let toCity = "";
-  
+
   if (fromToMatch) {
     fromCity = fromToMatch[1].trim();
     toCity = fromToMatch[2].trim();
@@ -1876,7 +1723,7 @@ function fallbackParseTripText(text: string): any[] {
     toCity = toFromMatch[1].trim();
     fromCity = toFromMatch[2].trim();
   }
-  
+
   if (fromCity && toCity) {
     // Add outbound flight
     legs.push({
@@ -1887,7 +1734,7 @@ function fallbackParseTripText(text: string): any[] {
       to: toCity,
       date: ""
     });
-    
+
     // Outbound transport: to departure airport
     legs.push({
       type: "car",
@@ -1896,7 +1743,7 @@ function fallbackParseTripText(text: string): any[] {
       to: `${fromCity} Airport`,
       date: ""
     });
-    
+
     // Outbound transport: from arrival airport to hotel
     legs.push({
       type: "car",
@@ -1905,7 +1752,7 @@ function fallbackParseTripText(text: string): any[] {
       from: `${toCity} Airport`,
       date: ""
     });
-    
+
     // If round trip, add return flight and transports
     if (isRoundTrip) {
       // Return flight
@@ -1917,7 +1764,7 @@ function fallbackParseTripText(text: string): any[] {
         to: fromCity,
         date: ""
       });
-      
+
       // Return transport: from hotel to departure airport
       legs.push({
         type: "car",
@@ -1926,7 +1773,7 @@ function fallbackParseTripText(text: string): any[] {
         to: `${toCity} Airport`,
         date: ""
       });
-      
+
       // Return transport: from arrival airport to home
       legs.push({
         type: "car",
@@ -1937,13 +1784,13 @@ function fallbackParseTripText(text: string): any[] {
       });
     }
   }
-  
+
   return legs;
 }
 
 async function handleSseRequest(res: ServerResponse) {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  const server = createTripPlannerServer();
+  const server = createFlowerDeliveryServer();
   const transport = new SSEServerTransport(postPath, res);
   const sessionId = transport.sessionId;
 
@@ -2070,8 +1917,8 @@ const httpServer = createServer(
     }
 
     // Serve alias for legacy loader path -> our main widget HTML
-    if (req.method === "GET" && url.pathname === "/assets/trip-planner.html") {
-      const mainAssetPath = path.join(ASSETS_DIR, "trip-planner.html");
+    if (req.method === "GET" && url.pathname === "/assets/flower-delivery.html") {
+      const mainAssetPath = path.join(ASSETS_DIR, "flower-delivery.html");
       console.log(`[Debug Legacy] Request: ${url.pathname}, Main Path: ${mainAssetPath}, Exists: ${fs.existsSync(mainAssetPath)}`);
       if (fs.existsSync(mainAssetPath) && fs.statSync(mainAssetPath).isFile()) {
         res.writeHead(200, {
@@ -2101,7 +1948,7 @@ const httpServer = createServer(
           ".svg": "image/svg+xml"
         };
         const contentType = contentTypeMap[ext] || "application/octet-stream";
-        res.writeHead(200, { 
+        res.writeHead(200, {
           "Content-Type": contentType,
           "Access-Control-Allow-Origin": "*",
           "Cache-Control": "no-cache"
@@ -2127,7 +1974,7 @@ function startMonitoring() {
     try {
       const logs = getRecentLogs(7);
       const alerts = evaluateAlerts(logs);
-      
+
       if (alerts.length > 0) {
         console.log("\n=== 🚨 ACTIVE ALERTS 🚨 ===");
         alerts.forEach(alert => {
@@ -2143,7 +1990,7 @@ function startMonitoring() {
 
 httpServer.listen(port, () => {
   startMonitoring();
-  console.log(`Trip Planner MCP server listening on http://localhost:${port}`);
+  console.log(`Flower Delivery MCP server listening on http://localhost:${port}`);
   console.log(`  SSE stream: GET http://localhost:${port}${ssePath}`);
   console.log(
     `  Message post endpoint: POST http://localhost:${port}${postPath}?sessionId=...`
