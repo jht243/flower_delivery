@@ -250,6 +250,9 @@ function widgetMeta(widget: FlowerDeliveryWidget, bustCache: boolean = false) {
       "Find a local florist",
     ],
     "openai/widgetPrefersBorder": true,
+    "openai/widgetDimensions": {
+      "width": "115%"
+    },
     "openai/widgetCSP": {
       connect_domains: WIDGET_CONNECT_DOMAINS,
       resource_domains: WIDGET_RESOURCE_DOMAINS,
@@ -1111,26 +1114,26 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
       <div class="card">
         <h2>Order Management</h2>
         ${renderTable(
-      ["Action", "Count"],
-      Object.entries(tripActions).filter(([, c]) => c > 0).sort((a, b) => b[1] - a[1]).map(([a, c]) => [a, String(c)]),
-      "No in-app actions yet"
-    )}
+    ["Action", "Count"],
+    Object.entries(tripActions).filter(([, c]) => c > 0).sort((a, b) => b[1] - a[1]).map(([a, c]) => [a, String(c)]),
+    "No in-app actions yet"
+  )}
       </div>
       <div class="card">
         <h2>Footer Buttons</h2>
         ${renderTable(
-      ["Button", "Clicks"],
-      Object.entries(footerClicks).sort((a, b) => b[1] - a[1]).map(([b, c]) => [b, String(c)]),
-      "No clicks yet"
-    )}
+    ["Button", "Clicks"],
+    Object.entries(footerClicks).sort((a, b) => b[1] - a[1]).map(([b, c]) => [b, String(c)]),
+    "No clicks yet"
+  )}
       </div>
       <div class="card">
         <h2>Related App Clicks</h2>
         ${renderTable(
-      ["App", "Clicks"],
-      Object.entries(relatedAppClicks).sort((a, b) => b[1] - a[1]).map(([a, c]) => [a, String(c)]),
-      "No clicks yet"
-    )}
+    ["App", "Clicks"],
+    Object.entries(relatedAppClicks).sort((a, b) => b[1] - a[1]).map(([a, c]) => [a, String(c)]),
+    "No clicks yet"
+  )}
       </div>
     </div>
 
@@ -1167,15 +1170,15 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
       <div class="card">
         <h2>Feedback Submissions</h2>
         ${feedbackLogs.length > 0 ? renderTable(
-      ["Date", "Vote", "Feedback", "Order"],
-      feedbackLogs.slice(0, 15).map(l => [
-        `<span class="timestamp">${new Date(l.timestamp).toLocaleString()}</span>`,
-        l.enjoymentVote === "up" ? '<span class="badge badge-green">👍</span>' : l.enjoymentVote === "down" ? '<span class="badge badge-red">👎</span>' : "—",
-        `<div style="max-width:300px;overflow:hidden;text-overflow:ellipsis;">${l.feedback || "—"}</div>`,
-        l.orderName || "—"
-      ]),
-      "No feedback yet"
-    ) : '<p style="color:#9ca3af;font-size:13px;">No feedback submitted yet</p>'}
+    ["Date", "Vote", "Feedback", "Order"],
+    feedbackLogs.slice(0, 15).map(l => [
+      `<span class="timestamp">${new Date(l.timestamp).toLocaleString()}</span>`,
+      l.enjoymentVote === "up" ? '<span class="badge badge-green">👍</span>' : l.enjoymentVote === "down" ? '<span class="badge badge-red">👎</span>' : "—",
+      `<div style="max-width:300px;overflow:hidden;text-overflow:ellipsis;">${l.feedback || "—"}</div>`,
+      l.orderName || "—"
+    ]),
+    "No feedback yet"
+  ) : '<p style="color:#9ca3af;font-size:13px;">No feedback submitted yet</p>'}
       </div>
     </div>
 
@@ -1183,27 +1186,27 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
     <div class="section-title">📋 Recent Queries</div>
     <div class="card" style="margin-bottom:20px;">
       ${renderTable(
-      ["Date", "Query", "Occasion", "Address", "Location", "Locale"],
-      successLogs.slice(0, 25).map(l => [
-        `<span class="timestamp">${new Date(l.timestamp).toLocaleString()}</span>`,
-        `<div style="max-width:250px;overflow:hidden;text-overflow:ellipsis;">${l.inferredQuery || "—"}</div>`,
-        l.params?.occasion ? `<span class="badge badge-blue">${l.params.occasion}</span>` : "—",
-        l.params?.recipient_address || "—",
-        l.userLocation ? `${l.userLocation.city || ""}${l.userLocation.region ? ", " + l.userLocation.region : ""}${l.userLocation.country ? ", " + l.userLocation.country : ""}`.replace(/^, /, "") : "—",
-        l.userLocale || "—"
-      ]),
-      "No queries yet"
-    )}
+    ["Date", "Query", "Occasion", "Address", "Location", "Locale"],
+    successLogs.slice(0, 25).map(l => [
+      `<span class="timestamp">${new Date(l.timestamp).toLocaleString()}</span>`,
+      `<div style="max-width:250px;overflow:hidden;text-overflow:ellipsis;">${l.inferredQuery || "—"}</div>`,
+      l.params?.occasion ? `<span class="badge badge-blue">${l.params.occasion}</span>` : "—",
+      l.params?.recipient_address || "—",
+      l.userLocation ? `${l.userLocation.city || ""}${l.userLocation.region ? ", " + l.userLocation.region : ""}${l.userLocation.country ? ", " + l.userLocation.country : ""}`.replace(/^, /, "") : "—",
+      l.userLocale || "—"
+    ]),
+    "No queries yet"
+  )}
     </div>
 
     <!-- ========== ALL WIDGET EVENTS ========== -->
     <div class="section-title">📊 All Widget Interactions (Aggregated)</div>
     <div class="card" style="margin-bottom:20px;">
       ${renderTable(
-      ["Event", "Count"],
-      Object.entries(allWidgetCounts).sort((a, b) => b[1] - a[1]).map(([a, c]) => [a, String(c)]),
-      "No widget events yet"
-    )}
+    ["Event", "Count"],
+    Object.entries(allWidgetCounts).sort((a, b) => b[1] - a[1]).map(([a, c]) => [a, String(c)]),
+    "No widget events yet"
+  )}
     </div>
 
     <!-- ========== RAW EVENT LOG ========== -->
