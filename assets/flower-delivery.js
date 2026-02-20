@@ -25173,7 +25173,7 @@ var ALL_STYLES = [
 // src/FlowerDelivery.tsx
 var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
 var COLORS = {
-  bg: "#FDFBF7",
+  bg: "#F7F4E9",
   surface: "#FFFFFF",
   textMain: "#2C3A29",
   textMuted: "#6D7C6A",
