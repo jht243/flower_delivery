@@ -172,7 +172,10 @@ export default function App() {
           setSelectedStyles([data.state.flower_preference]);
         }
         if (data.state.delivery_date) setDeliveryDate(data.state.delivery_date);
+        if (data.state.sender_name) setSenderName(data.state.sender_name);
         if (data.state.sender_contact) setSenderContact(data.state.sender_contact);
+        if (data.state.recipient_name) setRecipientName(data.state.recipient_name);
+        if (data.state.recipient_contact) setRecipientContact(data.state.recipient_contact);
         if (data.state.gift_note) setNote(data.state.gift_note);
 
         if (data.state.recipient_address) {

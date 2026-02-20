@@ -287,29 +287,67 @@ widgets.forEach((widget) => {
 const toolInputSchema = {
   type: "object",
   properties: {
-    budget: { type: "number", description: "The maximum budget for the flowers." },
-    occasion: { type: "string", description: "The reason or occasion for the flowers (e.g. Anniversary)." },
-    flower_preference: { type: "string", description: "Specific flowers or vibe (e.g. Roses, Minimalist)." },
-    recipient_address: { type: "string", description: "Where the flowers should be delivered." },
-    delivery_date: { type: "string", description: "Delivery date for the flowers in YYYY-MM-DD format." },
-    gift_note: { type: "string", description: "The note to attach to the flowers." },
-    sender_contact: { type: "string", description: "Phone or email address of the person ordering." },
-    order_description: { type: "string", description: "Freeform text describing the request for AI-powered parsing." },
+    budget: {
+      type: "number",
+      description: "The maximum budget for the flowers in dollars. Extract dollar amounts like '$100', '150'.",
+      examples: [75, 100, 150]
+    },
+    occasion: {
+      type: "string",
+      description: "The reason or occasion for the flowers. e.g. 'Anniversary', 'Birthday', 'Sympathy', 'Mother's Day', 'Valentine's Day'.",
+      examples: ["Birthday", "Anniversary"]
+    },
+    flower_preference: {
+      type: "string",
+      description: "Specific flowers or vibe (e.g. Roses, Minimalist, Colorful, Tulips).",
+      examples: ["Roses", "Minimalist"]
+    },
+    recipient_name: {
+      type: "string",
+      description: "Name of the person receiving the flowers. E.g. Mom, Wife, John.",
+      examples: ["Mom", "John"]
+    },
+    recipient_contact: {
+      type: "string",
+      description: "Phone or email of the recipient."
+    },
+    recipient_address: {
+      type: "string",
+      description: "Where the flowers should be delivered. e.g. '123 Main St'.",
+      examples: ["123 Main St"]
+    },
+    delivery_date: {
+      type: "string",
+      description: "Delivery date for the flowers in YYYY-MM-DD format."
+    },
+    gift_note: {
+      type: "string",
+      description: "The note to attach to the flowers."
+    },
+    sender_name: {
+      type: "string",
+      description: "Name of the person ordering the flowers."
+    },
+    sender_contact: {
+      type: "string",
+      description: "Phone or email address of the person ordering."
+    },
   },
   required: [],
   additionalProperties: false,
-  $schema: "http://json-schema.org/draft-07/schema#",
 } as const;
 
 const toolInputParser = z.object({
   budget: z.number().optional(),
   occasion: z.string().optional(),
   flower_preference: z.string().optional(),
+  recipient_name: z.string().optional(),
+  recipient_contact: z.string().optional(),
   recipient_address: z.string().optional(),
   delivery_date: z.string().optional(),
   gift_note: z.string().optional(),
+  sender_name: z.string().optional(),
   sender_contact: z.string().optional(),
-  order_description: z.string().optional(),
 });
 
 const tools: Tool[] = widgets.map((widget) => ({
@@ -321,9 +359,17 @@ const tools: Tool[] = widgets.map((widget) => ({
     properties: {
       ready: { type: "boolean" },
       timestamp: { type: "string" },
+      api_base_url: { type: "string" },
       budget: { type: ["number", "null"] },
       occasion: { type: ["string", "null"] },
       flower_preference: { type: ["string", "null"] },
+      recipient_name: { type: ["string", "null"] },
+      recipient_contact: { type: ["string", "null"] },
+      recipient_address: { type: ["string", "null"] },
+      delivery_date: { type: ["string", "null"] },
+      gift_note: { type: ["string", "null"] },
+      sender_name: { type: ["string", "null"] },
+      sender_contact: { type: ["string", "null"] },
       input_source: { type: "string", enum: ["user", "default"] },
       summary: {
         type: "object",
@@ -457,17 +503,10 @@ function createFlowerDeliveryServer(): Server {
           throw new Error(`Unknown tool: ${request.params.name}`);
         }
 
-        // Helper: detect encoded tokens/hashes that aren't real trip descriptions
-        const looksLikeToken = (s: string) => !s.includes(" ") && s.length > 20 || /^v\d+\//.test(s) || /^[A-Za-z0-9+/=]{20,}$/.test(s);
-
         // Parse and validate input parameters
         let args: z.infer<typeof toolInputParser> = {};
         try {
           args = toolInputParser.parse(request.params.arguments ?? {});
-          // Strip order_description if it looks like an encoded token
-          if (args.order_description && looksLikeToken(args.order_description)) {
-            args.order_description = undefined;
-          }
         } catch (parseError: any) {
           logAnalytics("parameter_parse_error", {
             toolName: request.params.name,
@@ -518,10 +557,6 @@ function createFlowerDeliveryServer(): Server {
             else if (/wildflower/i.test(userText)) args.flower_preference = "Wildflowers";
             else if (/tulip/i.test(userText)) args.flower_preference = "Tulips";
             else if (/lily/i.test(userText)) args.flower_preference = "Lilies";
-          }
-
-          if (!args.order_description && userText.length > 10 && !looksLikeToken(userText)) {
-            args.order_description = userText;
           }
 
         } catch (e) {
