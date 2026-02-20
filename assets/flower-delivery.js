@@ -25218,31 +25218,41 @@ function getStylesForOccasion(occasion, customOccasion) {
   });
   return [...baseStyles, ...deterministicAvailable.slice(0, needed)];
 }
-function App() {
+function App({ initialData: initialData2 }) {
+  const hydrate = initialData2 || {};
   const [phase, setPhase] = (0, import_react3.useState)(0);
-  const [apiBaseUrl, setApiBaseUrl] = (0, import_react3.useState)("");
-  const [budget, setBudget] = (0, import_react3.useState)(null);
-  const [occasion, setOccasion] = (0, import_react3.useState)("");
+  const [apiBaseUrl, setApiBaseUrl] = (0, import_react3.useState)(hydrate.api_base_url || "");
+  const [budget, setBudget] = (0, import_react3.useState)(hydrate.budget ?? null);
+  const [occasion, setOccasion] = (0, import_react3.useState)(hydrate.occasion || "");
   const [customOccasion, setCustomOccasion] = (0, import_react3.useState)("");
   const [showMoreOccasions, setShowMoreOccasions] = (0, import_react3.useState)(false);
   const [selectedStyles, setSelectedStyles] = (0, import_react3.useState)([]);
   const [zoomedImage, setZoomedImage] = (0, import_react3.useState)(null);
-  const [address, setAddress] = (0, import_react3.useState)("");
+  const [address, setAddress] = (0, import_react3.useState)(hydrate.recipient_address || "");
   const [addressSuggestions, setAddressSuggestions] = (0, import_react3.useState)([]);
   const [showDropdown, setShowDropdown] = (0, import_react3.useState)(false);
   const [isDelivery, setIsDelivery] = (0, import_react3.useState)(true);
-  const [deliveryDate, setDeliveryDate] = (0, import_react3.useState)("");
-  const [senderName, setSenderName] = (0, import_react3.useState)("");
-  const [senderContact, setSenderContact] = (0, import_react3.useState)("");
-  const [recipientName, setRecipientName] = (0, import_react3.useState)("");
-  const [recipientContact, setRecipientContact] = (0, import_react3.useState)("");
-  const [note, setNote] = (0, import_react3.useState)("");
+  const [deliveryDate, setDeliveryDate] = (0, import_react3.useState)(hydrate.delivery_date || "");
+  const [senderName, setSenderName] = (0, import_react3.useState)(hydrate.sender_name || "");
+  const [senderContact, setSenderContact] = (0, import_react3.useState)(hydrate.sender_contact || "");
+  const [recipientName, setRecipientName] = (0, import_react3.useState)(hydrate.recipient_name || "");
+  const [recipientContact, setRecipientContact] = (0, import_react3.useState)(hydrate.recipient_contact || "");
+  const [note, setNote] = (0, import_react3.useState)(hydrate.gift_note || "");
   const [selectedFlorist, setSelectedFlorist] = (0, import_react3.useState)(null);
   const [email, setEmail] = (0, import_react3.useState)("");
   const [recipientDetails, setRecipientDetails] = (0, import_react3.useState)("");
   const [isCheckingOut, setIsCheckingOut] = (0, import_react3.useState)(false);
   const [checkoutSessionId, setCheckoutSessionId] = (0, import_react3.useState)(null);
   const [isAwaitingPayment, setIsAwaitingPayment] = (0, import_react3.useState)(false);
+  (0, import_react3.useEffect)(() => {
+    if (hydrate.occasion && phase === 0) {
+      if (hydrate.budget && hydrate.recipient_address) {
+        setPhase(2);
+      } else {
+        setPhase(1);
+      }
+    }
+  }, []);
   (0, import_react3.useEffect)(() => {
     if (!address.trim() || !showDropdown) {
       setAddressSuggestions([]);

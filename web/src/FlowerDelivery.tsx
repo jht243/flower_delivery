@@ -75,12 +75,13 @@ function getStylesForOccasion(occasion: string, customOccasion: string): FlowerS
   return [...baseStyles, ...deterministicAvailable.slice(0, needed)];
 }
 
-export default function App() {
+export default function App({ initialData }: { initialData?: any }) {
+  const hydrate = initialData || {};
   const [phase, setPhase] = useState(0);
-  const [apiBaseUrl, setApiBaseUrl] = useState('');
+  const [apiBaseUrl, setApiBaseUrl] = useState(hydrate.api_base_url || '');
 
-  const [budget, setBudget] = useState<number | null>(null);
-  const [occasion, setOccasion] = useState<string>('');
+  const [budget, setBudget] = useState<number | null>(hydrate.budget ?? null);
+  const [occasion, setOccasion] = useState<string>(hydrate.occasion || '');
   const [customOccasion, setCustomOccasion] = useState('');
   const [showMoreOccasions, setShowMoreOccasions] = useState(false);
 
@@ -90,17 +91,17 @@ export default function App() {
   // State for Lightbox Zoom
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
 
-  const [address, setAddress] = useState<string>('');
+  const [address, setAddress] = useState<string>(hydrate.recipient_address || '');
   const [addressSuggestions, setAddressSuggestions] = useState<string[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const [isDelivery, setIsDelivery] = useState<boolean>(true);
-  const [deliveryDate, setDeliveryDate] = useState<string>('');
-  const [senderName, setSenderName] = useState<string>('');
-  const [senderContact, setSenderContact] = useState<string>('');
-  const [recipientName, setRecipientName] = useState<string>('');
-  const [recipientContact, setRecipientContact] = useState<string>('');
-  const [note, setNote] = useState<string>('');
+  const [deliveryDate, setDeliveryDate] = useState<string>(hydrate.delivery_date || '');
+  const [senderName, setSenderName] = useState<string>(hydrate.sender_name || '');
+  const [senderContact, setSenderContact] = useState<string>(hydrate.sender_contact || '');
+  const [recipientName, setRecipientName] = useState<string>(hydrate.recipient_name || '');
+  const [recipientContact, setRecipientContact] = useState<string>(hydrate.recipient_contact || '');
+  const [note, setNote] = useState<string>(hydrate.gift_note || '');
   const [selectedFlorist, setSelectedFlorist] = useState<string | null>(null);
 
   // New states for Phase 3
@@ -109,6 +110,18 @@ export default function App() {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutSessionId, setCheckoutSessionId] = useState<string | null>(null);
   const [isAwaitingPayment, setIsAwaitingPayment] = useState(false);
+
+  // Auto-advance phase if hydrated with enough data
+  useEffect(() => {
+    if (hydrate.occasion && phase === 0) {
+      // If we have occasion + budget + address, skip to loading
+      if (hydrate.budget && hydrate.recipient_address) {
+        setPhase(2);
+      } else {
+        setPhase(1);
+      }
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // OpenStreetMap (Photon) Autocomplete logic
   useEffect(() => {
