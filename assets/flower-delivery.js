@@ -25324,7 +25324,7 @@ function App() {
     if (!isAwaitingPayment || !checkoutSessionId) return;
     const interval = setInterval(async () => {
       try {
-        const res = await fetch(`http://localhost:3000/check-payment-status?session_id=${checkoutSessionId}`);
+        const res = await fetch(`${apiBaseUrl}/check-payment-status?session_id=${checkoutSessionId}`);
         const data = await res.json();
         if (data.paid) {
           setIsAwaitingPayment(false);
@@ -25346,7 +25346,7 @@ function App() {
       const subtotal = budget || 0;
       const deliveryFee = isDelivery ? 15 : 0;
       const tax = subtotal * 0.08;
-      const response = await fetch("http://localhost:3000/create-checkout-session", {
+      const response = await fetch(`${apiBaseUrl}/create-checkout-session`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

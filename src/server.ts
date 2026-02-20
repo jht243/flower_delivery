@@ -29,6 +29,12 @@ import {
   type Tool,
 } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
+import Stripe from "stripe";
+
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || 'sk_test_123';
+const stripe = new Stripe(STRIPE_SECRET_KEY, {
+  apiVersion: '2026-01-28.clover',
+});
 
 type FlowerDeliveryWidget = {
   id: string;
@@ -287,12 +293,6 @@ const toolInputSchema = {
     sender_contact: { type: "string", description: "Phone or email address of the person ordering." },
     order_description: { type: "string", description: "Freeform text describing the request for AI-powered parsing." },
   },
-    occasion: { type: "string", description: "The reason or occasion for the flowers (e.g. Anniversary)." },
-    flower_preference: { type: "string", description: "Specific flowers or vibe (e.g. Roses, Minimalist)." },
-    recipient_address: { type: "string", description: "Where the flowers should be delivered." },
-    gift_note: { type: "string", description: "The note to attach to the flowers." },
-    order_description: { type: "string", description: "Freeform text describing the request for AI-powered parsing." },
-  },
   required: [],
   additionalProperties: false,
   $schema: "http://json-schema.org/draft-07/schema#",
@@ -461,9 +461,9 @@ function createFlowerDeliveryServer(): Server {
         let args: z.infer<typeof toolInputParser> = {};
         try {
           args = toolInputParser.parse(request.params.arguments ?? {});
-          // Strip trip_description if it looks like an encoded token
-          if (args.trip_description && looksLikeToken(args.trip_description)) {
-            args.trip_description = undefined;
+          // Strip order_description if it looks like an encoded token
+          if (args.order_description && looksLikeToken(args.order_description)) {
+            args.order_description = undefined;
           }
         } catch (parseError: any) {
           logAnalytics("parameter_parse_error", {
@@ -1905,14 +1905,71 @@ const httpServer = createServer(
       return;
     }
 
-    if (req.method === "OPTIONS" && url.pathname === "/api/parse-trip") {
+    if (req.method === "OPTIONS" && (url.pathname === "/api/parse-trip" || url.pathname === "/create-checkout-session" || url.pathname === "/check-payment-status")) {
       res.writeHead(204, {
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
         "Access-Control-Allow-Headers": "content-type",
         "Access-Control-Allow-Private-Network": "true",
       });
       res.end();
+      return;
+    }
+
+    if (req.method === "POST" && url.pathname === "/create-checkout-session") {
+      let body = "";
+      req.on("data", (chunk) => { body += chunk.toString(); });
+      req.on("end", async () => {
+        try {
+          const { budget, occasion, deliveryFee, tax, floristName } = JSON.parse(body);
+          if (STRIPE_SECRET_KEY === 'sk_test_123') {
+            res.writeHead(200, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });
+            res.end(JSON.stringify({ url: 'https://checkout.stripe.com/pay/cs_test_mocked_session', sessionId: 'cs_test_mocked_session' }));
+            return;
+          }
+          const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: [
+              { price_data: { currency: 'usd', product_data: { name: `${occasion || 'Custom'} Arrangement`, description: `Fulfilled by: ${floristName}` }, unit_amount: Math.round(budget * 100) }, quantity: 1 },
+              { price_data: { currency: 'usd', product_data: { name: 'Delivery Fee' }, unit_amount: Math.round(deliveryFee * 100) }, quantity: 1 },
+              { price_data: { currency: 'usd', product_data: { name: 'Estimated Tax' }, unit_amount: Math.round(tax * 100) }, quantity: 1 }
+            ],
+            mode: 'payment',
+            success_url: 'https://chatgpt.com/success',
+            cancel_url: 'https://chatgpt.com/cancel',
+          });
+          res.writeHead(200, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });
+          res.end(JSON.stringify({ url: session.url, sessionId: session.id }));
+        } catch (err: any) {
+          console.error('Stripe Error:', err.message);
+          res.writeHead(500, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });
+          res.end(JSON.stringify({ error: err.message }));
+        }
+      });
+      return;
+    }
+
+    if (req.method === "GET" && url.pathname === "/check-payment-status") {
+      try {
+        const sessionId = url.searchParams.get("session_id");
+        if (!sessionId) {
+          res.writeHead(400, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });
+          res.end(JSON.stringify({ error: 'Missing session_id' }));
+          return;
+        }
+        if (sessionId === 'cs_test_mocked_session') {
+          res.writeHead(200, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });
+          res.end(JSON.stringify({ paid: true }));
+          return;
+        }
+        const session = await stripe.checkout.sessions.retrieve(sessionId);
+        res.writeHead(200, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });
+        res.end(JSON.stringify({ paid: session.payment_status === 'paid' }));
+      } catch (err: any) {
+        console.error('Stripe Status Error:', err.message);
+        res.writeHead(500, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });
+        res.end(JSON.stringify({ error: err.message }));
+      }
       return;
     }
 
