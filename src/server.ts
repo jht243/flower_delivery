@@ -599,7 +599,7 @@ function createFlowerDeliveryServer(): Server {
             logAnalytics("tool_call_empty", {
               toolName: request.params.name,
               params: request.params.arguments || {},
-              reason: "No trip details provided"
+              reason: "No order details provided"
             });
           } else {
             logAnalytics("tool_call_success", {
@@ -674,18 +674,14 @@ function humanizeEventName(event: string): string {
     tool_call_error: "Tool Call (Error)",
     tool_call_empty: "Tool Call (Empty)",
     parameter_parse_error: "Parameter Parse Error",
-    // In-app trip actions
-    widget_parse_trip: "Analyze Trip (AI)",
-    widget_add_leg: "Add Leg",
-    widget_delete_leg: "Delete Leg",
-    widget_save_trip: "Save Order",
-    widget_open_trip: "Open Order",
-    widget_new_trip: "New Order",
-    widget_delete_trip: "Delete Order",
-    widget_duplicate_trip: "Duplicate Order",
+    // In-app order actions
+    widget_save_order: "Save Order",
+    widget_open_order: "Open Order",
+    widget_new_order: "New Order",
+    widget_delete_order: "Delete Order",
+    widget_duplicate_order: "Duplicate Order",
     widget_reset: "Reset Order",
     widget_back_to_home: "Back to Home",
-    widget_input_mode: "Input Mode Toggle",
     // Footer buttons
     widget_subscribe_click: "Subscribe (Click)",
     widget_donate_click: "Donate (Click)",
@@ -837,8 +833,8 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
 
   // --- Prompt-level analytics (from tool calls) ---
   const paramUsage: Record<string, number> = {};
-  const tripTypeDist: Record<string, number> = {};
-  const transportModeDist: Record<string, number> = {};
+  const occasionDist: Record<string, number> = {};
+  const styleDist: Record<string, number> = {};
 
   successLogs.forEach((log) => {
     if (log.params) {
@@ -847,39 +843,39 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
           paramUsage[key] = (paramUsage[key] || 0) + 1;
         }
       });
-      if (log.params.order_type) {
-        const tt = log.params.order_type;
-        tripTypeDist[tt] = (tripTypeDist[tt] || 0) + 1;
+      if (log.params.occasion) {
+        const tt = log.params.occasion;
+        occasionDist[tt] = (occasionDist[tt] || 0) + 1;
       }
-      if (log.params.departure_mode) {
-        const mode = log.params.departure_mode;
-        transportModeDist[mode] = (transportModeDist[mode] || 0) + 1;
+      if (log.params.flower_preference) {
+        const mode = log.params.flower_preference;
+        styleDist[mode] = (styleDist[mode] || 0) + 1;
       }
     }
   });
 
-  // Destinations (top 10)
+  // Delivery Addresses (top 10)
   const destinationDist: Record<string, number> = {};
   successLogs.forEach((log) => {
-    if (log.params?.destination) {
-      const dest = log.params.destination;
+    if (log.params?.recipient_address) {
+      const dest = log.params.recipient_address;
       destinationDist[dest] = (destinationDist[dest] || 0) + 1;
     }
   });
 
-  // Departure cities (top 10)
+  // Budgets (top 10)
   const departureCityDist: Record<string, number> = {};
   successLogs.forEach((log) => {
-    if (log.params?.departure_city) {
-      const city = log.params.departure_city;
+    if (log.params?.budget) {
+      const city = String(log.params.budget);
       departureCityDist[city] = (departureCityDist[city] || 0) + 1;
     }
   });
 
   // --- In-app analytics (from widget events) ---
-  // Trip management actions
+  // Order management actions
   const tripActions: Record<string, number> = {};
-  const tripActionEvents = ["widget_parse_trip", "widget_add_leg", "widget_delete_leg", "widget_save_trip", "widget_open_trip", "widget_new_trip", "widget_delete_trip", "widget_duplicate_trip", "widget_reset", "widget_back_to_home", "widget_input_mode"];
+  const tripActionEvents = ["widget_save_order", "widget_open_order", "widget_new_order", "widget_delete_order", "widget_duplicate_order", "widget_reset", "widget_back_to_home"];
   tripActionEvents.forEach(e => { tripActions[humanizeEventName(e)] = 0; });
 
   // Footer button clicks
@@ -896,13 +892,6 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
 
   // Feedback with votes
   const feedbackLogs: AnalyticsEvent[] = [];
-
-  // Input mode preferences
-  let freeformCount = 0;
-  let manualCount = 0;
-
-  // Leg type distribution (from add_leg events)
-  const legTypeDist: Record<string, number> = {};
 
   // All widget interactions (catch-all)
   const allWidgetCounts: Record<string, number> = {};
@@ -933,15 +922,7 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
     if (log.event === "widget_user_feedback") {
       feedbackLogs.push(log);
     }
-    // Input mode
-    if (log.event === "widget_input_mode") {
-      if (log.mode === "freeform") freeformCount++;
-      else if (log.mode === "manual") manualCount++;
-    }
-    // Leg types
-    if (log.event === "widget_add_leg" && log.legType) {
-      legTypeDist[log.legType] = (legTypeDist[log.legType] || 0) + 1;
-    }
+
   });
 
   const totalEnjoyVotes = enjoyUp + enjoyDown;
@@ -1070,24 +1051,22 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
     <div class="section-title">🔍 Prompt Analytics (What's Being Called)</div>
     <div class="grid-3">
       <div class="card">
-        <h2>Order Type Distribution</h2>
+        <h2>Occasions</h2>
         ${renderTable(
-    ["Type", "Count", "%"],
-    Object.entries(tripTypeDist).sort((a, b) => b[1] - a[1]).map(([tt, count]) => {
+    ["Occasion", "Count", "%"],
+    Object.entries(occasionDist).sort((a, b) => b[1] - a[1]).map(([tt, count]) => {
       const pct = successLogs.length > 0 ? ((count / successLogs.length) * 100).toFixed(0) : "0";
-      const label = tt === "round_trip" ? "🔄 Round Trip" : tt === "one_way" ? "➡️ One Way" : tt === "multi_city" ? "🌍 Multi-City" : tt;
-      return [label, String(count), `${pct}%`];
+      return [tt, String(count), `${pct}%`];
     }),
     "No data yet"
   )}
       </div>
       <div class="card">
-        <h2>Transport Mode</h2>
+        <h2>Flower Styles</h2>
         ${renderTable(
-    ["Mode", "Count"],
-    Object.entries(transportModeDist).sort((a, b) => b[1] - a[1]).map(([mode, count]) => {
-      const icon = mode === "plane" ? "✈️" : mode === "car" ? "🚗" : mode === "train" ? "🚂" : mode === "bus" ? "🚌" : mode === "ferry" ? "⛴️" : "🚐";
-      return [`${icon} ${mode}`, String(count)];
+    ["Style", "Count"],
+    Object.entries(styleDist).sort((a, b) => b[1] - a[1]).map(([mode, count]) => {
+      return [mode, String(count)];
     }),
     "No data yet"
   )}
@@ -1108,7 +1087,7 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
 
     <div class="grid-3">
       <div class="card">
-        <h2>🏙️ Top Destinations</h2>
+        <h2>📍 Top Delivery Addresses</h2>
         ${renderTable(
     ["City", "Count"],
     Object.entries(destinationDist).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([d, c]) => [d, String(c)]),
@@ -1116,37 +1095,21 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
   )}
       </div>
       <div class="card">
-        <h2>🛫 Top Departure Cities</h2>
+        <h2>💰 Top Budgets</h2>
         ${renderTable(
     ["City", "Count"],
     Object.entries(departureCityDist).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([d, c]) => [d, String(c)]),
     "No data yet"
   )}
       </div>
-      <div class="card">
-        <h2>🗺️ Popular Routes</h2>
-        ${(() => {
-      const routes: Record<string, number> = {};
-      successLogs.forEach(l => {
-        if (l.params?.departure_city && l.params?.destination) {
-          const route = l.params.departure_city + " → " + l.params.destination;
-          routes[route] = (routes[route] || 0) + 1;
-        }
-      });
-      return renderTable(
-        ["Route", "Count"],
-        Object.entries(routes).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([r, c]) => [r, String(c)]),
-        "No data yet"
-      );
-    })()}
-      </div>
+
     </div>
 
     <!-- ========== IN-APP ANALYTICS ========== -->
     <div class="section-title">🖱️ In-App Actions (After Tool Call)</div>
     <div class="grid-3">
       <div class="card">
-        <h2>Trip Management</h2>
+        <h2>Order Management</h2>
         ${renderTable(
       ["Action", "Count"],
       Object.entries(tripActions).filter(([, c]) => c > 0).sort((a, b) => b[1] - a[1]).map(([a, c]) => [a, String(c)]),
@@ -1171,30 +1134,7 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
       </div>
     </div>
 
-    <div class="grid-2" style="margin-bottom:20px;">
-      <div class="card">
-        <h2>Input Mode Preference</h2>
-        ${renderTable(
-      ["Mode", "Count"],
-      [
-        ["✨ Freeform (AI Describe)", String(freeformCount)],
-        ["✏️ Manual (Add Manually)", String(manualCount)],
-      ],
-      "No data yet"
-    )}
-      </div>
-      <div class="card">
-        <h2>Leg Types Added</h2>
-        ${renderTable(
-      ["Type", "Count"],
-      Object.entries(legTypeDist).sort((a, b) => b[1] - a[1]).map(([t, c]) => {
-        const icon = t === "flight" ? "✈️" : t === "hotel" ? "🏨" : t === "car" ? "🚗" : t === "train" ? "🚂" : t === "bus" ? "🚌" : "📌";
-        return [`${icon} ${t}`, String(c)];
-      }),
-      "No legs added yet"
-    )}
-      </div>
-    </div>
+
 
     <!-- ========== USER EXPERIENCE ========== -->
     <div class="section-title">❤️ User Experience & Feedback</div>
@@ -1227,7 +1167,7 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
       <div class="card">
         <h2>Feedback Submissions</h2>
         ${feedbackLogs.length > 0 ? renderTable(
-      ["Date", "Vote", "Feedback", "Trip"],
+      ["Date", "Vote", "Feedback", "Order"],
       feedbackLogs.slice(0, 15).map(l => [
         `<span class="timestamp">${new Date(l.timestamp).toLocaleString()}</span>`,
         l.enjoymentVote === "up" ? '<span class="badge badge-green">👍</span>' : l.enjoymentVote === "down" ? '<span class="badge badge-red">👎</span>' : "—",
@@ -1243,12 +1183,12 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
     <div class="section-title">📋 Recent Queries</div>
     <div class="card" style="margin-bottom:20px;">
       ${renderTable(
-      ["Date", "Query", "Order Type", "From → To", "Location", "Locale"],
+      ["Date", "Query", "Occasion", "Address", "Location", "Locale"],
       successLogs.slice(0, 25).map(l => [
         `<span class="timestamp">${new Date(l.timestamp).toLocaleString()}</span>`,
         `<div style="max-width:250px;overflow:hidden;text-overflow:ellipsis;">${l.inferredQuery || "—"}</div>`,
-        l.params?.order_type ? `<span class="badge badge-blue">${l.params.order_type}</span>` : "—",
-        l.params?.departure_city && l.params?.destination ? `${l.params.departure_city} → ${l.params.destination}` : (l.params?.destination || "—"),
+        l.params?.occasion ? `<span class="badge badge-blue">${l.params.occasion}</span>` : "—",
+        l.params?.recipient_address || "—",
         l.userLocation ? `${l.userLocation.city || ""}${l.userLocation.region ? ", " + l.userLocation.region : ""}${l.userLocation.country ? ", " + l.userLocation.country : ""}`.replace(/^, /, "") : "—",
         l.userLocale || "—"
       ]),
@@ -1524,7 +1464,7 @@ async function handleSubscribe(req: IncomingMessage, res: ServerResponse) {
       await subscribeToButtondown(email, topicId, topicName);
       res.writeHead(200).end(JSON.stringify({
         success: true,
-        message: "Successfully subscribed! You'll receive trip planning tips and updates."
+        message: "Successfully subscribed! You'll receive updates on upcoming seasonal arrangements and offers."
       }));
     } catch (subscribeError: any) {
       const rawMessage = String(subscribeError?.message ?? "").trim();
@@ -1580,213 +1520,6 @@ async function handleSubscribe(req: IncomingMessage, res: ServerResponse) {
   }
 }
 
-// AI-powered trip parsing using OpenAI
-async function handleParseTripAI(req: IncomingMessage, res: ServerResponse) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Headers", "content-type");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Private-Network", "true");
-
-  if (req.method !== "POST") {
-    res.writeHead(405).end("Method not allowed");
-    return;
-  }
-
-  try {
-    const body = await new Promise<string>((resolve, reject) => {
-      let data = "";
-      req.on("data", chunk => data += chunk);
-      req.on("end", () => resolve(data));
-      req.on("error", reject);
-    });
-
-    const { text } = JSON.parse(body);
-
-    if (!text || typeof text !== "string") {
-      res.writeHead(400).end(JSON.stringify({ error: "Missing 'text' field" }));
-      return;
-    }
-
-    const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-
-    if (!OPENAI_API_KEY) {
-      // Fallback to basic parsing if no API key
-      console.log("[Parse Order] No OPENAI_API_KEY, using fallback parsing");
-      const legs = fallbackParseTripText(text);
-      res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ legs, source: "fallback" }));
-      return;
-    }
-
-    const systemPrompt = `You are a travel assistant that extracts trip information from natural language descriptions.
-
-Extract all trip components (flights, hotels, transportation) from the user's text and return them as a JSON array.
-
-Each item should have:
-- type: "flight" | "hotel" | "car" | "train" | "bus" | "ferry"
-- status: always "pending"
-- title: descriptive title (e.g., "Flight: Boston → Medellin")
-- date: ISO date string (YYYY-MM-DD) if mentioned, otherwise empty string
-- endDate: for hotels, the checkout date if mentioned
-- from: departure city/location (for transport)
-- to: arrival city/location (for transport)
-- location: for hotels, the city
-- time: departure time if mentioned (HH:MM format)
-
-Rules:
-1. If the user mentions a destination and duration but NO specific flights/hotels, create a basic trip structure:
-   - Add one "flight" leg with the destination as "to" (leave "from" empty if not specified)
-   - Add one "hotel" leg with the destination as "location"
-2. Only extract what the user explicitly mentions for specific flights/hotels/transport
-3. Think like a traveler - for each flight:
-   - You need transport TO the departure airport before the flight
-   - You need transport FROM the arrival airport after landing (to get to hotel or home)
-4. Do NOT duplicate transports - each leg of the journey needs exactly one transport to the airport and one from the airport
-5. Parse dates like "June 11th, 2026" to "2026-06-11"
-6. If no year mentioned, assume current year or next year if month has passed
-
-Return ONLY valid JSON array, no explanation.`;
-
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: text }
-        ],
-        temperature: 0.3,
-        max_tokens: 2000
-      })
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("[Parse Order] OpenAI API error:", response.status, errorText);
-      // Fallback on API error
-      const legs = fallbackParseTripText(text);
-      res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ legs, source: "fallback" }));
-      return;
-    }
-
-    const data = await response.json() as any;
-    const content = data.choices?.[0]?.message?.content || "[]";
-
-    // Parse the JSON response
-    let legs;
-    try {
-      // Handle potential markdown code blocks
-      const jsonStr = content.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
-      legs = JSON.parse(jsonStr);
-    } catch (parseError) {
-      console.error("[Parse Order] Failed to parse AI response:", content);
-      legs = fallbackParseTripText(text);
-      res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ legs, source: "fallback" }));
-      return;
-    }
-
-    console.log("[Parse Order] AI parsed legs:", legs.length);
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ legs, source: "ai" }));
-
-  } catch (error: any) {
-    console.error("[Parse Order] Error:", error);
-    res.writeHead(500).end(JSON.stringify({ error: error.message || "Failed to parse trip" }));
-  }
-}
-
-// Fallback parsing when OpenAI is not available
-function fallbackParseTripText(text: string): any[] {
-  const legs: any[] = [];
-  const lower = text.toLowerCase();
-
-  // Simple pattern matching
-  const fromToMatch = lower.match(/from\s+([a-z\s]+?)\s+to\s+([a-z\s]+?)(?:\s|$|,|\.)/i);
-  const toFromMatch = lower.match(/to\s+([a-z\s]+?)\s+from\s+([a-z\s]+?)(?:\s|$|,|\.)/i);
-
-  // Check for return/round trip
-  const isRoundTrip = /return|round\s*trip|coming back|fly back|back to/i.test(lower);
-
-  let fromCity = "";
-  let toCity = "";
-
-  if (fromToMatch) {
-    fromCity = fromToMatch[1].trim();
-    toCity = fromToMatch[2].trim();
-  } else if (toFromMatch) {
-    toCity = toFromMatch[1].trim();
-    fromCity = toFromMatch[2].trim();
-  }
-
-  if (fromCity && toCity) {
-    // Add outbound flight
-    legs.push({
-      type: "flight",
-      status: "pending",
-      title: `Flight: ${fromCity} → ${toCity}`,
-      from: fromCity,
-      to: toCity,
-      date: ""
-    });
-
-    // Outbound transport: to departure airport
-    legs.push({
-      type: "car",
-      status: "pending",
-      title: `Transport to ${fromCity} Airport`,
-      to: `${fromCity} Airport`,
-      date: ""
-    });
-
-    // Outbound transport: from arrival airport to hotel
-    legs.push({
-      type: "car",
-      status: "pending",
-      title: `Transport from ${toCity} Airport`,
-      from: `${toCity} Airport`,
-      date: ""
-    });
-
-    // If round trip, add return flight and transports
-    if (isRoundTrip) {
-      // Return flight
-      legs.push({
-        type: "flight",
-        status: "pending",
-        title: `Flight: ${toCity} → ${fromCity}`,
-        from: toCity,
-        to: fromCity,
-        date: ""
-      });
-
-      // Return transport: from hotel to departure airport
-      legs.push({
-        type: "car",
-        status: "pending",
-        title: `Transport to ${toCity} Airport`,
-        to: `${toCity} Airport`,
-        date: ""
-      });
-
-      // Return transport: from arrival airport to home
-      legs.push({
-        type: "car",
-        status: "pending",
-        title: `Transport from ${fromCity} Airport`,
-        from: `${fromCity} Airport`,
-        date: ""
-      });
-    }
-  }
-
-  return legs;
-}
 
 async function handleSseRequest(res: ServerResponse) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -1899,13 +1632,7 @@ const httpServer = createServer(
       return;
     }
 
-    // AI-powered trip parsing endpoint
-    if (req.method === "POST" && url.pathname === "/api/parse-trip") {
-      await handleParseTripAI(req, res);
-      return;
-    }
-
-    if (req.method === "OPTIONS" && (url.pathname === "/api/parse-trip" || url.pathname === "/create-checkout-session" || url.pathname === "/check-payment-status")) {
+    if (req.method === "OPTIONS" && (url.pathname === "/create-checkout-session" || url.pathname === "/check-payment-status")) {
       res.writeHead(204, {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
