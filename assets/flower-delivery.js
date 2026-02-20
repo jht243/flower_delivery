@@ -25941,8 +25941,8 @@ function App() {
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 44, height: 44, borderRadius: 14, backgroundColor: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flower2, { color: "white", size: 24 }) }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 13, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: COLORS.primary }, children: "Concierge" }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 22, fontWeight: 700, color: COLORS.white, fontFamily: '"Playfair Display", serif' }, children: "Local Floral" })
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 13, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: COLORS.primary }, children: "The Artisan Florist" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 22, fontWeight: 700, color: COLORS.white, fontFamily: '"Playfair Display", serif' }, children: "Premium Delivery Network" })
           ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }, children: [
@@ -25955,6 +25955,7 @@ function App() {
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, color: "rgba(255,255,255,0.8)", fontWeight: 500 }, children: "4.9/5 from 10,000+ local deliveries" })
         ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 13, color: "rgba(255,255,255,0.9)", fontStyle: "italic", marginBottom: 12 }, children: '"Sourced directly from verified, independent local growers."' }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontSize: 15, color: "rgba(255,255,255,0.85)", lineHeight: 1.5, margin: 0, fontWeight: 400 }, children: "Empowering independent florists in your community. Every order directly supports local artisans." })
       ] }) }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { paddingBottom: 60 }, children: [
