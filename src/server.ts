@@ -507,6 +507,16 @@ function createFlowerDeliveryServer(): Server {
         let args: z.infer<typeof toolInputParser> = {};
         try {
           args = toolInputParser.parse(request.params.arguments ?? {});
+
+          // Normalize common occasions so React exact-matches the UI pills
+          if (args.occasion) {
+            const lowerOcc = args.occasion.toLowerCase();
+            if (lowerOcc.includes('birthday')) args.occasion = 'Birthday';
+            else if (lowerOcc.includes('anniversary')) args.occasion = 'Anniversary';
+            else if (lowerOcc.includes('sympathy')) args.occasion = 'Sympathy';
+            else if (lowerOcc.includes('mother')) args.occasion = "Mother's Day";
+            else if (lowerOcc.includes('valentine')) args.occasion = "Valentine's Day";
+          }
         } catch (parseError: any) {
           logAnalytics("parameter_parse_error", {
             toolName: request.params.name,
