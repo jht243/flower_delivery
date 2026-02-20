@@ -37,7 +37,7 @@ const inlineScript = `
           console.error('[Flower Delivery] Failed to load:', err);
           const root = document.getElementById('flower-delivery-root');
           if (root) {
-            root.innerHTML = '<div style="padding:20px;text-align:center;font-family:sans-serif;color:#DC2626"><h3>Failed to load planner</h3><p>Please refresh the page.</p></div>';
+            root.innerHTML = '<div style="padding:20px;text-align:center;font-family:sans-serif;color:#DC2626"><h3>Failed to load widget</h3><p>Please refresh the page.</p></div>';
           }
         });
     </script>`;

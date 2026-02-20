@@ -877,9 +877,9 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
 
   // --- In-app analytics (from widget events) ---
   // Order management actions
-  const tripActions: Record<string, number> = {};
-  const tripActionEvents = ["widget_save_order", "widget_open_order", "widget_new_order", "widget_delete_order", "widget_duplicate_order", "widget_reset", "widget_back_to_home"];
-  tripActionEvents.forEach(e => { tripActions[humanizeEventName(e)] = 0; });
+  const orderActions: Record<string, number> = {};
+  const orderActionEvents = ["widget_save_order", "widget_open_order", "widget_new_order", "widget_delete_order", "widget_duplicate_order", "widget_reset", "widget_back_to_home"];
+  orderActionEvents.forEach(e => { orderActions[humanizeEventName(e)] = 0; });
 
   // Footer button clicks
   const footerClicks: Record<string, number> = {};
@@ -903,9 +903,9 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
     const humanName = humanizeEventName(log.event);
     allWidgetCounts[humanName] = (allWidgetCounts[humanName] || 0) + 1;
 
-    // Trip management
-    if (tripActionEvents.includes(log.event)) {
-      tripActions[humanName] = (tripActions[humanName] || 0) + 1;
+    // Order management
+    if (orderActionEvents.includes(log.event)) {
+      orderActions[humanName] = (orderActions[humanName] || 0) + 1;
     }
     // Footer
     if (footerEvents.includes(log.event)) {
@@ -1114,9 +1114,9 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
       <div class="card">
         <h2>Order Management</h2>
         ${renderTable(
-    ["Action", "Count"],
-    Object.entries(tripActions).filter(([, c]) => c > 0).sort((a, b) => b[1] - a[1]).map(([a, c]) => [a, String(c)]),
-    "No in-app actions yet"
+    ["Order Action", "Count"],
+    Object.entries(orderActions).filter(([, c]) => c > 0).sort((a, b) => b[1] - a[1]).map(([a, c]) => [a, String(c)]),
+    "No actions recorded"
   )}
       </div>
       <div class="card">
