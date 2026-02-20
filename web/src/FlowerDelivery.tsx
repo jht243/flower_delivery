@@ -804,7 +804,8 @@ export default function App() {
         body, html {
           margin: 0; padding: 0;
           font-family: 'Inter', -apple-system, system-ui, sans-serif;
-          background-color: ${COLORS.bg};
+          background-color: transparent;
+          padding: 16px 0;
         }
         
         .fade-in { animation: fadeIn 0.4s ease-out forwards; }
@@ -823,7 +824,7 @@ export default function App() {
           to { transform: rotate(360deg); }
         }
       `}</style>
-      <div style={{ maxWidth: 480, margin: '0 auto', minHeight: '100vh', backgroundColor: COLORS.bg, position: 'relative' }}>
+      <div style={{ maxWidth: 480, margin: '0 auto', minHeight: '80vh', backgroundColor: COLORS.bg, position: 'relative', borderRadius: 16, border: '1px solid #E5E7EB', overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.08)' }}>
 
         <div style={{ padding: '32px 20px 24px', backgroundColor: '#2C3A29', color: COLORS.white, position: 'relative', overflow: 'hidden', marginBottom: 24 }}>
           <div style={{ position: 'relative', zIndex: 1 }}>

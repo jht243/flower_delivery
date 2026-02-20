@@ -251,7 +251,7 @@ function widgetMeta(widget: FlowerDeliveryWidget, bustCache: boolean = false) {
     ],
     "openai/widgetPrefersBorder": true,
     "openai/widgetDimensions": {
-      "width": "115%"
+      "width": "125%"
     },
     "openai/widgetCSP": {
       connect_domains: WIDGET_CONNECT_DOMAINS,
