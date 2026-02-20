@@ -329,13 +329,17 @@ export default function App() {
             </button>
           )}
         </div>
-        <input
-          type="text"
-          placeholder="Or type a custom occasion..."
-          value={customOccasion}
-          onChange={e => handleCustomOccasionChange(e.target.value)}
-          style={{ width: '100%', padding: '12px 14px', borderRadius: 10, border: `1px solid ${COLORS.border}`, fontSize: 14, marginBottom: 24, boxSizing: 'border-box', outline: 'none', background: COLORS.surface }}
-        />
+        {showMoreOccasions && (
+          <div className="fade-in">
+            <input
+              type="text"
+              placeholder="Or type a custom occasion..."
+              value={customOccasion}
+              onChange={e => handleCustomOccasionChange(e.target.value)}
+              style={{ width: '100%', padding: '12px 14px', borderRadius: 10, border: `1px solid ${COLORS.border}`, fontSize: 14, marginBottom: 24, boxSizing: 'border-box', outline: 'none', background: COLORS.surface }}
+            />
+          </div>
+        )}
 
         {effectiveOccasion && (
           <div className="fade-in">

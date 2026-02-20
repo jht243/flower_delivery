@@ -25427,7 +25427,7 @@ function App() {
           }
         )
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+      showMoreOccasions && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "fade-in", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
         "input",
         {
           type: "text",
@@ -25436,7 +25436,7 @@ function App() {
           onChange: (e) => handleCustomOccasionChange(e.target.value),
           style: { width: "100%", padding: "12px 14px", borderRadius: 10, border: `1px solid ${COLORS.border}`, fontSize: 14, marginBottom: 24, boxSizing: "border-box", outline: "none", background: COLORS.surface }
         }
-      ),
+      ) }),
       effectiveOccasion && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "fade-in", children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SectionTitle, { title: "Flower Inspiration (Select up to 3)" }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12, marginBottom: 24 }, children: currentStyleCollection.map((s) => {
