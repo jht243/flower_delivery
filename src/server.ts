@@ -92,7 +92,7 @@ const WIDGET_CONNECT_DOMAINS = Array.from(
     WIDGET_API_BASE_URL,
     LOCALHOST_API_ORIGIN,
     LOCALHOST_LOOPBACK_API_ORIGIN,
-    "https://flower-delivery-da2g.onrender.com",
+    "https://flower-delivery-ffh2.onrender.com",
     "https://nominatim.openstreetmap.org",
     "https://api.open-meteo.com",
     "https://geocoding-api.open-meteo.com",
@@ -101,7 +101,7 @@ const WIDGET_CONNECT_DOMAINS = Array.from(
 
 const WIDGET_RESOURCE_DOMAINS = Array.from(
   new Set([
-    "https://flower-delivery-da2g.onrender.com",
+    "https://flower-delivery-ffh2.onrender.com",
     ...(WIDGET_API_BASE_URL.startsWith("https://") ? [WIDGET_API_BASE_URL] : []),
   ])
 );
