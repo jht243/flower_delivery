@@ -302,10 +302,10 @@ export default function App() {
     return (
       <div className="fade-in" style={{ padding: '0 16px' }}>
         <h2 style={{ fontFamily: '"Playfair Display", serif', fontSize: 28, color: COLORS.textMain, fontWeight: 600, marginTop: 10, marginBottom: 8 }}>
-          What are we celebrating?
+          What are you celebrating?
         </h2>
         <p style={{ color: COLORS.textMuted, fontSize: 15, marginBottom: 24, lineHeight: 1.5 }}>
-          Tell us about the occasion and we'll help you find the perfect arrangement.
+          Tell us the occasion and we'll find the perfect arrangement.
         </p>
 
         <SectionTitle title="Occasion" />
@@ -840,7 +840,7 @@ export default function App() {
                   The Artisan Florist
                 </div>
                 <div style={{ fontSize: 22, fontWeight: 700, color: COLORS.white, fontFamily: '"Playfair Display", serif' }}>
-                  Premium Delivery Network
+                  Local Flower Delivery
                 </div>
               </div>
             </div>
@@ -857,7 +857,7 @@ export default function App() {
             </div>
 
             <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.85)', lineHeight: 1.5, margin: 0, fontWeight: 400 }}>
-              Empowering independent florists in your community. Every order directly supports local artisans.
+              Empowering independent florists in your community.
             </p>
           </div>
         </div>

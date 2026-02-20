@@ -230,7 +230,7 @@ function widgetMeta(widget: FlowerDeliveryWidget, bustCache: boolean = false) {
 
   return {
     "openai/outputTemplate": templateUri,
-    "openai/widgetDescription": "The Artisan Florist Premium Network — A sophisticated, high-end flower delivery interface sourced from verified local growers. Helps users order beautiful, locally-sourced floral arrangements. Call this tool immediately with NO arguments to let the user enter their parameters manually if details are missing. Only provide arguments if the user has explicitly stated them.",
+    "openai/widgetDescription": "The Artisan Florist Local Flower Delivery — A sophisticated, high-end flower delivery interface sourced from verified local growers. Helps users order beautiful, locally-sourced floral arrangements. Call this tool immediately with NO arguments to let the user enter their parameters manually if details are missing. Only provide arguments if the user has explicitly stated them.",
     "openai/componentDescriptions": {
       "discovery": "Filters to select occasion, budget, and flower preference.",
       "curator": "Horizontal scroll of local florist options.",
@@ -268,9 +268,9 @@ function widgetMeta(widget: FlowerDeliveryWidget, bustCache: boolean = false) {
 const widgets: FlowerDeliveryWidget[] = [
   {
     id: "flower-delivery",
-    title: "The Artisan Florist — Premium Delivery Network",
+    title: "The Artisan Florist — Local Flower Delivery",
     templateUri: `ui://widget/flower-delivery.html?v=${VERSION}`,
-    invoking: "Opening Premium Delivery Network...",
+    invoking: "Opening Local Flower Delivery...",
     invoked: "Here is the Artisan Florist Network. Describe your flower preferences, budget, and occasion to find local options.",
     html: readWidgetHtml("flower-delivery"),
   },
