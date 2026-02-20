@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Flower2, Gift, MapPin, CheckCircle2, ChevronRight, Check, Phone,
-  ArrowLeft, Star, Heart, Calendar, AtSign, Plus, Search, ShieldCheck, Lock, ZoomIn, X, Info, ChevronDown, CreditCard
+  ArrowLeft, Star, Heart, Calendar, AtSign, Plus, Search, ShieldCheck, Lock, ZoomIn, X, Info, ChevronDown, CreditCard,
+  ThumbsUp, ThumbsDown, MessageSquare
 } from 'lucide-react';
 
 const COLORS = {
@@ -110,6 +111,88 @@ export default function App({ initialData }: { initialData?: any }) {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutSessionId, setCheckoutSessionId] = useState<string | null>(null);
   const [isAwaitingPayment, setIsAwaitingPayment] = useState(false);
+
+  // Feedback pill state
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [enjoyVote, setEnjoyVote] = useState<'up' | 'down' | null>(null);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [feedbackText, setFeedbackText] = useState('');
+  const [feedbackStatus, setFeedbackStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [pillRight, setPillRight] = useState(16);
+
+  // Load persisted enjoy vote
+  useEffect(() => {
+    try {
+      const v = localStorage.getItem('enjoyVote_flower');
+      if (v === 'up' || v === 'down') setEnjoyVote(v);
+    } catch { }
+  }, []);
+
+  // Track pill position relative to container for correct iframe placement
+  useEffect(() => {
+    const update = () => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      setPillRight(Math.max(16, window.innerWidth - rect.right + 16));
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    if (containerRef.current) ro.observe(containerRef.current);
+    window.addEventListener('resize', update);
+    window.addEventListener('scroll', update, { passive: true });
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', update);
+      window.removeEventListener('scroll', update);
+    };
+  }, []);
+
+  // Track helper
+  const trackEvent = (event: string, data: Record<string, any> = {}) => {
+    const base = apiBaseUrl || (typeof window !== 'undefined' ? window.location.origin : '');
+    if (!base) return;
+    fetch(`${base}/api/track`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ event, data }),
+    }).catch(() => { });
+  };
+
+  const handleEnjoyVote = (vote: 'up' | 'down') => {
+    if (enjoyVote) return;
+    setEnjoyVote(vote);
+    try { localStorage.setItem('enjoyVote_flower', vote); } catch { }
+    trackEvent('widget_app_enjoyment_vote', { vote, phase });
+    setShowFeedbackModal(true);
+  };
+
+  const handleFeedbackSubmit = async () => {
+    if (!feedbackText.trim()) return;
+    setFeedbackStatus('submitting');
+    const base = apiBaseUrl || (typeof window !== 'undefined' ? window.location.origin : '');
+    try {
+      const response = await fetch(`${base}/api/track`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          event: 'widget_user_feedback',
+          data: { feedback: feedbackText, enjoymentVote: enjoyVote || null, phase },
+        }),
+      });
+      if (response.ok) {
+        setFeedbackStatus('success');
+        setTimeout(() => {
+          setShowFeedbackModal(false);
+          setFeedbackText('');
+          setFeedbackStatus('idle');
+        }, 2000);
+      } else {
+        setFeedbackStatus('error');
+      }
+    } catch {
+      setFeedbackStatus('error');
+    }
+  };
 
   // Auto-advance phase if hydrated with enough data
   useEffect(() => {
@@ -843,8 +926,11 @@ export default function App({ initialData }: { initialData?: any }) {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
+        @media print {
+          .no-print { display: none !important; }
+        }
       `}</style>
-      <div style={{ maxWidth: 540, margin: '0 auto', minHeight: '80vh', backgroundColor: COLORS.bg, position: 'relative', borderRadius: 16, border: '1px solid #E5E7EB', overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.08)' }}>
+      <div ref={containerRef} style={{ maxWidth: 540, margin: '0 auto', minHeight: '80vh', backgroundColor: COLORS.bg, position: 'relative', borderRadius: 16, border: '1px solid #E5E7EB', overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.08)' }}>
 
         <div style={{ padding: '32px 20px 24px', backgroundColor: '#2C3A29', color: COLORS.white, position: 'relative', overflow: 'hidden', marginBottom: 24 }}>
           <div style={{ position: 'relative', zIndex: 1 }}>
@@ -929,6 +1015,169 @@ export default function App({ initialData }: { initialData?: any }) {
             onClick={(e) => e.stopPropagation()}
             alt="Zoomed arrangement"
           />
+        </div>
+      )}
+
+      {/* Floating "Enjoying This App?" Pill */}
+      {!enjoyVote && (
+        <div className="no-print" style={{
+          position: 'fixed',
+          bottom: 20,
+          right: pillRight,
+          zIndex: 900,
+          pointerEvents: 'none',
+        }}>
+          <div style={{
+            backgroundColor: '#fff',
+            border: '1px solid #E5E7EB',
+            borderRadius: 9999,
+            boxShadow: '0 8px 24px rgba(17, 24, 39, 0.14)',
+            padding: '6px 12px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            pointerEvents: 'auto',
+          }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: '#374151', whiteSpace: 'nowrap' }}>
+              Enjoying This App?
+            </span>
+            <div style={{ display: 'flex', gap: 4 }}>
+              <button
+                onClick={() => handleEnjoyVote('up')}
+                title="Thumbs up"
+                style={{
+                  width: 30, height: 28, borderRadius: 8,
+                  border: '1px solid #E5E7EB',
+                  backgroundColor: '#fff',
+                  cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  padding: 0, transition: 'all 0.2s',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#F0FDF4')}
+                onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#fff')}
+              >
+                <ThumbsUp size={13} style={{ color: '#6B7280' }} />
+              </button>
+              <button
+                onClick={() => handleEnjoyVote('down')}
+                title="Thumbs down"
+                style={{
+                  width: 30, height: 28, borderRadius: 8,
+                  border: '1px solid #E5E7EB',
+                  backgroundColor: '#fff',
+                  cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  padding: 0, transition: 'all 0.2s',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#FFF1F2')}
+                onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#fff')}
+              >
+                <ThumbsDown size={13} style={{ color: '#6B7280' }} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Feedback Modal */}
+      {showFeedbackModal && (
+        <div
+          style={{
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            zIndex: 1000,
+          }}
+          onClick={() => setShowFeedbackModal(false)}
+        >
+          <div
+            style={{
+              backgroundColor: '#fff', borderRadius: 16, padding: 32,
+              maxWidth: 400, width: '90%', position: 'relative',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
+            }}
+            onClick={e => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowFeedbackModal(false)}
+              style={{
+                position: 'absolute', top: 16, right: 16,
+                background: 'none', border: 'none', cursor: 'pointer',
+                color: '#9CA3AF', padding: 4,
+              }}
+            >
+              <X size={22} />
+            </button>
+
+            {/* Vote banner */}
+            {enjoyVote && (
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16,
+                padding: '12px 16px',
+                backgroundColor: enjoyVote === 'up' ? '#F0FDF4' : '#FFF1F2',
+                borderRadius: 12,
+                border: `1px solid ${enjoyVote === 'up' ? '#86EFAC' : '#FECDD3'}`,
+              }}>
+                {enjoyVote === 'up'
+                  ? <ThumbsUp size={22} style={{ color: '#16A34A' }} />
+                  : <ThumbsDown size={22} style={{ color: '#DC2626' }} />}
+                <div style={{ fontSize: 14, fontWeight: 600, color: enjoyVote === 'up' ? '#15803D' : '#B91C1C' }}>
+                  Thank you for rating the app!
+                </div>
+              </div>
+            )}
+
+            <div style={{ fontSize: 22, fontWeight: 800, marginBottom: 6, color: COLORS.textMain, fontFamily: '"Playfair Display", serif' }}>
+              {enjoyVote ? 'Share Your Thoughts' : 'Feedback'}
+            </div>
+            <div style={{ fontSize: 14, color: COLORS.textMuted, marginBottom: 20 }}>
+              {enjoyVote ? 'Your thoughts help us improve.' : 'Help us improve the Artisan Florist experience.'}
+            </div>
+
+            {feedbackStatus === 'success' ? (
+              <div style={{ textAlign: 'center', padding: 20, color: '#2C3A29', fontWeight: 600 }}>
+                🌸 Thanks for your feedback!
+              </div>
+            ) : (
+              <>
+                <textarea
+                  placeholder={
+                    enjoyVote === 'up' ? 'What do you love about this app?'
+                      : enjoyVote === 'down' ? 'What can we improve?'
+                        : 'Tell us what you think...'
+                  }
+                  value={feedbackText}
+                  onChange={e => setFeedbackText(e.target.value)}
+                  style={{
+                    width: '100%', height: 110, padding: '12px 14px',
+                    borderRadius: 10, border: '1px solid #E5E7EB',
+                    fontSize: 15, outline: 'none', resize: 'none',
+                    fontFamily: 'inherit', boxSizing: 'border-box', marginBottom: 12,
+                  }}
+                  onFocus={e => (e.currentTarget.style.borderColor = '#2C3A29')}
+                  onBlur={e => (e.currentTarget.style.borderColor = '#E5E7EB')}
+                />
+                {feedbackStatus === 'error' && (
+                  <div style={{ color: '#EF4444', fontSize: 13, marginBottom: 10 }}>
+                    Failed to send. Please try again.
+                  </div>
+                )}
+                <button
+                  onClick={handleFeedbackSubmit}
+                  disabled={feedbackStatus === 'submitting' || !feedbackText.trim()}
+                  style={{
+                    width: '100%', padding: 14, borderRadius: 10, border: 'none',
+                    backgroundColor: '#2C3A29', color: '#fff',
+                    fontSize: 15, fontWeight: 700,
+                    cursor: (feedbackStatus === 'submitting' || !feedbackText.trim()) ? 'not-allowed' : 'pointer',
+                    opacity: (feedbackStatus === 'submitting' || !feedbackText.trim()) ? 0.7 : 1,
+                  }}
+                >
+                  {feedbackStatus === 'submitting' ? 'Sending...' : 'Send Feedback'}
+                </button>
+              </>
+            )}
+          </div>
         </div>
       )}
 

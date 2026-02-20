@@ -24656,21 +24656,47 @@ var __iconNode15 = [
 ];
 var Star = createLucideIcon("star", __iconNode15);
 
-// node_modules/lucide-react/dist/esm/icons/x.js
+// node_modules/lucide-react/dist/esm/icons/thumbs-down.js
 var __iconNode16 = [
+  ["path", { d: "M17 14V2", key: "8ymqnk" }],
+  [
+    "path",
+    {
+      d: "M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z",
+      key: "m61m77"
+    }
+  ]
+];
+var ThumbsDown = createLucideIcon("thumbs-down", __iconNode16);
+
+// node_modules/lucide-react/dist/esm/icons/thumbs-up.js
+var __iconNode17 = [
+  ["path", { d: "M7 10v12", key: "1qc93n" }],
+  [
+    "path",
+    {
+      d: "M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z",
+      key: "emmmcr"
+    }
+  ]
+];
+var ThumbsUp = createLucideIcon("thumbs-up", __iconNode17);
+
+// node_modules/lucide-react/dist/esm/icons/x.js
+var __iconNode18 = [
   ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
   ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
 ];
-var X = createLucideIcon("x", __iconNode16);
+var X = createLucideIcon("x", __iconNode18);
 
 // node_modules/lucide-react/dist/esm/icons/zoom-in.js
-var __iconNode17 = [
+var __iconNode19 = [
   ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }],
   ["line", { x1: "21", x2: "16.65", y1: "21", y2: "16.65", key: "13gj7c" }],
   ["line", { x1: "11", x2: "11", y1: "8", y2: "14", key: "1vmskp" }],
   ["line", { x1: "8", x2: "14", y1: "11", y2: "11", key: "durymu" }]
 ];
-var ZoomIn = createLucideIcon("zoom-in", __iconNode17);
+var ZoomIn = createLucideIcon("zoom-in", __iconNode19);
 
 // src/generatedStyles.ts
 var FOLDER_COLLECTIONS = {
@@ -25244,6 +25270,83 @@ function App({ initialData: initialData2 }) {
   const [isCheckingOut, setIsCheckingOut] = (0, import_react3.useState)(false);
   const [checkoutSessionId, setCheckoutSessionId] = (0, import_react3.useState)(null);
   const [isAwaitingPayment, setIsAwaitingPayment] = (0, import_react3.useState)(false);
+  const containerRef = (0, import_react3.useRef)(null);
+  const [enjoyVote, setEnjoyVote] = (0, import_react3.useState)(null);
+  const [showFeedbackModal, setShowFeedbackModal] = (0, import_react3.useState)(false);
+  const [feedbackText, setFeedbackText] = (0, import_react3.useState)("");
+  const [feedbackStatus, setFeedbackStatus] = (0, import_react3.useState)("idle");
+  const [pillRight, setPillRight] = (0, import_react3.useState)(16);
+  (0, import_react3.useEffect)(() => {
+    try {
+      const v = localStorage.getItem("enjoyVote_flower");
+      if (v === "up" || v === "down") setEnjoyVote(v);
+    } catch {
+    }
+  }, []);
+  (0, import_react3.useEffect)(() => {
+    const update = () => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      setPillRight(Math.max(16, window.innerWidth - rect.right + 16));
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    if (containerRef.current) ro.observe(containerRef.current);
+    window.addEventListener("resize", update);
+    window.addEventListener("scroll", update, { passive: true });
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update);
+    };
+  }, []);
+  const trackEvent = (event, data = {}) => {
+    const base = apiBaseUrl || (typeof window !== "undefined" ? window.location.origin : "");
+    if (!base) return;
+    fetch(`${base}/api/track`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ event, data })
+    }).catch(() => {
+    });
+  };
+  const handleEnjoyVote = (vote) => {
+    if (enjoyVote) return;
+    setEnjoyVote(vote);
+    try {
+      localStorage.setItem("enjoyVote_flower", vote);
+    } catch {
+    }
+    trackEvent("widget_app_enjoyment_vote", { vote, phase });
+    setShowFeedbackModal(true);
+  };
+  const handleFeedbackSubmit = async () => {
+    if (!feedbackText.trim()) return;
+    setFeedbackStatus("submitting");
+    const base = apiBaseUrl || (typeof window !== "undefined" ? window.location.origin : "");
+    try {
+      const response = await fetch(`${base}/api/track`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          event: "widget_user_feedback",
+          data: { feedback: feedbackText, enjoymentVote: enjoyVote || null, phase }
+        })
+      });
+      if (response.ok) {
+        setFeedbackStatus("success");
+        setTimeout(() => {
+          setShowFeedbackModal(false);
+          setFeedbackText("");
+          setFeedbackStatus("idle");
+        }, 2e3);
+      } else {
+        setFeedbackStatus("error");
+      }
+    } catch {
+      setFeedbackStatus("error");
+    }
+  };
   (0, import_react3.useEffect)(() => {
     if (hydrate.occasion && phase === 0) {
       if (hydrate.budget && hydrate.recipient_address) {
@@ -25948,8 +26051,11 @@ function App({ initialData: initialData2 }) {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
+        @media print {
+          .no-print { display: none !important; }
+        }
       ` }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { maxWidth: 540, margin: "0 auto", minHeight: "80vh", backgroundColor: COLORS.bg, position: "relative", borderRadius: 16, border: "1px solid #E5E7EB", overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.08)" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { ref: containerRef, style: { maxWidth: 540, margin: "0 auto", minHeight: "80vh", backgroundColor: COLORS.bg, position: "relative", borderRadius: 16, border: "1px solid #E5E7EB", overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.08)" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "32px 20px 24px", backgroundColor: "#2C3A29", color: COLORS.white, position: "relative", overflow: "hidden", marginBottom: 24 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { position: "relative", zIndex: 1 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 44, height: 44, borderRadius: 14, backgroundColor: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flower2, { color: "white", size: 24 }) }),
@@ -26041,6 +26147,186 @@ function App({ initialData: initialData2 }) {
             }
           )
         ]
+      }
+    ),
+    !enjoyVote && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "no-print", style: {
+      position: "fixed",
+      bottom: 20,
+      right: pillRight,
+      zIndex: 900,
+      pointerEvents: "none"
+    }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+      backgroundColor: "#fff",
+      border: "1px solid #E5E7EB",
+      borderRadius: 9999,
+      boxShadow: "0 8px 24px rgba(17, 24, 39, 0.14)",
+      padding: "6px 12px",
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      pointerEvents: "auto"
+    }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 11, fontWeight: 700, color: "#374151", whiteSpace: "nowrap" }, children: "Enjoying This App?" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 4 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+          "button",
+          {
+            onClick: () => handleEnjoyVote("up"),
+            title: "Thumbs up",
+            style: {
+              width: 30,
+              height: 28,
+              borderRadius: 8,
+              border: "1px solid #E5E7EB",
+              backgroundColor: "#fff",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 0,
+              transition: "all 0.2s"
+            },
+            onMouseEnter: (e) => e.currentTarget.style.backgroundColor = "#F0FDF4",
+            onMouseLeave: (e) => e.currentTarget.style.backgroundColor = "#fff",
+            children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ThumbsUp, { size: 13, style: { color: "#6B7280" } })
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+          "button",
+          {
+            onClick: () => handleEnjoyVote("down"),
+            title: "Thumbs down",
+            style: {
+              width: 30,
+              height: 28,
+              borderRadius: 8,
+              border: "1px solid #E5E7EB",
+              backgroundColor: "#fff",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 0,
+              transition: "all 0.2s"
+            },
+            onMouseEnter: (e) => e.currentTarget.style.backgroundColor = "#FFF1F2",
+            onMouseLeave: (e) => e.currentTarget.style.backgroundColor = "#fff",
+            children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ThumbsDown, { size: 13, style: { color: "#6B7280" } })
+          }
+        )
+      ] })
+    ] }) }),
+    showFeedbackModal && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+      "div",
+      {
+        style: {
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: "rgba(0,0,0,0.5)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 1e3
+        },
+        onClick: () => setShowFeedbackModal(false),
+        children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+          "div",
+          {
+            style: {
+              backgroundColor: "#fff",
+              borderRadius: 16,
+              padding: 32,
+              maxWidth: 400,
+              width: "90%",
+              position: "relative",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.2)"
+            },
+            onClick: (e) => e.stopPropagation(),
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                "button",
+                {
+                  onClick: () => setShowFeedbackModal(false),
+                  style: {
+                    position: "absolute",
+                    top: 16,
+                    right: 16,
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    color: "#9CA3AF",
+                    padding: 4
+                  },
+                  children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X, { size: 22 })
+                }
+              ),
+              enjoyVote && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                marginBottom: 16,
+                padding: "12px 16px",
+                backgroundColor: enjoyVote === "up" ? "#F0FDF4" : "#FFF1F2",
+                borderRadius: 12,
+                border: `1px solid ${enjoyVote === "up" ? "#86EFAC" : "#FECDD3"}`
+              }, children: [
+                enjoyVote === "up" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ThumbsUp, { size: 22, style: { color: "#16A34A" } }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ThumbsDown, { size: 22, style: { color: "#DC2626" } }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 14, fontWeight: 600, color: enjoyVote === "up" ? "#15803D" : "#B91C1C" }, children: "Thank you for rating the app!" })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 22, fontWeight: 800, marginBottom: 6, color: COLORS.textMain, fontFamily: '"Playfair Display", serif' }, children: enjoyVote ? "Share Your Thoughts" : "Feedback" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 14, color: COLORS.textMuted, marginBottom: 20 }, children: enjoyVote ? "Your thoughts help us improve." : "Help us improve the Artisan Florist experience." }),
+              feedbackStatus === "success" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { textAlign: "center", padding: 20, color: "#2C3A29", fontWeight: 600 }, children: "\u{1F338} Thanks for your feedback!" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                  "textarea",
+                  {
+                    placeholder: enjoyVote === "up" ? "What do you love about this app?" : enjoyVote === "down" ? "What can we improve?" : "Tell us what you think...",
+                    value: feedbackText,
+                    onChange: (e) => setFeedbackText(e.target.value),
+                    style: {
+                      width: "100%",
+                      height: 110,
+                      padding: "12px 14px",
+                      borderRadius: 10,
+                      border: "1px solid #E5E7EB",
+                      fontSize: 15,
+                      outline: "none",
+                      resize: "none",
+                      fontFamily: "inherit",
+                      boxSizing: "border-box",
+                      marginBottom: 12
+                    },
+                    onFocus: (e) => e.currentTarget.style.borderColor = "#2C3A29",
+                    onBlur: (e) => e.currentTarget.style.borderColor = "#E5E7EB"
+                  }
+                ),
+                feedbackStatus === "error" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { color: "#EF4444", fontSize: 13, marginBottom: 10 }, children: "Failed to send. Please try again." }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                  "button",
+                  {
+                    onClick: handleFeedbackSubmit,
+                    disabled: feedbackStatus === "submitting" || !feedbackText.trim(),
+                    style: {
+                      width: "100%",
+                      padding: 14,
+                      borderRadius: 10,
+                      border: "none",
+                      backgroundColor: "#2C3A29",
+                      color: "#fff",
+                      fontSize: 15,
+                      fontWeight: 700,
+                      cursor: feedbackStatus === "submitting" || !feedbackText.trim() ? "not-allowed" : "pointer",
+                      opacity: feedbackStatus === "submitting" || !feedbackText.trim() ? 0.7 : 1
+                    },
+                    children: feedbackStatus === "submitting" ? "Sending..." : "Send Feedback"
+                  }
+                )
+              ] })
+            ]
+          }
+        )
       }
     )
   ] });
@@ -26472,6 +26758,22 @@ lucide-react/dist/esm/icons/shield-check.js:
    *)
 
 lucide-react/dist/esm/icons/star.js:
+  (**
+   * @license lucide-react v0.554.0 - ISC
+   *
+   * This source code is licensed under the ISC license.
+   * See the LICENSE file in the root directory of this source tree.
+   *)
+
+lucide-react/dist/esm/icons/thumbs-down.js:
+  (**
+   * @license lucide-react v0.554.0 - ISC
+   *
+   * This source code is licensed under the ISC license.
+   * See the LICENSE file in the root directory of this source tree.
+   *)
+
+lucide-react/dist/esm/icons/thumbs-up.js:
   (**
    * @license lucide-react v0.554.0 - ISC
    *
