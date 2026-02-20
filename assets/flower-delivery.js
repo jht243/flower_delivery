@@ -25916,7 +25916,7 @@ function App() {
         body, html {
           margin: 0; padding: 0;
           font-family: 'Inter', -apple-system, system-ui, sans-serif;
-          background-color: transparent;
+          background-color: #FFFFFF;
           padding: 16px 0;
         }
         
@@ -25936,7 +25936,7 @@ function App() {
           to { transform: rotate(360deg); }
         }
       ` }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { maxWidth: 480, margin: "0 auto", minHeight: "80vh", backgroundColor: COLORS.bg, position: "relative", borderRadius: 16, border: "1px solid #E5E7EB", overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.08)" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { maxWidth: 680, margin: "0 auto", minHeight: "80vh", backgroundColor: COLORS.bg, position: "relative", borderRadius: 16, border: "1px solid #E5E7EB", overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.08)" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "32px 20px 24px", backgroundColor: "#2C3A29", color: COLORS.white, position: "relative", overflow: "hidden", marginBottom: 24 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { position: "relative", zIndex: 1 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 44, height: 44, borderRadius: 14, backgroundColor: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flower2, { color: "white", size: 24 }) }),
