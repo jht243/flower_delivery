@@ -162,26 +162,75 @@ window.addEventListener('openai:set_globals', (ev: any) => {
   }
 });
 
-// MCP Apps bridge: listen for tool-result via postMessage (official pattern)
+// MCP Apps bridge: JSON-RPC over postMessage (official OpenAI Apps SDK pattern)
+// Step 1: RPC helpers
+let rpcId = 0;
+const pendingRequests = new Map<number, { resolve: (v: any) => void; reject: (e: any) => void }>();
+
+const rpcNotify = (method: string, params: any) => {
+  window.parent.postMessage({ jsonrpc: "2.0", method, params }, "*");
+};
+
+const rpcRequest = (method: string, params: any): Promise<any> =>
+  new Promise((resolve, reject) => {
+    const id = ++rpcId;
+    pendingRequests.set(id, { resolve, reject });
+    window.parent.postMessage({ jsonrpc: "2.0", id, method, params }, "*");
+  });
+
+// Step 2: Handle incoming messages (responses + notifications)
 window.addEventListener(
   "message",
   (event: MessageEvent) => {
     if (event.source !== window.parent) return;
     const message = event.data;
     if (!message || message.jsonrpc !== "2.0") return;
-    if (message.method !== "ui/notifications/tool-result") return;
 
-    console.log("[Hydration] MCP Apps bridge tool-result received:", message.params);
-    const toolResult = message.params;
-    const data =
-      toolResult?.structuredContent ??
-      toolResult?.result?.structuredContent ??
-      {};
+    // Handle RPC responses
+    if (typeof message.id === "number") {
+      const pending = pendingRequests.get(message.id);
+      if (!pending) return;
+      pendingRequests.delete(message.id);
+      if (message.error) {
+        pending.reject(message.error);
+      } else {
+        pending.resolve(message.result);
+      }
+      return;
+    }
 
-    if (data && typeof data === "object" && Object.keys(data).length > 0) {
-      console.log("[Hydration] Re-rendering with MCP Apps bridge data:", data);
-      renderApp(data);
+    // Handle notifications
+    if (typeof message.method !== "string") return;
+    if (message.method === "ui/notifications/tool-result") {
+      console.log("[Hydration] MCP Apps bridge tool-result received:", message.params);
+      const toolResult = message.params;
+      const data =
+        toolResult?.structuredContent ??
+        toolResult?.result?.structuredContent ??
+        {};
+      if (data && typeof data === "object" && Object.keys(data).length > 0) {
+        console.log("[Hydration] Re-rendering with MCP Apps bridge data:", data);
+        renderApp(data);
+      }
     }
   },
   { passive: true }
 );
+
+// Step 3: Perform the required ui/initialize handshake
+// Without this, ChatGPT will NOT deliver ui/notifications/tool-result messages
+const initializeBridge = async () => {
+  try {
+    await rpcRequest("ui/initialize", {
+      appInfo: { name: "flower-delivery", version: "0.1.0" },
+      appCapabilities: {},
+      protocolVersion: "2026-01-26",
+    });
+    rpcNotify("ui/notifications/initialized", {});
+    console.log("[Hydration] MCP Apps bridge initialized successfully");
+  } catch (error) {
+    console.warn("[Hydration] Failed to initialize MCP Apps bridge (may be running outside ChatGPT):", error);
+  }
+};
+
+initializeBridge();
