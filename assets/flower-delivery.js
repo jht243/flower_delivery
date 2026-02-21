@@ -25664,7 +25664,8 @@ function App({ initialData: initialData2 }) {
           label: "Continue",
           icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { size: 18 })
         }
-      )
+      ),
+      (!effectiveOccasion || selectedStyles.length === 0 || !budget) && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { textAlign: "center", color: "#B00020", fontSize: 13, marginTop: 12, fontWeight: 500 }, children: !effectiveOccasion ? "Please select the occasion you're purchasing for." : selectedStyles.length === 0 ? "Please select at least one inspiration photo." : "Please select a budget for your arrangement." })
     ] });
   };
   const renderPhase1 = () => {
@@ -25745,7 +25746,8 @@ function App({ initialData: initialData2 }) {
           label: "Continue to Payment",
           icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { size: 18 })
         }
-      )
+      ),
+      (!address.trim() || showDropdown) && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { textAlign: "center", color: "#B00020", fontSize: 13, marginTop: 12, fontWeight: 500 }, children: !address.trim() ? "Please enter a delivery address." : "Please select an exact address from the suggestions." })
     ] });
   };
   const renderPhase2 = () => {
@@ -25848,11 +25850,12 @@ function App({ initialData: initialData2 }) {
           ] })
         ] }),
         recipientName.trim().length > 0 && recipientContact.trim().length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "fade-in", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", { style: { display: "block", fontSize: 13, fontWeight: 600, color: COLORS.textMuted, marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }, children: "Gift Note (Optional)" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", { style: { display: "block", fontSize: 13, fontWeight: 600, color: COLORS.textMuted, marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }, children: "Write A Note To The Recipient (Optional)" }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
             "textarea",
             {
-              placeholder: "Write a heartfelt message...",
+              placeholder: "Keep it brief \u2014 about two sentences maximum...",
+              maxLength: 200,
               value: note,
               onChange: (e) => setNote(e.target.value),
               style: { width: "100%", padding: 14, borderRadius: 10, border: `1px solid ${COLORS.border}`, fontSize: 15, height: 100, boxSizing: "border-box", outline: "none", resize: "none", background: COLORS.bg, color: COLORS.textMain }
@@ -25868,7 +25871,8 @@ function App({ initialData: initialData2 }) {
           label: "Review Order",
           icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, { size: 18 })
         }
-      )
+      ),
+      (!deliveryDate || !senderName.trim() || !senderContact.trim() || !recipientName.trim() || !recipientContact.trim()) && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { textAlign: "center", color: "#B00020", fontSize: 13, marginTop: 12, fontWeight: 500 }, children: !deliveryDate ? "Please select a delivery date." : !senderName.trim() || !senderContact.trim() ? "Please complete the sender details." : "Please complete the recipient details." })
     ] });
   };
   const renderPhase4 = () => {

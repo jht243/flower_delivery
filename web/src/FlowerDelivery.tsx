@@ -535,6 +535,13 @@ export default function App({ initialData }: { initialData?: any }) {
           label="Continue"
           icon={<ChevronRight size={18} />}
         />
+        {(!effectiveOccasion || selectedStyles.length === 0 || !budget) && (
+          <div style={{ textAlign: 'center', color: '#B00020', fontSize: 13, marginTop: 12, fontWeight: 500 }}>
+            {!effectiveOccasion ? "Please select the occasion you're purchasing for."
+              : selectedStyles.length === 0 ? "Please select at least one inspiration photo."
+                : "Please select a budget for your arrangement."}
+          </div>
+        )}
       </div>
     );
   };
@@ -613,6 +620,11 @@ export default function App({ initialData }: { initialData?: any }) {
           label="Continue to Payment"
           icon={<ChevronRight size={18} />}
         />
+        {(!address.trim() || showDropdown) && (
+          <div style={{ textAlign: 'center', color: '#B00020', fontSize: 13, marginTop: 12, fontWeight: 500 }}>
+            {!address.trim() ? "Please enter a delivery address." : "Please select an exact address from the suggestions."}
+          </div>
+        )}
       </div>
     );
   };
@@ -730,10 +742,11 @@ export default function App({ initialData }: { initialData?: any }) {
           {(recipientName.trim().length > 0 && recipientContact.trim().length > 0) && (
             <div className="fade-in">
               <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: COLORS.textMuted, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                Gift Note (Optional)
+                Write A Note To The Recipient (Optional)
               </label>
               <textarea
-                placeholder="Write a heartfelt message..."
+                placeholder="Keep it brief — about two sentences maximum..."
+                maxLength={200}
                 value={note}
                 onChange={e => setNote(e.target.value)}
                 style={{ width: '100%', padding: 14, borderRadius: 10, border: `1px solid ${COLORS.border}`, fontSize: 15, height: 100, boxSizing: 'border-box', outline: 'none', resize: 'none', background: COLORS.bg, color: COLORS.textMain }}
@@ -748,6 +761,13 @@ export default function App({ initialData }: { initialData?: any }) {
           label="Review Order"
           icon={<ChevronRight size={18} />}
         />
+        {(!deliveryDate || !senderName.trim() || !senderContact.trim() || !recipientName.trim() || !recipientContact.trim()) && (
+          <div style={{ textAlign: 'center', color: '#B00020', fontSize: 13, marginTop: 12, fontWeight: 500 }}>
+            {!deliveryDate ? "Please select a delivery date." :
+              (!senderName.trim() || !senderContact.trim()) ? "Please complete the sender details." :
+                "Please complete the recipient details."}
+          </div>
+        )}
       </div>
     );
   };
