@@ -120,9 +120,8 @@ export default function App({ initialData }: { initialData?: any }) {
   const [feedbackStatus, setFeedbackStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [pillRight, setPillRight] = useState(16);
 
-  // Load persisted enjoy vote
+  // Hydrate component directly on mount AND on updates if initialData is present
   useEffect(() => {
-    // Hydrate component directly on mount if initialData is present
     if (initialData && Object.keys(initialData).length > 0) {
       console.log("[FlowerDelivery] Hydrating from initialData:", initialData);
       // Auto-clear logic from travel-checklist
@@ -133,11 +132,22 @@ export default function App({ initialData }: { initialData?: any }) {
         console.warn("[FlowerDelivery] Could not clear localStorage:", e);
       }
 
-      // We rely on the initial state from useState hooks capturing this data
-      // when the component first mounts (or remounts due to the Date.now() key in main.tsx)
-      console.log("[FlowerDelivery] Current phase:", phase);
+      // Explicitly set the states when hydration data arrives (or updates due to fast late events)
+      if (initialData.budget !== undefined) setBudget(initialData.budget);
+      if (initialData.occasion !== undefined) setOccasion(initialData.occasion);
+      if (initialData.api_base_url) setApiBaseUrl(initialData.api_base_url);
+      if (initialData.recipient_address) setAddress(initialData.recipient_address);
+      if (initialData.delivery_date) setDeliveryDate(initialData.delivery_date);
+      if (initialData.sender_name) setSenderName(initialData.sender_name);
+      if (initialData.sender_contact) setSenderContact(initialData.sender_contact);
+      if (initialData.recipient_name) setRecipientName(initialData.recipient_name);
+      if (initialData.recipient_contact) setRecipientContact(initialData.recipient_contact);
+      if (initialData.gift_note) setNote(initialData.gift_note);
     }
+  }, [initialData]);
 
+  // Load persisted enjoy vote
+  useEffect(() => {
     try {
       const v = localStorage.getItem('enjoyVote_flower');
       if (v === 'up' || v === 'down') setEnjoyVote(v);
