@@ -32,6 +32,22 @@ import { z } from "zod";
 import Stripe from "stripe";
 import { Resend } from "resend";
 
+// Import the auto-generated styles to resolve image IDs
+import fs_sync from "node:fs";
+const stylesFile = path.resolve(process.cwd(), "web/src/generatedStyles.ts");
+let ALL_STYLES: { id: string, label: string, image: string }[] = [];
+if (fs_sync.existsSync(stylesFile)) {
+  const fileContent = fs_sync.readFileSync(stylesFile, 'utf8');
+  const match = fileContent.match(/export const ALL_STYLES: FlowerStyle\[\] = (\[[\s\S]*?\]);/);
+  if (match && match[1]) {
+    try {
+      ALL_STYLES = JSON.parse(match[1]);
+    } catch (e) {
+      console.error("Failed to parse ALL_STYLES from generatedStyles.ts");
+    }
+  }
+}
+
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || 'sk_test_123';
 const stripe = new Stripe(STRIPE_SECRET_KEY, {
   apiVersion: '2026-01-28.clover',
@@ -1749,7 +1765,19 @@ const httpServer = createServer(
           notifiedSessions.add(sessionId);
           if (process.env.RESEND_API_KEY) {
             const order = pendingOrders.get(sessionId) || {};
-            const styleListHTML = order.selectedStyles ? order.selectedStyles.map((s: string) => `<li>${s}</li>`).join('') : "";
+
+            const styleListHTML = order.selectedStyles ? order.selectedStyles.map((styleId: string) => {
+              const styleObj = ALL_STYLES.find(s => s.id === styleId);
+              if (styleObj) {
+                return `
+                  <div style="display: inline-block; margin-right: 12px; margin-bottom: 12px; text-align: center;">
+                    <img src="${styleObj.image}" alt="${styleObj.label}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0; display: block;" />
+                    <span style="font-size: 13px; color: #475569; margin-top: 6px; display: block;">${styleObj.label}</span>
+                  </div>
+                `;
+              }
+              return `<li>${styleId}</li>`;
+            }).join('') : "";
 
             try {
               const response = await resend.emails.send({
@@ -1769,7 +1797,9 @@ const httpServer = createServer(
                     <li><strong>Fulfilling Florist:</strong> ${order.floristName}</li>
                   </ul>
                   <h3>Styles Requested</h3>
-                  <ul>${styleListHTML || '<li>None</li>'}</ul>
+                  <div style="display: flex; flex-wrap: wrap;">
+                    ${styleListHTML || '<p>None selected</p>'}
+                  </div>
                   <h3>Delivery Details</h3>
                   <ul>
                     <li><strong>Recipient:</strong> ${order.recipientName} (${order.recipientContact})</li>
