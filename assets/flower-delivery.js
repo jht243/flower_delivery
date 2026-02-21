@@ -25277,6 +25277,16 @@ function App({ initialData: initialData2 }) {
   const [feedbackStatus, setFeedbackStatus] = (0, import_react3.useState)("idle");
   const [pillRight, setPillRight] = (0, import_react3.useState)(16);
   (0, import_react3.useEffect)(() => {
+    if (initialData2 && Object.keys(initialData2).length > 0) {
+      console.log("[FlowerDelivery] Hydrating from initialData:", initialData2);
+      try {
+        localStorage.removeItem("flowerDeliveryState");
+        console.log("[FlowerDelivery] Cleared old localStorage data for fresh hydration");
+      } catch (e) {
+        console.warn("[FlowerDelivery] Could not clear localStorage:", e);
+      }
+      console.log("[FlowerDelivery] Current phase:", phase);
+    }
     try {
       const v = localStorage.getItem("enjoyVote_flower");
       if (v === "up" || v === "down") setEnjoyVote(v);

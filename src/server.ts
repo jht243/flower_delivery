@@ -274,6 +274,14 @@ const widgets: FlowerDeliveryWidget[] = [
     invoked: "Here is the Artisan Florist Network. Describe your flower preferences, budget, and occasion to find local options.",
     html: readWidgetHtml("flower-delivery"),
   },
+  {
+    id: "test-hydration",
+    title: "Test Hydration Rails",
+    templateUri: `ui://widget/test-hydration.html?v=${VERSION}`,
+    invoking: "Opening Hydration Test...",
+    invoked: "Hydration Test started.",
+    html: readWidgetHtml("test-hydration"),
+  },
 ];
 
 const widgetsById = new Map<string, FlowerDeliveryWidget>();
