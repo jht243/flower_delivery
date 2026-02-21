@@ -440,7 +440,7 @@ export default function App({ initialData }: { initialData?: any }) {
           What are you celebrating?
         </h2>
         <p style={{ color: COLORS.textMuted, fontSize: 15, marginBottom: 24, lineHeight: 1.5 }}>
-          Tell us the occasion and we'll find the perfect arrangement.
+          Tell us the occasion and <u>we'll find the perfect arrangement.</u>
         </p>
 
         <SectionTitle title="Occasion" />
