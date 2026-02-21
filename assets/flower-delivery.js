@@ -25461,6 +25461,29 @@ function App({ initialData: initialData2 }) {
   }, [isAwaitingPayment, checkoutSessionId]);
   const handleNext = () => setPhase((p) => Math.min(p + 1, 5));
   const handleBack = () => setPhase((p) => Math.max(p - 1, 0));
+  const handleMakeAnotherOrder = () => {
+    setPhase(0);
+    setBudget(null);
+    setOccasion("");
+    setCustomOccasion("");
+    setSelectedStyles([]);
+    setAddress("");
+    setIsDelivery(true);
+    setDeliveryDate("");
+    setSenderName("");
+    setSenderContact("");
+    setRecipientName("");
+    setRecipientContact("");
+    setNote("");
+    setSelectedFlorist(null);
+    setIsAwaitingPayment(false);
+    setCheckoutSessionId(null);
+    setIsCheckingOut(false);
+    try {
+      localStorage.removeItem("flowerDeliveryState");
+    } catch {
+    }
+  };
   const handleBackFromPhase3 = () => setPhase(1);
   const handleBackFromPhase4 = () => {
     setIsAwaitingPayment(false);
@@ -26063,7 +26086,16 @@ function App({ initialData: initialData2 }) {
           senderContact,
           ")"
         ] })
-      ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { marginTop: 32, maxWidth: 300, margin: "32px auto 0" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+        PrimaryButton,
+        {
+          disabled: false,
+          onClick: handleMakeAnotherOrder,
+          label: "Make Another Order",
+          icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flower2, { size: 18 })
+        }
+      ) })
     ] });
   };
   return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [

@@ -331,6 +331,27 @@ export default function App({ initialData }: { initialData?: any }) {
 
   const handleNext = () => setPhase(p => Math.min(p + 1, 5));
   const handleBack = () => setPhase(p => Math.max(p - 1, 0));
+
+  const handleMakeAnotherOrder = () => {
+    setPhase(0);
+    setBudget(null);
+    setOccasion('');
+    setCustomOccasion('');
+    setSelectedStyles([]);
+    setAddress('');
+    setIsDelivery(true);
+    setDeliveryDate('');
+    setSenderName('');
+    setSenderContact('');
+    setRecipientName('');
+    setRecipientContact('');
+    setNote('');
+    setSelectedFlorist(null);
+    setIsAwaitingPayment(false);
+    setCheckoutSessionId(null);
+    setIsCheckingOut(false);
+    try { localStorage.removeItem('flowerDeliveryState'); } catch { }
+  };
   const handleBackFromPhase3 = () => setPhase(1); // Skip loading screen if backing up from Phase 3
 
   // When going back from Phase 4 (checkout), clear any pending payment so Pay button reappears
@@ -937,6 +958,15 @@ export default function App({ initialData }: { initialData?: any }) {
 
           <div style={{ fontSize: 12, color: COLORS.textMuted, textTransform: 'uppercase', fontWeight: 600, marginBottom: 4 }}>Receipt Sent To</div>
           <div style={{ fontSize: 15, fontWeight: 500, color: COLORS.textMain }}>{senderName} ({senderContact})</div>
+        </div>
+
+        <div style={{ marginTop: 32, maxWidth: 300, margin: '32px auto 0' }}>
+          <PrimaryButton
+            disabled={false}
+            onClick={handleMakeAnotherOrder}
+            label="Make Another Order"
+            icon={<Flower2 size={18} />}
+          />
         </div>
       </div>
     );
