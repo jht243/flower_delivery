@@ -295,10 +295,6 @@ widgets.forEach((widget) => {
 const toolInputSchema = {
   type: "object",
   properties: {
-    user_request: {
-      type: "string",
-      description: "REQUIRED. Copy the user's FULL original message here verbatim. Example: 'help me find birthday flowers under $100'."
-    },
     budget: {
       type: "number",
       description: "The maximum budget for the flowers in dollars. Extract dollar amounts like '$100', '150'.",
@@ -345,12 +341,11 @@ const toolInputSchema = {
       description: "Phone or email address of the person ordering."
     },
   },
-  required: ["user_request"],
+  required: [],
   additionalProperties: false,
 } as const;
 
 const toolInputParser = z.object({
-  user_request: z.string().optional(),
   budget: z.number().optional(),
   occasion: z.string().optional(),
   flower_preference: z.string().optional(),
@@ -550,15 +545,10 @@ function createFlowerDeliveryServer(): Server {
         // Debug log
         console.log("Captured meta:", { userLocation, userLocale, userAgent });
 
-        // OCCASION INFERENCE: Use ALL available text sources to extract occasion
-        // Priority: 1) args.occasion (ChatGPT extracted it), 2) args.user_request, 3) meta fields
+        // OCCASION INFERENCE: Use available text sources to extract occasion
+        // Priority: 1) args.occasion (ChatGPT extracted it), 2) meta fields
         try {
           const textSources: string[] = [];
-
-          // Source 1: user_request field (most reliable — we asked ChatGPT to always send this)
-          if (args.user_request && typeof args.user_request === 'string') {
-            textSources.push(args.user_request);
-          }
 
           // Source 2: meta fields
           const metaCandidates: any[] = [
