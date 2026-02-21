@@ -257,34 +257,58 @@ export default function App({ initialData }: { initialData?: any }) {
 
   // MCP Hydration
   useEffect(() => {
+    const handleHydration = (statePayload: any) => {
+      if (!statePayload) return;
+      if (statePayload.api_base_url) setApiBaseUrl(statePayload.api_base_url);
+      if (statePayload.budget) setBudget(statePayload.budget);
+      if (statePayload.occasion) {
+        setOccasion(statePayload.occasion);
+        setSelectedStyles([]); // reset styles when AI hydrates a new occasion
+      }
+      if (statePayload.flower_preference) {
+        // If the AI sets a preference, map it to a mock selected state
+        setSelectedStyles([statePayload.flower_preference]);
+      }
+      if (statePayload.delivery_date) setDeliveryDate(statePayload.delivery_date);
+      if (statePayload.sender_name) setSenderName(statePayload.sender_name);
+      if (statePayload.sender_contact) setSenderContact(statePayload.sender_contact);
+      if (statePayload.recipient_name) setRecipientName(statePayload.recipient_name);
+      if (statePayload.recipient_contact) setRecipientContact(statePayload.recipient_contact);
+      if (statePayload.gift_note) setNote(statePayload.gift_note);
+
+      if (statePayload.recipient_address) {
+        setAddress(statePayload.recipient_address);
+        setShowDropdown(false);
+      }
+    };
+
     const handleMessage = (event: MessageEvent) => {
       const { data } = event;
       if (data && data.type === 'ai_state_update' && data.state) {
-        if (data.state.api_base_url) setApiBaseUrl(data.state.api_base_url);
-        if (data.state.budget) setBudget(data.state.budget);
-        if (data.state.occasion) {
-          setOccasion(data.state.occasion);
-          setSelectedStyles([]); // reset styles when AI hydrates a new occasion
-        }
-        if (data.state.flower_preference) {
-          // If the AI sets a preference, map it to a mock selected state
-          setSelectedStyles([data.state.flower_preference]);
-        }
-        if (data.state.delivery_date) setDeliveryDate(data.state.delivery_date);
-        if (data.state.sender_name) setSenderName(data.state.sender_name);
-        if (data.state.sender_contact) setSenderContact(data.state.sender_contact);
-        if (data.state.recipient_name) setRecipientName(data.state.recipient_name);
-        if (data.state.recipient_contact) setRecipientContact(data.state.recipient_contact);
-        if (data.state.gift_note) setNote(data.state.gift_note);
+        handleHydration(data.state);
+        return;
+      }
 
-        if (data.state.recipient_address) {
-          setAddress(data.state.recipient_address);
-          setShowDropdown(false);
+      // MCP Apps SDK JSON-RPC compat
+      if (data && data.jsonrpc === "2.0") {
+        if (data.method === "ui/notifications/tool-result" || data.method === "ui/notifications/tool-input") {
+          const params = data.params;
+          const payload = params?.structuredContent || params?.result?.structuredContent || params?.arguments;
+          if (payload) handleHydration(payload);
         }
-
-        // Auto-advance DISABLED: always stay on Phase 0
       }
     };
+
+    // Check for pre-loaded window.openai sync context from Host
+    const openaiGlobal = (window as any).openai;
+    if (openaiGlobal) {
+      if (openaiGlobal.toolOutput && openaiGlobal.toolOutput.structuredContent) {
+        handleHydration(openaiGlobal.toolOutput.structuredContent);
+      } else if (openaiGlobal.toolInput) {
+        handleHydration(openaiGlobal.toolInput);
+      }
+    }
+
     window.addEventListener('message', handleMessage);
     if (window.parent !== window) {
       window.parent.postMessage({ type: 'component_loaded', component: 'flower-delivery' }, '*');

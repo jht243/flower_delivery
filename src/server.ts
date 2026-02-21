@@ -249,6 +249,16 @@ function widgetMeta(widget: FlowerDeliveryWidget, bustCache: boolean = false) {
     : widget.templateUri;
 
   return {
+    "ui": {
+      "resourceUri": templateUri,
+      "prefersBorder": true,
+      "csp": {
+        "connectDomains": WIDGET_CONNECT_DOMAINS,
+        "resourceDomains": WIDGET_RESOURCE_DOMAINS
+      },
+      "domain": "https://web-sandbox.oaiusercontent.com"
+    },
+    // Legacy mapping aliases:
     "openai/outputTemplate": templateUri,
     "openai/widgetDescription": "The Artisan Florist Local Flower Delivery. YOU MUST ALWAYS extract any explicit details (budget, occasion, flower type) provided by the user and pass them as arguments to this tool. If NO details are provided, call this tool immediately with NO arguments.",
     "openai/componentDescriptions": {
@@ -398,7 +408,7 @@ const resources: Resource[] = widgets.map((widget) => ({
   uri: widget.templateUri,
   name: widget.title,
   description:
-    "HTML template for My Travel Organizer widget.",
+    "HTML template for Flower Delivery widget.",
   mimeType: "text/html+skybridge",
   _meta: widgetMeta(widget),
 }));
@@ -407,7 +417,7 @@ const resourceTemplates: ResourceTemplate[] = widgets.map((widget) => ({
   uriTemplate: widget.templateUri,
   name: widget.title,
   description:
-    "Template descriptor for My Travel Organizer widget.",
+    "Template descriptor for Flower Delivery widget.",
   mimeType: "text/html+skybridge",
   _meta: widgetMeta(widget),
 }));

@@ -25401,30 +25401,50 @@ function App({ initialData: initialData2 }) {
     return () => clearTimeout(delayDebounceFn);
   }, [address, showDropdown]);
   (0, import_react3.useEffect)(() => {
+    const handleHydration = (statePayload) => {
+      if (!statePayload) return;
+      if (statePayload.api_base_url) setApiBaseUrl(statePayload.api_base_url);
+      if (statePayload.budget) setBudget(statePayload.budget);
+      if (statePayload.occasion) {
+        setOccasion(statePayload.occasion);
+        setSelectedStyles([]);
+      }
+      if (statePayload.flower_preference) {
+        setSelectedStyles([statePayload.flower_preference]);
+      }
+      if (statePayload.delivery_date) setDeliveryDate(statePayload.delivery_date);
+      if (statePayload.sender_name) setSenderName(statePayload.sender_name);
+      if (statePayload.sender_contact) setSenderContact(statePayload.sender_contact);
+      if (statePayload.recipient_name) setRecipientName(statePayload.recipient_name);
+      if (statePayload.recipient_contact) setRecipientContact(statePayload.recipient_contact);
+      if (statePayload.gift_note) setNote(statePayload.gift_note);
+      if (statePayload.recipient_address) {
+        setAddress(statePayload.recipient_address);
+        setShowDropdown(false);
+      }
+    };
     const handleMessage = (event) => {
       const { data } = event;
       if (data && data.type === "ai_state_update" && data.state) {
-        if (data.state.api_base_url) setApiBaseUrl(data.state.api_base_url);
-        if (data.state.budget) setBudget(data.state.budget);
-        if (data.state.occasion) {
-          setOccasion(data.state.occasion);
-          setSelectedStyles([]);
-        }
-        if (data.state.flower_preference) {
-          setSelectedStyles([data.state.flower_preference]);
-        }
-        if (data.state.delivery_date) setDeliveryDate(data.state.delivery_date);
-        if (data.state.sender_name) setSenderName(data.state.sender_name);
-        if (data.state.sender_contact) setSenderContact(data.state.sender_contact);
-        if (data.state.recipient_name) setRecipientName(data.state.recipient_name);
-        if (data.state.recipient_contact) setRecipientContact(data.state.recipient_contact);
-        if (data.state.gift_note) setNote(data.state.gift_note);
-        if (data.state.recipient_address) {
-          setAddress(data.state.recipient_address);
-          setShowDropdown(false);
+        handleHydration(data.state);
+        return;
+      }
+      if (data && data.jsonrpc === "2.0") {
+        if (data.method === "ui/notifications/tool-result" || data.method === "ui/notifications/tool-input") {
+          const params = data.params;
+          const payload = params?.structuredContent || params?.result?.structuredContent || params?.arguments;
+          if (payload) handleHydration(payload);
         }
       }
     };
+    const openaiGlobal = window.openai;
+    if (openaiGlobal) {
+      if (openaiGlobal.toolOutput && openaiGlobal.toolOutput.structuredContent) {
+        handleHydration(openaiGlobal.toolOutput.structuredContent);
+      } else if (openaiGlobal.toolInput) {
+        handleHydration(openaiGlobal.toolInput);
+      }
+    }
     window.addEventListener("message", handleMessage);
     if (window.parent !== window) {
       window.parent.postMessage({ type: "component_loaded", component: "flower-delivery" }, "*");
