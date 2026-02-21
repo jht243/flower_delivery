@@ -1738,15 +1738,19 @@ const httpServer = createServer(
           notifiedSessions.add(sessionId);
           if (process.env.RESEND_API_KEY) {
             try {
-              await resend.emails.send({
+              const response = await resend.emails.send({
                 from: 'Flower Delivery <onboarding@resend.dev>',
-                to: 'jonathan@layer3labs.io',
+                to: 'jonathan@pipelinemarketing.io',
                 subject: 'New Flower Order Received! 🌸',
                 html: `<p>A new flower delivery order was successfully paid for!</p><p><strong>Session ID:</strong> ${sessionId}</p>`
               });
-              console.log(`[Email] Notification sent for session ${sessionId}`);
+              if (response.error) {
+                console.error('[Email] Resend API returned an error:', response.error);
+              } else {
+                console.log(`[Email] Notification sent for session ${sessionId}, ID:`, response.data?.id);
+              }
             } catch (err: any) {
-              console.error('[Email] Failed to send order notification:', err.message);
+              console.error('[Email] Exception when sending order notification:', err.message);
             }
           } else {
             console.log(`[Email] RESEND_API_KEY not set. Skipping notification for ${sessionId}`);
