@@ -986,6 +986,11 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
   const totalEnjoyVotes = enjoyUp + enjoyDown;
   const enjoyPct = totalEnjoyVotes > 0 ? ((enjoyUp / totalEnjoyVotes) * 100).toFixed(0) : "—";
 
+  // Completed Orders
+  const completedOrders = logs
+    .filter(l => l.event === "order_completed")
+    .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
   // Daily call volume (last 7 days)
   const dailyCounts: Record<string, { toolCalls: number; widgetEvents: number; errors: number }> = {};
   for (let i = 6; i >= 0; i--) {
@@ -1161,6 +1166,26 @@ function generateAnalyticsDashboard(logs: AnalyticsEvent[], alerts: AlertEntry[]
   )}
       </div>
 
+    </div>
+
+    <!-- ========== DETAILED ORDER HISTORY ========== -->
+    <div class="section-title">📦 Detailed Order History</div>
+    <div class="card" style="margin-bottom:20px; overflow-x: auto;">
+      ${renderTable(
+    ["Time", "Occasion", "Budget", "Recipient", "Address", "Florist"],
+    completedOrders.slice(0, 50).map(l => {
+      const o = l.orderDetails || {};
+      return [
+        `<span class="timestamp">${new Date(l.timestamp).toLocaleString()}</span>`,
+        o.occasion ? `<span class="badge badge-blue">${o.occasion}</span>` : "—",
+        o.budget ? `$${o.budget}` : "—",
+        o.recipientName || "—",
+        o.address || "—",
+        o.floristName || "—"
+      ];
+    }),
+    "No completed orders yet"
+  )}
     </div>
 
     <!-- ========== IN-APP ANALYTICS ========== -->
@@ -1765,6 +1790,8 @@ const httpServer = createServer(
           notifiedSessions.add(sessionId);
           if (process.env.RESEND_API_KEY) {
             const order = pendingOrders.get(sessionId) || {};
+            logAnalytics("order_completed", { sessionId, orderDetails: order });
+
 
             const styleListHTML = order.selectedStyles ? order.selectedStyles.map((styleId: string) => {
               const styleObj = ALL_STYLES.find(s => s.id === styleId);
