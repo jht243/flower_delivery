@@ -173,10 +173,8 @@ function computeSummary(args: any) {
     budget: args.budget || null,
     occasion: args.occasion || null,
     flower_preference: args.flower_preference || null,
-    recipient_address: args.recipient_address || null,
     gift_note: args.gift_note || null,
     delivery_date: args.delivery_date || null,
-    sender_contact: args.sender_contact || null,
   };
 }
 function readWidgetHtml(componentName: string): string {
@@ -311,36 +309,10 @@ const toolInputSchema = {
       description: "Specific flowers or vibe (e.g. Roses, Minimalist, Colorful, Tulips).",
       examples: ["Roses", "Minimalist"]
     },
-    recipient_name: {
-      type: "string",
-      description: "Name of the person receiving the flowers. E.g. Mom, Wife, John.",
-      examples: ["Mom", "John"]
-    },
-    recipient_contact: {
-      type: "string",
-      description: "Phone or email of the recipient."
-    },
-    recipient_address: {
-      type: "string",
-      description: "Where the flowers should be delivered. e.g. '123 Main St'.",
-      examples: ["123 Main St"]
-    },
-    delivery_date: {
-      type: "string",
-      description: "Delivery date for the flowers in YYYY-MM-DD format."
-    },
     gift_note: {
       type: "string",
       description: "The note to attach to the flowers."
-    },
-    sender_name: {
-      type: "string",
-      description: "Name of the person ordering the flowers."
-    },
-    sender_contact: {
-      type: "string",
-      description: "Phone or email address of the person ordering."
-    },
+    }
   },
   required: [],
   additionalProperties: false,
@@ -350,13 +322,8 @@ const toolInputParser = z.object({
   budget: z.number().optional(),
   occasion: z.string().optional(),
   flower_preference: z.string().optional(),
-  recipient_name: z.string().optional(),
-  recipient_contact: z.string().optional(),
-  recipient_address: z.string().optional(),
   delivery_date: z.string().optional(),
   gift_note: z.string().optional(),
-  sender_name: z.string().optional(),
-  sender_contact: z.string().optional(),
 });
 
 const tools: Tool[] = widgets.map((widget) => ({
@@ -372,13 +339,8 @@ const tools: Tool[] = widgets.map((widget) => ({
       budget: { type: ["number", "null"] },
       occasion: { type: ["string", "null"] },
       flower_preference: { type: ["string", "null"] },
-      recipient_name: { type: ["string", "null"] },
-      recipient_contact: { type: ["string", "null"] },
-      recipient_address: { type: ["string", "null"] },
       delivery_date: { type: ["string", "null"] },
       gift_note: { type: ["string", "null"] },
-      sender_name: { type: ["string", "null"] },
-      sender_contact: { type: ["string", "null"] },
       input_source: { type: "string", enum: ["user", "default"] },
       summary: {
         type: "object",
@@ -386,10 +348,8 @@ const tools: Tool[] = widgets.map((widget) => ({
           budget: { type: ["number", "null"] },
           occasion: { type: ["string", "null"] },
           flower_preference: { type: ["string", "null"] },
-          recipient_address: { type: ["string", "null"] },
           delivery_date: { type: ["string", "null"] },
           gift_note: { type: ["string", "null"] },
-          sender_contact: { type: ["string", "null"] },
         },
       },
       suggested_followups: {
@@ -640,13 +600,8 @@ function createFlowerDeliveryServer(): Server {
           budget: args.budget ?? null,
           occasion: args.occasion ?? null,
           flower_preference: args.flower_preference ?? null,
-          recipient_name: args.recipient_name ?? null,
-          recipient_contact: args.recipient_contact ?? null,
-          recipient_address: args.recipient_address ?? null,
           delivery_date: args.delivery_date ?? null,
           gift_note: args.gift_note ?? null,
-          sender_name: args.sender_name ?? null,
-          sender_contact: args.sender_contact ?? null,
           input_source: usedDefaults ? "default" : "user",
           summary: computeSummary(args),
           suggested_followups: [
