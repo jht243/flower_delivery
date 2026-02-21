@@ -93,15 +93,16 @@ const WIDGET_CONNECT_DOMAINS = Array.from(
     LOCALHOST_API_ORIGIN,
     LOCALHOST_LOOPBACK_API_ORIGIN,
     "https://flower-delivery-ffh2.onrender.com",
-    "https://nominatim.openstreetmap.org",
-    "https://api.open-meteo.com",
-    "https://geocoding-api.open-meteo.com",
+    "https://photon.komoot.io",
   ])
 );
 
 const WIDGET_RESOURCE_DOMAINS = Array.from(
   new Set([
     "https://flower-delivery-ffh2.onrender.com",
+    "https://images.unsplash.com",
+    "https://fonts.googleapis.com",
+    "https://fonts.gstatic.com",
     ...(WIDGET_API_BASE_URL.startsWith("https://") ? [WIDGET_API_BASE_URL] : []),
   ])
 );

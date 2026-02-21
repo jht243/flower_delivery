@@ -24585,15 +24585,28 @@ var __iconNode8 = [
 ];
 var Info = createLucideIcon("info", __iconNode8);
 
-// node_modules/lucide-react/dist/esm/icons/lock.js
+// node_modules/lucide-react/dist/esm/icons/leaf.js
 var __iconNode9 = [
+  [
+    "path",
+    {
+      d: "M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z",
+      key: "nnexq3"
+    }
+  ],
+  ["path", { d: "M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12", key: "mt58a7" }]
+];
+var Leaf = createLucideIcon("leaf", __iconNode9);
+
+// node_modules/lucide-react/dist/esm/icons/lock.js
+var __iconNode10 = [
   ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
   ["path", { d: "M7 11V7a5 5 0 0 1 10 0v4", key: "fwvmzm" }]
 ];
-var Lock = createLucideIcon("lock", __iconNode9);
+var Lock = createLucideIcon("lock", __iconNode10);
 
 // node_modules/lucide-react/dist/esm/icons/map-pin.js
-var __iconNode10 = [
+var __iconNode11 = [
   [
     "path",
     {
@@ -24603,10 +24616,10 @@ var __iconNode10 = [
   ],
   ["circle", { cx: "12", cy: "10", r: "3", key: "ilqhr7" }]
 ];
-var MapPin = createLucideIcon("map-pin", __iconNode10);
+var MapPin = createLucideIcon("map-pin", __iconNode11);
 
 // node_modules/lucide-react/dist/esm/icons/phone.js
-var __iconNode11 = [
+var __iconNode12 = [
   [
     "path",
     {
@@ -24615,24 +24628,24 @@ var __iconNode11 = [
     }
   ]
 ];
-var Phone = createLucideIcon("phone", __iconNode11);
+var Phone = createLucideIcon("phone", __iconNode12);
 
 // node_modules/lucide-react/dist/esm/icons/plus.js
-var __iconNode12 = [
+var __iconNode13 = [
   ["path", { d: "M5 12h14", key: "1ays0h" }],
   ["path", { d: "M12 5v14", key: "s699le" }]
 ];
-var Plus = createLucideIcon("plus", __iconNode12);
+var Plus = createLucideIcon("plus", __iconNode13);
 
 // node_modules/lucide-react/dist/esm/icons/search.js
-var __iconNode13 = [
+var __iconNode14 = [
   ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
   ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
 ];
-var Search = createLucideIcon("search", __iconNode13);
+var Search = createLucideIcon("search", __iconNode14);
 
 // node_modules/lucide-react/dist/esm/icons/shield-check.js
-var __iconNode14 = [
+var __iconNode15 = [
   [
     "path",
     {
@@ -24642,10 +24655,10 @@ var __iconNode14 = [
   ],
   ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
 ];
-var ShieldCheck = createLucideIcon("shield-check", __iconNode14);
+var ShieldCheck = createLucideIcon("shield-check", __iconNode15);
 
 // node_modules/lucide-react/dist/esm/icons/star.js
-var __iconNode15 = [
+var __iconNode16 = [
   [
     "path",
     {
@@ -24654,10 +24667,10 @@ var __iconNode15 = [
     }
   ]
 ];
-var Star = createLucideIcon("star", __iconNode15);
+var Star = createLucideIcon("star", __iconNode16);
 
 // node_modules/lucide-react/dist/esm/icons/thumbs-down.js
-var __iconNode16 = [
+var __iconNode17 = [
   ["path", { d: "M17 14V2", key: "8ymqnk" }],
   [
     "path",
@@ -24667,10 +24680,10 @@ var __iconNode16 = [
     }
   ]
 ];
-var ThumbsDown = createLucideIcon("thumbs-down", __iconNode16);
+var ThumbsDown = createLucideIcon("thumbs-down", __iconNode17);
 
 // node_modules/lucide-react/dist/esm/icons/thumbs-up.js
-var __iconNode17 = [
+var __iconNode18 = [
   ["path", { d: "M7 10v12", key: "1qc93n" }],
   [
     "path",
@@ -24680,23 +24693,23 @@ var __iconNode17 = [
     }
   ]
 ];
-var ThumbsUp = createLucideIcon("thumbs-up", __iconNode17);
+var ThumbsUp = createLucideIcon("thumbs-up", __iconNode18);
 
 // node_modules/lucide-react/dist/esm/icons/x.js
-var __iconNode18 = [
+var __iconNode19 = [
   ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
   ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
 ];
-var X = createLucideIcon("x", __iconNode18);
+var X = createLucideIcon("x", __iconNode19);
 
 // node_modules/lucide-react/dist/esm/icons/zoom-in.js
-var __iconNode19 = [
+var __iconNode20 = [
   ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }],
   ["line", { x1: "21", x2: "16.65", y1: "21", y2: "16.65", key: "13gj7c" }],
   ["line", { x1: "11", x2: "11", y1: "8", y2: "14", key: "1vmskp" }],
   ["line", { x1: "8", x2: "14", y1: "11", y2: "11", key: "durymu" }]
 ];
-var ZoomIn = createLucideIcon("zoom-in", __iconNode19);
+var ZoomIn = createLucideIcon("zoom-in", __iconNode20);
 
 // src/generatedStyles.ts
 var FOLDER_COLLECTIONS = {
@@ -25271,11 +25284,11 @@ function App({ initialData: initialData2 }) {
   const [checkoutSessionId, setCheckoutSessionId] = (0, import_react3.useState)(null);
   const [isAwaitingPayment, setIsAwaitingPayment] = (0, import_react3.useState)(false);
   const containerRef = (0, import_react3.useRef)(null);
+  const contentRef = (0, import_react3.useRef)(null);
   const [enjoyVote, setEnjoyVote] = (0, import_react3.useState)(null);
   const [showFeedbackModal, setShowFeedbackModal] = (0, import_react3.useState)(false);
   const [feedbackText, setFeedbackText] = (0, import_react3.useState)("");
   const [feedbackStatus, setFeedbackStatus] = (0, import_react3.useState)("idle");
-  const [pillRight, setPillRight] = (0, import_react3.useState)(16);
   (0, import_react3.useEffect)(() => {
     if (initialData2 && Object.keys(initialData2).length > 0) {
       console.log("[FlowerDelivery] HYDRATION initialData:", JSON.stringify(initialData2));
@@ -25294,28 +25307,18 @@ function App({ initialData: initialData2 }) {
     }
   }, [initialData2]);
   (0, import_react3.useEffect)(() => {
+    if (phase > 0 && contentRef.current) {
+      setTimeout(() => {
+        contentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
+  }, [phase]);
+  (0, import_react3.useEffect)(() => {
     try {
       const v = localStorage.getItem("enjoyVote_flower");
       if (v === "up" || v === "down") setEnjoyVote(v);
     } catch {
     }
-  }, []);
-  (0, import_react3.useEffect)(() => {
-    const update = () => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      setPillRight(Math.max(16, window.innerWidth - rect.right + 16));
-    };
-    update();
-    const ro = new ResizeObserver(update);
-    if (containerRef.current) ro.observe(containerRef.current);
-    window.addEventListener("resize", update);
-    window.addEventListener("scroll", update, { passive: true });
-    return () => {
-      ro.disconnect();
-      window.removeEventListener("resize", update);
-      window.removeEventListener("scroll", update);
-    };
   }, []);
   const trackEvent = (event, data = {}) => {
     const base = apiBaseUrl || (typeof window !== "undefined" ? window.location.origin : "");
@@ -25519,17 +25522,17 @@ function App({ initialData: initialData2 }) {
     });
   };
   const renderPhase0 = () => {
-    const primaryOccasions = ["Anniversary", "Birthday", "Sympathy", "Mother's Day"];
-    const extraOccasions = ["Valentine's Day", "Father's Day", "Women's Day", "Graduation", "Get Well", "Just Because"];
+    const primaryOccasions = ["Anniversary", "Birthday", "Sympathy", "Mother's Day", "Get Well", "Graduation"];
+    const extraOccasions = ["Valentine's Day", "Father's Day", "Women's Day", "Just Because"];
     const budgets = [50, 75, 100, 150, 200];
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "fade-in", style: { padding: "0 16px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { style: { fontFamily: '"Playfair Display", serif', fontSize: 28, color: COLORS.textMain, fontWeight: 600, marginTop: 10, marginBottom: 8 }, children: "What are you celebrating?" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { style: { fontFamily: '"Playfair Display", serif', fontSize: 28, color: COLORS.textMain, fontWeight: 600, marginTop: 5, marginBottom: 8 }, children: "What are you celebrating?" }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { style: { color: COLORS.textMuted, fontSize: 15, marginBottom: 24, lineHeight: 1.5 }, children: [
         "Tell us the occasion and ",
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("u", { children: "we'll find the perfect arrangement." })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SectionTitle, { title: "Occasion" }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 12 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 12 }, children: [
         primaryOccasions.map((occ) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectPill, { label: occ, selected: occasion === occ && !customOccasion, onClick: () => handleOccasionSelect(occ) }, occ)),
         showMoreOccasions && extraOccasions.map((occ) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectPill, { label: occ, selected: occasion === occ && !customOccasion, onClick: () => handleOccasionSelect(occ) }, occ)),
         !showMoreOccasions && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
@@ -25538,12 +25541,12 @@ function App({ initialData: initialData2 }) {
             className: "btn-press",
             onClick: () => setShowMoreOccasions(true),
             style: {
-              padding: "10px 18px",
+              padding: "8px 14px",
               borderRadius: 24,
               border: `1.5px dashed ${COLORS.border}`,
               backgroundColor: "transparent",
               color: COLORS.textMuted,
-              fontSize: 14,
+              fontSize: 13,
               fontWeight: 600,
               cursor: "pointer",
               display: "flex",
@@ -26089,28 +26092,31 @@ function App({ initialData: initialData2 }) {
           .no-print { display: none !important; }
         }
       ` }),
-    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { ref: containerRef, style: { maxWidth: 540, margin: "0 auto", minHeight: "80vh", backgroundColor: COLORS.bg, position: "relative", borderRadius: 16, border: "1px solid #E5E7EB", overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.08)" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { padding: "32px 20px 24px", backgroundColor: "#2C3A29", color: COLORS.white, position: "relative", overflow: "hidden", marginBottom: 24 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { position: "relative", zIndex: 1 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 44, height: 44, borderRadius: 14, backgroundColor: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flower2, { color: "white", size: 24 }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 13, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: COLORS.primary }, children: "The Artisan Florist" }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 22, fontWeight: 700, color: COLORS.white, fontFamily: '"Playfair Display", serif' }, children: "Local Flower Delivery" })
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", color: "#FFD700" }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { size: 14, fill: "currentColor" }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { size: 14, fill: "currentColor" }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { size: 14, fill: "currentColor" }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { size: 14, fill: "currentColor" }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { size: 14, fill: "currentColor" })
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { ref: containerRef, style: { maxWidth: 540, margin: "0 auto", backgroundColor: COLORS.bg, position: "relative", borderRadius: 16, border: "1px solid #E5E7EB", overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.08)" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { padding: "32px 20px 16px", backgroundColor: "#2C3A29", color: COLORS.white, position: "relative", overflow: "hidden", marginBottom: 12 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { position: "absolute", top: -25, right: -20, opacity: 0.1, zIndex: 0, transform: "rotate(15deg)" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Leaf, { size: 160, color: "#FFFFFF", strokeWidth: 1.5 }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { position: "relative", zIndex: 1 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { width: 44, height: 44, borderRadius: 14, backgroundColor: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Flower2, { color: "white", size: 24 }) }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 13, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: COLORS.primary }, children: "The Artisan Florist" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 22, fontWeight: 700, color: COLORS.white, fontFamily: '"Playfair Display", serif' }, children: "Local Flower Delivery" })
+            ] })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, color: "rgba(255,255,255,0.8)", fontWeight: 500 }, children: "4.9/5 from 10,000+ local deliveries" })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 16, color: "rgba(255,255,255,0.95)", fontStyle: "italic", marginBottom: 16, lineHeight: 1.4, fontWeight: 500 }, children: '"Sourced directly from verified, independent local growers."' })
-      ] }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { paddingBottom: 60 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", color: "#FFD700" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { size: 14, fill: "currentColor" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { size: 14, fill: "currentColor" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { size: 14, fill: "currentColor" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { size: 14, fill: "currentColor" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Star, { size: 14, fill: "currentColor" })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, color: "rgba(255,255,255,0.8)", fontWeight: 500 }, children: "4.9/5 from 10,000+ local deliveries" })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 16, color: "rgba(255,255,255,0.95)", fontStyle: "italic", marginBottom: 0, lineHeight: 1.4, fontWeight: 500 }, children: '"Sourced directly from verified, independent local growers."' })
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { ref: contentRef, style: { paddingBottom: 40, scrollMarginTop: 65 }, children: [
         phase === 0 && renderPhase0(),
         phase === 1 && renderPhase1(),
         phase === 2 && renderPhase2(),
@@ -26118,14 +26124,81 @@ function App({ initialData: initialData2 }) {
         phase === 4 && renderPhase4(),
         phase === 5 && renderPhase5()
       ] }),
-      phase < 2 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "fade-in", style: { padding: "0 20px 40px", textAlign: "center" }, children: [
+      phase < 2 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "fade-in", style: { padding: "0 20px 24px", textAlign: "center" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, color: COLORS.textMuted, marginBottom: 16 }, children: "Recognized By" }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "center", alignItems: "center", gap: 24, opacity: 0.4, filter: "grayscale(100%)" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontFamily: '"Playfair Display", serif', fontSize: 18, fontWeight: 700 }, children: "VOGUE" }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontFamily: "Inter, sans-serif", fontSize: 16, fontWeight: 700, letterSpacing: "-0.5px" }, children: "The Knot" }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontFamily: '"Playfair Display", serif', fontSize: 16, fontStyle: "italic", fontWeight: 600 }, children: "Martha Stewart" })
         ] })
-      ] })
+      ] }),
+      !enjoyVote && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "fade-in no-print", style: {
+        position: "absolute",
+        bottom: 16,
+        right: 16,
+        zIndex: 900,
+        pointerEvents: "none"
+      }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
+        backgroundColor: "#fff",
+        border: "1px solid #E5E7EB",
+        borderRadius: 9999,
+        boxShadow: "0 8px 24px rgba(17, 24, 39, 0.14)",
+        padding: "6px 14px",
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        pointerEvents: "auto"
+      }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, fontWeight: 600, color: "#111827", whiteSpace: "nowrap" }, children: "Enjoying this app?" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 6 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+            "button",
+            {
+              onClick: () => handleEnjoyVote("up"),
+              title: "Thumbs up",
+              style: {
+                width: 32,
+                height: 32,
+                borderRadius: 8,
+                border: "1px solid #E5E7EB",
+                backgroundColor: "#fff",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: 0,
+                transition: "all 0.2s"
+              },
+              onMouseEnter: (e) => e.currentTarget.style.backgroundColor = "#F0FDF4",
+              onMouseLeave: (e) => e.currentTarget.style.backgroundColor = "#fff",
+              children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ThumbsUp, { size: 15, style: { color: "#059669" }, strokeWidth: 2.5 })
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+            "button",
+            {
+              onClick: () => handleEnjoyVote("down"),
+              title: "Thumbs down",
+              style: {
+                width: 32,
+                height: 32,
+                borderRadius: 8,
+                border: "1px solid #E5E7EB",
+                backgroundColor: "#fff",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: 0,
+                transition: "all 0.2s"
+              },
+              onMouseEnter: (e) => e.currentTarget.style.backgroundColor = "#FFF1F2",
+              onMouseLeave: (e) => e.currentTarget.style.backgroundColor = "#fff",
+              children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ThumbsDown, { size: 15, style: { color: "#DC2626" }, strokeWidth: 2.5 })
+            }
+          )
+        ] })
+      ] }) })
     ] }),
     zoomedImage && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
       "div",
@@ -26182,73 +26255,6 @@ function App({ initialData: initialData2 }) {
         ]
       }
     ),
-    !enjoyVote && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "no-print", style: {
-      position: "fixed",
-      bottom: 20,
-      right: pillRight,
-      zIndex: 900,
-      pointerEvents: "none"
-    }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: {
-      backgroundColor: "#fff",
-      border: "1px solid #E5E7EB",
-      borderRadius: 9999,
-      boxShadow: "0 8px 24px rgba(17, 24, 39, 0.14)",
-      padding: "6px 12px",
-      display: "flex",
-      alignItems: "center",
-      gap: 8,
-      pointerEvents: "auto"
-    }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 11, fontWeight: 700, color: "#374151", whiteSpace: "nowrap" }, children: "Enjoying This App?" }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", gap: 4 }, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          "button",
-          {
-            onClick: () => handleEnjoyVote("up"),
-            title: "Thumbs up",
-            style: {
-              width: 30,
-              height: 28,
-              borderRadius: 8,
-              border: "1px solid #E5E7EB",
-              backgroundColor: "#fff",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: 0,
-              transition: "all 0.2s"
-            },
-            onMouseEnter: (e) => e.currentTarget.style.backgroundColor = "#F0FDF4",
-            onMouseLeave: (e) => e.currentTarget.style.backgroundColor = "#fff",
-            children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ThumbsUp, { size: 13, style: { color: "#6B7280" } })
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          "button",
-          {
-            onClick: () => handleEnjoyVote("down"),
-            title: "Thumbs down",
-            style: {
-              width: 30,
-              height: 28,
-              borderRadius: 8,
-              border: "1px solid #E5E7EB",
-              backgroundColor: "#fff",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: 0,
-              transition: "all 0.2s"
-            },
-            onMouseEnter: (e) => e.currentTarget.style.backgroundColor = "#FFF1F2",
-            onMouseLeave: (e) => e.currentTarget.style.backgroundColor = "#fff",
-            children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ThumbsDown, { size: 13, style: { color: "#6B7280" } })
-          }
-        )
-      ] })
-    ] }) }),
     showFeedbackModal && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
       "div",
       {
@@ -26371,12 +26377,12 @@ function SelectPill({ label, selected, onClick }) {
       className: "btn-press",
       onClick,
       style: {
-        padding: "10px 18px",
+        padding: "8px 14px",
         borderRadius: 24,
         border: `1.5px solid ${selected ? COLORS.primary : COLORS.border}`,
         backgroundColor: selected ? `${COLORS.primary}15` : COLORS.surface,
         color: selected ? COLORS.primary : COLORS.textMuted,
-        fontSize: 14,
+        fontSize: 13,
         fontWeight: 600,
         cursor: "pointer",
         transition: "all 0.2s",
@@ -26681,6 +26687,14 @@ lucide-react/dist/esm/icons/flower-2.js:
    *)
 
 lucide-react/dist/esm/icons/info.js:
+  (**
+   * @license lucide-react v0.554.0 - ISC
+   *
+   * This source code is licensed under the ISC license.
+   * See the LICENSE file in the root directory of this source tree.
+   *)
+
+lucide-react/dist/esm/icons/leaf.js:
   (**
    * @license lucide-react v0.554.0 - ISC
    *

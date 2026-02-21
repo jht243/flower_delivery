@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Flower2, Gift, MapPin, CheckCircle2, ChevronRight, Check, Phone,
+  Leaf, Flower2, Gift, MapPin, CheckCircle2, ChevronRight, Check, Phone,
   ArrowLeft, Star, Heart, Calendar, AtSign, Plus, Search, ShieldCheck, Lock, ZoomIn, X, Info, ChevronDown, CreditCard,
   ThumbsUp, ThumbsDown, MessageSquare
 } from 'lucide-react';
@@ -114,11 +114,11 @@ export default function App({ initialData }: { initialData?: any }) {
 
   // Feedback pill state
   const containerRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const [enjoyVote, setEnjoyVote] = useState<'up' | 'down' | null>(null);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [feedbackText, setFeedbackText] = useState('');
   const [feedbackStatus, setFeedbackStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-  const [pillRight, setPillRight] = useState(16);
 
   // Hydrate component — ONLY occasion (focused MVP approach)
   useEffect(() => {
@@ -140,6 +140,15 @@ export default function App({ initialData }: { initialData?: any }) {
     }
   }, [initialData]);
 
+  // Auto-scroll on phase change
+  useEffect(() => {
+    if (phase > 0 && contentRef.current) {
+      setTimeout(() => {
+        contentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }, [phase]);
+
   // Load persisted enjoy vote
   useEffect(() => {
     try {
@@ -148,24 +157,7 @@ export default function App({ initialData }: { initialData?: any }) {
     } catch { }
   }, []);
 
-  // Track pill position relative to container for correct iframe placement
-  useEffect(() => {
-    const update = () => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      setPillRight(Math.max(16, window.innerWidth - rect.right + 16));
-    };
-    update();
-    const ro = new ResizeObserver(update);
-    if (containerRef.current) ro.observe(containerRef.current);
-    window.addEventListener('resize', update);
-    window.addEventListener('scroll', update, { passive: true });
-    return () => {
-      ro.disconnect();
-      window.removeEventListener('resize', update);
-      window.removeEventListener('scroll', update);
-    };
-  }, []);
+
 
   // Track helper
   const trackEvent = (event: string, data: Record<string, any> = {}) => {
@@ -412,13 +404,13 @@ export default function App({ initialData }: { initialData?: any }) {
 
   // Render Phases
   const renderPhase0 = () => {
-    const primaryOccasions = ["Anniversary", "Birthday", "Sympathy", "Mother's Day"];
-    const extraOccasions = ["Valentine's Day", "Father's Day", "Women's Day", "Graduation", "Get Well", "Just Because"];
+    const primaryOccasions = ["Anniversary", "Birthday", "Sympathy", "Mother's Day", "Get Well", "Graduation"];
+    const extraOccasions = ["Valentine's Day", "Father's Day", "Women's Day", "Just Because"];
     const budgets = [50, 75, 100, 150, 200];
 
     return (
       <div className="fade-in" style={{ padding: '0 16px' }}>
-        <h2 style={{ fontFamily: '"Playfair Display", serif', fontSize: 28, color: COLORS.textMain, fontWeight: 600, marginTop: 10, marginBottom: 8 }}>
+        <h2 style={{ fontFamily: '"Playfair Display", serif', fontSize: 28, color: COLORS.textMain, fontWeight: 600, marginTop: 5, marginBottom: 8 }}>
           What are you celebrating?
         </h2>
         <p style={{ color: COLORS.textMuted, fontSize: 15, marginBottom: 24, lineHeight: 1.5 }}>
@@ -426,7 +418,7 @@ export default function App({ initialData }: { initialData?: any }) {
         </p>
 
         <SectionTitle title="Occasion" />
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 12 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
           {primaryOccasions.map(occ => (
             <SelectPill key={occ} label={occ} selected={occasion === occ && !customOccasion} onClick={() => handleOccasionSelect(occ)} />
           ))}
@@ -437,8 +429,8 @@ export default function App({ initialData }: { initialData?: any }) {
             <button
               className="btn-press" onClick={() => setShowMoreOccasions(true)}
               style={{
-                padding: '10px 18px', borderRadius: 24, border: `1.5px dashed ${COLORS.border}`,
-                backgroundColor: 'transparent', color: COLORS.textMuted, fontSize: 14, fontWeight: 600,
+                padding: '8px 14px', borderRadius: 24, border: `1.5px dashed ${COLORS.border}`,
+                backgroundColor: 'transparent', color: COLORS.textMuted, fontSize: 13, fontWeight: 600,
                 cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4
               }}
             >
@@ -961,9 +953,12 @@ export default function App({ initialData }: { initialData?: any }) {
           .no-print { display: none !important; }
         }
       `}</style>
-      <div ref={containerRef} style={{ maxWidth: 540, margin: '0 auto', minHeight: '80vh', backgroundColor: COLORS.bg, position: 'relative', borderRadius: 16, border: '1px solid #E5E7EB', overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.08)' }}>
+      <div ref={containerRef} style={{ maxWidth: 540, margin: '0 auto', backgroundColor: COLORS.bg, position: 'relative', borderRadius: 16, border: '1px solid #E5E7EB', overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.08)' }}>
 
-        <div style={{ padding: '32px 20px 24px', backgroundColor: '#2C3A29', color: COLORS.white, position: 'relative', overflow: 'hidden', marginBottom: 24 }}>
+        <div style={{ padding: '32px 20px 16px', backgroundColor: '#2C3A29', color: COLORS.white, position: 'relative', overflow: 'hidden', marginBottom: 12 }}>
+          <div style={{ position: 'absolute', top: -25, right: -20, opacity: 0.1, zIndex: 0, transform: 'rotate(15deg)' }}>
+            <Leaf size={160} color="#FFFFFF" strokeWidth={1.5} />
+          </div>
           <div style={{ position: 'relative', zIndex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
               <div style={{ width: 44, height: 44, borderRadius: 14, backgroundColor: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
@@ -986,13 +981,13 @@ export default function App({ initialData }: { initialData?: any }) {
               <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)', fontWeight: 500 }}>4.9/5 from 10,000+ local deliveries</span>
             </div>
 
-            <div style={{ fontSize: 16, color: 'rgba(255,255,255,0.95)', fontStyle: 'italic', marginBottom: 16, lineHeight: 1.4, fontWeight: 500 }}>
+            <div style={{ fontSize: 16, color: 'rgba(255,255,255,0.95)', fontStyle: 'italic', marginBottom: 0, lineHeight: 1.4, fontWeight: 500 }}>
               "Sourced directly from verified, independent local growers."
             </div>
           </div>
         </div>
 
-        <div style={{ paddingBottom: 60 }}>
+        <div ref={contentRef} style={{ paddingBottom: 40, scrollMarginTop: 65 }}>
           {phase === 0 && renderPhase0()}
           {phase === 1 && renderPhase1()}
           {phase === 2 && renderPhase2()}
@@ -1002,7 +997,7 @@ export default function App({ initialData }: { initialData?: any }) {
         </div>
 
         {phase < 2 && (
-          <div className="fade-in" style={{ padding: '0 20px 40px', textAlign: 'center' }}>
+          <div className="fade-in" style={{ padding: '0 20px 24px', textAlign: 'center' }}>
             <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, color: COLORS.textMuted, marginBottom: 16 }}>
               Recognized By
             </div>
@@ -1010,6 +1005,67 @@ export default function App({ initialData }: { initialData?: any }) {
               <span style={{ fontFamily: '"Playfair Display", serif', fontSize: 18, fontWeight: 700 }}>VOGUE</span>
               <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 16, fontWeight: 700, letterSpacing: '-0.5px' }}>The Knot</span>
               <span style={{ fontFamily: '"Playfair Display", serif', fontSize: 16, fontStyle: 'italic', fontWeight: 600 }}>Martha Stewart</span>
+            </div>
+          </div>
+        )}
+
+        {/* Floating "Enjoying this app?" Pill */}
+        {!enjoyVote && (
+          <div className="fade-in no-print" style={{
+            position: 'absolute',
+            bottom: 16,
+            right: 16,
+            zIndex: 900,
+            pointerEvents: 'none',
+          }}>
+            <div style={{
+              backgroundColor: '#fff',
+              border: '1px solid #E5E7EB',
+              borderRadius: 9999,
+              boxShadow: '0 8px 24px rgba(17, 24, 39, 0.14)',
+              padding: '6px 14px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              pointerEvents: 'auto',
+            }}>
+              <span style={{ fontSize: 13, fontWeight: 600, color: '#111827', whiteSpace: 'nowrap' }}>
+                Enjoying this app?
+              </span>
+              <div style={{ display: 'flex', gap: 6 }}>
+                <button
+                  onClick={() => handleEnjoyVote('up')}
+                  title="Thumbs up"
+                  style={{
+                    width: 32, height: 32, borderRadius: 8,
+                    border: '1px solid #E5E7EB',
+                    backgroundColor: '#fff',
+                    cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    padding: 0, transition: 'all 0.2s',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#F0FDF4')}
+                  onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#fff')}
+                >
+                  <ThumbsUp size={15} style={{ color: '#059669' }} strokeWidth={2.5} />
+                </button>
+                <button
+                  onClick={() => handleEnjoyVote('down')}
+                  title="Thumbs down"
+                  style={{
+                    width: 32, height: 32, borderRadius: 8,
+                    border: '1px solid #E5E7EB',
+                    backgroundColor: '#fff',
+                    cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    padding: 0, transition: 'all 0.2s',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#FFF1F2')}
+                  onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#fff')}
+                >
+                  <ThumbsDown size={15} style={{ color: '#DC2626' }} strokeWidth={2.5} />
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -1045,66 +1101,7 @@ export default function App({ initialData }: { initialData?: any }) {
         </div>
       )}
 
-      {/* Floating "Enjoying This App?" Pill */}
-      {!enjoyVote && (
-        <div className="no-print" style={{
-          position: 'fixed',
-          bottom: 20,
-          right: pillRight,
-          zIndex: 900,
-          pointerEvents: 'none',
-        }}>
-          <div style={{
-            backgroundColor: '#fff',
-            border: '1px solid #E5E7EB',
-            borderRadius: 9999,
-            boxShadow: '0 8px 24px rgba(17, 24, 39, 0.14)',
-            padding: '6px 12px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            pointerEvents: 'auto',
-          }}>
-            <span style={{ fontSize: 11, fontWeight: 700, color: '#374151', whiteSpace: 'nowrap' }}>
-              Enjoying This App?
-            </span>
-            <div style={{ display: 'flex', gap: 4 }}>
-              <button
-                onClick={() => handleEnjoyVote('up')}
-                title="Thumbs up"
-                style={{
-                  width: 30, height: 28, borderRadius: 8,
-                  border: '1px solid #E5E7EB',
-                  backgroundColor: '#fff',
-                  cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  padding: 0, transition: 'all 0.2s',
-                }}
-                onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#F0FDF4')}
-                onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#fff')}
-              >
-                <ThumbsUp size={13} style={{ color: '#6B7280' }} />
-              </button>
-              <button
-                onClick={() => handleEnjoyVote('down')}
-                title="Thumbs down"
-                style={{
-                  width: 30, height: 28, borderRadius: 8,
-                  border: '1px solid #E5E7EB',
-                  backgroundColor: '#fff',
-                  cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  padding: 0, transition: 'all 0.2s',
-                }}
-                onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#FFF1F2')}
-                onMouseLeave={e => (e.currentTarget.style.backgroundColor = '#fff')}
-              >
-                <ThumbsDown size={13} style={{ color: '#6B7280' }} />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+
 
       {/* Feedback Modal */}
       {showFeedbackModal && (
@@ -1217,10 +1214,10 @@ function SelectPill({ label, selected, onClick }: { label: string, selected: boo
     <button
       className="btn-press" onClick={onClick}
       style={{
-        padding: '10px 18px', borderRadius: 24, border: `1.5px solid ${selected ? COLORS.primary : COLORS.border}`,
+        padding: '8px 14px', borderRadius: 24, border: `1.5px solid ${selected ? COLORS.primary : COLORS.border}`,
         backgroundColor: selected ? `${COLORS.primary}15` : COLORS.surface,
         color: selected ? COLORS.primary : COLORS.textMuted,
-        fontSize: 14, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
+        fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
         boxShadow: selected ? 'none' : '0 2px 4px rgba(0,0,0,0.02)'
       }}
     >
