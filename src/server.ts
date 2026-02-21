@@ -30,11 +30,15 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 import Stripe from "stripe";
+import { Resend } from "resend";
 
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || 'sk_test_123';
 const stripe = new Stripe(STRIPE_SECRET_KEY, {
   apiVersion: '2026-01-28.clover',
 });
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+const notifiedSessions = new Set<string>();
 
 type FlowerDeliveryWidget = {
   id: string;
@@ -1721,14 +1725,36 @@ const httpServer = createServer(
           res.end(JSON.stringify({ error: 'Missing session_id' }));
           return;
         }
+
+        let isPaid = false;
         if (sessionId === 'cs_test_mocked_session') {
-          res.writeHead(200, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });
-          res.end(JSON.stringify({ paid: true }));
-          return;
+          isPaid = true;
+        } else {
+          const session = await stripe.checkout.sessions.retrieve(sessionId);
+          isPaid = session.payment_status === 'paid';
         }
-        const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+        if (isPaid && !notifiedSessions.has(sessionId)) {
+          notifiedSessions.add(sessionId);
+          if (process.env.RESEND_API_KEY) {
+            try {
+              await resend.emails.send({
+                from: 'Flower Delivery <onboarding@resend.dev>',
+                to: 'jonathan@layer3labs.io',
+                subject: 'New Flower Order Received! 🌸',
+                html: `<p>A new flower delivery order was successfully paid for!</p><p><strong>Session ID:</strong> ${sessionId}</p>`
+              });
+              console.log(`[Email] Notification sent for session ${sessionId}`);
+            } catch (err: any) {
+              console.error('[Email] Failed to send order notification:', err.message);
+            }
+          } else {
+            console.log(`[Email] RESEND_API_KEY not set. Skipping notification for ${sessionId}`);
+          }
+        }
+
         res.writeHead(200, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });
-        res.end(JSON.stringify({ paid: session.payment_status === 'paid' }));
+        res.end(JSON.stringify({ paid: isPaid }));
       } catch (err: any) {
         console.error('Stripe Status Error:', err.message);
         res.writeHead(500, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });
