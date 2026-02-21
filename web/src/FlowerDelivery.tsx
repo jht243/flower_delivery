@@ -133,8 +133,8 @@ export default function App({ initialData }: { initialData?: any }) {
       }
 
       // Explicitly set the states when hydration data arrives (or updates due to fast late events)
-      if (initialData.budget !== undefined) setBudget(initialData.budget);
-      if (initialData.occasion !== undefined) setOccasion(initialData.occasion);
+      if (initialData.budget !== undefined && initialData.budget !== null) setBudget(initialData.budget);
+      if (initialData.occasion !== undefined && initialData.occasion !== null) setOccasion(initialData.occasion);
       if (initialData.api_base_url) setApiBaseUrl(initialData.api_base_url);
       if (initialData.recipient_address) setAddress(initialData.recipient_address);
       if (initialData.delivery_date) setDeliveryDate(initialData.delivery_date);
