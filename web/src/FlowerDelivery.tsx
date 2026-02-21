@@ -122,6 +122,22 @@ export default function App({ initialData }: { initialData?: any }) {
 
   // Load persisted enjoy vote
   useEffect(() => {
+    // Hydrate component directly on mount if initialData is present
+    if (initialData && Object.keys(initialData).length > 0) {
+      console.log("[FlowerDelivery] Hydrating from initialData:", initialData);
+      // Auto-clear logic from travel-checklist
+      try {
+        localStorage.removeItem('flowerDeliveryState');
+        console.log("[FlowerDelivery] Cleared old localStorage data for fresh hydration");
+      } catch (e) {
+        console.warn("[FlowerDelivery] Could not clear localStorage:", e);
+      }
+
+      // We rely on the initial state from useState hooks capturing this data
+      // when the component first mounts (or remounts due to the Date.now() key in main.tsx)
+      console.log("[FlowerDelivery] Current phase:", phase);
+    }
+
     try {
       const v = localStorage.getItem('enjoyVote_flower');
       if (v === 'up' || v === 'down') setEnjoyVote(v);
