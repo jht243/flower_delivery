@@ -383,7 +383,15 @@ export default function App({ initialData }: { initialData?: any }) {
           occasion: customOccasion || occasion,
           deliveryFee,
           tax,
-          floristName
+          floristName,
+          address,
+          deliveryDate,
+          senderName,
+          senderContact,
+          recipientName,
+          recipientContact,
+          note,
+          selectedStyles
         })
       });
 

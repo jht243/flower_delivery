@@ -39,6 +39,7 @@ const stripe = new Stripe(STRIPE_SECRET_KEY, {
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const notifiedSessions = new Set<string>();
+const pendingOrders = new Map<string, any>();
 
 type FlowerDeliveryWidget = {
   id: string;
@@ -1689,25 +1690,35 @@ const httpServer = createServer(
       req.on("data", (chunk) => { body += chunk.toString(); });
       req.on("end", async () => {
         try {
-          const { budget, occasion, deliveryFee, tax, floristName } = JSON.parse(body);
+          const payload = JSON.parse(body);
+          const { budget, occasion, deliveryFee, tax, floristName } = payload;
+
+          let activeSessionId = '';
+          let sessionUrl = '';
+
           if (STRIPE_SECRET_KEY === 'sk_test_123') {
-            res.writeHead(200, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });
-            res.end(JSON.stringify({ url: 'https://checkout.stripe.com/pay/cs_test_mocked_session', sessionId: 'cs_test_mocked_session' }));
-            return;
+            activeSessionId = 'cs_test_mocked_session';
+            sessionUrl = 'https://checkout.stripe.com/pay/cs_test_mocked_session';
+          } else {
+            const session = await stripe.checkout.sessions.create({
+              payment_method_types: ['card'],
+              line_items: [
+                { price_data: { currency: 'usd', product_data: { name: `${occasion || 'Custom'} Arrangement`, description: `Fulfilled by: ${floristName}` }, unit_amount: Math.round(budget * 100) }, quantity: 1 },
+                { price_data: { currency: 'usd', product_data: { name: 'Delivery Fee' }, unit_amount: Math.round(deliveryFee * 100) }, quantity: 1 },
+                { price_data: { currency: 'usd', product_data: { name: 'Estimated Tax' }, unit_amount: Math.round(tax * 100) }, quantity: 1 }
+              ],
+              mode: 'payment',
+              success_url: 'https://chatgpt.com/success',
+              cancel_url: 'https://chatgpt.com/cancel',
+            });
+            activeSessionId = session.id;
+            sessionUrl = session.url!;
           }
-          const session = await stripe.checkout.sessions.create({
-            payment_method_types: ['card'],
-            line_items: [
-              { price_data: { currency: 'usd', product_data: { name: `${occasion || 'Custom'} Arrangement`, description: `Fulfilled by: ${floristName}` }, unit_amount: Math.round(budget * 100) }, quantity: 1 },
-              { price_data: { currency: 'usd', product_data: { name: 'Delivery Fee' }, unit_amount: Math.round(deliveryFee * 100) }, quantity: 1 },
-              { price_data: { currency: 'usd', product_data: { name: 'Estimated Tax' }, unit_amount: Math.round(tax * 100) }, quantity: 1 }
-            ],
-            mode: 'payment',
-            success_url: 'https://chatgpt.com/success',
-            cancel_url: 'https://chatgpt.com/cancel',
-          });
+
+          pendingOrders.set(activeSessionId, payload);
+
           res.writeHead(200, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });
-          res.end(JSON.stringify({ url: session.url, sessionId: session.id }));
+          res.end(JSON.stringify({ url: sessionUrl, sessionId: activeSessionId }));
         } catch (err: any) {
           console.error('Stripe Error:', err.message);
           res.writeHead(500, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });
@@ -1737,12 +1748,40 @@ const httpServer = createServer(
         if (isPaid && !notifiedSessions.has(sessionId)) {
           notifiedSessions.add(sessionId);
           if (process.env.RESEND_API_KEY) {
+            const order = pendingOrders.get(sessionId) || {};
+            const styleListHTML = order.selectedStyles ? order.selectedStyles.map((s: string) => `<li>${s}</li>`).join('') : "";
+
             try {
               const response = await resend.emails.send({
                 from: 'Flower Delivery <onboarding@resend.dev>',
                 to: 'jonathan@pipelinemarketing.io',
-                subject: 'New Flower Order Received! 🌸',
-                html: `<p>A new flower delivery order was successfully paid for!</p><p><strong>Session ID:</strong> ${sessionId}</p>`
+                subject: `New Flower Order for ${order.recipientName || 'a recipient'}! 🌸`,
+                html: `
+                  <h2>New Order Received!</h2>
+                  <p><strong>Session ID:</strong> ${sessionId}</p>
+                  <hr/>
+                  <h3>Order Summary</h3>
+                  <ul>
+                    <li><strong>Occasion:</strong> ${order.occasion}</li>
+                    <li><strong>Budget:</strong> $${order.budget}.00</li>
+                    <li><strong>Delivery Fee:</strong> $${order.deliveryFee}.00</li>
+                    <li><strong>Tax:</strong> $${order.tax?.toFixed(2)}</li>
+                    <li><strong>Fulfilling Florist:</strong> ${order.floristName}</li>
+                  </ul>
+                  <h3>Styles Requested</h3>
+                  <ul>${styleListHTML || '<li>None</li>'}</ul>
+                  <h3>Delivery Details</h3>
+                  <ul>
+                    <li><strong>Recipient:</strong> ${order.recipientName} (${order.recipientContact})</li>
+                    <li><strong>Address:</strong> ${order.address}</li>
+                    <li><strong>Delivery Date:</strong> ${order.deliveryDate}</li>
+                    <li><strong>Gift Note:</strong> ${order.note || 'None'}</li>
+                  </ul>
+                  <h3>Sender Details</h3>
+                  <ul>
+                    <li><strong>Sender:</strong> ${order.senderName} (${order.senderContact})</li>
+                  </ul>
+                `
               });
               if (response.error) {
                 console.error('[Email] Resend API returned an error:', response.error);

@@ -25510,7 +25510,15 @@ function App({ initialData: initialData2 }) {
           occasion: customOccasion || occasion,
           deliveryFee,
           tax,
-          floristName
+          floristName,
+          address,
+          deliveryDate,
+          senderName,
+          senderContact,
+          recipientName,
+          recipientContact,
+          note,
+          selectedStyles
         })
       });
       const data = await response.json();
