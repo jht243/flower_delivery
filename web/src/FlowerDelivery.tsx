@@ -806,9 +806,27 @@ export default function App({ initialData }: { initialData?: any }) {
         <button onClick={handleBackFromPhase4} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', color: COLORS.textMuted, cursor: 'pointer', padding: 0, marginBottom: 16, fontSize: 14, fontWeight: 500 }}>
           <ArrowLeft size={16} /> Back to Details
         </button>
-        <h2 style={{ fontFamily: '"Playfair Display", serif', fontSize: 26, color: COLORS.textMain, fontWeight: 600, marginBottom: 24 }}>
-          Review Your Order
-        </h2>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+          <h2 style={{ fontFamily: '"Playfair Display", serif', fontSize: 26, color: COLORS.textMain, fontWeight: 600, margin: 0 }}>
+            Review Your Order
+          </h2>
+          {selectedStyles.length > 0 && (
+            <div style={{ display: 'flex', gap: 6 }}>
+              {selectedStyles.map(styleId => {
+                const styleObj = ALL_STYLES.find(s => s.id === styleId);
+                if (!styleObj) return null;
+                return (
+                  <img
+                    key={styleObj.id}
+                    src={styleObj.image}
+                    alt={styleObj.label}
+                    style={{ width: 44, height: 44, borderRadius: 8, objectFit: 'cover', border: `1px solid ${COLORS.border}` }}
+                  />
+                );
+              })}
+            </div>
+          )}
+        </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: 24 }}>
           {/* Order Summary Card */}

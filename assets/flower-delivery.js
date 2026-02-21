@@ -25910,7 +25910,22 @@ function App({ initialData: initialData2 }) {
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { size: 16 }),
         " Back to Details"
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { style: { fontFamily: '"Playfair Display", serif', fontSize: 26, color: COLORS.textMain, fontWeight: 600, marginBottom: 24 }, children: "Review Your Order" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { style: { fontFamily: '"Playfair Display", serif', fontSize: 26, color: COLORS.textMain, fontWeight: 600, margin: 0 }, children: "Review Your Order" }),
+        selectedStyles.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 6 }, children: selectedStyles.map((styleId) => {
+          const styleObj = ALL_STYLES.find((s) => s.id === styleId);
+          if (!styleObj) return null;
+          return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+            "img",
+            {
+              src: styleObj.image,
+              alt: styleObj.label,
+              style: { width: 44, height: 44, borderRadius: 8, objectFit: "cover", border: `1px solid ${COLORS.border}` }
+            },
+            styleObj.id
+          );
+        }) })
+      ] }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "grid", gridTemplateColumns: "repeat(1, 1fr)", gap: 24 }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: "#FAF9F5", borderRadius: 16, padding: 24, border: `1px solid ${COLORS.border}`, boxShadow: "0 2px 8px rgba(0,0,0,0.02)" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { style: { fontFamily: '"Playfair Display", serif', fontSize: 20, fontWeight: 700, color: COLORS.textMain, marginBottom: 20 }, children: "Order Summary" }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }, children: [
