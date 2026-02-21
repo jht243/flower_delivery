@@ -1004,13 +1004,9 @@ export default function App({ initialData }: { initialData?: any }) {
               <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)', fontWeight: 500 }}>4.9/5 from 10,000+ local deliveries</span>
             </div>
 
-            <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.9)', fontStyle: 'italic', marginBottom: 12 }}>
+            <div style={{ fontSize: 16, color: 'rgba(255,255,255,0.95)', fontStyle: 'italic', marginBottom: 16, lineHeight: 1.4, fontWeight: 500 }}>
               "Sourced directly from verified, independent local growers."
             </div>
-
-            <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.85)', lineHeight: 1.5, margin: 0, fontWeight: 400 }}>
-              Empowering independent florists in your community.
-            </p>
           </div>
         </div>
 
