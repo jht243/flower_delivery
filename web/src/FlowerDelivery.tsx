@@ -214,17 +214,8 @@ export default function App({ initialData }: { initialData?: any }) {
     }
   };
 
-  // Auto-advance phase if hydrated with enough data
-  useEffect(() => {
-    if (hydrate.occasion && phase === 0) {
-      // If we have occasion + budget + address, skip to loading
-      if (hydrate.budget && hydrate.recipient_address) {
-        setPhase(2);
-      } else {
-        setPhase(1);
-      }
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // Auto-advance DISABLED: always start on Phase 0 so user can browse flower inspiration
+  // even when occasion is pre-filled via hydration
 
   // OpenStreetMap (Photon) Autocomplete logic
   useEffect(() => {
@@ -299,10 +290,7 @@ export default function App({ initialData }: { initialData?: any }) {
           setShowDropdown(false);
         }
 
-        if (data.state.budget && data.state.occasion && phase === 0) {
-          if (data.state.recipient_address) setPhase(2);
-          else setPhase(1);
-        }
+        // Auto-advance DISABLED: always stay on Phase 0
       }
     };
     window.addEventListener('message', handleMessage);

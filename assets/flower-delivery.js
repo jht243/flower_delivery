@@ -25365,15 +25365,6 @@ function App({ initialData: initialData2 }) {
     }
   };
   (0, import_react3.useEffect)(() => {
-    if (hydrate.occasion && phase === 0) {
-      if (hydrate.budget && hydrate.recipient_address) {
-        setPhase(2);
-      } else {
-        setPhase(1);
-      }
-    }
-  }, []);
-  (0, import_react3.useEffect)(() => {
     if (!address.trim() || !showDropdown) {
       setAddressSuggestions([]);
       return;
@@ -25428,10 +25419,6 @@ function App({ initialData: initialData2 }) {
         if (data.state.recipient_address) {
           setAddress(data.state.recipient_address);
           setShowDropdown(false);
-        }
-        if (data.state.budget && data.state.occasion && phase === 0) {
-          if (data.state.recipient_address) setPhase(2);
-          else setPhase(1);
         }
       }
     };
