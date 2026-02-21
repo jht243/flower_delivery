@@ -120,29 +120,23 @@ export default function App({ initialData }: { initialData?: any }) {
   const [feedbackStatus, setFeedbackStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [pillRight, setPillRight] = useState(16);
 
-  // Hydrate component directly on mount AND on updates if initialData is present
+  // Hydrate component — ONLY occasion (focused MVP approach)
   useEffect(() => {
     if (initialData && Object.keys(initialData).length > 0) {
-      console.log("[FlowerDelivery] Hydrating from initialData:", initialData);
-      // Auto-clear logic from travel-checklist
-      try {
-        localStorage.removeItem('flowerDeliveryState');
-        console.log("[FlowerDelivery] Cleared old localStorage data for fresh hydration");
-      } catch (e) {
-        console.warn("[FlowerDelivery] Could not clear localStorage:", e);
-      }
+      console.log("[FlowerDelivery] HYDRATION initialData:", JSON.stringify(initialData));
+      console.log("[FlowerDelivery] HYDRATION occasion value:", initialData.occasion);
 
-      // Explicitly set the states when hydration data arrives (or updates due to fast late events)
-      if (initialData.budget !== undefined && initialData.budget !== null) setBudget(initialData.budget);
-      if (initialData.occasion !== undefined && initialData.occasion !== null) setOccasion(initialData.occasion);
-      if (initialData.api_base_url) setApiBaseUrl(initialData.api_base_url);
-      if (initialData.recipient_address) setAddress(initialData.recipient_address);
-      if (initialData.delivery_date) setDeliveryDate(initialData.delivery_date);
-      if (initialData.sender_name) setSenderName(initialData.sender_name);
-      if (initialData.sender_contact) setSenderContact(initialData.sender_contact);
-      if (initialData.recipient_name) setRecipientName(initialData.recipient_name);
-      if (initialData.recipient_contact) setRecipientContact(initialData.recipient_contact);
-      if (initialData.gift_note) setNote(initialData.gift_note);
+      // Auto-clear old state
+      try { localStorage.removeItem('flowerDeliveryState'); } catch { }
+
+      // ONLY hydrate occasion and api_base_url — stripped to minimum
+      if (initialData.occasion && typeof initialData.occasion === 'string' && initialData.occasion.length > 0) {
+        console.log("[FlowerDelivery] SETTING occasion to:", initialData.occasion);
+        setOccasion(initialData.occasion);
+      }
+      if (initialData.api_base_url) {
+        setApiBaseUrl(initialData.api_base_url);
+      }
     }
   }, [initialData]);
 

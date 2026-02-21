@@ -25278,15 +25278,22 @@ function App({ initialData: initialData2 }) {
   const [pillRight, setPillRight] = (0, import_react3.useState)(16);
   (0, import_react3.useEffect)(() => {
     if (initialData2 && Object.keys(initialData2).length > 0) {
-      console.log("[FlowerDelivery] Hydrating from initialData:", initialData2);
+      console.log("[FlowerDelivery] HYDRATION initialData:", JSON.stringify(initialData2));
+      console.log("[FlowerDelivery] HYDRATION occasion value:", initialData2.occasion);
       try {
         localStorage.removeItem("flowerDeliveryState");
-        console.log("[FlowerDelivery] Cleared old localStorage data for fresh hydration");
-      } catch (e) {
-        console.warn("[FlowerDelivery] Could not clear localStorage:", e);
+      } catch {
       }
-      console.log("[FlowerDelivery] Current phase:", phase);
+      if (initialData2.occasion && typeof initialData2.occasion === "string" && initialData2.occasion.length > 0) {
+        console.log("[FlowerDelivery] SETTING occasion to:", initialData2.occasion);
+        setOccasion(initialData2.occasion);
+      }
+      if (initialData2.api_base_url) {
+        setApiBaseUrl(initialData2.api_base_url);
+      }
     }
+  }, [initialData2]);
+  (0, import_react3.useEffect)(() => {
     try {
       const v = localStorage.getItem("enjoyVote_flower");
       if (v === "up" || v === "down") setEnjoyVote(v);
@@ -25530,7 +25537,10 @@ function App({ initialData: initialData2 }) {
     const budgets = [50, 75, 100, 150, 200];
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "fade-in", style: { padding: "0 16px" }, children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { style: { fontFamily: '"Playfair Display", serif', fontSize: 28, color: COLORS.textMain, fontWeight: 600, marginTop: 10, marginBottom: 8 }, children: "What are you celebrating?" }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { color: COLORS.textMuted, fontSize: 15, marginBottom: 24, lineHeight: 1.5 }, children: "Tell us the occasion and we'll find the perfect arrangement." }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { style: { color: COLORS.textMuted, fontSize: 15, marginBottom: 24, lineHeight: 1.5 }, children: [
+        "Tell us the occasion and ",
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("u", { children: "we'll find the perfect arrangement." })
+      ] }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SectionTitle, { title: "Occasion" }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 12 }, children: [
         primaryOccasions.map((occ) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectPill, { label: occ, selected: occasion === occ && !customOccasion, onClick: () => handleOccasionSelect(occ) }, occ)),
@@ -26111,8 +26121,7 @@ function App({ initialData: initialData2 }) {
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 13, color: "rgba(255,255,255,0.8)", fontWeight: 500 }, children: "4.9/5 from 10,000+ local deliveries" })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 13, color: "rgba(255,255,255,0.9)", fontStyle: "italic", marginBottom: 12 }, children: '"Sourced directly from verified, independent local growers."' }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { fontSize: 15, color: "rgba(255,255,255,0.85)", lineHeight: 1.5, margin: 0, fontWeight: 400 }, children: "Empowering independent florists in your community." })
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { fontSize: 16, color: "rgba(255,255,255,0.95)", fontStyle: "italic", marginBottom: 16, lineHeight: 1.4, fontWeight: 500 }, children: '"Sourced directly from verified, independent local growers."' })
       ] }) }),
       /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { paddingBottom: 60 }, children: [
         phase === 0 && renderPhase0(),

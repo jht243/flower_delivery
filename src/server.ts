@@ -230,7 +230,7 @@ function widgetMeta(widget: FlowerDeliveryWidget, bustCache: boolean = false) {
 
   return {
     "openai/outputTemplate": templateUri,
-    "openai/widgetDescription": "The Artisan Florist Local Flower Delivery — A sophisticated, high-end flower delivery interface sourced from verified local growers. Helps users order beautiful, locally-sourced floral arrangements. Call this tool immediately with NO arguments to let the user enter their parameters manually if details are missing. Only provide arguments if the user has explicitly stated them.",
+    "openai/widgetDescription": "The Artisan Florist Local Flower Delivery. YOU MUST ALWAYS extract any explicit details (budget, occasion, flower type) provided by the user and pass them as arguments to this tool. If NO details are provided, call this tool immediately with NO arguments.",
     "openai/componentDescriptions": {
       "discovery": "Filters to select occasion, budget, and flower preference.",
       "curator": "Horizontal scroll of local florist options.",
@@ -295,6 +295,10 @@ widgets.forEach((widget) => {
 const toolInputSchema = {
   type: "object",
   properties: {
+    user_request: {
+      type: "string",
+      description: "REQUIRED. Copy the user's FULL original message here verbatim. Example: 'help me find birthday flowers under $100'."
+    },
     budget: {
       type: "number",
       description: "The maximum budget for the flowers in dollars. Extract dollar amounts like '$100', '150'.",
@@ -302,7 +306,7 @@ const toolInputSchema = {
     },
     occasion: {
       type: "string",
-      description: "The reason or occasion for the flowers. e.g. 'Anniversary', 'Birthday', 'Sympathy', 'Mother's Day', 'Valentine's Day'.",
+      description: "IMPORTANT: If the user mentions ANY occasion (birthday, anniversary, sympathy, mother's day, valentine's day, graduation, get well, wedding, etc.), you MUST extract it and pass it here. For example if the user says 'flowers for my birthday', pass 'Birthday'.",
       examples: ["Birthday", "Anniversary"]
     },
     flower_preference: {
@@ -341,11 +345,12 @@ const toolInputSchema = {
       description: "Phone or email address of the person ordering."
     },
   },
-  required: [],
+  required: ["user_request"],
   additionalProperties: false,
 } as const;
 
 const toolInputParser = z.object({
+  user_request: z.string().optional(),
   budget: z.number().optional(),
   occasion: z.string().optional(),
   flower_preference: z.string().optional(),
@@ -360,7 +365,7 @@ const toolInputParser = z.object({
 
 const tools: Tool[] = widgets.map((widget) => ({
   name: widget.id,
-  description: "Use this tool to plan and organize a flower delivery order. Collect budget, occasion, details and display local florists. Call this tool immediately with NO arguments if details are missing.",
+  description: "Use this tool to plan and organize a flower delivery order. Collect budget, occasion, details and display local florists. YOU MUST ALWAYS extract any explicit details (budget, occasion, flower type) provided by the user and pass them as arguments to this tool. If NO details are provided, call this tool immediately with NO arguments.",
   inputSchema: toolInputSchema,
   outputSchema: {
     type: "object",
@@ -545,9 +550,18 @@ function createFlowerDeliveryServer(): Server {
         // Debug log
         console.log("Captured meta:", { userLocation, userLocale, userAgent });
 
-        // If ChatGPT didn't pass structured arguments, try to infer flower details from freeform text in meta
+        // OCCASION INFERENCE: Use ALL available text sources to extract occasion
+        // Priority: 1) args.occasion (ChatGPT extracted it), 2) args.user_request, 3) meta fields
         try {
-          const candidates: any[] = [
+          const textSources: string[] = [];
+
+          // Source 1: user_request field (most reliable — we asked ChatGPT to always send this)
+          if (args.user_request && typeof args.user_request === 'string') {
+            textSources.push(args.user_request);
+          }
+
+          // Source 2: meta fields
+          const metaCandidates: any[] = [
             meta["openai/subject"],
             meta["openai/userPrompt"],
             meta["openai/userText"],
@@ -555,30 +569,41 @@ function createFlowerDeliveryServer(): Server {
             meta["openai/inputText"],
             meta["openai/requestText"],
           ];
-          const userText = candidates.find((t) => typeof t === "string" && t.trim().length > 0) || "";
+          for (const t of metaCandidates) {
+            if (typeof t === 'string' && t.trim().length > 0) textSources.push(t);
+          }
+
+          const combinedText = textSources.join(' ');
+          console.log("[Occasion Inference] Combined text sources:", combinedText);
+          console.log("[Occasion Inference] args.occasion before inference:", args.occasion);
+
+          if (!args.occasion && combinedText.length > 0) {
+            if (/birthday/i.test(combinedText)) args.occasion = "Birthday";
+            else if (/anniversary/i.test(combinedText)) args.occasion = "Anniversary";
+            else if (/sympathy/i.test(combinedText)) args.occasion = "Sympathy";
+            else if (/valentine/i.test(combinedText)) args.occasion = "Valentine's Day";
+            else if (/mother/i.test(combinedText)) args.occasion = "Mother's Day";
+            else if (/father/i.test(combinedText)) args.occasion = "Father's Day";
+            else if (/graduat/i.test(combinedText)) args.occasion = "Graduation";
+            else if (/get well/i.test(combinedText)) args.occasion = "Get Well";
+          }
+
+          console.log("[Occasion Inference] args.occasion after inference:", args.occasion);
 
           if (args.budget === undefined) {
-            const match = userText.match(/\$(\d+)/i);
+            const match = combinedText.match(/\$(\d+)/i);
             if (match) args.budget = parseInt(match[1]);
           }
 
-          if (args.occasion === undefined) {
-            if (/anniversary/i.test(userText)) args.occasion = "Anniversary";
-            else if (/birthday/i.test(userText)) args.occasion = "Birthday";
-            else if (/sympathy/i.test(userText)) args.occasion = "Sympathy";
-            else if (/valentine/i.test(userText)) args.occasion = "Valentine's Day";
-            else if (/mother/i.test(userText)) args.occasion = "Mother's Day";
-          }
-
           if (args.flower_preference === undefined) {
-            if (/rose/i.test(userText)) args.flower_preference = "Roses";
-            else if (/wildflower/i.test(userText)) args.flower_preference = "Wildflowers";
-            else if (/tulip/i.test(userText)) args.flower_preference = "Tulips";
-            else if (/lily/i.test(userText)) args.flower_preference = "Lilies";
+            if (/rose/i.test(combinedText)) args.flower_preference = "Roses";
+            else if (/wildflower/i.test(combinedText)) args.flower_preference = "Wildflowers";
+            else if (/tulip/i.test(combinedText)) args.flower_preference = "Tulips";
+            else if (/lily/i.test(combinedText)) args.flower_preference = "Lilies";
           }
 
         } catch (e) {
-          console.warn("Parameter inference from meta failed", e);
+          console.warn("Parameter inference from text failed", e);
         }
 
         const responseTime = Date.now() - startTime;
@@ -615,12 +640,22 @@ function createFlowerDeliveryServer(): Server {
         const widgetMetadata = widgetMeta(widget, false);
         console.log(`[MCP] Tool called: ${request.params.name}, returning templateUri: ${(widgetMetadata as any)["openai/outputTemplate"]}`);
 
-        // Build structured content once so we can log it and return it.
+        // Build structured content — ALWAYS explicitly include occasion field
+        // so it always exists in the widget data (not relying on ...args spread)
         const structured = {
           ready: true,
           timestamp: new Date().toISOString(),
           api_base_url: WIDGET_API_BASE_URL,
-          ...args,
+          budget: args.budget ?? null,
+          occasion: args.occasion ?? null,
+          flower_preference: args.flower_preference ?? null,
+          recipient_name: args.recipient_name ?? null,
+          recipient_contact: args.recipient_contact ?? null,
+          recipient_address: args.recipient_address ?? null,
+          delivery_date: args.delivery_date ?? null,
+          gift_note: args.gift_note ?? null,
+          sender_name: args.sender_name ?? null,
+          sender_contact: args.sender_contact ?? null,
           input_source: usedDefaults ? "default" : "user",
           summary: computeSummary(args),
           suggested_followups: [
