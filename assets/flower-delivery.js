@@ -25455,6 +25455,16 @@ function App({ initialData: initialData2 }) {
   const handleNext = () => setPhase((p) => Math.min(p + 1, 5));
   const handleBack = () => setPhase((p) => Math.max(p - 1, 0));
   const handleBackFromPhase3 = () => setPhase(1);
+  const handleBackFromPhase4 = () => {
+    setIsAwaitingPayment(false);
+    setCheckoutSessionId(null);
+    setIsCheckingOut(false);
+    setPhase(3);
+  };
+  const cancelPendingPayment = () => {
+    setIsAwaitingPayment(false);
+    setCheckoutSessionId(null);
+  };
   const handleCheckout = async () => {
     setIsCheckingOut(true);
     try {
@@ -25859,7 +25869,7 @@ function App({ initialData: initialData2 }) {
     const tax = subtotal * 0.08;
     const finalTotal = subtotal + deliveryFee + tax;
     return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "fade-in", style: { padding: "0 16px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { onClick: handleBack, style: { display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", color: COLORS.textMuted, cursor: "pointer", padding: 0, marginBottom: 16, fontSize: 14, fontWeight: 500 }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { onClick: handleBackFromPhase4, style: { display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", color: COLORS.textMuted, cursor: "pointer", padding: 0, marginBottom: 16, fontSize: 14, fontWeight: 500 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { size: 16 }),
         " Back to Details"
       ] }),
@@ -25954,7 +25964,24 @@ function App({ initialData: initialData2 }) {
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { marginTop: 32 }, children: isAwaitingPayment ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { backgroundColor: COLORS.surface, borderRadius: 12, padding: 24, textAlign: "center", border: `1px solid ${COLORS.accent}` }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: `@keyframes pulseText { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }` }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { style: { fontFamily: '"Playfair Display", serif', fontSize: 18, color: COLORS.accent, margin: "0 0 8px 0", animation: "pulseText 2s infinite" }, children: "Secure Checkout Opened" }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { margin: 0, fontSize: 14, color: COLORS.textMuted }, children: "Waiting for payment confirmation. Please complete your transaction in the new Stripe tab." })
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: { margin: "0 0 16px 0", fontSize: 14, color: COLORS.textMuted }, children: "Waiting for payment confirmation. Please complete your transaction in the Stripe tab that just opened." }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+          "button",
+          {
+            onClick: cancelPendingPayment,
+            style: {
+              background: "none",
+              border: "1px solid #D1D5DB",
+              borderRadius: 8,
+              padding: "8px 20px",
+              fontSize: 13,
+              fontWeight: 600,
+              color: COLORS.textMuted,
+              cursor: "pointer"
+            },
+            children: "\u2715 Cancel & Try Again"
+          }
+        )
       ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
         PrimaryButton,
         {

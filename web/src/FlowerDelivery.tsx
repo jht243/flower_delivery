@@ -333,6 +333,19 @@ export default function App({ initialData }: { initialData?: any }) {
   const handleBack = () => setPhase(p => Math.max(p - 1, 0));
   const handleBackFromPhase3 = () => setPhase(1); // Skip loading screen if backing up from Phase 3
 
+  // When going back from Phase 4 (checkout), clear any pending payment so Pay button reappears
+  const handleBackFromPhase4 = () => {
+    setIsAwaitingPayment(false);
+    setCheckoutSessionId(null);
+    setIsCheckingOut(false);
+    setPhase(3);
+  };
+
+  const cancelPendingPayment = () => {
+    setIsAwaitingPayment(false);
+    setCheckoutSessionId(null);
+  };
+
   const handleCheckout = async () => {
     setIsCheckingOut(true);
     try {
@@ -749,7 +762,7 @@ export default function App({ initialData }: { initialData?: any }) {
 
     return (
       <div className="fade-in" style={{ padding: '0 16px' }}>
-        <button onClick={handleBack} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', color: COLORS.textMuted, cursor: 'pointer', padding: 0, marginBottom: 16, fontSize: 14, fontWeight: 500 }}>
+        <button onClick={handleBackFromPhase4} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', color: COLORS.textMuted, cursor: 'pointer', padding: 0, marginBottom: 16, fontSize: 14, fontWeight: 500 }}>
           <ArrowLeft size={16} /> Back to Details
         </button>
         <h2 style={{ fontFamily: '"Playfair Display", serif', fontSize: 26, color: COLORS.textMain, fontWeight: 600, marginBottom: 24 }}>
@@ -839,7 +852,17 @@ export default function App({ initialData }: { initialData?: any }) {
             <div style={{ backgroundColor: COLORS.surface, borderRadius: 12, padding: 24, textAlign: 'center', border: `1px solid ${COLORS.accent}` }}>
               <style>{`@keyframes pulseText { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }`}</style>
               <h3 style={{ fontFamily: '"Playfair Display", serif', fontSize: 18, color: COLORS.accent, margin: '0 0 8px 0', animation: 'pulseText 2s infinite' }}>Secure Checkout Opened</h3>
-              <p style={{ margin: 0, fontSize: 14, color: COLORS.textMuted }}>Waiting for payment confirmation. Please complete your transaction in the new Stripe tab.</p>
+              <p style={{ margin: '0 0 16px 0', fontSize: 14, color: COLORS.textMuted }}>Waiting for payment confirmation. Please complete your transaction in the Stripe tab that just opened.</p>
+              <button
+                onClick={cancelPendingPayment}
+                style={{
+                  background: 'none', border: '1px solid #D1D5DB', borderRadius: 8,
+                  padding: '8px 20px', fontSize: 13, fontWeight: 600, color: COLORS.textMuted,
+                  cursor: 'pointer',
+                }}
+              >
+                ✕ Cancel &amp; Try Again
+              </button>
             </div>
           ) : (
             <PrimaryButton
