@@ -389,9 +389,9 @@ const tools: Tool[] = widgets.map((widget) => ({
     securitySchemes: [{ type: "noauth" }],
   },
   annotations: {
-    readOnlyHint: true,
+    readOnlyHint: false,
     destructiveHint: false,
-    idempotentHint: true,
+    idempotentHint: false,
     openWorldHint: false,
   },
 }));
