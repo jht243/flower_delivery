@@ -105,26 +105,38 @@ const WIDGET_API_BASE_URL = normalizeOrigin(
   `http://localhost:${port}`
 ) || `http://localhost:${port}`;
 
-const LOCALHOST_API_ORIGIN = `http://localhost:${port}`;
-const LOCALHOST_LOOPBACK_API_ORIGIN = `http://127.0.0.1:${port}`;
+// Production deployment origin (always HTTPS, used by the public ChatGPT MCP connector).
+const PRODUCTION_ORIGIN = "https://flower-delivery-ffh2.onrender.com";
 
+// Only HTTPS origins are eligible for the widget's CSP (the OpenAI Apps SDK requires
+// HTTPS end-to-end). Any HTTP/localhost API base used during local development is
+// intentionally excluded so the production CSP stays tight and submission-ready.
+const isHttpsApiBase = WIDGET_API_BASE_URL.startsWith("https://");
+
+// connect_domains: exact list of HTTPS origins the widget JS will fetch() from.
+//   - PRODUCTION_ORIGIN: own backend (/api/track, /create-checkout-session, /check-payment-status)
+//   - photon.komoot.io: third-party geocoding API used to autocomplete delivery addresses
+//   - WIDGET_API_BASE_URL: included only when it resolves to an HTTPS origin (e.g. preview deploys)
 const WIDGET_CONNECT_DOMAINS = Array.from(
   new Set([
-    WIDGET_API_BASE_URL,
-    LOCALHOST_API_ORIGIN,
-    LOCALHOST_LOOPBACK_API_ORIGIN,
-    "https://flower-delivery-ffh2.onrender.com",
+    PRODUCTION_ORIGIN,
     "https://photon.komoot.io",
+    ...(isHttpsApiBase ? [WIDGET_API_BASE_URL] : []),
   ])
 );
 
+// resource_domains: exact list of HTTPS origins the widget HTML loads <img>, fonts,
+// and other passive resources from.
+//   - PRODUCTION_ORIGIN: bundled florist-style imagery served from /assets/
+//   - images.unsplash.com: hard-coded florist hero photography
+//   - fonts.googleapis.com / fonts.gstatic.com: Inter + Playfair Display web fonts
 const WIDGET_RESOURCE_DOMAINS = Array.from(
   new Set([
-    "https://flower-delivery-ffh2.onrender.com",
+    PRODUCTION_ORIGIN,
     "https://images.unsplash.com",
     "https://fonts.googleapis.com",
     "https://fonts.gstatic.com",
-    ...(WIDGET_API_BASE_URL.startsWith("https://") ? [WIDGET_API_BASE_URL] : []),
+    ...(isHttpsApiBase ? [WIDGET_API_BASE_URL] : []),
   ])
 );
 
@@ -252,11 +264,13 @@ function widgetMeta(widget: FlowerDeliveryWidget, bustCache: boolean = false) {
     "ui": {
       "resourceUri": templateUri,
       "prefersBorder": true,
+      // _meta.ui.csp uses camelCase per the Apps SDK iframe/CSP reference.
+      // Mirrors openai/widgetCSP below so both formats stay in sync.
       "csp": {
         "connectDomains": WIDGET_CONNECT_DOMAINS,
-        "resourceDomains": WIDGET_RESOURCE_DOMAINS
+        "resourceDomains": WIDGET_RESOURCE_DOMAINS,
       },
-      "domain": "https://web-sandbox.oaiusercontent.com"
+      "domain": "https://web-sandbox.oaiusercontent.com",
     },
     // Legacy mapping aliases:
     "openai/outputTemplate": templateUri,
@@ -388,11 +402,44 @@ const tools: Tool[] = widgets.map((widget) => ({
     "openai/visibility": "public",
     securitySchemes: [{ type: "noauth" }],
   },
+  // Tool annotations — every hint is explicitly true/false (never null) and
+  // chosen to match the tool's actual behavior per the OpenAI App Submission
+  // guidelines (https://developers.openai.com/apps-sdk/deploy/submission).
+  //
+  //   readOnlyHint: false
+  //     The tool is NOT side-effect-free. On every invocation it appends a JSON
+  //     entry to the daily analytics log file (see logAnalytics()), and the
+  //     widget it returns enables follow-on writes (Stripe checkout sessions,
+  //     order email via Resend, Buttondown email subscriptions). Per OpenAI's
+  //     guidance, "writes logs … or otherwise change state" disqualifies a
+  //     tool from being marked read-only.
+  //
+  //   destructiveHint: false
+  //     The tool cannot perform any irreversible destructive action. It does
+  //     not delete or overwrite remote data; the widget's "delete order"
+  //     action only removes a localStorage entry on the user's own device,
+  //     and Stripe checkout requires explicit user confirmation on Stripe's
+  //     hosted page before any payment is captured.
+  //
+  //   idempotentHint: false
+  //     Repeated calls with identical arguments are NOT guaranteed to have no
+  //     additional effect: each call appends a new analytics log entry, and
+  //     parameter inference reads from request _meta (locale, userPrompt,
+  //     etc.), so the resulting structuredContent can vary between calls.
+  //
+  //   openWorldHint: true
+  //     The tool's widget reaches multiple external, publicly-visible systems
+  //     on user action: photon.komoot.io for delivery-address geocoding,
+  //     Stripe Checkout for payment processing, Buttondown for email-list
+  //     subscription, and Resend for transactional email to the fulfilling
+  //     florist. Per OpenAI's guidance, anything that "sends emails/messages
+  //     to external recipients" or "submits forms to third parties" must be
+  //     marked openWorldHint: true.
   annotations: {
     readOnlyHint: false,
     destructiveHint: false,
     idempotentHint: false,
-    openWorldHint: false,
+    openWorldHint: true,
   },
 }));
 
