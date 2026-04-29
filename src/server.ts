@@ -50,12 +50,136 @@ if (fs_sync.existsSync(stylesFile)) {
 
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || 'sk_test_123';
 const stripe = new Stripe(STRIPE_SECRET_KEY, {
-  apiVersion: '2026-01-28.clover',
+  apiVersion: '2026-02-25.clover',
 });
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const notifiedSessions = new Set<string>();
 const pendingOrders = new Map<string, any>();
+
+function orderPayloadToStripeMetadata(payload: any): Record<string, string> {
+  const metadata: Record<string, string> = {};
+  const fields = [
+    "budget",
+    "occasion",
+    "deliveryFee",
+    "tax",
+    "floristName",
+    "address",
+    "deliveryDate",
+    "senderName",
+    "senderContact",
+    "recipientName",
+    "recipientContact",
+    "note",
+  ];
+
+  for (const field of fields) {
+    const value = payload?.[field];
+    if (value !== undefined && value !== null && String(value).trim() !== "") {
+      metadata[field] = String(value).slice(0, 500);
+    }
+  }
+
+  if (Array.isArray(payload?.selectedStyles)) {
+    metadata.selectedStyles = JSON.stringify(payload.selectedStyles).slice(0, 500);
+  }
+
+  return metadata;
+}
+
+function orderPayloadFromStripeMetadata(metadata: Stripe.Metadata | null | undefined): any {
+  const order: Record<string, unknown> = {};
+  if (!metadata) return order;
+
+  for (const [key, value] of Object.entries(metadata)) {
+    if (key === "selectedStyles") {
+      try {
+        order.selectedStyles = JSON.parse(value);
+      } catch {
+        order.selectedStyles = value ? [value] : [];
+      }
+    } else if (key === "budget" || key === "deliveryFee" || key === "tax") {
+      const n = Number(value);
+      order[key] = Number.isFinite(n) ? n : value;
+    } else {
+      order[key] = value;
+    }
+  }
+
+  return order;
+}
+
+async function sendOrderNotification(sessionId: string, order: any, source: "poll" | "webhook") {
+  if (notifiedSessions.has(sessionId)) return;
+  notifiedSessions.add(sessionId);
+
+  logAnalytics("order_completed", { sessionId, source, orderDetails: order });
+
+  if (!process.env.RESEND_API_KEY) {
+    console.log(`[Email] RESEND_API_KEY not set. Skipping notification for ${sessionId}`);
+    return;
+  }
+
+  const styleListHTML = order.selectedStyles ? order.selectedStyles.map((styleId: string) => {
+    const styleObj = ALL_STYLES.find(s => s.id === styleId);
+    if (styleObj) {
+      return `
+        <div style="display: inline-block; margin-right: 12px; margin-bottom: 12px; text-align: center;">
+          <img src="${styleObj.image}" alt="${styleObj.label}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0; display: block;" />
+          <span style="font-size: 13px; color: #475569; margin-top: 6px; display: block;">${styleObj.label}</span>
+        </div>
+      `;
+    }
+    return `<li>${styleId}</li>`;
+  }).join('') : "";
+
+  try {
+    const response = await resend.emails.send({
+      from: 'Flower Delivery <onboarding@resend.dev>',
+      to: 'jonathan@pipelinemarketing.io',
+      subject: `New Flower Order for ${order.recipientName || 'a recipient'}! 🌸`,
+      html: `
+        <h2>New Order Received!</h2>
+        <p><strong>Session ID:</strong> ${sessionId}</p>
+        <p><strong>Notification Source:</strong> ${source}</p>
+        <hr/>
+        <h3>Order Summary</h3>
+        <ul>
+          <li><strong>Occasion:</strong> ${order.occasion}</li>
+          <li><strong>Budget:</strong> $${order.budget}.00</li>
+          <li><strong>Delivery Fee:</strong> $${order.deliveryFee}.00</li>
+          <li><strong>Tax:</strong> $${Number(order.tax ?? 0).toFixed(2)}</li>
+          <li><strong>Fulfilling Florist:</strong> ${order.floristName}</li>
+        </ul>
+        <h3>Styles Requested</h3>
+        <div style="display: flex; flex-wrap: wrap;">
+          ${styleListHTML || '<p>None selected</p>'}
+        </div>
+        <h3>Delivery Details</h3>
+        <ul>
+          <li><strong>Recipient:</strong> ${order.recipientName} (${order.recipientContact})</li>
+          <li><strong>Address:</strong> ${order.address}</li>
+          <li><strong>Delivery Date:</strong> ${order.deliveryDate}</li>
+          <li><strong>Gift Note:</strong> ${order.note || 'None'}</li>
+        </ul>
+        <h3>Sender Details</h3>
+        <ul>
+          <li><strong>Sender:</strong> ${order.senderName} (${order.senderContact})</li>
+        </ul>
+      `
+    });
+    if (response.error) {
+      console.error('[Email] Resend API returned an error:', response.error);
+      notifiedSessions.delete(sessionId);
+    } else {
+      console.log(`[Email] Notification sent for session ${sessionId}, ID:`, response.data?.id);
+    }
+  } catch (err: any) {
+    notifiedSessions.delete(sessionId);
+    console.error('[Email] Exception when sending order notification:', err.message);
+  }
+}
 
 type FlowerDeliveryWidget = {
   id: string;
@@ -1788,6 +1912,52 @@ const httpServer = createServer(
       return;
     }
 
+    if (req.method === "POST" && url.pathname === "/stripe-webhook") {
+      const chunks: Buffer[] = [];
+      req.on("data", (chunk) => {
+        chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+      });
+      req.on("end", async () => {
+        try {
+          const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+          if (!webhookSecret) {
+            console.error("[Stripe Webhook] STRIPE_WEBHOOK_SECRET is not set");
+            res.writeHead(500, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ error: "Webhook secret not configured" }));
+            return;
+          }
+
+          const rawBody = Buffer.concat(chunks);
+          const signature = req.headers["stripe-signature"];
+          if (!signature || Array.isArray(signature)) {
+            res.writeHead(400, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ error: "Missing Stripe signature" }));
+            return;
+          }
+
+          const event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
+
+          if (event.type === "checkout.session.completed") {
+            const session = event.data.object as Stripe.Checkout.Session;
+            const sessionId = session.id;
+            const order =
+              pendingOrders.get(sessionId) ||
+              orderPayloadFromStripeMetadata(session.metadata);
+
+            await sendOrderNotification(sessionId, order, "webhook");
+          }
+
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ received: true }));
+        } catch (err: any) {
+          console.error("[Stripe Webhook] Error:", err.message);
+          res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: err.message }));
+        }
+      });
+      return;
+    }
+
     if (req.method === "OPTIONS" && (url.pathname === "/create-checkout-session" || url.pathname === "/check-payment-status")) {
       res.writeHead(204, {
         "Access-Control-Allow-Origin": "*",
@@ -1824,6 +1994,7 @@ const httpServer = createServer(
               mode: 'payment',
               success_url: 'https://chatgpt.com/success',
               cancel_url: 'https://chatgpt.com/cancel',
+              metadata: orderPayloadToStripeMetadata(payload),
             });
             activeSessionId = session.id;
             sessionUrl = session.url!;
@@ -1852,78 +2023,19 @@ const httpServer = createServer(
         }
 
         let isPaid = false;
+        let stripeSession: Stripe.Checkout.Session | null = null;
         if (sessionId === 'cs_test_mocked_session') {
           isPaid = true;
         } else {
-          const session = await stripe.checkout.sessions.retrieve(sessionId);
-          isPaid = session.payment_status === 'paid';
+          stripeSession = await stripe.checkout.sessions.retrieve(sessionId);
+          isPaid = stripeSession.payment_status === 'paid';
         }
 
-        if (isPaid && !notifiedSessions.has(sessionId)) {
-          notifiedSessions.add(sessionId);
-          if (process.env.RESEND_API_KEY) {
-            const order = pendingOrders.get(sessionId) || {};
-            logAnalytics("order_completed", { sessionId, orderDetails: order });
-
-
-            const styleListHTML = order.selectedStyles ? order.selectedStyles.map((styleId: string) => {
-              const styleObj = ALL_STYLES.find(s => s.id === styleId);
-              if (styleObj) {
-                return `
-                  <div style="display: inline-block; margin-right: 12px; margin-bottom: 12px; text-align: center;">
-                    <img src="${styleObj.image}" alt="${styleObj.label}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0; display: block;" />
-                    <span style="font-size: 13px; color: #475569; margin-top: 6px; display: block;">${styleObj.label}</span>
-                  </div>
-                `;
-              }
-              return `<li>${styleId}</li>`;
-            }).join('') : "";
-
-            try {
-              const response = await resend.emails.send({
-                from: 'Flower Delivery <onboarding@resend.dev>',
-                to: 'jonathan@pipelinemarketing.io',
-                subject: `New Flower Order for ${order.recipientName || 'a recipient'}! 🌸`,
-                html: `
-                  <h2>New Order Received!</h2>
-                  <p><strong>Session ID:</strong> ${sessionId}</p>
-                  <hr/>
-                  <h3>Order Summary</h3>
-                  <ul>
-                    <li><strong>Occasion:</strong> ${order.occasion}</li>
-                    <li><strong>Budget:</strong> $${order.budget}.00</li>
-                    <li><strong>Delivery Fee:</strong> $${order.deliveryFee}.00</li>
-                    <li><strong>Tax:</strong> $${order.tax?.toFixed(2)}</li>
-                    <li><strong>Fulfilling Florist:</strong> ${order.floristName}</li>
-                  </ul>
-                  <h3>Styles Requested</h3>
-                  <div style="display: flex; flex-wrap: wrap;">
-                    ${styleListHTML || '<p>None selected</p>'}
-                  </div>
-                  <h3>Delivery Details</h3>
-                  <ul>
-                    <li><strong>Recipient:</strong> ${order.recipientName} (${order.recipientContact})</li>
-                    <li><strong>Address:</strong> ${order.address}</li>
-                    <li><strong>Delivery Date:</strong> ${order.deliveryDate}</li>
-                    <li><strong>Gift Note:</strong> ${order.note || 'None'}</li>
-                  </ul>
-                  <h3>Sender Details</h3>
-                  <ul>
-                    <li><strong>Sender:</strong> ${order.senderName} (${order.senderContact})</li>
-                  </ul>
-                `
-              });
-              if (response.error) {
-                console.error('[Email] Resend API returned an error:', response.error);
-              } else {
-                console.log(`[Email] Notification sent for session ${sessionId}, ID:`, response.data?.id);
-              }
-            } catch (err: any) {
-              console.error('[Email] Exception when sending order notification:', err.message);
-            }
-          } else {
-            console.log(`[Email] RESEND_API_KEY not set. Skipping notification for ${sessionId}`);
-          }
+        if (isPaid) {
+          const order =
+            pendingOrders.get(sessionId) ||
+            orderPayloadFromStripeMetadata(stripeSession?.metadata);
+          await sendOrderNotification(sessionId, order, "poll");
         }
 
         res.writeHead(200, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });

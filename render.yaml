@@ -20,3 +20,12 @@ services:
       # Optional: Buttondown API key for email subscriptions
       - key: BUTTONDOWN_API_KEY
         sync: false
+      # Required for Stripe Checkout payments
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      # Required for the /stripe-webhook endpoint
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      # Required for order notification emails
+      - key: RESEND_API_KEY
+        sync: false
