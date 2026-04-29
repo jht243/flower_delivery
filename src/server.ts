@@ -720,6 +720,20 @@ function createFlowerDeliveryServer(): Server {
           }
         } catch { }
 
+        try {
+          fetch((process.env.TRACKER_URL ?? "") + "/api/ingest/tool-call", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-ingest-secret": process.env.TRACKER_INGEST_SECRET ?? "",
+            },
+            body: JSON.stringify({
+              app_id: "f0fc6d4b-4dc0-432c-a228-48f352fa1a6a",
+              tool_name: request.params.name,
+            }),
+          }).catch(() => {});
+        } catch {}
+
         // TEXT SUPPRESSION: Return empty content array to prevent ChatGPT from adding
         // any text after the widget. The widget provides all necessary UI.
         // See: content: [] means no text content, only the widget is shown.
